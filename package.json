@@ -1,0 +1,11 @@
+{
+  "name": "devextreme-cli",
+  "version": "0.0.0",
+  "description": "DevExtreme CLI",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "bin": "index.js",
+  "author": "",
+  "license": "MIT"
+}
