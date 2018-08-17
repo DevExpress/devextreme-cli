@@ -2,10 +2,9 @@
   "name": "devextreme-cli",
   "version": "0.0.0",
   "description": "DevExtreme CLI",
-  "scripts": {
-    "build": "tsc -p tsconfig.json"
+  "bin": {
+    "devextreme": "index.js"
   },
-  "bin": "index.js",
-  "author": "",
+  "author": "DevExpress",
   "license": "MIT"
 }

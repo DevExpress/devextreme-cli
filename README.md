@@ -1,13 +1,18 @@
 # DevExtreme CLI
 
+## Installation
+
+```bash
+npm i -g devextreme-cli
+```
 ## Create new DevExtreme application
 
 ### Angular
 ```bash
-npx devextreme-cli new angular-app my-app
+devextreme new angular-app my-app
 ```
 
 ## Theme builder
 ```bash
-npx build-theme --theme-name="generic.light" --metadata-file-path="./bootstrap.scss"
+devextreme build-theme --theme-name="generic.light" --metadata-file-path="./bootstrap.scss"
 ```
