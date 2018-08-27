@@ -15,7 +15,7 @@ if(!args.length) {
                 const collectionPath = collectionIndex ? args[collectionIndex] : 'devextreme-schematics';
                 const collectionName = collectionPath.replace(/^.*(\\|\/)/, '');
                 const appName = args[2] || 'my-app';
-                const cmd = `npx -p @angular-devkit/schematics-cli -p ${collectionPath} -c "schematics ${collectionName}:new-angular-app --name ${appName} --dry-run false"`;
+                const cmd = `npx -p @angular-devkit/schematics-cli -p @schematics/angular -p ${collectionPath} -c "schematics ${collectionName}:new-angular-app --name ${appName} --dry-run false"`;
 
                 exec(cmd, (error, stdout, stderr) => {
                     stdout && console.log(stdout);
