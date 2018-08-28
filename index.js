@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const exec = require('child_process').exec;
+const spawn = require('child_process').spawn;
 const args = process.argv.slice(2);
 
 if(!args.length) {
@@ -15,11 +15,17 @@ if(!args.length) {
                 const collectionPath = collectionIndex ? args[collectionIndex] : 'devextreme-schematics';
                 const collectionName = collectionPath.replace(/^.*(\\|\/)/, '');
                 const appName = args[2] || 'my-app';
-                const cmd = `npx -p @angular-devkit/schematics-cli -p @schematics/angular -p ${collectionPath} -c "schematics ${collectionName}:new-angular-app --name ${appName} --dry-run false"`;
+                const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
+                const commandArguments = [
+                    '-p', '@angular-devkit/schematics-cli',
+                    '-p', '@schematics/angular',
+                    '-p', collectionPath,
+                    '-c', `"schematics ${collectionName}:new-angular-app --name=${appName} --dry-run=false"`
+                ];
 
-                exec(cmd, (error, stdout, stderr) => {
-                    stdout && console.log(stdout);
-                    stderr && console.log(stderr);
+                spawn(command, commandArguments, {
+                    stdio: 'inherit',
+                    windowsVerbatimArguments: true
                 });
             } else {
                 console.log(`Application type '${args[1]}' does not exist.` );
