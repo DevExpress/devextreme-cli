@@ -6,5 +6,10 @@
     "devextreme": "index.js"
   },
   "author": "DevExpress",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "less": "^2.6.1",
+    "minimist": "^1.2.0",
+    "devextreme-themebuilder": "^18.2.1-pre-18249"
+  }
 }
