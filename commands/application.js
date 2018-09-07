@@ -1,6 +1,5 @@
 const spawn = require('child_process').spawn;
 
-
 const createApplication = (commands, args) => {
     if(!commands[1]) {
         console.log('No parameters found.');
