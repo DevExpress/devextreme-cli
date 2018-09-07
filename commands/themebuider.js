@@ -90,7 +90,7 @@ const runThemeBuilder = (rawOptions) => {
                 if(error) {
                     console.log(`Unable to write ${options.out} file. ${error.message}`);
                 } else {
-                    console.log(`Result was written to the ${options.out} file.`);
+                    console.log(`The result was written to the ${options.out} file.`);
                 }
             });
         });
