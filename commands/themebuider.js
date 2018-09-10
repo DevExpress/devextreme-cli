@@ -1,5 +1,6 @@
 const themeBuilder = require("devextreme-themebuilder");
 const commands = require("devextreme-themebuilder/modules/commands");
+const baseParameters = require("devextreme-themebuilder/modules/base-parameters");
 const fs = require("fs");
 const path = require("path");
 
@@ -57,6 +58,17 @@ const readInput = options => new Promise(resolve => {
     });
 });
 
+const getMeta = (fullMeta, base) => {
+    let result = {};
+
+    for(const key in fullMeta) {
+        if(base && baseParameters.indexOf(key) === -1) continue;
+        result[key] = fullMeta[key]
+    }
+
+    return result;
+};
+
 const runThemeBuilder = (rawOptions) => {
     delete rawOptions["_"];
 
@@ -76,14 +88,24 @@ const runThemeBuilder = (rawOptions) => {
                     console.log(`Add the '${result.swatchSelector}' class to the container to apply swatch styles to its nested elements.`);
                 }
             } else if(options.command === commands.BUILD_VARS) {
-                const metadata = result.compiledMetadata;
+                const metadata = getMeta(result.compiledMetadata, options.base);
 
                 for(const metadataKey in metadata) {
-                    if(options.base && baseParameters.indexOf(metadataKey) === -1) continue;
-
                     const formatKey = options.fileFormat === "scss" ? metadataKey.replace("@", "$") : metadataKey;
                     content += formatKey + ": " + metadata[metadataKey] + ";\n";
                 }
+            } else if(options.command === commands.BUILD_META) {
+                const metadata = getMeta(result.compiledMetadata, options.base);
+                let exportedMeta = [];
+
+                for(const metadataKey in metadata) {
+                    exportedMeta.push({ key: metadataKey, value: metadata[metadataKey]});
+                }
+
+                content = JSON.stringify({
+                    baseTheme: [ options.themeName, options.colorScheme.replace("-", ".") ].join("."),
+                    items: exportedMeta
+                }, " ", 4);
             }
 
             fs.writeFile(options.out, content, "utf8", error => {
