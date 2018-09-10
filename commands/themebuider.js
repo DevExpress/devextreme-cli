@@ -43,7 +43,7 @@ const readInput = options => new Promise(resolve => {
     if(!fileName) resolve();
     fs.readFile(fileName, (error, data) => {
         if(error) {
-            console.error(`Unable to read ${fileName} file.`);
+            console.error(`Unable to read the ${fileName} file.`);
         } else {
             const extension = path.extname(fileName);
             if(extension !== ".json") {
@@ -73,9 +73,9 @@ const runThemeBuilder = (rawOptions) => {
             if(options.command === commands.BUILD_THEME) {
                 content = result.css;
                 if(result.swatchSelector) {
-                    console.log(`Add the '${result.swatchSelector}' class to apply swatch styles to the container's inner elements.`);
+                    console.log(`Add the '${result.swatchSelector}' class to the container to apply swatch styles to its nested elements.`);
                 }
-            } else if(webkitConvertPointFromPageToNode.command === commands.BUILD_VARS) {
+            } else if(options.command === commands.BUILD_VARS) {
                 const metadata = result.compiledMetadata;
 
                 for(const metadataKey in metadata) {
@@ -88,7 +88,7 @@ const runThemeBuilder = (rawOptions) => {
 
             fs.writeFile(options.out, content, "utf8", error => {
                 if(error) {
-                    console.log(`Unable to write ${options.out} file. ${error.message}`);
+                    console.log(`Unable to write the ${options.out} file. ${error.message}`);
                 } else {
                     console.log(`The result was written to the ${options.out} file.`);
                 }
