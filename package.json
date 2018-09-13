@@ -1,6 +1,6 @@
 {
   "name": "devextreme-cli",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "DevExtreme CLI",
   "bin": {
     "devextreme": "index.js"
@@ -10,6 +10,6 @@
   "dependencies": {
     "less": "^2.6.1",
     "minimist": "^1.2.0",
-    "devextreme-themebuilder": "^18.2.1-pre-18249"
+    "devextreme-themebuilder": "^18.2.1-pre-18254"
   }
 }
