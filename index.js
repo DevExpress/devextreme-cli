@@ -10,12 +10,11 @@ if(!commands.length) {
     process.exit();
 }
 
-if(commands[0] === 'new') {
-    application.create(commands, args);
+if(application.isApplicationCommand(commands[0])) {
+    application.run(commands, args);
 } else if(themeBuilder.isThemeBuilderCommand(commands[0])) {
     args.command = commands[0];
     themeBuilder.run(args);
 } else {
     console.log(`Command '${commands[0]}' does not exist.` );
 }
-

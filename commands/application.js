@@ -1,31 +1,42 @@
-const spawn = require('child_process').spawn;
+const angularApplication = require('./application.angular');
 
-const createApplication = (commands, args) => {
+// TODO: get by devextreme.json
+const appEngine = 'angular';
+
+isApplicationCommand = (command) => {
+    return [ 'new', 'add' ].indexOf(command) > -1;
+};
+
+run = (commands, options) => {
     if(!commands[1]) {
         console.log('No parameters found.');
-    } else {
-        if(commands[1] === 'angular-app') {
-            const collectionPath = args["c"] ? args["c"] : 'devextreme-schematics';
-            const collectionName = collectionPath.replace(/^.*(\\|\/)/, '');
-            const appName = commands[2] || 'my-app';
-            const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
-            const commandArguments = [
-                '-p', '@angular-devkit/schematics-cli',
-                '-p', '@schematics/angular',
-                '-p', collectionPath,
-                '-c', `"schematics ${collectionName}:new-angular-app --name=${appName} --dry-run=false"`
-            ];
+        return;
+    }
 
-            spawn(command, commandArguments, {
-                stdio: 'inherit',
-                windowsVerbatimArguments: true
-            });
+    if(commands[0] === 'new') {
+        if(commands[1] === 'angular-app') {
+            angularApplication.create(commands[2] || 'my-app', options);
         } else {
             console.log(`Application type '${commands[1]}' does not exist.` );
+        }
+    } else {
+        if(commands[0] === 'add') {
+            if(appEngine === 'angular') {
+                if(commands[1] === 'devextreme') {
+                    angularApplication.addDevextreme(commands[2], options);
+                } else if(commands[1] === 'view') {
+                    angularApplication.addView(commands[2], options);
+                } else {
+                    console.log('Command is not correct');
+                }
+            } else {
+                console.log('DevExtreme application was not found');
+            }
         }
     }
 };
 
 module.exports = {
-    create: createApplication
+    isApplicationCommand,
+    run
 }
