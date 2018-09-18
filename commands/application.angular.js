@@ -29,13 +29,13 @@ const create = (appName, options) => {
     runNpxCommand([
         '-p', '@angular/cli@latest', 'ng', 'new', appName
     ]).then(() => {
-        addDevextreme(appName, options, {
+        addTemplate(appName, options, {
             cwd: path.join(process.cwd(), appName)
         });
     });
 };
 
-const addDevextreme = (appName, options, evaluatingOptions) => {
+const addTemplate = (appName, options, evaluatingOptions) => {
     runSchematicCommand(`add-app-template --project=${appName}`, options, evaluatingOptions);
 };
 
@@ -45,6 +45,6 @@ const addView = (viewName, options) => {
 
 module.exports = {
     create,
-    addDevextreme,
+    addTemplate,
     addView
 };

@@ -21,10 +21,12 @@ run = (commands, options) => {
         }
     } else {
         if(commands[0] === 'add') {
+            if(commands[1] === 'angular-template') {
+                angularApplication.addTemplate(commands[2], options);
+            }
+
             if(appEngine === 'angular') {
-                if(commands[1] === 'devextreme-template') {
-                    angularApplication.addDevextreme(commands[2], options);
-                } else if(commands[1] === 'view') {
+                if(commands[1] === 'view') {
                     angularApplication.addView(commands[2], options);
                 } else {
                     console.log('Command is not correct');
