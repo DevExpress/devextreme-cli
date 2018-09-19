@@ -1,13 +1,10 @@
 const angularApplication = require('./application.angular');
 
-// TODO: get by devextreme.json
-const appEngine = 'angular';
-
 isApplicationCommand = (command) => {
     return [ 'new', 'add' ].indexOf(command) > -1;
 };
 
-run = (commands, options) => {
+run = (commands, options, devextremeConfig) => {
     if(!commands[1]) {
         console.log('No parameters found.');
         return;
@@ -25,7 +22,7 @@ run = (commands, options) => {
                 angularApplication.addTemplate(commands[2], options);
             }
 
-            if(appEngine === 'angular') {
+            if(devextremeConfig.appEngine === 'angular') {
                 if(commands[1] === 'view') {
                     angularApplication.addView(commands[2], options);
                 } else {
