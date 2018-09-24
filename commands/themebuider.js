@@ -75,6 +75,7 @@ const runThemeBuilder = (rawOptions) => {
     readInput(options).then(() => {
         options.reader = readFile;
         options.lessCompiler = require("less/lib/less-node");
+        options.sassCompiler = require("sass");
 
         themeBuilder.buildTheme(options).then((result) => {
             let content = "";
