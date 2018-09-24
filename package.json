@@ -10,6 +10,7 @@
   "dependencies": {
     "devextreme-themebuilder": "^18.2.1-pre-18267",
     "less": "^2.6.1",
+    "sass": "^1.10.3",
     "minimist": "^1.2.0"
   }
 }
