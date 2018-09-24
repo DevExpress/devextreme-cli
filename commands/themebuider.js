@@ -14,11 +14,12 @@ const createPath = filePath => {
             if(!fs.existsSync(currentPath)) {
                 fs.mkdirSync(currentPath);
             }
+            return currentPath;
         }, "");
 };
 
 const readFile = fileName => new Promise((resolve, reject) => {
-    fileName = path.join(__dirname,"../node_modules/devextreme-themebuilder", fileName);
+    fileName = path.join(__dirname, "../node_modules/devextreme-themebuilder", fileName);
     fs.readFile(fileName, "utf8", (error, data) => {
         error ? reject(error) : resolve(data);
     });
