@@ -22,7 +22,7 @@ run = (commands, options, devextremeConfig) => {
                 angularApplication.addTemplate(commands[2], options);
             }
 
-            if(devextremeConfig.appEngine === 'angular') {
+            if(devextremeConfig.applicationEngine === 'angular') {
                 if(commands[1] === 'view') {
                     angularApplication.addView(commands[2], options);
                 } else {
