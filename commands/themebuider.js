@@ -69,8 +69,6 @@ const getMeta = (fullMeta, base) => {
 };
 
 const runThemeBuilder = (rawOptions) => {
-    delete rawOptions["_"];
-
     readInput(rawOptions).then(() => {
         const options = camelize(rawOptions);
 

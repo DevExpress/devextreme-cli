@@ -2,6 +2,7 @@
 
 const args = require("minimist")(process.argv.slice(2));
 const commands = args["_"];
+delete args["_"];
 const themeBuilder = require("./commands/themebuider");
 const application = require("./commands/application");
 const devextremeConfig = require("./utility/devextreme-config");
