@@ -14,6 +14,7 @@ const createPath = filePath => {
             if(!fs.existsSync(currentPath)) {
                 fs.mkdirSync(currentPath);
             }
+            return currentPath;
         }, "");
 };
 
@@ -39,7 +40,7 @@ const camelize = (object) => {
 };
 
 const readInput = options => new Promise(resolve => {
-    const fileName = options["input-file"];
+    const fileName = options.inputFile;
     if(!fileName) resolve();
     fs.readFile(fileName, (error, data) => {
         if(error) {
@@ -69,9 +70,9 @@ const getMeta = (fullMeta, base) => {
 };
 
 const runThemeBuilder = (rawOptions) => {
-    readInput(rawOptions).then(() => {
-        const options = camelize(rawOptions);
+    const options = camelize(rawOptions);
 
+    readInput(options).then(() => {
         options.reader = readFile;
         options.lessCompiler = require("less/lib/less-node");
 

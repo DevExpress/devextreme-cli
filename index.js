@@ -12,11 +12,24 @@ if(!commands.length) {
     process.exit();
 }
 
-if(application.isApplicationCommand(commands[0])) {
-    application.run(commands, args, devextremeConfig.read());
-} else if(themeBuilder.isThemeBuilderCommand(commands[0])) {
-    args.command = commands[0];
-    themeBuilder.run(args);
+run = (commands, options) => {
+    if(application.isApplicationCommand(commands[0])) {
+        application.run(commands, options, devextremeConfig.read());
+    } else if(themeBuilder.isThemeBuilderCommand(commands[0])) {
+        options.command = commands[0];
+        themeBuilder.run(options);
+    } else {
+        console.log(`Command '${commands[0]}' does not exist.`);
+    }
+};
+
+if(commands[0] === "build") {
+    const config = devextremeConfig.read();
+    if(config.build && config.build.commands) {
+        config.build.commands.forEach(commandConfig => {
+            run([commandConfig.command], commandConfig.options);
+        });
+    }
 } else {
-    console.log(`Command '${commands[0]}' does not exist.` );
+    run(commands, args);
 }
