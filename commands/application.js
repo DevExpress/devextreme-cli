@@ -20,6 +20,7 @@ run = (commands, options, devextremeConfig) => {
         if(commands[0] === 'add') {
             if(commands[1] === 'angular-template') {
                 angularApplication.addTemplate(commands[2], options);
+                return;
             }
 
             if(devextremeConfig.applicationEngine === 'angular') {
