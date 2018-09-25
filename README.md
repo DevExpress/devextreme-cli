@@ -78,7 +78,7 @@ Export theme variables as a json metadata file:
 
 The following command generates a new `custom` color swatch using Generic Dark as a base theme:
 ```bash 
-> npx devextreme-cli build-theme -–base-theme="generic.dark" --make-swatch --output-color-scheme="custom"
+> npx devextreme-cli build-theme --base-theme="generic.dark" --make-swatch --output-color-scheme="custom"
 ```
 
 The following command generates a new `pink` color scheme based on Material Blue Light theme using constants from pink.json file:
