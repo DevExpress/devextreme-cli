@@ -40,7 +40,7 @@ const addTemplate = (appName, options, evaluatingOptions) => {
 };
 
 const addView = (viewName, options) => {
-    runSchematicCommand(`add-view --name=${viewName}`, options);
+    runSchematicCommand(`add-view --name="${viewName}"`, options);
 };
 
 module.exports = {
