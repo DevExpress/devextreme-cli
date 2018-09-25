@@ -65,7 +65,7 @@ Export theme variables as a json metadata file:
 
 * `--output-file` – Specifies the output file name
 
-* `--output-format` – Specifies the output file format (‘less’ or ‘scss’) (the default value is ‘less’ or the extension extracted from the `--output-file` value (if it contains any))
+* `--output-format` – Specifies the format of the output variables (`less` or `scss`) (the default value is `less` or the extension extracted from the `--output-file` value (if it contains any))
 
 * `--output-color-scheme` – Specifies the custom color scheme name (the default value is `custom-scheme`)
 
@@ -78,7 +78,7 @@ Export theme variables as a json metadata file:
 
 The following command generates a new `custom` color swatch using Generic Dark as a base theme:
 ```bash 
-> npx devextreme-cli build-theme –base-theme="generic.dark" --make-swatch --output-color-scheme="custom"
+> npx devextreme-cli build-theme -–base-theme="generic.dark" --make-swatch --output-color-scheme="custom"
 ```
 
 The following command generates a new `pink` color scheme based on Material Blue Light theme using constants from pink.json file:
