@@ -4,6 +4,22 @@ const baseParameters = require("devextreme-themebuilder/modules/base-parameters"
 const fs = require("fs");
 const path = require("path");
 
+const scssCompiler = {
+    render: (scss) => {
+        return new Promise((resolve, reject) => {
+            require("node-sass").render({
+                data: scss
+            }, (error, result) => {
+                if(error) {
+                    reject(error);
+                } else {
+                    resolve(result.css.toString());
+                }
+            });
+        });
+    }
+};
+
 const createPath = filePath => {
     const directoryName = path.dirname(filePath);
 
@@ -75,7 +91,7 @@ const runThemeBuilder = (rawOptions) => {
     readInput(options).then(() => {
         options.reader = readFile;
         options.lessCompiler = require("less/lib/less-node");
-        options.sassCompiler = require("sass");
+        options.sassCompiler = scssCompiler;
 
         themeBuilder.buildTheme(options).then((result) => {
             let content = "";
