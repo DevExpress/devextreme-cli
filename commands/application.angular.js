@@ -27,7 +27,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 
 const create = (appName, options) => {
     runNpxCommand([
-        '-p', '@angular/cli@latest', 'ng', 'new', appName, '--style=scss'
+        '-p', '@angular/cli@latest', 'ng', 'new', appName, '--style=scss --skip-install=true'
     ]).then(() => {
         addTemplate(appName, options, {
             cwd: path.join(process.cwd(), appName)
