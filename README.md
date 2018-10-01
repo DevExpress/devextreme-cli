@@ -25,17 +25,17 @@ devextreme new angular-app my-app
 
 Build a custom color scheme:
 ```bash 
-> npx devextreme-cli build-theme [--base-theme][--input-file][--make-swatch][--output-file][--output-color-scheme]
+> npx -p devextreme-cli devextreme build-theme [--base-theme][--input-file][--make-swatch][--output-file][--output-color-scheme]
 ```
 
 Export theme variables as a less/scss file:
 ```bash
-> npx devextreme-cli export-theme-vars [--base-theme][--input-file][--output-format][--output-file][--base]
+> npx -p devextreme-cli devextreme export-theme-vars [--base-theme][--input-file][--output-format][--output-file][--base]
 ```
 
 Export theme variables as a json metadata file:
 ```bash
-> npx devextreme-cli export-theme-meta [--base-theme][--input-file][--output-file][--base]
+> npx -p devextreme-cli devextreme export-theme-meta [--base-theme][--input-file][--output-file][--base]
 ```
 
 
@@ -78,17 +78,17 @@ Export theme variables as a json metadata file:
 
 The following command generates a new `custom` color swatch using Generic Dark as a base theme:
 ```bash 
-> npx devextreme-cli build-theme --base-theme="generic.dark" --make-swatch --output-color-scheme="custom"
+> npx -p devextreme-cli devextreme build-theme --base-theme="generic.dark" --make-swatch --output-color-scheme="custom"
 ```
 
 The following command generates a new `pink` color scheme based on Material Blue Light theme using constants from pink.json file:
 ```bash 
-> npx devextreme-cli build-theme --base-theme="material.blue.light" --input-file="pink.json" --output-color-scheme="pink"
+> npx -p devextreme-cli devextreme build-theme --base-theme="material.blue.light" --input-file="pink.json" --output-color-scheme="pink"
 ```
 
 The following command exports base variables for Generic Carmine theme in LESS format:
 ```bash 
-> npx devextreme-cli export-theme-vars --base-theme="generic.carmine" --output-format="less" --base 
+> npx -p devextreme-cli devextreme export-theme-vars --base-theme="generic.carmine" --output-format="less" --base 
 ```
 
 ## Links
