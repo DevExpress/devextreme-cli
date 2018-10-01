@@ -12,7 +12,11 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 
     const additionalOptions = [];
     for(let option in options) {
-        additionalOptions.push(` --${option}="${options[option]}"`);
+        if(options[option]) {
+            additionalOptions.push(` --${option}="${options[option]}"`);
+        } else {
+            additionalOptions.push(` --${option}`);
+        }
     };
 
     const commandArguments = [
