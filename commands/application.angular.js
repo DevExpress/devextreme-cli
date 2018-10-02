@@ -12,6 +12,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 
     const additionalOptions = [];
     for(let option in options) {
+        //https://github.com/angular/angular-cli/issues/12150
         additionalOptions.push(` --${option}${options[option] === true ? '' : `="${options[option]}"`}`);
     };
 
