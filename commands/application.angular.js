@@ -24,6 +24,10 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     runNpxCommand(commandArguments, evaluatingOptions);
 }
 
+const install = (options) => {
+    runSchematicCommand(`install`, options);
+};
+
 const create = (appName, options) => {
     runNpxCommand([
         '-p', '@angular/cli@latest', 'ng', 'new', appName, '--style=scss --skip-install=true'
@@ -43,6 +47,7 @@ const addView = (viewName, options) => {
 };
 
 module.exports = {
+    install,
     create,
     addTemplate,
     addView

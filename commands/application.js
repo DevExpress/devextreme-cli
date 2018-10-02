@@ -18,6 +18,11 @@ run = (commands, options, devextremeConfig) => {
         }
     } else {
         if(commands[0] === 'add') {
+            if(commands[1] === 'devextreme-angular') {
+                angularApplication.install(options);
+                return;
+            }
+
             if(commands[1] === 'angular-template') {
                 angularApplication.addTemplate(commands[2], options);
                 return;
