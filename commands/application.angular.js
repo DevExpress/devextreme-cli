@@ -17,7 +17,6 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 
     const commandArguments = [
         '-p', '@angular-devkit/schematics-cli@latest',
-        '-p', '@schematics/angular@latest',
         '-p', collectionPath,
         '-c', `"schematics ${collectionName}:${schematicCommand}${additionalOptions.join('')} --dry-run=false"`
     ];
