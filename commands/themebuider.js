@@ -90,8 +90,12 @@ const runThemeBuilder = (rawOptions) => {
 
     readInput(options).then(() => {
         options.reader = readFile;
-        options.lessCompiler = require("less/lib/less-node");
         options.sassCompiler = scssCompiler;
+        options.lessCompiler = require("less/lib/less-node");
+        
+        if(options.assetsBasePath) {
+            options.lessCompiler.options["rootpath"] = options.assetsBasePath;
+        }
 
         themeBuilder.buildTheme(options).then((result) => {
             let content = "";
