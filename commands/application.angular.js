@@ -1,6 +1,5 @@
 const path = require('path');
 const runNpxCommand = require('../utility/run-npx-command');
-const themeBuilder = require("./themebuider");
 
 function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -13,7 +12,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 
     const additionalOptions = [];
     for(let option in options) {
-        //https://github.com/angular/angular-cli/issues/12150
+        // NOTE: Removing boolean values is a workaround for the @angular/cli issue [angular/angular-cli#12150](https://github.com/angular/angular-cli/issues/12150)
         additionalOptions.push(` --${option}${options[option] === true ? '' : `="${options[option]}"`}`);
     };
 
