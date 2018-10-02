@@ -33,16 +33,16 @@ const create = (appName, options) => {
     ]).then(() => {
         addTemplate(appName, options, {
             cwd: path.join(process.cwd(), appName)
-        }).then(() => {
-            runNpxCommand(['devextreme build'], {
-                cwd: path.join(process.cwd(), appName)
-            });
         });
     });
 };
 
 const addTemplate = (appName, options, evaluatingOptions) => {
-    return runSchematicCommand(`add-app-template --project=${appName} --overrideAppComponent`, options, evaluatingOptions);
+    runSchematicCommand(`add-app-template --project=${appName} --overrideAppComponent`, options, evaluatingOptions).then(() => {
+        runNpxCommand(['devextreme build'], {
+            cwd: path.join(process.cwd(), appName)
+        });
+    });
 };
 
 const addView = (viewName, options) => {
