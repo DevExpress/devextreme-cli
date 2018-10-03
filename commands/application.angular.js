@@ -12,6 +12,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 
     const additionalOptions = [];
     for(let option in options) {
+        // NOTE: Removing boolean values is a workaround for the @angular/cli issue [angular/angular-cli#12150](https://github.com/angular/angular-cli/issues/12150)
         additionalOptions.push(` --${option}${options[option] === true ? '' : `="${options[option]}"`}`);
     };
 
@@ -21,7 +22,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
         '-c', `"schematics ${collectionName}:${schematicCommand}${additionalOptions.join('')} --dry-run=false"`
     ];
 
-    runNpxCommand(commandArguments, evaluatingOptions);
+    return runNpxCommand(commandArguments, evaluatingOptions);
 }
 
 const install = (options) => {
@@ -39,7 +40,11 @@ const create = (appName, options) => {
 };
 
 const addTemplate = (appName, options, evaluatingOptions) => {
-    runSchematicCommand(`add-app-template --project=${appName} --overrideAppComponent`, options, evaluatingOptions);
+    runSchematicCommand(`add-app-template --project=${appName} --overrideAppComponent`, options, evaluatingOptions).then(() => {
+        runNpxCommand(['devextreme build'], {
+            cwd: path.join(process.cwd(), appName)
+        });
+    });
 };
 
 const addView = (viewName, options) => {
