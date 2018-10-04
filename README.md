@@ -35,7 +35,7 @@ or
 
 Add DevExtreme to an Angular application:
 ```bash
-devextreme add devextreme-angular
+> devextreme add devextreme-angular
 ```
 
 ### Command line arguments
