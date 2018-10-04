@@ -11,11 +11,28 @@ npm i -g devextreme-cli
 Alternatively, you can execute ThemeBuilder commands by using npx.
 
 
-## Create a new DevExtreme application
+## DevExtreme Application
 
 ### Angular
+
+Create a new DevExtreme application:
 ```bash
 devextreme new angular-app my-app
+```
+
+Add a DevExtreme layout template to an Angular application:
+```bash
+devextreme add angular-template
+```
+
+Add a view to a DevExtreme Angular application:
+```bash
+devextreme add view
+```
+
+Add DevExtreme to an Angular application:
+```bash
+devextreme add devextreme-angular
 ```
 
 
