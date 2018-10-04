@@ -62,8 +62,8 @@ Add DevExtreme to an Angular application:
 
 * `--layout` – Specifies the type of a DevExtreme layout to add (default: `side-nav-outer-toolbar`) 
  Available values:
- * side-nav-outer-toolbar
- * side-nav-inner-toolbar
+  * side-nav-outer-toolbar
+  * side-nav-inner-toolbar
 
 * `--empty` – Specifies whether to skip sample views generation (default: `false`)
 
