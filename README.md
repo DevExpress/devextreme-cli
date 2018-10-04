@@ -21,22 +21,22 @@ Create a new DevExtreme application:
 > npx devextreme new angular-app app-name [--layout][--empty]
 ```
 
-Add the DevExtreme layout template to an Angular application:
+Add the DevExtreme layout template to an Angular application (follow [this](https://github.com/DevExpress/devextreme-angular#quick-start) link for more information):
 ```bash
 > npx devextreme add angular-template [--layout][--empty][--override-app-component]
 ```
-  Follow [this](https://github.com/DevExpress/devextreme-angular#quick-start) link for more information.
+  
 
 Add a view to an Angular application with the DevExtreme layout template:
 ```bash
 > npx devextreme add view view-name [--icon]
 ```
 
-Add DevExtreme to an Angular application:
+Add DevExtreme to an Angular application (follow [this](https://github.com/DevExpress/devextreme-angular#adding-devexteme-to-an-existing-angular-application) link for more information):
 ```bash
 > npx devextreme add devextreme-angular
 ```
-  Follow [this](https://github.com/DevExpress/devextreme-angular#adding-devexteme-to-an-existing-angular-application) link for more information.
+  
 
 #### Global package usage
 
@@ -45,22 +45,20 @@ Create a new DevExtreme application:
 > devextreme new angular-app app-name [--layout][--empty]
 ```
 
-Add the DevExtreme layout template to an Angular application:
+Add the DevExtreme layout template to an Angular application (follow [this](https://github.com/DevExpress/devextreme-angular#quick-start) link for more information):
 ```bash
 > devextreme add angular-template [--layout][--empty][--override-app-component]
 ```
-  Follow [this](https://github.com/DevExpress/devextreme-angular#quick-start) link for more information.
 
 Add a view to an Angular application with the DevExtreme layout template:
 ```bash
 > devextreme add view view-name [--icon]
 ```
 
-Add DevExtreme to an Angular application:
+Add DevExtreme to an Angular application (follow [this](https://github.com/DevExpress/devextreme-angular#adding-devexteme-to-an-existing-angular-application) link for more information):
 ```bash
 > devextreme add devextreme-angular
 ```
-  Follow [this](https://github.com/DevExpress/devextreme-angular#adding-devexteme-to-an-existing-angular-application) link for more information.
 
 ### Command line arguments
 
