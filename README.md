@@ -60,7 +60,8 @@ Add DevExtreme to an Angular application:
 
 ### Command line arguments
 
-* `--layout` – Specifies the type of a DevExtreme layout to add (default: `side-nav-outer-toolbar`) 
+* `--layout` – Specifies the type of a DevExtreme layout to add (default: `side-nav-outer-toolbar`)
+
  Available values:
   * side-nav-outer-toolbar
   * side-nav-inner-toolbar
@@ -70,6 +71,7 @@ Add DevExtreme to an Angular application:
 * `--override-app-component` – Specifies whether to override the existing app component (default: `false`)
 
 * `--icon` – Specifies the view's icon name (default: `folder`)
+
  You can choose the icon name from the [icon library](https://js.devexpress.com/Documentation/Guide/Themes/Icon_Library/)
 
 
