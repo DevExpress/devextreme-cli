@@ -14,6 +14,30 @@ Alternatively, you can execute DevExtreme CLI commands by using npx.
 
 ### Angular
 
+#### Without global package usage
+
+Create a new DevExtreme application:
+```bash
+> npx devextreme new angular-app app-name [--layout][--empty]
+```
+
+Add the DevExtreme layout template to an Angular application:
+```bash
+> npx devextreme add angular-template [--layout][--empty][--override-app-component]
+```
+
+Add a view to an Angular application with the DevExtreme layout template:
+```bash
+> npx devextreme add view view-name [--icon]
+```
+
+Add DevExtreme to an Angular application:
+```bash
+> npx devextreme add devextreme-angular
+```
+
+#### Global package usage
+
 Create a new DevExtreme application:
 ```bash
 > devextreme new angular-app app-name [--layout][--empty]
@@ -27,9 +51,6 @@ Add the DevExtreme layout template to an Angular application:
 Add a view to an Angular application with the DevExtreme layout template:
 ```bash
 > devextreme add view view-name [--icon]
-
-without global DevExtreme-CLI installation:
-> npx devextreme add view view-name [--icon]
 ```
 
 Add DevExtreme to an Angular application:
