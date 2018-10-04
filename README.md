@@ -27,9 +27,8 @@ Add the DevExtreme layout template to an Angular application:
 Add a view to an Angular application with the DevExtreme layout template:
 ```bash
 > devextreme add view view-name [--icon]
-```
-or
-```bash
+
+without global DevExtreme-CLI installation:
 > npx devextreme add view view-name [--icon]
 ```
 
