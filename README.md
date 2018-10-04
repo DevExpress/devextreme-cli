@@ -25,6 +25,7 @@ Add the DevExtreme layout template to an Angular application:
 ```bash
 > npx devextreme add angular-template [--layout][--empty][--override-app-component]
 ```
+  Follow [this](https://github.com/DevExpress/devextreme-angular#quick-start) link for more information.
 
 Add a view to an Angular application with the DevExtreme layout template:
 ```bash
@@ -35,6 +36,7 @@ Add DevExtreme to an Angular application:
 ```bash
 > npx devextreme add devextreme-angular
 ```
+  Follow [this](https://github.com/DevExpress/devextreme-angular#adding-devexteme-to-an-existing-angular-application) link for more information.
 
 #### Global package usage
 
@@ -47,6 +49,7 @@ Add the DevExtreme layout template to an Angular application:
 ```bash
 > devextreme add angular-template [--layout][--empty][--override-app-component]
 ```
+  Follow [this](https://github.com/DevExpress/devextreme-angular#quick-start) link for more information.
 
 Add a view to an Angular application with the DevExtreme layout template:
 ```bash
@@ -57,6 +60,7 @@ Add DevExtreme to an Angular application:
 ```bash
 > devextreme add devextreme-angular
 ```
+  Follow [this](https://github.com/DevExpress/devextreme-angular#adding-devexteme-to-an-existing-angular-application) link for more information.
 
 ### Command line arguments
 
