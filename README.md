@@ -5,7 +5,7 @@ DevExtreme CLI is a set of command-line tools to be used with DevExtreme control
 ## Installation
 
 ```bash
-npm i -g devextreme-cli
+> npm i -g devextreme-cli
 ```
 
 Alternatively, you can execute DevExtreme CLI commands by using npx.
@@ -16,23 +16,37 @@ Alternatively, you can execute DevExtreme CLI commands by using npx.
 
 Create a new DevExtreme application:
 ```bash
-devextreme new angular-app app-name [--layout][--empty]
+> devextreme new angular-app app-name [--layout][--empty]
 ```
 
 Add the DevExtreme layout template to an Angular application:
 ```bash
-devextreme add angular-template [--layout][--empty][--overrideAppComponent]
+> devextreme add angular-template [--layout][--empty][--override-app-component]
 ```
 
 Add a view to an Angular application with the DevExtreme layout template:
 ```bash
-devextreme add view view-name [--icon]
+> devextreme add view view-name [--icon]
+```
+or
+```bash
+> npx devextreme add view view-name [--icon]
 ```
 
 Add DevExtreme to an Angular application:
 ```bash
 devextreme add devextreme-angular
 ```
+
+### Command line arguments
+
+* `--layout` – Specifies the type of a DevExtreme layout to add (default: `side-nav-outer-toolbar`) 
+
+* `--empty` – Specifies whether to skip sample views generation (default: `false`)
+
+* `--override-app-component` – Specifies whether to override the existing app component (default: `false`)
+
+* `--icon` – Specifies the view's icon name (default: `folder`)
 
 
 ## ThemeBuilder
