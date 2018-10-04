@@ -8,8 +8,7 @@ DevExtreme CLI is a set of command-line tools to be used with DevExtreme control
 npm i -g devextreme-cli
 ```
 
-Alternatively, you can execute ThemeBuilder commands by using npx.
-
+Alternatively, you can execute DevExtreme CLI commands by using npx.
 
 ## DevExtreme Application
 
@@ -17,17 +16,17 @@ Alternatively, you can execute ThemeBuilder commands by using npx.
 
 Create a new DevExtreme application:
 ```bash
-devextreme new angular-app my-app
+devextreme new angular-app app-name [--layout][--empty]
 ```
 
-Add a DevExtreme layout template to an Angular application:
+Add the DevExtreme layout template to an Angular application:
 ```bash
-devextreme add angular-template
+devextreme add angular-template [--layout][--empty][--overrideAppComponent]
 ```
 
-Add a view to a DevExtreme Angular application:
+Add a view to an Angular application with the DevExtreme layout template:
 ```bash
-devextreme add view
+devextreme add view view-name [--icon]
 ```
 
 Add DevExtreme to an Angular application:
