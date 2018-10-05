@@ -1,13 +1,13 @@
-const themeBuilder = require("devextreme-themebuilder");
-const commands = require("devextreme-themebuilder/modules/commands");
-const baseParameters = require("devextreme-themebuilder/modules/base-parameters");
-const fs = require("fs");
-const path = require("path");
+const themeBuilder = require('devextreme-themebuilder');
+const commands = require('devextreme-themebuilder/modules/commands');
+const baseParameters = require('devextreme-themebuilder/modules/base-parameters');
+const fs = require('fs');
+const path = require('path');
 
 const scssCompiler = {
     render: (scss) => {
         return new Promise((resolve, reject) => {
-            require("node-sass").render({
+            require('node-sass').render({
                 data: scss
             }, (error, result) => {
                 if(error) {
@@ -31,11 +31,11 @@ const createPath = filePath => {
                 fs.mkdirSync(currentPath);
             }
             return currentPath;
-        }, "");
+        }, '');
 };
 
 const readFile = fileName => new Promise((resolve, reject) => {
-    fs.readFile(require.resolve(fileName), "utf8", (error, data) => {
+    fs.readFile(require.resolve(fileName), 'utf8', (error, data) => {
         error ? reject(error) : resolve(data);
     });
 });
@@ -63,7 +63,7 @@ const readInput = options => new Promise(resolve => {
             console.error(`Unable to read the ${fileName} file.`);
         } else {
             const extension = path.extname(fileName);
-            if(extension !== ".json") {
+            if(extension !== '.json') {
                 options.data = data;
             } else {
                 const inputObject = JSON.parse(data);
@@ -79,7 +79,7 @@ const getMeta = (fullMeta, base) => {
 
     for(const key in fullMeta) {
         if(base && baseParameters.indexOf(key) === -1) continue;
-        result[key] = fullMeta[key]
+        result[key] = fullMeta[key];
     }
 
     return result;
@@ -91,15 +91,15 @@ const runThemeBuilder = (rawOptions) => {
     readInput(options).then(() => {
         options.reader = readFile;
         options.sassCompiler = scssCompiler;
-        options.lessCompiler = require("less/lib/less-node");
+        options.lessCompiler = require('less/lib/less-node');
 
         if(options.assetsBasePath) {
             options.lessCompiler.options = options.lessCompiler.options || {};
-            options.lessCompiler.options["rootpath"] = options.assetsBasePath;
+            options.lessCompiler.options['rootpath'] = options.assetsBasePath;
         }
 
         themeBuilder.buildTheme(options).then((result) => {
-            let content = "";
+            let content = '';
             createPath(options.out);
 
             if(options.command === commands.BUILD_THEME) {
@@ -111,24 +111,24 @@ const runThemeBuilder = (rawOptions) => {
                 const metadata = getMeta(result.compiledMetadata, options.base);
 
                 for(const metadataKey in metadata) {
-                    const formatKey = options.fileFormat === "scss" ? metadataKey.replace("@", "$") : metadataKey;
-                    content += formatKey + ": " + metadata[metadataKey] + ";\n";
+                    const formatKey = options.fileFormat === 'scss' ? metadataKey.replace('@', '$') : metadataKey;
+                    content += formatKey + ': ' + metadata[metadataKey] + ';\n';
                 }
             } else if(options.command === commands.BUILD_META) {
                 const metadata = getMeta(result.compiledMetadata, options.base);
                 let exportedMeta = [];
 
                 for(const metadataKey in metadata) {
-                    exportedMeta.push({ key: metadataKey, value: metadata[metadataKey]});
+                    exportedMeta.push({ key: metadataKey, value: metadata[metadataKey] });
                 }
 
                 content = JSON.stringify({
-                    baseTheme: [ options.themeName, options.colorScheme.replace("-", ".") ].join("."),
+                    baseTheme: [ options.themeName, options.colorScheme.replace('-', '.') ].join('.'),
                     items: exportedMeta
-                }, " ", 4);
+                }, ' ', 4);
             }
 
-            fs.writeFile(options.out, content, "utf8", error => {
+            fs.writeFile(options.out, content, 'utf8', error => {
                 if(error) {
                     console.log(`Unable to write the ${options.out} file. ${error.message}`);
                 } else {
