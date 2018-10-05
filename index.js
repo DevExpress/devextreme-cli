@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 
-const args = require("minimist")(process.argv.slice(2));
-const commands = args["_"];
-delete args["_"];
-const themeBuilder = require("./commands/themebuider");
-const application = require("./commands/application");
-const devextremeConfig = require("./utility/devextreme-config");
+const args = require('minimist')(process.argv.slice(2));
+const commands = args['_'];
+delete args['_'];
+const themeBuilder = require('./commands/themebuider');
+const application = require('./commands/application');
+const devextremeConfig = require('./utility/devextreme-config');
 
 if(!commands.length) {
     console.log('No command found.');
     process.exit();
 }
 
-run = (commands, options) => {
+const run = (commands, options) => {
     if(application.isApplicationCommand(commands[0])) {
         application.run(commands, options, devextremeConfig.read());
     } else if(themeBuilder.isThemeBuilderCommand(commands[0])) {
@@ -23,7 +23,7 @@ run = (commands, options) => {
     }
 };
 
-if(commands[0] === "build") {
+if(commands[0] === 'build') {
     const config = devextremeConfig.read();
     if(config.build && config.build.commands) {
         console.log('The DevExtreme build started');

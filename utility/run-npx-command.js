@@ -1,6 +1,6 @@
 const spawn = require('child_process').spawn;
 
-module.exports = function (args, customConfig) {
+module.exports = function(args, customConfig) {
     const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
     const config = {
         stdio: 'inherit',
@@ -22,4 +22,4 @@ module.exports = function (args, customConfig) {
             }
         });
     });
-}
+};

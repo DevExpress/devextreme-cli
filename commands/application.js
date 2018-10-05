@@ -1,10 +1,10 @@
 const angularApplication = require('./application.angular');
 
-isApplicationCommand = (command) => {
+const isApplicationCommand = (command) => {
     return [ 'new', 'add' ].indexOf(command) > -1;
 };
 
-run = (commands, options, devextremeConfig) => {
+const run = (commands, options, devextremeConfig) => {
     if(!commands[1]) {
         console.log('No parameters found.');
         return;
@@ -44,4 +44,4 @@ run = (commands, options, devextremeConfig) => {
 module.exports = {
     isApplicationCommand,
     run
-}
+};

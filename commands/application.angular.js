@@ -5,9 +5,9 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
     let collectionPath = collectionName;
 
-    if(options["c"]) {
-        collectionPath = `"${path.join(process.cwd(), options["c"])}"`;
-        delete options["c"];
+    if(options['c']) {
+        collectionPath = `"${path.join(process.cwd(), options['c'])}"`;
+        delete options['c'];
     }
 
     const additionalOptions = [];
@@ -25,7 +25,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 }
 
 const install = (options) => {
-    runSchematicCommand(`install`, options);
+    runSchematicCommand('install', options);
 };
 
 const create = (appName, options) => {
