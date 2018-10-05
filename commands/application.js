@@ -14,7 +14,7 @@ run = (commands, options, devextremeConfig) => {
         if(commands[1] === 'angular-app') {
             angularApplication.create(commands[2] || 'my-app', options);
         } else {
-            console.log(`Application type '${commands[1]}' does not exist.` );
+            console.log(`The '${commands[1]}' application type is not valid`);
         }
     } else {
         if(commands[0] === 'add') {
@@ -32,10 +32,10 @@ run = (commands, options, devextremeConfig) => {
                 if(commands[1] === 'view') {
                     angularApplication.addView(commands[2], options);
                 } else {
-                    console.log('Command is not correct');
+                    console.log('Invalid command');
                 }
             } else {
-                console.log('DevExtreme application was not found');
+                console.log('The DevExtreme application cannot be found');
             }
         }
     }
