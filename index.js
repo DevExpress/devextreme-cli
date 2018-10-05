@@ -26,6 +26,7 @@ run = (commands, options) => {
 if(commands[0] === "build") {
     const config = devextremeConfig.read();
     if(config.build && config.build.commands) {
+        console.log('The DevExtreme build started');
         config.build.commands.forEach(commandConfig => {
             run([commandConfig.command], commandConfig.options);
         });
