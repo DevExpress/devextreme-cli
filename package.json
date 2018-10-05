@@ -1,14 +1,23 @@
 {
   "name": "devextreme-cli",
-  "version": "0.0.2",
+  "version": "1.0.0-beta.1",
   "description": "DevExtreme CLI",
+  "keywords": [
+    "devexpress",
+    "devextreme",
+    "cli",
+    "themebuilder",
+    "theme",
+    "application"
+  ],
   "bin": {
     "devextreme": "index.js"
   },
   "scripts": {
     "lint": "eslint ./"
   },
-  "author": "DevExpress",
+  "author": "Developer Express Inc.",
+  "repository": "https://github.com/DevExpress/devextreme-cli",
   "license": "MIT",
   "dependencies": {
     "devextreme-themebuilder": "^18.2.1-pre-18268",
