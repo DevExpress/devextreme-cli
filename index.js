@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-const args = require('minimist')(process.argv.slice(2));
+const args = require('minimist')(process.argv.slice(2), {
+    alias: { v: 'version' }
+});
 const commands = args['_'];
 delete args['_'];
 const themeBuilder = require('./commands/themebuider');
