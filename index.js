@@ -13,7 +13,7 @@ if(!commands.length) {
     if(args.version) {
         console.log(packageJson.version);
     } else {
-        console.log('No command found.', args);
+        console.log('No command found.');
     }
     
     process.exit();
