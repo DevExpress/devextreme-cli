@@ -1,14 +1,23 @@
 #!/usr/bin/env node
 
-const args = require('minimist')(process.argv.slice(2));
+const args = require('minimist')(process.argv.slice(2), {
+    alias: { v: 'version' }
+});
 const commands = args['_'];
 delete args['_'];
 const themeBuilder = require('./commands/themebuider');
 const application = require('./commands/application');
 const devextremeConfig = require('./utility/devextreme-config');
 
+const packageJson = require('./package.json');
+
 if(!commands.length) {
-    console.log('No command found.');
+    if(args.version) {
+        console.log(packageJson.version);
+    } else {
+        console.log('No command found.');
+    }
+    
     process.exit();
 }
 
