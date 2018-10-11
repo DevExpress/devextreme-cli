@@ -39,11 +39,14 @@ const create = (appName, options) => {
 };
 
 const addTemplate = (appName, options, evaluatingOptions) => {
-    runSchematicCommand(`add-app-template --project=${appName} --overrideAppComponent`, options, evaluatingOptions);
+    options.project = appName;
+    options.overrideAppComponent = true;
+    runSchematicCommand('add-app-template', options, evaluatingOptions);
 };
 
 const addView = (viewName, options) => {
-    runSchematicCommand(`add-view --name="${viewName}"`, options);
+    options.name = viewName;
+    runSchematicCommand('add-view', options);
 };
 
 module.exports = {
