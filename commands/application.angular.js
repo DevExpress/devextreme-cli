@@ -18,8 +18,8 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const commandArguments = [
         '-p', '@angular-devkit/schematics-cli@latest',
         '-p', collectionPath,
-        'schematics', `${collectionName}:${schematicCommand}`, `${additionalOptions.join('')}`, '--dry-run=false'
-    ];
+        'schematics', `${collectionName}:${schematicCommand}`, '--dry-run=false'
+    ].concat(additionalOptions);
 
     runNpxCommand(commandArguments, evaluatingOptions);
 }
