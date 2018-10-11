@@ -39,16 +39,19 @@ const create = (appName, options) => {
 };
 
 const addTemplate = (appName, options, evaluatingOptions) => {
-    const schematicOptions = Object.assign({}, options);
-    schematicOptions.project = appName;
-    schematicOptions.overrideAppComponent = true;
+    const schematicOptions = Object.assign({
+        project: appName,
+        overrideAppComponent: true
+    }, options);
     runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
 
 const addView = (viewName, options) => {
-    const schematicOptions = Object.assign({}, options);
+    const schematicOptions = Object.assign({
+        name: viewName
+    }, options);
     schematicOptions.name = viewName;
-    runSchematicCommand('add-view', schematicOptions);
+    runSchematicCommand('add-view', schematicsOptions);
 };
 
 module.exports = {
