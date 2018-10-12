@@ -12,7 +12,9 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 
     const additionalOptions = [];
     for(let option in options) {
-        additionalOptions.push(` --${option}${options[option] === true ? '' : `="${options[option]}"`}`);
+        // NOTE: Removing boolean values is a workaround for the @angular/cli issue [angular/angular-cli#12150](https://github.com/angular/angular-cli/issues/12150)
+        const schematicOption = `--${option}${options[option] === true ? '' : `=${options[option]}`}`;
+        additionalOptions.push(schematicOption);
     };
 
     const commandArguments = [
@@ -30,7 +32,7 @@ const install = (options) => {
 
 const create = (appName, options) => {
     runNpxCommand([
-        '-p', '@angular/cli@latest', 'ng', 'new', appName, '--style=scss --skip-install=true'
+        '-p', '@angular/cli@latest', 'ng', 'new', appName, '--style=scss', '--skip-install=true'
     ]).then(() => {
         addTemplate(appName, options, {
             cwd: path.join(process.cwd(), appName)
@@ -39,11 +41,19 @@ const create = (appName, options) => {
 };
 
 const addTemplate = (appName, options, evaluatingOptions) => {
-    runSchematicCommand(`add-app-template --project=${appName} --overrideAppComponent`, options, evaluatingOptions);
+    const schematicOptions = Object.assign({
+        project: appName,
+        overrideAppComponent: true
+    }, options);
+    runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
 
 const addView = (viewName, options) => {
-    runSchematicCommand(`add-view --name="${viewName}"`, options);
+    const schematicOptions = Object.assign({
+        name: viewName
+    }, options);
+    schematicOptions.name = viewName;
+    runSchematicCommand('add-view', schematicOptions);
 };
 
 module.exports = {
