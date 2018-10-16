@@ -23,7 +23,7 @@ Create a new DevExtreme application:
 
 Add the DevExtreme layout template to an Angular application (follow [this](https://github.com/DevExpress/devextreme-angular#quick-start) link for more information):
 ```bash
-> npx devextreme add angular-template [--layout][--empty][--override-app-component]
+> npx devextreme add angular-template [--layout][--empty][--resolve-conflicts]
 ```
   
 
@@ -47,7 +47,7 @@ Create a new DevExtreme application:
 
 Add the DevExtreme layout template to an Angular application (follow [this](https://github.com/DevExpress/devextreme-angular#quick-start) link for more information):
 ```bash
-> devextreme add angular-template [--layout][--empty][--override-app-component]
+> devextreme add angular-template [--layout][--empty][--resolve-conflicts]
 ```
 
 Add a view to an Angular application with the DevExtreme layout template:
@@ -62,16 +62,19 @@ Add DevExtreme to an Angular application (follow [this](https://github.com/DevEx
 
 ### Command line arguments
 
-* `--layout` – Specifies the type of a DevExtreme layout to add (default: `side-nav-outer-toolbar`)  
-  Available values:  
+* `--layout` – Specifies the type of a DevExtreme layout to add (default: `side-nav-outer-toolbar`)
+  Available values:
   * side-nav-outer-toolbar
   * side-nav-inner-toolbar
 
 * `--empty` – Specifies whether to skip sample views generation (default: `false`)
 
-* `--override-app-component` – Specifies whether to override the existing app component (default: `false`)
+* `--resolve-conflicts` – Specifies whether to override the existing app component or create a component with another name. (default: `safe`)
+  Available values:
+  * safe
+  * override
 
-* `--icon` – Specifies the view's icon name (default: `folder`)  
+* `--icon` – Specifies the view's icon name (default: `folder`)
   You can choose the icon name from the [icon library](https://js.devexpress.com/Documentation/Guide/Themes/Icon_Library/)
 
 
@@ -80,7 +83,7 @@ Add DevExtreme to an Angular application (follow [this](https://github.com/DevEx
 ### One-off usage
 
 Build a custom color scheme:
-```bash 
+```bash
 > npx -p devextreme-cli devextreme build-theme [--base-theme][--input-file][--make-swatch][--output-file][--output-color-scheme]
 ```
 
@@ -98,7 +101,7 @@ Export theme variables as a json metadata file:
 ### Global package usage
 
 Build a custom color scheme:
-```bash 
+```bash
 > devextreme build-theme [--base-theme][--input-file][--make-swatch][--output-file][--output-color-scheme][--help]
 ```
 
@@ -115,7 +118,7 @@ Export theme variables as a json metadata file:
 
 ### Command line arguments
 
-* `--base-theme` – Specifies a base theme’s name (the default value is `generic.light`) 
+* `--base-theme` – Specifies a base theme’s name (the default value is `generic.light`)
 
 * `--input-file` – Specifies the name of the file that contains input data (a .json file with metadata or a .less/.scss file with Bootstrap variables)
 
@@ -133,18 +136,18 @@ Export theme variables as a json metadata file:
 ### Examples
 
 The following command generates a new `custom` color swatch using Generic Dark as a base theme:
-```bash 
+```bash
 > npx -p devextreme-cli devextreme build-theme --base-theme="generic.dark" --make-swatch --output-color-scheme="custom"
 ```
 
 The following command generates a new `pink` color scheme based on Material Blue Light theme using constants from pink.json file:
-```bash 
+```bash
 > npx -p devextreme-cli devextreme build-theme --base-theme="material.blue.light" --input-file="pink.json" --output-color-scheme="pink"
 ```
 
 The following command exports base variables for Generic Carmine theme in LESS format:
-```bash 
-> npx -p devextreme-cli devextreme export-theme-vars --base-theme="generic.carmine" --output-format="less" --base 
+```bash
+> npx -p devextreme-cli devextreme export-theme-vars --base-theme="generic.carmine" --output-format="less" --base
 ```
 
 ## Links
@@ -152,4 +155,4 @@ The following command exports base variables for Generic Carmine theme in LESS f
 - Official website: [js.devexpress.com](https://js.devexpress.com)
 - Pricing: [js.devexpress.com/buy](https://js.devexpress.com/Buy)
 - Licensing: [js.devexpress.com/licensing](https://js.devexpress.com/Licensing)
-- Support: [www.devexpress.com/support](https://www.devexpress.com/support) 
+- Support: [www.devexpress.com/support](https://www.devexpress.com/support)
