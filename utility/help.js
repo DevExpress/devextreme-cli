@@ -1,4 +1,4 @@
-const commands = require('./help-command.json').commands;
+const commands = require('../commands/help-command.json').commands;
 
 const textColor = ['\x1b[36m', '\x1b[0m'];
 
