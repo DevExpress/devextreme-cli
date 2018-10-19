@@ -114,7 +114,7 @@ const findCommand = (commandName) => {
 
 const logInfo = (value) => {
     console.info(`${textColor[0]}%s${textColor[1]}`, `  ${value.name}`, ` ${value.descripttion}`);
-}
+};
 
 const printOptions = (command) => {
     console.info('    Options:');
