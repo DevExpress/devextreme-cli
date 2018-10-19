@@ -36,9 +36,10 @@ const run = (commands, options, devextremeConfig) => {
                     angularApplication.addView(commands[2], options);
                 } else {
                     console.error('Invalid command');
+                    printHelp(commands[0]);
                 }
             } else {
-                printHelp(commands[0]);
+                console.log('The DevExtreme application cannot be found');
             }
         }
     }

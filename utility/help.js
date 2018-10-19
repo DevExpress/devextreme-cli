@@ -121,10 +121,10 @@ const printOptions = (command) => {
     command.options.forEach((option) => {
         console.info(`${textColor[0]}%s${textColor[1]}`, `    ${option.name}`, ` ${option.descripttion}`);
     });
-}
+};
 
 const printHelp = (commandName) => {
-    if (!commandName) {
+    if(!commandName) {
         console.info('Available commands:');
         commands.forEach((command) => {
             logInfo(command);
@@ -132,7 +132,7 @@ const printHelp = (commandName) => {
         console.log('\nFor more detailed help run "devextreme [command name] --help"');
     }
 
-    if (commandName) {
+    if(commandName) {
         const command = findCommand(commandName)[0];
 
         if(!command) {
@@ -143,14 +143,14 @@ const printHelp = (commandName) => {
         logInfo(command);
         console.info('Usage: ', command.usage);
 
-        if (command.arguments) {
+        if(command.arguments) {
             console.info('Arguments:');
             command.arguments.forEach((argument) => {
                 logInfo(argument);
             });
         }
 
-        if (command.options) {
+        if(command.options) {
             printOptions(command);
         }
 
@@ -158,7 +158,7 @@ const printHelp = (commandName) => {
             console.info('Parameters:');
             command.parameters.forEach((parameter) => {
                 logInfo(parameter);
-                if (parameter.options) {
+                if(parameter.options) {
                     printOptions(parameter);
                 }
             });

@@ -19,7 +19,6 @@ if(!commands.length) {
         console.error('The DevExtreme command is not specified.');
         printHelp();
     }
-
     process.exit();
 }
 
