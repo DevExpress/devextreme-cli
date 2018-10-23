@@ -14,16 +14,16 @@ Alternatively, you can execute DevExtreme CLI commands by using npx.
 
 ### Angular 
 
+Add DevExtreme to an Angular application (follow [this](https://github.com/DevExpress/devextreme-angular#adding-devexteme-to-an-existing-angular-application) link for more information):
+
 #### Without global package usage
 
-Add DevExtreme to an Angular application (follow [this](https://github.com/DevExpress/devextreme-angular#adding-devexteme-to-an-existing-angular-application) link for more information):
 ```bash
 > npx devextreme add devextreme-angular
 ```
 
 #### Global package usage
 
-Add DevExtreme to an Angular application (follow [this](https://github.com/DevExpress/devextreme-angular#adding-devexteme-to-an-existing-angular-application) link for more information):
 ```bash
 > devextreme add devextreme-angular
 ```
