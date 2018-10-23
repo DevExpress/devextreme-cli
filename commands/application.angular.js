@@ -20,7 +20,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const commandArguments = [
         '-p', '@angular/cli@latest',
         '-p', collectionPath,
-        'ng', 'g', `${collectionName}:${schematicCommand}`, '--dry-run=false'
+        'ng', 'g', `${collectionName}:${schematicCommand}`
     ].concat(additionalOptions);
 
     runNpxCommand(commandArguments, evaluatingOptions);
