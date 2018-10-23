@@ -25,7 +25,7 @@ Add the DevExtreme layout template to an Angular application (follow [this](http
 ```bash
 > npx devextreme add angular-template [--layout][--empty][--resolve-conflicts]
 ```
-  
+
 
 Add a view to an Angular application with the DevExtreme layout template:
 ```bash
@@ -36,7 +36,7 @@ Add DevExtreme to an Angular application (follow [this](https://github.com/DevEx
 ```bash
 > npx devextreme add devextreme-angular
 ```
-  
+
 
 #### Global package usage
 
@@ -69,9 +69,9 @@ Add DevExtreme to an Angular application (follow [this](https://github.com/DevEx
 
 * `--empty` – Specifies whether to skip sample views generation (default: `false`)
 
-* `--resolve-conflicts` – Specifies whether to override the existing app component or create a component with another name. (default: `safe`)
+* `--resolve-conflicts` – Specifies whether to override the existing app component or create a component with another name. (default: `createNew`)
   Available values:
-  * safe
+  * createNew
   * override
 
 * `--icon` – Specifies the view's icon name (default: `folder`)
