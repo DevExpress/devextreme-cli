@@ -39,7 +39,7 @@
             "descripttion": "Add a view to an Angular application with the DevExtreme layout template",
             "options": [{
                 "name": "--icon",
-                "descripttion": "Specifies the view's icon name (default: folder)"
+                "descripttion": "Specifies the view's icon name (default: folder). See more: https://js.devexpress.com/Documentation/Guide/Themes/Icon_Library/"
             }]
         }, {
             "name": "devextreme-angular",
