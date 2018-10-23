@@ -12,18 +12,15 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 
     const additionalOptions = [];
     for(let option in options) {
-        const optionName = option.replace(/(-)+(.)?/g, (match, separator, chr) => {
-            return chr ? chr.toUpperCase() : '';
-        });
         // NOTE: Removing boolean values is a workaround for the @angular/cli issue [angular/angular-cli#12150](https://github.com/angular/angular-cli/issues/12150)
-        const schematicOption = `--${optionName}${options[option] === true ? '' : `=${options[option]}`}`;
+        const schematicOption = `--${option}${options[option] === true ? '' : `=${options[option]}`}`;
         additionalOptions.push(schematicOption);
     };
 
     const commandArguments = [
-        '-p', '@angular-devkit/schematics-cli@latest',
+        '-p', '@angular/cli@latest',
         '-p', collectionPath,
-        'schematics', `${collectionName}:${schematicCommand}`, '--dry-run=false'
+        'ng', 'g', `${collectionName}:${schematicCommand}`, '--dry-run=false'
     ].concat(additionalOptions);
 
     runNpxCommand(commandArguments, evaluatingOptions);
