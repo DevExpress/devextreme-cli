@@ -1,4 +1,4 @@
-const commands = require('../commands/help-command.json').commands;
+const commands = require('./commands.json').commands;
 
 const textColor = ['\x1b[36m', '\x1b[0m'];
 
@@ -39,23 +39,16 @@ const printHelp = (commandName) => {
         logInfo(command);
         console.info('Usage: ', command.usage);
 
-        if(command.arguments) {
-            console.info('Arguments:');
-            command.arguments.forEach((argument) => {
-                logInfo(argument);
-            });
-        }
-
         if(command.options) {
             printOptions(command);
         }
 
-        if(command.parameters) {
-            console.info('Parameters:');
-            command.parameters.forEach((parameter) => {
-                logInfo(parameter);
-                if(parameter.options) {
-                    printOptions(parameter);
+        if(command.arguments) {
+            console.info('Arguments:');
+            command.arguments.forEach((argument) => {
+                logInfo(argument);
+                if(argument.options) {
+                    printOptions(argument);
                 }
             });
         }

@@ -8,7 +8,7 @@ delete args['_'];
 const themeBuilder = require('./commands/themebuider');
 const application = require('./commands/application');
 const devextremeConfig = require('./utility/devextreme-config');
-const printHelp = require('./utility/help').printHelp;
+const printHelp = require('./commands/help').printHelp;
 
 const packageJson = require('./package.json');
 

@@ -1,5 +1,5 @@
 const angularApplication = require('./application.angular');
-const printHelp = require('../utility/help').printHelp;
+const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
     return [ 'new', 'add' ].indexOf(command) > -1;
