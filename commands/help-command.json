@@ -2,10 +2,10 @@
     "commands": [{
         "name": "new",
         "descripttion": "Create a new DevExtreme application",
-        "usage": "devexterme new <application> <name> [options]",
+        "usage": "devexterme new <application-type> <name> [options]",
         "parameters": [{
             "name": "angular-app",
-            "descripttion": "",
+            "descripttion": "The application type",
             "options": [{
                 "name": "--layout",
                 "descripttion": "Specifies the type of a DevExtreme layout to add (default: side-nav-outer-toolbar)"
@@ -16,7 +16,7 @@
         }],
         "arguments": [{
             "name": "name",
-            "descripttion": "Application name"
+            "descripttion": "The application name"
         }]
     }, {
         "name": "add",
