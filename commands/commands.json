@@ -11,7 +11,7 @@
             "descripttion": "The application type",
             "options": [{
                 "name": "--layout",
-                "descripttion": "Specifies the type of a DevExtreme layout to add (default: side-nav-outer-toolbar)"
+                "descripttion": "Specifies the type of a DevExtreme layout to add. Available values: side-nav-outer-toolbar(default)|side-nav-outer-toolbar"
             }, {
                 "name": "--empty",
                 "descripttion": "Specifies whether to skip sample views generation (default: false)"
@@ -26,13 +26,13 @@
             "descripttion": "Add the DevExtreme layout template to an Angular application",
             "options": [{
                 "name": "--layout",
-                "descripttion": "Specifies the type of a DevExtreme layout to add (default: side-nav-outer-toolbar)"
+                "descripttion": "Specifies the type of a DevExtreme layout to add. Available values: side-nav-outer-toolbar(default)|side-nav-outer-toolbar"
             }, {
                 "name": "--empty",
                 "descripttion": "Specifies whether to skip sample views generation (default: false)"
             }, {
                 "name": "--resolve-conflicts",
-                "descripttion": "Specifies whether to override the existing app component or create a component with another name. (default: safe)"
+                "descripttion": "Specifies whether to override the existing app component or create a component with another name. Available values: createNew(default)|override"
             }]
         }, {
             "name": "view",
