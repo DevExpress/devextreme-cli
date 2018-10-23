@@ -11,7 +11,7 @@
             "descripttion": "The application type",
             "options": [{
                 "name": "--layout",
-                "descripttion": "Specifies the type of a DevExtreme layout to add. Available values: side-nav-outer-toolbar(default)|side-nav-outer-toolbar"
+                "descripttion": "Specifies the type of a DevExtreme layout to add. Available values: side-nav-outer-toolbar(default)|side-nav-inner-toolbar"
             }, {
                 "name": "--empty",
                 "descripttion": "Specifies whether to skip sample views generation (default: false)"
@@ -26,7 +26,7 @@
             "descripttion": "Add the DevExtreme layout template to an Angular application",
             "options": [{
                 "name": "--layout",
-                "descripttion": "Specifies the type of a DevExtreme layout to add. Available values: side-nav-outer-toolbar(default)|side-nav-outer-toolbar"
+                "descripttion": "Specifies the type of a DevExtreme layout to add. Available values: side-nav-outer-toolbar(default)|side-nav-inner-toolbar"
             }, {
                 "name": "--empty",
                 "descripttion": "Specifies whether to skip sample views generation (default: false)"
