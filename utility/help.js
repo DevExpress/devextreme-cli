@@ -25,7 +25,7 @@ const printHelp = (commandName) => {
         commands.forEach((command) => {
             logInfo(command);
         });
-        console.log('\nFor more detailed help run "devextreme [command name] --help"');
+        console.log('\nRun devextreme [command name] --help for information on a certain command.');
     }
 
     if(commandName) {
