@@ -1,6 +1,6 @@
 const commands = require('./commands.json').commands;
 
-const textColor = '\x1b[36m$s\x1b[0m';
+const textColor = '\x1b[36m%s\x1b[0m';
 
 const findCommand = (commandName) => {
     return commands.filter(command => command.name === commandName);
@@ -22,30 +22,31 @@ const printHelp = (commandName) => {
         console.info('Available commands:');
         commands.forEach(logInfo);
         console.log('\nRun devextreme [command name] --help for information on a certain command.');
-    } else {
-        const command = findCommand(commandName)[0];
+        return;
+    }
 
-        if(!command) {
-            console.log('Command not found');
-            return;
-        }
+    const command = findCommand(commandName)[0];
 
-        logInfo(command);
-        console.info('Usage: ', command.usage);
+    if(!command) {
+        console.log('Command not found');
+        return;
+    }
 
-        if(command.options) {
-            printOptions(command);
-        }
+    logInfo(command);
+    console.info('Usage: ', command.usage);
 
-        if(command.arguments) {
-            console.info('Arguments:');
-            command.arguments.forEach((argument) => {
-                logInfo(argument);
-                if(argument.options) {
-                    printOptions(argument);
-                }
-            });
-        }
+    if(command.options) {
+        printOptions(command);
+    }
+
+    if(command.arguments) {
+        console.info('Arguments:');
+        command.arguments.forEach((argument) => {
+            logInfo(argument);
+            if(argument.options) {
+                printOptions(argument);
+            }
+        });
     }
 };
 
