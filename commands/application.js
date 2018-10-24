@@ -1,4 +1,5 @@
 const angularApplication = require('./application.angular');
+const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
     return [ 'new', 'add' ].indexOf(command) > -1;
@@ -6,7 +7,8 @@ const isApplicationCommand = (command) => {
 
 const run = (commands, options, devextremeConfig) => {
     if(!commands[1]) {
-        console.log('No parameters found.');
+        console.error('No parameters found.');
+        printHelp(commands[0]);
         return;
     }
 
@@ -14,7 +16,8 @@ const run = (commands, options, devextremeConfig) => {
         if(commands[1] === 'angular-app') {
             angularApplication.create(commands[2] || 'my-app', options);
         } else {
-            console.log(`The '${commands[1]}' application type is not valid`);
+            console.error(`The '${commands[1]}' application type is not valid`);
+            printHelp(commands[0]);
         }
     } else {
         if(commands[0] === 'add') {
@@ -32,7 +35,8 @@ const run = (commands, options, devextremeConfig) => {
                 if(commands[1] === 'view') {
                     angularApplication.addView(commands[2], options);
                 } else {
-                    console.log('Invalid command');
+                    console.error('Invalid command');
+                    printHelp(commands[0]);
                 }
             } else {
                 console.log('The DevExtreme application cannot be found');

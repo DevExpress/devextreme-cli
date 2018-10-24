@@ -8,6 +8,7 @@ delete args['_'];
 const themeBuilder = require('./commands/themebuider');
 const application = require('./commands/application');
 const devextremeConfig = require('./utility/devextreme-config');
+const printHelp = require('./commands/help').printHelp;
 
 const packageJson = require('./package.json');
 
@@ -15,9 +16,14 @@ if(!commands.length) {
     if(args.version) {
         console.log(packageJson.version);
     } else {
-        console.log('No command found.');
+        console.error('The DevExtreme command is not specified.');
+        printHelp();
     }
-    
+    process.exit();
+}
+
+if(args.help) {
+    printHelp(commands[0]);
     process.exit();
 }
 
@@ -28,7 +34,7 @@ const run = (commands, options) => {
         options.command = commands[0];
         themeBuilder.run(options);
     } else {
-        console.log(`Command '${commands[0]}' does not exist.`);
+        console.error(`Command '${commands[0]}' does not exist.`);
     }
 };
 
