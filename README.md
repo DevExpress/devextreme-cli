@@ -2,7 +2,25 @@
 
 DevExtreme CLI is a set of command-line tools to be used with DevExtreme controls library.
 
-## Installation
+* [Installation](#installation)
+* [Add DevExtreme to an Existing Application](#add-devextreme)
+    * [Angular](#add-devextreme-angular)
+        * [Without global package usage](#add-devextreme-angular-no-global)
+        * [Global package usage](#add-devextreme-angular-global)
+* [DevExtreme Application](#devextreme-app)
+    * [Angular](#devextreme-app-angular)
+        * [Without global package usage](#devextreme-app-angular-no-global)
+        * [Global package usage](#devextreme-app-angular-global)
+    * [Command Line Arguments](#devextreme-app-arguments)
+* [Theme Builder](#theme-builder)
+    * [One-off Usage](#theme-builder-one-off)
+    * [Global package usage](#theme-builder-global)
+    * [Command Line Arguments](#theme-builder-arguments)
+    * [Examples](#theme-builder-examples)
+* [License](#license)
+* [Support](#support)
+
+## <a name="installation"></a>Installation
 
 ```bash
 > npm i -g devextreme-cli
@@ -10,29 +28,29 @@ DevExtreme CLI is a set of command-line tools to be used with DevExtreme control
 
 Alternatively, you can execute DevExtreme CLI commands by using npx.
 
-## Add DevExtreme to an Existing Application
+## <a name="add-devextreme"></a>Add DevExtreme to an Existing Application
 
-### Angular 
+### <a name="add-devextreme-angular"></a>Angular 
 
 Add DevExtreme to an Angular application (follow [this](https://github.com/DevExpress/devextreme-angular#adding-devexteme-to-an-existing-angular-application) link for more information):
 
-#### Without global package usage
+#### <a name="add-devextreme-angular-no-global"></a>Without global package usage
 
 ```bash
 > npx devextreme add devextreme-angular
 ```
 
-#### Global package usage
+#### <a name="add-devextreme-angular-global"></a>Global package usage
 
 ```bash
 > devextreme add devextreme-angular
 ```
 
-## DevExtreme Application
+## <a name="devextreme-app"></a>DevExtreme Application
 
-### Angular
+### <a name="devextreme-app-angular"></a>Angular
 
-#### Without global package usage
+#### <a name="devextreme-app-angular-no-global"></a>Without global package usage
 
 Create a new DevExtreme application:
 ```bash
@@ -49,7 +67,7 @@ Add a view to an Angular application with the DevExtreme layout template:
 > npx devextreme add view view-name [--icon]
 ```
 
-#### Global package usage
+#### <a name="devextreme-app-angular-global"></a>Global package usage
 
 Create a new DevExtreme application:
 ```bash
@@ -66,7 +84,7 @@ Add a view to an Angular application with the DevExtreme layout template:
 > devextreme add view view-name [--icon]
 ```
 
-### Command line arguments
+### <a name="devextreme-app-arguments"></a>Command line arguments
 
 * `--layout` – Specifies the type of a DevExtreme layout to add (default: `side-nav-outer-toolbar`)
   Available values:
@@ -84,9 +102,9 @@ Add a view to an Angular application with the DevExtreme layout template:
   You can choose the icon name from the [icon library](https://js.devexpress.com/Documentation/Guide/Themes/Icon_Library/)
 
 
-## ThemeBuilder
+## <a name="theme-builder"></a>ThemeBuilder
 
-### One-off usage
+### <a name="theme-builder-one-off"></a>One-off usage
 
 Build a custom color scheme:
 ```bash
@@ -104,7 +122,7 @@ Export theme variables as a json metadata file:
 ```
 
 
-### Global package usage
+### <a name="theme-builder-global"></a>Global package usage
 
 Build a custom color scheme:
 ```bash
@@ -122,7 +140,7 @@ Export theme variables as a json metadata file:
 ```
 
 
-### Command line arguments
+### <a name="theme-builder-arguments"></a>Command line arguments
 
 * `--base-theme` – Specifies a base theme’s name (the default value is `generic.light`)
 
@@ -139,7 +157,7 @@ Export theme variables as a json metadata file:
 * `--base` – Exports only base variables which are used to produce the derived variables
 
 
-### Examples
+### <a name="theme-builder-examples"></a>Examples
 
 The following command generates a new `custom` color swatch using Generic Dark as a base theme:
 ```bash
@@ -156,9 +174,14 @@ The following command exports base variables for Generic Carmine theme in LESS f
 > npx -p devextreme-cli devextreme export-theme-vars --base-theme="generic.carmine" --output-format="less" --base
 ```
 
-## Links
+## <a name="license"></a>License
 
-- Official website: [js.devexpress.com](https://js.devexpress.com)
-- Pricing: [js.devexpress.com/buy](https://js.devexpress.com/Buy)
-- Licensing: [js.devexpress.com/licensing](https://js.devexpress.com/Licensing)
-- Support: [www.devexpress.com/support](https://www.devexpress.com/support)
+Familiarize yourself with the
+[DevExtreme License](https://js.devexpress.com/Licensing/).
+[Free trial is available!](http://js.devexpress.com/Buy/)
+
+**DevExtreme CLI is released as a MIT-licensed (free and open-source) add-on to DevExtreme.**
+
+## <a name="support"></a>Support
+
+Feel free to ask questions, share your ideas and report bugs using [DevExpress Support Center](https://www.devexpress.com/Support/Center).
