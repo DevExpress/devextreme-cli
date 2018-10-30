@@ -32,7 +32,7 @@ const install = (options) => {
 
 const create = (appName, options) => {
     runNpxCommand([
-        '-p', '@angular/cli@latest', 'ng', 'new', appName, '--style=scss', '--skip-install=true'
+        '-p', '@angular/cli@latest', 'ng', 'new', appName, '--style=scss', '--routing=false', '--skip-install=true'
     ]).then(() => {
         options.resolveConflicts = 'override';
         addTemplate(appName, options, {
