@@ -33,7 +33,7 @@ Add DevExtreme to an Angular application (follow [this](https://github.com/DevEx
 #### <a name="add-devextreme-angular-no-global"></a>Without global package usage
 
 ```bash
-> npx devextreme add devextreme-angular
+> npx -p devextreme-cli devextreme add devextreme-angular
 ```
 
 #### <a name="add-devextreme-angular-global"></a>Global package usage
@@ -50,17 +50,17 @@ Add DevExtreme to an Angular application (follow [this](https://github.com/DevEx
 
 Create a new DevExtreme application:
 ```bash
-> npx devextreme new angular-app app-name [--layout][--empty]
+> npx -p devextreme-cli devextreme new angular-app app-name [--layout][--empty]
 ```
 
 Add the DevExtreme layout template to an Angular application (follow [this](https://github.com/DevExpress/devextreme-angular#quick-start) link for more information):
 ```bash
-> npx devextreme add angular-template [--layout][--empty][--resolve-conflicts]
+> npx -p devextreme-cli devextreme add angular-template [--layout][--empty][--resolve-conflicts]
 ```
 
 Add a view to an Angular application with the DevExtreme layout template:
 ```bash
-> npx devextreme add view view-name [--icon]
+> npx -p devextreme-cli devextreme add view view-name [--icon]
 ```
 
 #### <a name="devextreme-app-angular-global"></a>Global package usage
