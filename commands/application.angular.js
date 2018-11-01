@@ -7,10 +7,6 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionPackageJsonPath = path.join(process.cwd(), `node_modules/${collectionName}/package.json`)
     let collectionPath = collectionName;
 
-    if(!fs.existsSync(collectionPackageJsonPath)) {
-        runCommand('npm', ['install', collectionName]);
-    }
-
     if(options['c']) {
         collectionPath = `"${path.join(process.cwd(), options['c'])}"`;
         delete options['c'];
@@ -29,7 +25,13 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
         'ng', 'g', `${collectionName}:${schematicCommand}`
     ].concat(additionalOptions);
 
-    runCommand('npx', commandArguments, evaluatingOptions);
+    if(!fs.existsSync(collectionPackageJsonPath)) {
+        runCommand('npm', ['install', collectionName]).then(() => {
+            runCommand('npx', commandArguments, evaluatingOptions);
+        });
+    } else {
+        runCommand('npx', commandArguments, evaluatingOptions);
+    }
 }
 
 const install = (options) => {
@@ -48,7 +50,7 @@ const create = (appName, options) => {
 };
 
 const addTemplate = (appName, options, evaluatingOptions) => {
-    const schematicOptions = {...(appName && {project: appName}), ...options}
+    const schematicOptions = {...(appName && {project: appName}), ...options};
     runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
 
