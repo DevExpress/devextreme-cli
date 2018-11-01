@@ -48,10 +48,12 @@ const create = (appName, options) => {
 };
 
 const addTemplate = (appName, options, evaluatingOptions) => {
-    const schematicOptions = Object.assign({
-        project: appName
-    }, options);
-    runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
+    if(appName) {
+        options = Object.assign({
+            project: appName
+        }, options);
+    }
+    runSchematicCommand('add-app-template', options, evaluatingOptions);
 };
 
 const addView = (viewName, options) => {
