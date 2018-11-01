@@ -4,10 +4,10 @@ const runCommand = require('../utility/run-command');
 
 function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
-    const packageJsonPath = path.join(process.cwd(), `node_modules/${collectionName}/package.json`)
+    const collectionPackageJsonPath = path.join(process.cwd(), `node_modules/${collectionName}/package.json`)
     let collectionPath = collectionName;
 
-    if(!fs.existsSync(packageJsonPath)) {
+    if(!fs.existsSync(collectionPackageJsonPath)) {
         runCommand('npm', ['install', collectionName]);
     }
 
@@ -37,7 +37,7 @@ const install = (options) => {
 };
 
 const create = (appName, options) => {
-    runCommand([
+    runCommand('npx', [
         '-p', '@angular/cli@latest', 'ng', 'new', appName, '--style=scss', '--routing=false', '--skip-install=true'
     ]).then(() => {
         options.resolveConflicts = 'override';

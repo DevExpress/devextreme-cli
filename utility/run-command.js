@@ -1,7 +1,7 @@
 const spawn = require('child_process').spawn;
 
-module.exports = function(packageManagerName, args, customConfig) {
-    const command = /^win/.test(process.platform) ? `${packageManagerName}.cmd` : packageManagerName;
+module.exports = function(commandName, args, customConfig) {
+    const command = /^win/.test(process.platform) ? `${commandName}.cmd` : commandName;
     const config = {
         stdio: 'inherit',
         windowsVerbatimArguments: true
