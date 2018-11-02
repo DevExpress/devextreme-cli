@@ -46,7 +46,7 @@ const camelCase = str => str.replace(/[-](\w|$)/g, (_, letter) => {
 
 const camelize = (object) => {
     let result = {};
-    for(var key in object) {
+    for(let key in object) {
         if(object.hasOwnProperty(key)) {
             const newKey = camelCase(key);
             result[newKey] = object[key];
@@ -74,11 +74,12 @@ const readInput = options => new Promise(resolve => {
     });
 });
 
-const getMeta = (fullMeta, base) => {
+const getMeta = (fullMeta, base, filter) => {
     let result = {};
 
     for(const key in fullMeta) {
         if(base && baseParameters.indexOf(key) === -1) continue;
+        if(filter && filter.length > 0 && filter.indexOf(key) === -1) continue;
         result[key] = fullMeta[key];
     }
 
@@ -100,6 +101,7 @@ const runThemeBuilder = (rawOptions) => {
 
         themeBuilder.buildTheme(options).then((result) => {
             let content = '';
+            let filter = (options.vars instanceof Array) ? options.vars : options.vars.split(',');
             createPath(options.out);
 
             if(options.command === commands.BUILD_THEME) {
@@ -108,14 +110,14 @@ const runThemeBuilder = (rawOptions) => {
                     console.log(`Add the '${result.swatchSelector}' class to the container to apply swatch styles to its nested elements.`);
                 }
             } else if(options.command === commands.BUILD_VARS) {
-                const metadata = getMeta(result.compiledMetadata, options.base);
+                const metadata = getMeta(result.compiledMetadata, options.base, filter);
 
                 for(const metadataKey in metadata) {
                     const formatKey = options.fileFormat === 'scss' ? metadataKey.replace('@', '$') : metadataKey;
                     content += formatKey + ': ' + metadata[metadataKey] + ';\n';
                 }
             } else if(options.command === commands.BUILD_META) {
-                const metadata = getMeta(result.compiledMetadata, options.base);
+                const metadata = getMeta(result.compiledMetadata, options.base, filter);
                 let exportedMeta = [];
 
                 for(const metadataKey in metadata) {
