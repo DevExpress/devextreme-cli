@@ -3,7 +3,7 @@ const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
 const fs = require('fs');
 const exec = require('child_process').exec;
-const minVersion = new semver('6.0.0');
+const minAngularCLIVersion = '6.0.0';
 
 function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -31,7 +31,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
             commandArguments = additionalArguments.concat(commandArguments);
         }
 
-        if(!checkLocalPackage(collectionName)) {
+        if(!localPackageExists(collectionName)) {
             runCommand('npm', ['install', collectionName]).then(() => {
                 runCommand('npx', commandArguments, evaluatingOptions);
             });
@@ -41,7 +41,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     });
 }
 
-function checkLocalPackage(packageName) {
+function localPackageExists(packageName) {
     if(!fs.existsSync('node_modules')) {
         return;
     }
@@ -60,9 +60,9 @@ function getAdditionalCommandArguments() {
             }
             if(stdout) {
                 const commandResult = stdout.toString();
-                const version = new semver(commandResult.match(/(?<=angular.cli:.)([0-9]+.[0-9]+.[0-9]+(-(beta|rc|alpha).[0-9]+)*)/ig)[0]);
+                const version = new semver(commandResult.match(/(?<=angular.cli: )(\S+)/ig)[0]);
 
-                if(version.compare(minVersion) < 0) {
+                if(version.compare(new semver(minAngularCLIVersion)) < 0) {
                     resolve(commandArguments);
                 }
             }
