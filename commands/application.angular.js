@@ -3,6 +3,7 @@ const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
 const fs = require('fs');
 const exec = require('child_process').exec;
+const minVersion = new semver('6.0.0');
 
 function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -25,14 +26,12 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
         'ng', 'g', `${collectionName}:${schematicCommand}`
     ].concat(additionalOptions);
 
-    const packageName = getNotInstalledLocalPackage(collectionName, evaluatingOptions && evaluatingOptions.cwd);
-
-    checkAngularPackage().then((result) => {
-        if(result) {
-            commandArguments = result.concat(commandArguments);
+    getAdditionalCommandArguments().then((additionalArguments) => {
+        if(additionalArguments) {
+            commandArguments = additionalArguments.concat(commandArguments);
         }
 
-        if(packageName) {
+        if(!checkLocalPackage(collectionName)) {
             runCommand('npm', ['install', collectionName]).then(() => {
                 runCommand('npx', commandArguments, evaluatingOptions);
             });
@@ -42,19 +41,17 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     });
 }
 
-function getNotInstalledLocalPackage(packageName, cwd) {
-    if(fs.existsSync('node_modules') || cwd) {
-        const packageJsonPath = path.join(cwd || process.cwd(), `node_modules/${packageName}/package.json`);
-
-        if(!fs.existsSync(packageJsonPath)) {
-            return packageName;
-        }
+function checkLocalPackage(packageName) {
+    if(!fs.existsSync('node_modules')) {
+        return;
     }
-    return;
+
+    const packageJsonPath = path.join(process.cwd(), `node_modules/${packageName}/package.json`);
+
+    return fs.existsSync(packageJsonPath);
 }
 
-function checkAngularPackage() {
-    const minVersion = new semver('6.0.0');
+function getAdditionalCommandArguments() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
             const commandArguments = ['-p', '@angular/cli'];
@@ -63,9 +60,9 @@ function checkAngularPackage() {
             }
             if(stdout) {
                 const commandResult = stdout.toString();
-                const version = new semver(commandResult.match(/(?<=angular.cli:.)([0-9]+.[0-9]+.[0-9]+)/ig)[0]);
+                const version = new semver(commandResult.match(/(?<=angular.cli:.)([0-9]+.[0-9]+.[0-9]+(-(beta|rc|alpha).[0-9]+)*)/ig)[0]);
 
-                if(minVersion.compare(version) > 0) {
+                if(version.compare(minVersion) < 0) {
                     resolve(commandArguments);
                 }
             }
@@ -80,9 +77,9 @@ const install = (options) => {
 
 const create = (appName, options) => {
     let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-install=true'];
-    checkAngularPackage().then((result) => {
-        if(result) {
-            commandArguments = result.concat(commandArguments);
+    getAdditionalCommandArguments().then((additionalArguments) => {
+        if(additionalArguments) {
+            commandArguments = additionalArguments.concat(commandArguments);
         }
         runCommand('npx', commandArguments).then(() => {
             options.resolveConflicts = 'override';
