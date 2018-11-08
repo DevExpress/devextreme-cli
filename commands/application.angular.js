@@ -3,7 +3,7 @@ const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
 const fs = require('fs');
 const exec = require('child_process').exec;
-const minAngularCLIVersion = '6.0.0';
+const minNgCLIVersion = new semver('6.0.0');
 
 function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -26,24 +26,24 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
         'ng', 'g', `${collectionName}:${schematicCommand}`
     ].concat(additionalOptions);
 
-    optimizeNgCommandArguments(commandArguments).then((resultArguments) => {
+    optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
         if(!localPackageExists(collectionName)) {
             runCommand('npm', ['install', collectionName]).then(() => {
-                runCommand('npx', resultArguments, evaluatingOptions);
+                runCommand('npx', optimizedArguments, evaluatingOptions);
             });
         } else {
-            runCommand('npx', resultArguments, evaluatingOptions);
+            runCommand('npx', optimizedArguments, evaluatingOptions);
         }
     });
 }
 
 function localPackageExists(packageName) {
-    if(!fs.existsSync('node_modules')) {
+    const nodeModulesPath = path.join(process.cwd(), `node_modules`);
+    if(!fs.existsSync(nodeModulesPath)) {
         return;
     }
 
-    const packageJsonPath = path.join(process.cwd(), `node_modules/${packageName}/package.json`);
-
+    const packageJsonPath = path.join(nodeModulesPath, `${packageName}/package.json`);
     return fs.existsSync(packageJsonPath);
 }
 
@@ -56,8 +56,7 @@ function optimizeNgCommandArguments(args) {
 function hasSutableNgCli() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
-
-            stderr || parseNgCliVersion(stdout).compare(new semver(minAngularCLIVersion)) < 0
+            stderr || parseNgCliVersion(stdout).compare(minNgCLIVersion) < 0
               ? reject()
               : resolve();
         });
@@ -74,8 +73,8 @@ const install = (options) => {
 
 const create = (appName, options) => {
     let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-install=true'];
-    optimizeNgCommandArguments(commandArguments).then((resultArguments) => {
-        runCommand('npx', resultArguments).then(() => {
+    optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
+        runCommand('npx', optimizedArguments).then(() => {
             options.resolveConflicts = 'override';
             addTemplate(appName, options, {
                 cwd: path.join(process.cwd(), appName)
