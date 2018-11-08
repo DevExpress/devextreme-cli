@@ -26,17 +26,13 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
         'ng', 'g', `${collectionName}:${schematicCommand}`
     ].concat(additionalOptions);
 
-    getAdditionalCommandArguments().then((additionalArguments) => {
-        if(additionalArguments) {
-            commandArguments = additionalArguments.concat(commandArguments);
-        }
-
+    optimizeNgCommandArguments(commandArguments).then((resultArguments) => {
         if(!localPackageExists(collectionName)) {
             runCommand('npm', ['install', collectionName]).then(() => {
-                runCommand('npx', commandArguments, evaluatingOptions);
+                runCommand('npx', resultArguments, evaluatingOptions);
             });
         } else {
-            runCommand('npx', commandArguments, evaluatingOptions);
+            runCommand('npx', resultArguments, evaluatingOptions);
         }
     });
 }
@@ -51,22 +47,25 @@ function localPackageExists(packageName) {
     return fs.existsSync(packageJsonPath);
 }
 
-function getAdditionalCommandArguments() {
+function optimizeNgCommandArguments(args) {
+    return new Promise((resolve, reject) => {
+      hasSutableNgCli().then(() => resolve(args), () => resolve(['-p', '@angular/cli', ...args]));
+    });
+}
+
+function hasSutableNgCli() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
-            if(stderr || !ngCliVersionIsSuitable(stdout)) {
-                resolve(['-p', '@angular/cli']);
-            }
-            resolve();
+
+            stderr || parseNgCliVersion(stdout).compare(new semver(minAngularCLIVersion)) < 0
+              ? reject()
+              : resolve();
         });
     });
 }
 
-function ngCliVersionIsSuitable(stdout) {
-    const commandResult = stdout.toString();
-    const version = new semver(commandResult.match(/(?<=angular.cli: )(\S+)/ig)[0]);
-
-    return version.compare(new semver(minAngularCLIVersion)) < 0 ? false : true;
+function parseNgCliVersion(stdout) {
+    return new semver(stdout.toString().match(/(?<=angular.cli: )(\S+)/ig)[0]);
 }
 
 const install = (options) => {
@@ -75,11 +74,8 @@ const install = (options) => {
 
 const create = (appName, options) => {
     let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-install=true'];
-    getAdditionalCommandArguments().then((additionalArguments) => {
-        if(additionalArguments) {
-            commandArguments = additionalArguments.concat(commandArguments);
-        }
-        runCommand('npx', commandArguments).then(() => {
+    optimizeNgCommandArguments(commandArguments).then((resultArguments) => {
+        runCommand('npx', resultArguments).then(() => {
             options.resolveConflicts = 'override';
             addTemplate(appName, options, {
                 cwd: path.join(process.cwd(), appName)
