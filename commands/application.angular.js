@@ -1,5 +1,9 @@
 const path = require('path');
-const runNpxCommand = require('../utility/run-npx-command');
+const runCommand = require('../utility/run-command');
+const semver = require('semver').SemVer;
+const fs = require('fs');
+const exec = require('child_process').exec;
+const minNgCliVersion = new semver('6.0.0');
 
 function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -17,13 +21,50 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
         additionalOptions.push(schematicOption);
     };
 
-    const commandArguments = [
-        '-p', '@angular/cli@latest',
-        '-p', collectionPath,
+
+    let commandArguments = [
         'ng', 'g', `${collectionName}:${schematicCommand}`
     ].concat(additionalOptions);
 
-    runNpxCommand(commandArguments, evaluatingOptions);
+    optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
+        if(!localPackageExists(collectionName)) {
+            runCommand('npm', ['install', collectionName]).then(() => {
+                runCommand('npx', optimizedArguments, evaluatingOptions);
+            });
+        } else {
+            runCommand('npx', optimizedArguments, evaluatingOptions);
+        }
+    });
+}
+
+function localPackageExists(packageName) {
+    const nodeModulesPath = path.join(process.cwd(), `node_modules`);
+    if(!fs.existsSync(nodeModulesPath)) {
+        return;
+    }
+
+    const packageJsonPath = path.join(nodeModulesPath, packageName, 'package.json');
+    return fs.existsSync(packageJsonPath);
+}
+
+function optimizeNgCommandArguments(args) {
+    return new Promise((resolve, reject) => {
+      hasSutableNgCli().then(() => resolve(args), () => resolve(['-p', '@angular/cli', ...args]));
+    });
+}
+
+function hasSutableNgCli() {
+    return new Promise((resolve, reject) => {
+        exec('ng v', (err, stdout, stderr) => {
+            stderr || parseNgCliVersion(stdout).compare(minNgCliVersion) < 0
+              ? reject()
+              : resolve();
+        });
+    });
+}
+
+function parseNgCliVersion(stdout) {
+    return new semver(stdout.toString().match(/(?<=angular.cli: )(\S+)/ig)[0]);
 }
 
 const install = (options) => {
@@ -31,20 +72,19 @@ const install = (options) => {
 };
 
 const create = (appName, options) => {
-    runNpxCommand([
-        '-p', '@angular/cli@latest', 'ng', 'new', appName, '--style=scss', '--routing=false', '--skip-install=true'
-    ]).then(() => {
-        options.resolveConflicts = 'override';
-        addTemplate(appName, options, {
-            cwd: path.join(process.cwd(), appName)
+    let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-install=true'];
+    optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
+        runCommand('npx', optimizedArguments).then(() => {
+            options.resolveConflicts = 'override';
+            addTemplate(appName, options, {
+                cwd: path.join(process.cwd(), appName)
+            });
         });
     });
 };
 
 const addTemplate = (appName, options, evaluatingOptions) => {
-    const schematicOptions = Object.assign({
-        project: appName
-    }, options);
+    const schematicOptions = {...(appName && {project: appName}), ...options};
     runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
 
