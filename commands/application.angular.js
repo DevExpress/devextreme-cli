@@ -43,7 +43,7 @@ function localPackageExists(packageName) {
         return;
     }
 
-    const packageJsonPath = path.join(nodeModulesPath, `${packageName}/package.json`);
+    const packageJsonPath = path.join(nodeModulesPath, packageName, 'package.json');
     return fs.existsSync(packageJsonPath);
 }
 
