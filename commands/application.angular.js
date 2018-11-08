@@ -3,7 +3,7 @@ const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
 const fs = require('fs');
 const exec = require('child_process').exec;
-const minNgCLIVersion = new semver('6.0.0');
+const minNgCliVersion = new semver('6.0.0');
 
 function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -56,7 +56,7 @@ function optimizeNgCommandArguments(args) {
 function hasSutableNgCli() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
-            stderr || parseNgCliVersion(stdout).compare(minNgCLIVersion) < 0
+            stderr || parseNgCliVersion(stdout).compare(minNgCliVersion) < 0
               ? reject()
               : resolve();
         });
