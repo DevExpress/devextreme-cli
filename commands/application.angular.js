@@ -54,21 +54,19 @@ function localPackageExists(packageName) {
 function getAdditionalCommandArguments() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
-            const commandArguments = ['-p', '@angular/cli'];
-            if(stderr) {
-                resolve(commandArguments);
-            }
-            if(stdout) {
-                const commandResult = stdout.toString();
-                const version = new semver(commandResult.match(/(?<=angular.cli: )(\S+)/ig)[0]);
-
-                if(version.compare(new semver(minAngularCLIVersion)) < 0) {
-                    resolve(commandArguments);
-                }
+            if(stderr || !ngCliVersionIsSuitable(stdout)) {
+                resolve(['-p', '@angular/cli']);
             }
             resolve();
         });
     });
+}
+
+function ngCliVersionIsSuitable(stdout) {
+    const commandResult = stdout.toString();
+    const version = new semver(commandResult.match(/(?<=angular.cli: )(\S+)/ig)[0]);
+
+    return version.compare(new semver(minAngularCLIVersion)) < 0 ? false : true;
 }
 
 const install = (options) => {
