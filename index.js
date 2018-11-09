@@ -8,7 +8,6 @@ const themeBuilder = require('./commands/themebuider');
 const application = require('./commands/application');
 const devextremeConfig = require('./utility/devextreme-config');
 const printHelp = require('./commands/help').printHelp;
-
 const packageJson = require('./package.json');
 
 if(!commands.length) {

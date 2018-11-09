@@ -4,7 +4,7 @@
         "node": true
     },
     "parserOptions": {
-        "ecmaVersion": 6,
+        "ecmaVersion": 2018,
         "sourceType": "module",
         "ecmaFeatures": {
             "globalReturn": true
@@ -40,6 +40,7 @@
                 }
             }
         ],
+        "linebreak-style": ["error", "unix"],
         "no-multiple-empty-lines": [ "error", { "max": 2 } ],
         "no-irregular-whitespace": "error",
         "no-multi-spaces": "error",

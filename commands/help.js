@@ -1,5 +1,4 @@
 const commands = require('./commands.json').commands;
-
 const textColor = '\x1b[36m%s\x1b[0m';
 
 const findCommand = (commandName) => {
