@@ -101,7 +101,8 @@ const runThemeBuilder = (rawOptions) => {
 
         themeBuilder.buildTheme(options).then((result) => {
             let content = '';
-            let filter = (options.vars instanceof Array) ? options.vars : options.vars.split(',');
+            const vars = options.vars || [];
+            let filter = (vars instanceof Array) ? vars : vars.split(',');
             createPath(options.out);
 
             if(options.command === commands.BUILD_THEME) {
