@@ -27,8 +27,8 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     ].concat(additionalOptions);
 
     optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
-        if(!localPackageExists(collectionName)) {
-            runCommand('npm', ['install', collectionName]).then(() => {
+        if(!localPackageExists(collectionPath)) {
+            runCommand('npm', ['install', collectionPath], evaluatingOptions).then(() => {
                 runCommand('npx', optimizedArguments, evaluatingOptions);
             });
         } else {
