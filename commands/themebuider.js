@@ -58,6 +58,7 @@ const camelize = (object) => {
 const readInput = options => new Promise(resolve => {
     const fileName = options.inputFile;
     if(!fileName) resolve();
+
     fs.readFile(fileName, (error, data) => {
         if(error) {
             console.error(`Unable to read the ${fileName} file.`);

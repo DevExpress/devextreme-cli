@@ -15,10 +15,11 @@ const run = (commands, options, devextremeConfig) => {
     if(commands[0] === 'new') {
         if(commands[1] === 'angular-app') {
             angularApplication.create(commands[2] || 'my-app', options);
-        } else {
-            console.error(`The '${commands[1]}' application type is not valid`);
-            printHelp(commands[0]);
+            return;
         }
+
+        console.error(`The '${commands[1]}' application type is not valid`);
+        printHelp(commands[0]);
     } else {
         if(commands[0] === 'add') {
             if(commands[1] === 'devextreme-angular') {

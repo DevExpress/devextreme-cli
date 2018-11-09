@@ -38,7 +38,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 }
 
 function localPackageExists(packageName) {
-    const nodeModulesPath = path.join(process.cwd(), `node_modules`);
+    const nodeModulesPath = path.join(process.cwd(), 'node_modules');
     if(!fs.existsSync(nodeModulesPath)) {
         return;
     }
@@ -49,7 +49,7 @@ function localPackageExists(packageName) {
 
 function optimizeNgCommandArguments(args) {
     return new Promise((resolve, reject) => {
-      hasSutableNgCli().then(() => resolve(args), () => resolve(['-p', '@angular/cli', ...args]));
+        hasSutableNgCli().then(() => resolve(args), () => resolve(['-p', '@angular/cli', ...args]));
     });
 }
 
@@ -57,14 +57,14 @@ function hasSutableNgCli() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
             stderr || parseNgCliVersion(stdout).compare(minNgCliVersion) < 0
-              ? reject()
-              : resolve();
+                ? reject()
+                : resolve();
         });
     });
 }
 
 function parseNgCliVersion(stdout) {
-    return new semver(stdout.toString().match(/(?<=angular.cli: )(\S+)/ig)[0]);
+    return new semver(/angular.cli:\s*(\S+)/ig.exec(stdout.toString())[1]);
 }
 
 const install = (options) => {
@@ -84,7 +84,7 @@ const create = (appName, options) => {
 };
 
 const addTemplate = (appName, options, evaluatingOptions) => {
-    const schematicOptions = {...(appName && {project: appName}), ...options};
+    const schematicOptions = { ...(appName && { project: appName }), ...options };
     runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
 

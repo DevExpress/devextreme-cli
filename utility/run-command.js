@@ -15,11 +15,7 @@ module.exports = function(commandName, args, customConfig) {
 
     return new Promise((resolve, reject) => {
         spawn(command, args, config).on('exit', (code) => {
-            if(code) {
-                reject(code);
-            } else {
-                resolve();
-            }
+            code ? reject(code) : resolve();
         });
     });
 };
