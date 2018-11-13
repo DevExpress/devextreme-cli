@@ -72,7 +72,7 @@ const install = (options) => {
 };
 
 const create = (appName, options) => {
-    let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-install=true'];
+    let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-install=true', '--skip-tests=true'];
     optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
         runCommand('npx', optimizedArguments).then(() => {
             options.resolveConflicts = 'override';
