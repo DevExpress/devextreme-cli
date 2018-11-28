@@ -95,8 +95,9 @@ const runThemeBuilder = (rawOptions) => {
         options.sassCompiler = scssCompiler;
         options.lessCompiler = require('less/lib/less-node');
 
+        options.lessCompiler.options = options.lessCompiler.options || {};
+        options.lessCompiler.options['math'] = 'always';
         if(options.assetsBasePath) {
-            options.lessCompiler.options = options.lessCompiler.options || {};
             options.lessCompiler.options['rootpath'] = options.assetsBasePath;
         }
 
