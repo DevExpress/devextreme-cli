@@ -76,6 +76,7 @@ const create = (appName, options) => {
     optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
         runCommand('npx', optimizedArguments).then(() => {
             options.resolveConflicts = 'override';
+            options.updateBudgets = true;
             addTemplate(appName, options, {
                 cwd: path.join(process.cwd(), appName)
             });
