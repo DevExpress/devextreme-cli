@@ -16,8 +16,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 
     const additionalOptions = [];
     for(let option in options) {
-        // NOTE: Removing boolean values is a workaround for the @angular/cli issue [angular/angular-cli#12150](https://github.com/angular/angular-cli/issues/12150)
-        const schematicOption = `--${option}${options[option] === true ? '' : `=${options[option]}`}`;
+        const schematicOption = `--${option}=${options[option]}`;
         additionalOptions.push(schematicOption);
     };
 
