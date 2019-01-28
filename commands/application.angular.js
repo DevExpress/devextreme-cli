@@ -3,7 +3,7 @@ const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
 const fs = require('fs');
 const exec = require('child_process').exec;
-const minNgCliVersion = new semver('6.0.0');
+const minNgCliVersion = new semver('7.2.0');
 
 function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
