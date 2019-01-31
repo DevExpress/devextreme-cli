@@ -24,6 +24,7 @@ You can also find information that can help you to resolve the issue in the foll
     devextreme-cli version:
 
 **Steps to reproduce:**
+<!-- Provide commands in the sequence you used them: -->
 
 **Current behavior:**
 <!-- Describe how the bug manifests. -->
