@@ -19,7 +19,7 @@ You can also find information that can help you to resolve the issue in the foll
 
 <!-- Please provide the following information -->
 
-**Package versions:**
+**Package version:**
 
     devextreme-cli version:
 
