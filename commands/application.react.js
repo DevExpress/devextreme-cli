@@ -58,18 +58,19 @@ const preparePackageJson = (appPath, appName) => {
         { name: 'devextreme-react', version: '18.2'},
         { name: 'node-sass', version: '^4.11.0'},
         { name: 'react-router-dom', version: '^4.3.1'}
-    ];
-
-    const devDepends = [
+    ],
+    devDepends = [
         { name: 'devextreme-cli', version: '1.0.3'},
         { name: 'gh-pages', version: '^2.0.1'}
+    ],
+    scripts = [
+        { key: 'postinstall', value: 'npm run build-themes' },
+        { key: 'deploy', value: 'gh-pages -d build' }
     ];
 
     packageJsonUtils.addDependencies(appPath, depends);
     packageJsonUtils.addDependencies(appPath, devDepends, 'dev');
-    packageJsonUtils.updateScripts(appPath, 'postinstall', 'npm run build-themes');
-    packageJsonUtils.updateScripts(appPath, 'build-themes', 'devextreme build');
-    packageJsonUtils.updateScripts(appPath, 'deploy', 'gh-pages -d build');
+    packageJsonUtils.updateScripts(appPath, scripts);
     packageJsonUtils.updateValue(appPath, 'name', appName);
 };
 

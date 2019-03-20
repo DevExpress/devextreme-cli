@@ -25,11 +25,14 @@ const addDependencies = (appPath, packages, type) => {
     fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 });
 };
 
-const updateScripts = (appPath, key, value) => {
+const updateScripts = (appPath, scripts) => {
     const packageJsonPath = path.join(appPath, 'package.json');
     let packageJson = fs.readJSONSync(packageJsonPath);
 
-    packageJson.scripts[key] = value;
+    scripts.forEach((script) => {
+        packageJson.scripts[script.key] = script.value;
+    });
+    
     fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 });
 };
 
