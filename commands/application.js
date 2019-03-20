@@ -1,4 +1,5 @@
 const angularApplication = require('./application.angular');
+const reactApplication = require('./application.react');
 const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
@@ -18,6 +19,11 @@ const run = (commands, options, devextremeConfig) => {
             return;
         }
 
+        if(commands[1] === 'react-app') {
+            reactApplication.create(commands[2] || 'my-app', options);
+            return;
+        }
+
         console.error(`The '${commands[1]}' application type is not valid`);
         printHelp(commands[0]);
     } else {
@@ -29,6 +35,11 @@ const run = (commands, options, devextremeConfig) => {
 
             if(commands[1] === 'angular-template') {
                 angularApplication.addTemplate(commands[2], options);
+                return;
+            }
+
+            if(commands[1] === 'react-template') {
+                reactApplication.addTemplate(commands[2], options);
                 return;
             }
 
