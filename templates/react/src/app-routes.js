@@ -1,6 +1,6 @@
-import { HomePage, DisplayDataPage, ProfilePage } from './pages';
+<%=^empty%>import { HomePage, DisplayDataPage, ProfilePage } from './pages';
 
-export default [
+<%=/empty%>export default [<%=^empty%>
   {
     path: '/display-data',
     component: DisplayDataPage
@@ -17,4 +17,4 @@ export default [
     path: '**',
     redirectTo: 'home'
   }
-];
+  <%=/empty%>];

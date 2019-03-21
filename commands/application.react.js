@@ -1,30 +1,37 @@
 const runCommand = require('../utility/run-command');
-const moveTemplate = require('../utility/move-template-files').moveTemplate;
+const moveTemplateToProject = require('../utility/move-template-to-project').moveTemplateToProject;
+const addPageToProject = require('../utility/move-template-to-project').addPageToProject;
 const packageJsonUtils = require('../utility/package');
-const basename = require('path').basename;
+const modify = require('../utility/modify-file');
+const stringUtils = require('../utility/string');
 const path = require('path');
-const fs = require('fs-extra');
 const layouts = {
-    "side-nav-inner-toolbar": "SideNavInnerToolbar",
-    "side-nav-outer-toolbar": "SideNavOuterToolbar"
+    'side-nav-inner-toolbar': 'SideNavInnerToolbar',
+    'side-nav-outer-toolbar': 'SideNavOuterToolbar'
 };
 
-const getAppPath = (appName) => {
-    if (appName) {
-        return path.join(process.cwd(), appName);
-    }
+const preparePackageJson = (appPath, appName) => {
+    const depends = [
+        { name: 'devextreme', version: '18.2'},
+        { name: 'devextreme-react', version: '18.2'},
+        { name: 'node-sass', version: '^4.11.0'},
+        { name: 'react-router-dom', version: '^4.3.1'}
+    ];
+    const devDepends = [
+        { name: 'devextreme-cli', version: '1.0.3'},
+        { name: 'gh-pages', version: '^2.0.1'}
+    ];
+    const scripts = [
+        { key: 'build-themes', value: 'devextreme build' },
+        { key: 'postinstall', value: 'npm run build-themes' },
+        { key: 'deploy', value: 'gh-pages -d build' }
+    ];
 
-    if (!isProjectFolder()) {
-        console.error('Use the command inside the react project');
-        process.exit(1);
-    }
-
-    return process.cwd();
+    packageJsonUtils.addDependencies(appPath, depends);
+    packageJsonUtils.addDependencies(appPath, devDepends, 'dev');
+    packageJsonUtils.updateScripts(appPath, scripts);
+    packageJsonUtils.updateValue(appPath, 'name', appName);
 };
-
-const isProjectFolder = () => {
-    return fs.existsSync(path.join(process.cwd(), 'package.json'));
-}
 
 const normalizeOptions = (options) => {
     let normalizedOptions = {};
@@ -52,69 +59,64 @@ const create = (appName, options) => {
     });
 };
 
-const preparePackageJson = (appPath, appName) => {
-    const depends = [
-        { name: 'devextreme', version: '18.2'},
-        { name: 'devextreme-react', version: '18.2'},
-        { name: 'node-sass', version: '^4.11.0'},
-        { name: 'react-router-dom', version: '^4.3.1'}
-    ],
-    devDepends = [
-        { name: 'devextreme-cli', version: '1.0.3'},
-        { name: 'gh-pages', version: '^2.0.1'}
-    ],
-    scripts = [
-        { key: 'postinstall', value: 'npm run build-themes' },
-        { key: 'deploy', value: 'gh-pages -d build' }
-    ];
-
-    packageJsonUtils.addDependencies(appPath, depends);
-    packageJsonUtils.addDependencies(appPath, devDepends, 'dev');
-    packageJsonUtils.updateScripts(appPath, scripts);
-    packageJsonUtils.updateValue(appPath, 'name', appName);
-};
-
 const install = (appPath) => {
     const config = path ? { cwd: appPath} : {};
     
     runCommand('npm', ['install'], config);
 };
 
-const modifyContent = (templateContent, currentContent, filePath) => {
-    if (basename(filePath) === 'index.css') {
-        return `${currentContent}\n${templateContent}`;
+const getLayout = (layout) => {
+    const layoutName = layouts[layout];
+    if (!layout || !layoutName) {
+        return 'SideNavOuterToolbar';
     }
-
-    return templateContent;
+    
+    return layoutName;
 };
 
-const addTemplate = (appName, templateOptions) => {
-    const ownPath = path.dirname(require.resolve(path.join(__dirname, '..', 'templates', 'react', 'devextreme.json')));
-    const defaultLayout = 'SideNavOuterToolbar';
-    let normalizedOptions = normalizeOptions(templateOptions);
-    const appPath = getAppPath(appName);
+const addTemplate = (appName, options) => {
+    const templateSourcePath = path.join(__dirname, '..', 'templates', 'react');
+    const appPath = path.join(process.cwd(), appName);
 
-    normalizedOptions.layout = layouts[normalizedOptions.layout] || defaultLayout;
-    normalizedOptions.resolveConflicts = normalizedOptions.resolveConflicts || 'createNew';
-    normalizedOptions.resolveConflictOptions= 'src\\App.js';
+    const templateOptions = Object.assign({
+        skipFolder: options.empty ? 'pages' : '',
+        layout: getLayout(options.layout),
 
-    moveTemplate(ownPath, appPath, normalizedOptions, modifyContent).then(() => {
+    }, options);
+
+    moveTemplateToProject(templateSourcePath, appPath, templateOptions).then(() => {
         preparePackageJson(appPath, appName);
         install(appPath);
     });
 };
 
-// const addView = (viewName, options) => {
-//     const schematicOptions = Object.assign({
-//         name: viewName
-//     }, options);
-//     schematicOptions.name = viewName;
-//     runSchematicCommand('add-view', schematicOptions);
-// };
+const getComponentPageName = (viewName) => {
+    return `${stringUtils.capitalize(viewName)}Page`;
+};
+
+const createRoute = (viewName, componentName) => {
+    return `\n{\n    path: \'/${viewName}\',\n    component: ${componentName}\n  },`;
+};
+const createNavigation = (viewName, componentName) => {
+    return `, {\n    text: \'${stringUtils.capitalize(viewName)}\',\n    path: \'/${viewName}\',\n    icon: \'home\'\n  }`;
+};
+
+const addView = (viewName, options) => {
+    const componentName = getComponentPageName(viewName);
+    const pathToApp = path.join(process.cwd(), 'src', 'pages');
+    const pathToPageIndex = path.join(process.cwd(), 'src', 'pages', 'index.js');
+
+    addPageToProject(viewName, pathToApp, { isReact: true, pageName: viewName });
+
+    modify.insertExport(pathToPageIndex, componentName, `./${viewName}/${viewName}`, true);
+    modify.addPageToRouting('src\\app-routes.js', createRoute(viewName, componentName));
+    modify.addNavigation('src\\app-navigation.js', createNavigation(viewName, componentName));
+    modify.insertImport('src\\app-routes.js', componentName, './pages');
+};
 
 module.exports = {
     install,
     create,
     addTemplate,
-    // addView
+    addView
 };

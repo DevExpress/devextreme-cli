@@ -1,18 +1,26 @@
-const fs = require('fs-extra');
+const fs = require('fs');
 const path = require('path');
 
-const updateValue = (appPath, key, value) => {
+const readJSONFile = (appPath) => {
     const packageJsonPath = path.join(appPath, 'package.json');
-    let packageJson = fs.readJSONSync(packageJsonPath);
+    return JSON.parse(fs.readFileSync(packageJsonPath));
+};
+
+const writeJSONFile = (appPath, content) => {
+    const packageJsonPath = path.join(appPath, 'package.json');
+    fs.writeFileSync(packageJsonPath, JSON.stringify(content, null, 2));
+};
+
+const updateValue = (appPath, key, value) => {
+    let packageJson = readJSONFile(appPath);
     packageJson[key] = value;
 
-    fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 });
+    writeJSONFile(appPath, packageJson);
 };
 
 const addDependencies = (appPath, packages, type) => {
-    const packageJsonPath = path.join(appPath, 'package.json');
+    let packageJson = readJSONFile(appPath);
     type = type === 'dev' ? 'devDependencies' : 'dependencies';
-    let packageJson = fs.readJSONSync(packageJsonPath);
 
     if (!packageJson[type]) {
         packageJson[type] = {};
@@ -22,18 +30,17 @@ const addDependencies = (appPath, packages, type) => {
         packageJson[type][package.name] = package.version;
     });
 
-    fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 });
+    writeJSONFile(appPath, packageJson);
 };
 
 const updateScripts = (appPath, scripts) => {
-    const packageJsonPath = path.join(appPath, 'package.json');
-    let packageJson = fs.readJSONSync(packageJsonPath);
+    let packageJson = readJSONFile(appPath);
 
     scripts.forEach((script) => {
         packageJson.scripts[script.key] = script.value;
     });
     
-    fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 });
+    writeJSONFile(appPath, packageJson);
 };
 
 module.exports = {

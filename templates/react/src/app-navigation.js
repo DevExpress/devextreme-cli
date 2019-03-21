@@ -1,4 +1,4 @@
-export const navigation = [
+export const navigation = [<%=^empty%>
   {
     text: 'Home',
     path: '/home',
@@ -18,4 +18,4 @@ export const navigation = [
       }
     ]
   }
-];
+  <%=/empty%>];

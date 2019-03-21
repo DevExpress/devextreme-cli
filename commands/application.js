@@ -38,14 +38,16 @@ const run = (commands, options, devextremeConfig) => {
                 return;
             }
 
-            if(commands[1] === 'react-template') {
-                reactApplication.addTemplate(commands[2], options);
-                return;
-            }
-
             if(devextremeConfig.applicationEngine === 'angular') {
                 if(commands[1] === 'view') {
                     angularApplication.addView(commands[2], options);
+                } else {
+                    console.error('Invalid command');
+                    printHelp(commands[0]);
+                }
+            } if (devextremeConfig.applicationEngine === 'react') {
+                if(commands[1] === 'view') {
+                    reactApplication.addView(commands[2], options);
                 } else {
                     console.error('Invalid command');
                     printHelp(commands[0]);
