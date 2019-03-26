@@ -1,19 +1,29 @@
 const runCommand = require('../utility/run-command');
-const moveTemplateToProject = require('../utility/move-template-to-project').moveTemplateToProject;
+const path = require('path');
+const fs = require('fs');
+const moveTemplateFilesToProject = require('../utility/move-template-to-project').moveTemplateFilesToProject;
 const addPageToProject = require('../utility/move-template-to-project').addPageToProject;
 const packageJsonUtils = require('../utility/package');
-const modify = require('../utility/modify-file');
+const routingUtils = require('../utility/routing');
+const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
-const path = require('path');
+const pathToPagesIndex = path.join(process.cwd(), 'src', 'pages', 'index.js');
 const layouts = {
     'side-nav-inner-toolbar': 'SideNavInnerToolbar',
     'side-nav-outer-toolbar': 'SideNavOuterToolbar'
 };
 
-const preparePackageJson = (appPath, appName) => {
+const addDevextremeToPackageJson = (appPath) => {
     const depends = [
         { name: 'devextreme', version: '18.2'},
-        { name: 'devextreme-react', version: '18.2'},
+        { name: 'devextreme-react', version: '18.2'}
+    ];
+
+    packageJsonUtils.addDependencies(appPath, depends);
+};
+
+const preparePackageJsonForTemplate = (appPath, appName) => {
+    const depends = [
         { name: 'node-sass', version: '^4.11.0'},
         { name: 'react-router-dom', version: '^4.3.1'}
     ];
@@ -50,19 +60,34 @@ const create = (appName, options) => {
         normalizedOptions = normalizeOptions(options);
 
     runCommand('npx', commandArguments).then(() => {
-        const templateOptions = Object.assign({
+        const templateOptions = Object.assign({}, normalizedOptions, {
             project: appName,
-            resolveConflicts: 'override'
-        }, normalizedOptions);
+            skipFolder: options.empty ? 'pages' : '',
+            layout: getLayout(options.layout)
+        });
 
         addTemplate(appName, templateOptions);
     });
 };
 
-const install = (appPath) => {
-    const config = path ? { cwd: appPath} : {};
-    
-    runCommand('npm', ['install'], config);
+const addTemplate = (appName, templateOptions) => {
+    const templateSourcePath = path.join(__dirname, '..', 'templates', 'react');
+    const appPath = path.join(process.cwd(), appName);
+
+    moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions)
+    addDevextremeToPackageJson(appPath);
+    preparePackageJsonForTemplate(appPath, appName);
+    runCommand('npm', ['install'], { cwd: appPath });
+};
+
+const install = () => {
+    const appPath = process.cwd();
+    const pathToMainComponent = path.join(appPath, 'src', 'App.js');
+    moduleUtils.insertImport(pathToMainComponent, 'devextreme/dist/css/dx.common.css');
+    moduleUtils.insertImport(pathToMainComponent, 'devextreme/dist/css/dx.light.compact.css');
+    addDevextremeToPackageJson(appPath);
+
+    runCommand('npm', ['install'], { cwd: appPath });
 };
 
 const getLayout = (layout) => {
@@ -74,44 +99,54 @@ const getLayout = (layout) => {
     return layoutName;
 };
 
-const addTemplate = (appName, options) => {
-    const templateSourcePath = path.join(__dirname, '..', 'templates', 'react');
-    const appPath = path.join(process.cwd(), appName);
-
-    const templateOptions = Object.assign({
-        skipFolder: options.empty ? 'pages' : '',
-        layout: getLayout(options.layout),
-
-    }, options);
-
-    moveTemplateToProject(templateSourcePath, appPath, templateOptions).then(() => {
-        preparePackageJson(appPath, appName);
-        install(appPath);
-    });
-};
-
 const getComponentPageName = (viewName) => {
     return `${stringUtils.capitalize(viewName)}Page`;
 };
 
-const createRoute = (viewName, componentName) => {
-    return `\n{\n    path: \'/${viewName}\',\n    component: ${componentName}\n  },`;
+const getNavigationData = (viewName, componentName, icon) => {
+    return {
+        route: `\n{\n    path: \'/${viewName}\',\n    component: ${componentName}\n  }`,
+        navigation: `{\n    text: \'${stringUtils.capitalize(viewName)}\',\n    path: \'/${viewName}\',\n    icon: \'${icon}\'\n  }`
+    };
 };
-const createNavigation = (viewName, componentName) => {
-    return `, {\n    text: \'${stringUtils.capitalize(viewName)}\',\n    path: \'/${viewName}\',\n    icon: \'home\'\n  }`;
+
+const createPathToPage = (pageName) => {
+    const pagesPath = path.join(process.cwd(), 'src', 'pages');
+    const newPagePath = path.join(pagesPath, pageName);
+
+    if (!fs.existsSync(pagesPath)) {
+        fs.mkdirSync(pagesPath);
+        createPagesIndex();
+    }
+
+    if (fs.existsSync(newPagePath)) {
+        console.error('The age already exists');
+        process.exit();
+    }
+    
+    fs.mkdirSync(newPagePath);
+
+    return newPagePath;
 };
 
-const addView = (viewName, options) => {
-    const componentName = getComponentPageName(viewName);
-    const pathToApp = path.join(process.cwd(), 'src', 'pages');
-    const pathToPageIndex = path.join(process.cwd(), 'src', 'pages', 'index.js');
+const createPagesIndex = () => {
+    fs.writeFileSync(pathToPagesIndex, '');
+};
 
-    addPageToProject(viewName, pathToApp, { isReact: true, pageName: viewName });
+const addView = (pageName, options) => {
+    const componentName = getComponentPageName(pageName);
+    const pathToPage = createPathToPage(pageName);
+    const templatePagesPath = path.join(__dirname, '..', 'templates', 'pages');
+    const routingModulePath = path.join(process.cwd(), 'src', 'app-routes.js' );
+    const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js' );
+    const icon = options && options.icon || 'home';
+    const navigationData = getNavigationData(pageName, componentName, icon);
 
-    modify.insertExport(pathToPageIndex, componentName, `./${viewName}/${viewName}`, true);
-    modify.addPageToRouting('src\\app-routes.js', createRoute(viewName, componentName));
-    modify.addNavigation('src\\app-navigation.js', createNavigation(viewName, componentName));
-    modify.insertImport('src\\app-routes.js', componentName, './pages');
+    addPageToProject(pageName, pathToPage, templatePagesPath);
+    moduleUtils.insertExport(pathToPagesIndex, componentName, `./${pageName}/${pageName}`);
+    moduleUtils.insertImport(routingModulePath, './pages', componentName);
+    routingUtils.addPageToAppNavigation(routingModulePath, navigationData.route);
+    routingUtils.addPageToAppNavigation(navigationModulePath, navigationData.navigation, true);
 };
 
 module.exports = {

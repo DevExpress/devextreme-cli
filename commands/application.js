@@ -33,6 +33,11 @@ const run = (commands, options, devextremeConfig) => {
                 return;
             }
 
+            if(commands[1] === 'devextreme-react') {
+                reactApplication.install(options);
+                return;
+            }
+
             if(commands[1] === 'angular-template') {
                 angularApplication.addTemplate(commands[2], options);
                 return;

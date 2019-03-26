@@ -1,4 +1,3 @@
-<%=#isReact%>
 import React from 'react';
 import './<%=pageName%>.scss';
 
@@ -12,4 +11,3 @@ export default () => (
     </div>
   </React.Fragment>
 );
-<%=/isReact%>

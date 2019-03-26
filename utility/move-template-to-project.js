@@ -1,23 +1,7 @@
 const pathJoin = require('path').join;
 const extname = require('path').extname
-const dirname = require('path').dirname;
 const fs = require('fs');
 const Mustache = require('mustache');
-
-const getTemplateFiles = (ownPath, directory, fileList, options) => {
-    fs.readdirSync(ownPath).forEach(file => {
-        const isSkip = options && options.skipFolder === file;
-        if (!isSkip) {
-            const path = pathJoin(ownPath, file);
-            if (fs.lstatSync(path).isDirectory()) {
-                fileList.concat(getTemplateFiles(path, pathJoin(directory || './', file), fileList, options));
-            } else {           
-                fileList.push(pathJoin(directory  || './', file));
-            }
-        }
-    });
-    return fileList;
-};
 
 const applyTemplateToFile = (filePath, templateOptions) => {
     const tags = ['<%=', '%>'];
@@ -27,43 +11,36 @@ const applyTemplateToFile = (filePath, templateOptions) => {
     return content;
 };
 
-const addPageToProject = (pageName, path, templateOptions) => {
-    const pagePath = pathJoin(path, pageName);
-    const templatePagesPath = pathJoin(__dirname, '..', 'templates', 'pages');
-    if (fs.existsSync(pagePath)) {
-        console.error('The page exists');
-        process.exit();
-    }
-
-    fs.mkdirSync(pagePath, { recursive: true });
-
-    console.log(getTemplateFiles(templatePagesPath, './', []));
-    getTemplateFiles(templatePagesPath, './', []).forEach((file) => {
-        const content = applyTemplateToFile(pathJoin(templatePagesPath, file), templateOptions);
-        console.log(content);
-        fs.writeFileSync(pathJoin(pagePath, `${pageName}${extname(file)}`), content);
+const addPageToProject = (pageName, pathToPage, templatePagesPath) => {
+    fs.readdirSync(templatePagesPath).forEach((pageItem) => {
+        const content = applyTemplateToFile(pathJoin(templatePagesPath, pageItem), { pageName });
+        fs.writeFileSync(pathJoin(pathToPage, `${pageName}${extname(pageItem)}`), content);
     });
 };
 
-const moveTemplateToProject = (ownPath, appPath, options) => { 
-    return new Promise((resolve, reject) => {
-        getTemplateFiles(ownPath, './', [], options).forEach((file) => {
-            const content = applyTemplateToFile(pathJoin(ownPath, file), options);
-            const filePath = pathJoin(appPath, file);
-            const directory = dirname(filePath);
-            
-            if (!fs.existsSync(directory)) {
-                fs.mkdirSync(directory, { recursive: true });
+const moveTemplateFilesToProject = (templateFolder, appPath, templateOptions, pathToFileRelativelyRoot) => {
+    const relativePath = pathToFileRelativelyRoot || '';
+    const pathToFiles = pathJoin(templateFolder, relativePath);
+    
+    fs.readdirSync(pathToFiles).forEach(file => {
+        if (templateOptions.skipFolder !== file) {
+            const pathToAppFile = pathJoin(appPath, relativePath, file);
+            const nextFilePath = pathJoin(pathToFiles, file);
+
+            if (fs.lstatSync(nextFilePath).isDirectory()) {
+                if (!fs.existsSync(pathToAppFile)) {
+                    fs.mkdirSync(pathToAppFile);
+                }
+                moveTemplateFilesToProject(templateFolder, appPath, templateOptions, pathJoin(relativePath, file));
+            } else {
+                const content = applyTemplateToFile(nextFilePath, templateOptions);
+                fs.writeFileSync(pathToAppFile, content);
             }
-
-            fs.writeFileSync(filePath, content);
-        });
-
-        resolve();
+        }
     });
 };
 
 module.exports = {
-    moveTemplateToProject,
+    moveTemplateFilesToProject,
     addPageToProject
 }
