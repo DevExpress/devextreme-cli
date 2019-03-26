@@ -50,7 +50,7 @@ const run = (commands, options, devextremeConfig) => {
                     console.error('Invalid command');
                     printHelp(commands[0]);
                 }
-            } if (devextremeConfig.applicationEngine === 'react') {
+            } if(devextremeConfig.applicationEngine === 'react') {
                 if(commands[1] === 'view') {
                     reactApplication.addView(commands[2], options);
                 } else {

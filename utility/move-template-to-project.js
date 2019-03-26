@@ -1,5 +1,5 @@
 const pathJoin = require('path').join;
-const extname = require('path').extname
+const extname = require('path').extname;
 const fs = require('fs');
 const Mustache = require('mustache');
 
@@ -21,14 +21,14 @@ const addPageToProject = (pageName, pathToPage, templatePagesPath) => {
 const moveTemplateFilesToProject = (templateFolder, appPath, templateOptions, pathToFileRelativelyRoot) => {
     const relativePath = pathToFileRelativelyRoot || '';
     const pathToFiles = pathJoin(templateFolder, relativePath);
-    
+
     fs.readdirSync(pathToFiles).forEach(file => {
-        if (templateOptions.skipFolder !== file) {
+        if(templateOptions.skipFolder !== file) {
             const pathToAppFile = pathJoin(appPath, relativePath, file);
             const nextFilePath = pathJoin(pathToFiles, file);
 
-            if (fs.lstatSync(nextFilePath).isDirectory()) {
-                if (!fs.existsSync(pathToAppFile)) {
+            if(fs.lstatSync(nextFilePath).isDirectory()) {
+                if(!fs.existsSync(pathToAppFile)) {
                     fs.mkdirSync(pathToAppFile);
                 }
                 moveTemplateFilesToProject(templateFolder, appPath, templateOptions, pathJoin(relativePath, file));
@@ -43,4 +43,4 @@ const moveTemplateFilesToProject = (templateFolder, appPath, templateOptions, pa
 module.exports = {
     moveTemplateFilesToProject,
     addPageToProject
-}
+};

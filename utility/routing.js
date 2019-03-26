@@ -1,4 +1,3 @@
-const path = require('path');
 const fs = require('fs');
 
 const isEmptyRouting = (content) => {
@@ -9,14 +8,14 @@ const getPositionInsertionIndexes = (content, isNavigationModule, isEmpty) => {
     const valueToSearch = isNavigationModule ? /(\}?)\s*(].*\s*)$/ : /(\[)\s*({?)/;
     const matchResult = content.match(valueToSearch);
     const edgeIndex = matchResult && matchResult.index;
-    
-    if (!edgeIndex) {
+
+    if(!edgeIndex) {
         console.error('No route found.');
         process.exit();
     }
 
-    if (isNavigationModule) {
-        return isEmpty ? edgeIndex :  edgeIndex + 1;
+    if(isNavigationModule) {
+        return isEmpty ? edgeIndex : edgeIndex + 1;
     } else {
         return edgeIndex + 1;
     }
@@ -36,7 +35,7 @@ const addPageToAppNavigation = (filePath, insertValue, isNavigationModule) => {
     const content = fs.readFileSync(filePath).toString();
     const isEmpty = isEmptyRouting(content);
     const positions = getPositionInsertionIndexes(content, isNavigationModule, isEmpty);
-    
+
     fs.writeFileSync(filePath, insertToContent(content, positions, addSeparatorToValue(insertValue, isNavigationModule, isEmpty)));
 };
 

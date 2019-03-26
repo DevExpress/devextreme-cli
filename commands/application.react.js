@@ -15,8 +15,8 @@ const layouts = {
 
 const addDevextremeToPackageJson = (appPath) => {
     const depends = [
-        { name: 'devextreme', version: '18.2'},
-        { name: 'devextreme-react', version: '18.2'}
+        { name: 'devextreme', version: '18.2' },
+        { name: 'devextreme-react', version: '18.2' }
     ];
 
     packageJsonUtils.addDependencies(appPath, depends);
@@ -24,12 +24,12 @@ const addDevextremeToPackageJson = (appPath) => {
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
     const depends = [
-        { name: 'node-sass', version: '^4.11.0'},
-        { name: 'react-router-dom', version: '^4.3.1'}
+        { name: 'node-sass', version: '^4.11.0' },
+        { name: 'react-router-dom', version: '^4.3.1' }
     ];
     const devDepends = [
-        { name: 'devextreme-cli', version: '1.0.3'},
-        { name: 'gh-pages', version: '^2.0.1'}
+        { name: 'devextreme-cli', version: '1.0.3' },
+        { name: 'gh-pages', version: '^2.0.1' }
     ];
     const scripts = [
         { key: 'build-themes', value: 'devextreme build' },
@@ -46,8 +46,8 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
 const normalizeOptions = (options) => {
     let normalizedOptions = {};
     for(let option in options) {
-        const optionName = option.replace(/(-)+/g, (match, separator, chr) => {	
-            return chr ? chr.toUpperCase() : '';	
+        const optionName = option.replace(/(-)+/g, (match, separator, chr) => {
+            return chr ? chr.toUpperCase() : '';
         });
         normalizedOptions[optionName] = options[option];
     }
@@ -74,7 +74,7 @@ const addTemplate = (appName, templateOptions) => {
     const templateSourcePath = path.join(__dirname, '..', 'templates', 'react');
     const appPath = path.join(process.cwd(), appName);
 
-    moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions)
+    moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);
     addDevextremeToPackageJson(appPath);
     preparePackageJsonForTemplate(appPath, appName);
     runCommand('npm', ['install'], { cwd: appPath });
@@ -92,10 +92,10 @@ const install = () => {
 
 const getLayout = (layout) => {
     const layoutName = layouts[layout];
-    if (!layout || !layoutName) {
+    if(!layout || !layoutName) {
         return 'SideNavOuterToolbar';
     }
-    
+
     return layoutName;
 };
 
@@ -114,16 +114,16 @@ const createPathToPage = (pageName) => {
     const pagesPath = path.join(process.cwd(), 'src', 'pages');
     const newPagePath = path.join(pagesPath, pageName);
 
-    if (!fs.existsSync(pagesPath)) {
+    if(!fs.existsSync(pagesPath)) {
         fs.mkdirSync(pagesPath);
         createPagesIndex();
     }
 
-    if (fs.existsSync(newPagePath)) {
+    if(fs.existsSync(newPagePath)) {
         console.error('The age already exists');
         process.exit();
     }
-    
+
     fs.mkdirSync(newPagePath);
 
     return newPagePath;
@@ -137,8 +137,8 @@ const addView = (pageName, options) => {
     const componentName = getComponentPageName(pageName);
     const pathToPage = createPathToPage(pageName);
     const templatePagesPath = path.join(__dirname, '..', 'templates', 'pages');
-    const routingModulePath = path.join(process.cwd(), 'src', 'app-routes.js' );
-    const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js' );
+    const routingModulePath = path.join(process.cwd(), 'src', 'app-routes.js');
+    const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js');
     const icon = options && options.icon || 'home';
     const navigationData = getNavigationData(pageName, componentName, icon);
 

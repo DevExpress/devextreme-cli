@@ -22,12 +22,12 @@ const addDependencies = (appPath, packages, type) => {
     let packageJson = readJSONFile(appPath);
     type = type === 'dev' ? 'devDependencies' : 'dependencies';
 
-    if (!packageJson[type]) {
+    if(!packageJson[type]) {
         packageJson[type] = {};
     }
 
-    packages.forEach(package => {
-        packageJson[type][package.name] = package.version;
+    packages.forEach(item => {
+        packageJson[type][item.name] = item.version;
     });
 
     writeJSONFile(appPath, packageJson);
@@ -39,7 +39,7 @@ const updateScripts = (appPath, scripts) => {
     scripts.forEach((script) => {
         packageJson.scripts[script.key] = script.value;
     });
-    
+
     writeJSONFile(appPath, packageJson);
 };
 
