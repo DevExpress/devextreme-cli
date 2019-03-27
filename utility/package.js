@@ -34,10 +34,30 @@ const addDependencies = (appPath, packages, type) => {
 };
 
 const updateScripts = (appPath, scripts) => {
-    let packageJson = readJSONFile(appPath);
+    const packageJson = readJSONFile(appPath);
+    let packageJsonScripts = packageJson.scripts;
 
     scripts.forEach((script) => {
-        packageJson.scripts[script.key] = script.value;
+        const name = script.name;
+        const value = script.value;
+        const currentValue = packageJsonScripts[name];
+
+        if (!currentValue) {
+            packageJsonScripts[name] = value;
+            return;
+        }
+
+        const alterName = `origin-${name}`;
+        const safeValue = `npm run ${alterName} && ${value}`;
+
+        if (currentValue === value || currentValue === safeValue) {
+            return;
+        }
+
+        packageJsonScripts[alterName] = currentValue;
+        packageJsonScripts[name] = safeValue;
+
+        packageJson.scripts = packageJsonScripts;
     });
 
     writeJSONFile(appPath, packageJson);

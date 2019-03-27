@@ -1,6 +1,7 @@
 const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
+const runPrompts = require('../utility/prompts');
 const moveTemplateFilesToProject = require('../utility/move-template-to-project').moveTemplateFilesToProject;
 const addPageToProject = require('../utility/move-template-to-project').addPageToProject;
 const packageJsonUtils = require('../utility/package');
@@ -8,10 +9,10 @@ const routingUtils = require('../utility/routing');
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
 const pathToPagesIndex = path.join(process.cwd(), 'src', 'pages', 'index.js');
-const layouts = {
-    'side-nav-inner-toolbar': 'SideNavInnerToolbar',
-    'side-nav-outer-toolbar': 'SideNavOuterToolbar'
-};
+const layouts = [
+    { fullName: 'side-nav-outer-toolbar', title: 'Side navigation (outer toolbar)', value: 'SideNavOuterToolbar' },
+    { fullName: 'side-nav-inner-toolbar', title: 'Side navigation (inner toolbar)', value: 'SideNavInnerToolbar' }
+];
 
 const addDevextremeToPackageJson = (appPath) => {
     const depends = [
@@ -32,9 +33,9 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
         { name: 'gh-pages', version: '^2.0.1' }
     ];
     const scripts = [
-        { key: 'build-themes', value: 'devextreme build' },
-        { key: 'postinstall', value: 'npm run build-themes' },
-        { key: 'deploy', value: 'gh-pages -d build' }
+        { name: 'build-themes', value: 'devextreme build' },
+        { name: 'postinstall', value: 'npm run build-themes' },
+        { name: 'deploy', value: 'gh-pages -d build' }
     ];
 
     packageJsonUtils.addDependencies(appPath, depends);
@@ -43,30 +44,35 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     packageJsonUtils.updateValue(appPath, 'name', appName);
 };
 
-const normalizeOptions = (options) => {
-    let normalizedOptions = {};
-    for(let option in options) {
-        const optionName = option.replace(/(-)+/g, (match, separator, chr) => {
-            return chr ? chr.toUpperCase() : '';
-        });
-        normalizedOptions[optionName] = options[option];
-    }
+const getLayout = (options) => {
+    const currentLayout = layouts.filter((layout) => {
+        return layout.fullName === options.layout;
+    });
 
-    return normalizedOptions;
+    return currentLayout.length ? [currentLayout[0].value] : undefined;
 };
 
 const create = (appName, options) => {
-    let commandArguments = ['create-react-app', appName],
-        normalizedOptions = normalizeOptions(options);
+    let commandArguments = ['create-react-app', appName];
+    const prompts = [
+        {
+            type: 'select',
+            name: 'layout',
+            message: 'What layout do you want to add?',
+            choices: layouts
+        }
+    ];
 
-    runCommand('npx', commandArguments).then(() => {
-        const templateOptions = Object.assign({}, normalizedOptions, {
-            project: appName,
-            skipFolder: options.empty ? 'pages' : '',
-            layout: getLayout(options.layout)
+    runPrompts(options, prompts, getLayout).then((promptsResult) => {
+        runCommand('npx', commandArguments).then(() => {
+            const templateOptions = Object.assign({}, options, {
+                project: appName,
+                skipFolder: options.empty ? 'pages' : '',
+                layout: promptsResult.layout
+            });
+    
+            addTemplate(appName, templateOptions);
         });
-
-        addTemplate(appName, templateOptions);
     });
 };
 
@@ -88,15 +94,6 @@ const install = () => {
     addDevextremeToPackageJson(appPath);
 
     runCommand('npm', ['install'], { cwd: appPath });
-};
-
-const getLayout = (layout) => {
-    const layoutName = layouts[layout];
-    if(!layout || !layoutName) {
-        return 'SideNavOuterToolbar';
-    }
-
-    return layoutName;
 };
 
 const getComponentPageName = (viewName) => {
