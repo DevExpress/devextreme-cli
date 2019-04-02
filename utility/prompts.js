@@ -1,6 +1,6 @@
 const prompts = require('prompts');
 
-const runPrompts = async (options, promptsValue, getOptionsValue) => {
+const runPrompts = async(options, promptsValue, getOptionsValue) => {
     const optionsValue = getOptionsValue(options);
 
     if(optionsValue) {

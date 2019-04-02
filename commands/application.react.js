@@ -4,7 +4,8 @@ const fs = require('fs');
 const runPrompts = require('../utility/prompts');
 const moveTemplateFilesToProject = require('../utility/move-template-to-project').moveTemplateFilesToProject;
 const addPageToProject = require('../utility/move-template-to-project').addPageToProject;
-const packageJsonUtils = require('../utility/package');
+const packageJsonUtils = require('../utility/modify-package-json');
+const modifyJson = require('../utility/modify-json-file');
 const routingUtils = require('../utility/routing');
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
@@ -15,21 +16,22 @@ const layouts = [
 ];
 
 const addDevextremeToPackageJson = (appPath) => {
+    const packagePath = path.join(appPath, 'package.json');
     const depends = [
         { name: 'devextreme', version: '18.2' },
         { name: 'devextreme-react', version: '18.2' }
     ];
 
-    packageJsonUtils.addDependencies(appPath, depends);
+    packageJsonUtils.addDependencies(packagePath, depends);
 };
 
-const preparePackageJsonForTemplate = (appPath, appName) => {
+const preparePackageJsonForTemplate = (packagePath, appName) => {
     const depends = [
         { name: 'node-sass', version: '^4.11.0' },
-        { name: 'react-router-dom', version: '^4.3.1' }
+        { name: 'react-router-dom', version: '^5.0.0' }
     ];
     const devDepends = [
-        { name: 'devextreme-cli', version: '1.0.3' },
+        { name: 'devextreme-cli', version: 'latest' },
         { name: 'gh-pages', version: '^2.0.1' }
     ];
     const scripts = [
@@ -38,10 +40,18 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
         { name: 'deploy', value: 'gh-pages -d build' }
     ];
 
-    packageJsonUtils.addDependencies(appPath, depends);
-    packageJsonUtils.addDependencies(appPath, devDepends, 'dev');
-    packageJsonUtils.updateScripts(appPath, scripts);
-    packageJsonUtils.updateValue(appPath, 'name', appName);
+    packageJsonUtils.addDependencies(packagePath, depends);
+    packageJsonUtils.addDependencies(packagePath, devDepends, 'dev');
+    packageJsonUtils.updateScripts(packagePath, scripts);
+    updateJsonName(packagePath, appName);
+};
+
+const updateJsonName = (path, name) => {
+    modifyJson(path, content => {
+        content.name = name;
+
+        return content;
+    });
 };
 
 const getLayout = (options) => {
@@ -65,24 +75,36 @@ const create = (appName, options) => {
 
     runPrompts(options, prompts, getLayout).then((promptsResult) => {
         runCommand('npx', commandArguments).then(() => {
+            const appPath = path.join(process.cwd(), appName);
+            const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {
-                project: appName,
+                project: humanizedName,
                 skipFolder: options.empty ? 'pages' : '',
                 layout: promptsResult.layout
             });
-    
-            addTemplate(appName, templateOptions);
+            changeHTMLTitleName(appPath, humanizedName);
+            addTemplate(appPath, appName, templateOptions);
         });
     });
 };
 
-const addTemplate = (appName, templateOptions) => {
+const changeHTMLTitleName = (appPath, appName) => {
+    const indexHtmlPath = path.join(appPath, 'public', 'index.html');
+    let htmlCotent = fs.readFileSync(indexHtmlPath).toString();
+
+    htmlCotent = htmlCotent.replace(/<title>(\w+\s*)+<\/title>/, `<title>${appName}<\/title>`);
+    fs.writeFileSync(indexHtmlPath, htmlCotent);
+};
+
+const addTemplate = (appPath, appName, templateOptions) => {
     const templateSourcePath = path.join(__dirname, '..', 'templates', 'react');
-    const appPath = path.join(process.cwd(), appName);
+    const packagePath = path.join(appPath, 'package.json');
+    const manifestPath = path.join(appPath, 'public', 'manifest.json');
 
     moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);
     addDevextremeToPackageJson(appPath);
-    preparePackageJsonForTemplate(appPath, appName);
+    preparePackageJsonForTemplate(packagePath, appName);
+    updateJsonName(manifestPath, appName);
     runCommand('npm', ['install'], { cwd: appPath });
 };
 
@@ -97,13 +119,14 @@ const install = () => {
 };
 
 const getComponentPageName = (viewName) => {
-    return `${stringUtils.capitalize(viewName)}Page`;
+    return `${stringUtils.classify(viewName)}Page`;
 };
 
 const getNavigationData = (viewName, componentName, icon) => {
+    const pagePath = stringUtils.dasherize(viewName);
     return {
-        route: `\n{\n    path: \'/${viewName}\',\n    component: ${componentName}\n  }`,
-        navigation: `{\n    text: \'${stringUtils.capitalize(viewName)}\',\n    path: \'/${viewName}\',\n    icon: \'${icon}\'\n  }`
+        route: `\n{\n    path: \'/${pagePath}\',\n    component: ${componentName}\n  }`,
+        navigation: `{\n    text: \'${stringUtils.humanize(viewName)}\',\n    path: \'/${pagePath}\',\n    icon: \'${icon}\'\n  }`
     };
 };
 
