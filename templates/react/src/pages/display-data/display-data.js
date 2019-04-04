@@ -43,7 +43,7 @@ export default () => {
         dataSource={dataSource}
         showBorders={false}
         focusedRowEnabled={true}
-        focusedRowIndex={0}
+        defaultFocusedRowIndex={0}
         columnAutoWidth={true}
         columnHidingEnabled={true}
       >

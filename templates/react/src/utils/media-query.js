@@ -12,8 +12,8 @@ const mediumMedia = window.matchMedia(Breakpoints.Medium);
 const largeMedia = window.matchMedia(Breakpoints.Large);
 
 [xSmallMedia, smallMedia, mediumMedia, largeMedia].forEach(media => {
-  media.addListener(() => {
-    handlers.forEach(handler => handler());
+  media.addListener((e) => {
+    e.matches && handlers.forEach(handler => handler());
   });
 });
 

@@ -12,9 +12,5 @@
   {
     path: '/home',
     component: HomePage
-  },
-  {
-    path: '**',
-    redirectTo: 'home'
   }
   <%=/empty%>];

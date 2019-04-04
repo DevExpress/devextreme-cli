@@ -166,7 +166,7 @@ const addView = (pageName, options) => {
     moduleUtils.insertExport(pathToPagesIndex, componentName, `./${pageName}/${pageName}`);
     moduleUtils.insertImport(routingModulePath, './pages', componentName);
     routingUtils.addPageToAppNavigation(routingModulePath, navigationData.route);
-    routingUtils.addPageToAppNavigation(navigationModulePath, navigationData.navigation, true);
+    routingUtils.addPageToAppNavigation(navigationModulePath, navigationData.navigation);
 };
 
 module.exports = {

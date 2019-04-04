@@ -4,8 +4,8 @@ const isEmptyRouting = (content) => {
     return /\[\s*\]/.test(content);
 };
 
-const getPositionIndex = (content, isNavigationModule, isEmpty) => {
-    const valueToSearch = isNavigationModule ? /(\}?)\s*(].*\s*)$/ : /(\[)\s*({?)/;
+const getPositionIndex = (content, isEmpty) => {
+    const valueToSearch = /(\}?)\s*(].*\s*)$/;
     const matchResult = content.match(valueToSearch);
     const edgeIndex = matchResult && matchResult.index;
 
@@ -14,29 +14,26 @@ const getPositionIndex = (content, isNavigationModule, isEmpty) => {
         process.exit();
     }
 
-    if(isNavigationModule) {
-        return isEmpty ? edgeIndex : edgeIndex + 1;
-    } else {
-        return edgeIndex + 1;
-    }
+    
+    return isEmpty ? edgeIndex : edgeIndex + 1;
 };
 
-const addSeparatorToValue = (insertValue, isNavigationModule, isEmpty) => {
+const addSeparatorToValue = (insertValue, isEmpty) => {
     const separator = isEmpty ? '' : ', ';
 
-    return isNavigationModule ? `${separator}${insertValue}` : `${insertValue}${separator}`;
+    return `${separator}${insertValue}`;
 };
 
 const insertToContent = (content, position, insertValue) => {
     return `${content.slice(0, position)}${insertValue}${content.slice(position, content.length)}`;
 };
 
-const addPageToAppNavigation = (filePath, insertValue, isNavigationModule) => {
+const addPageToAppNavigation = (filePath, insertValue) => {
     const content = fs.readFileSync(filePath).toString();
     const isEmpty = isEmptyRouting(content);
-    const position = getPositionIndex(content, isNavigationModule, isEmpty);
+    const position = getPositionIndex(content, isEmpty);
 
-    fs.writeFileSync(filePath, insertToContent(content, position, addSeparatorToValue(insertValue, isNavigationModule, isEmpty)));
+    fs.writeFileSync(filePath, insertToContent(content, position, addSeparatorToValue(insertValue, isEmpty)));
 };
 
 

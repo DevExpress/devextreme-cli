@@ -1,22 +1,50 @@
+import 'devextreme/dist/css/dx.common.css';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-
-import 'devextreme/dist/css/dx.common.css';
-import './themes/generated/theme.base.css';
-import './themes/generated/theme.additional.css';
-import { navigation } from './app-navigation';
 import appInfo from './app-info';
+import { navigation } from './app-navigation';
 import routes from './app-routes';
-
 import './App.scss';
+import { Footer, LoginForm } from './components';
 import {
-  // SideNavOuterToolbar,
+  //SideNavOuterToolbar,
   <%=layout%>,
   SingleCard
 } from './layouts';
-import { Footer, LoginForm } from './components';
+import './themes/generated/theme.additional.css';
+import './themes/generated/theme.base.css';
 import UserContext from './user-context';
 import { sizes, subscibe, unsibscribe } from './utils/media-query';
+
+const LoginContainer = ({ logIn }) => <LoginForm onLoginClick={logIn} />;
+
+const NotAuthPage = (props) => (
+  <SingleCard>
+    <Route render={() => <LoginContainer {...props} />} />
+  </SingleCard>
+);
+
+const AuthPage = () => (
+  <<%=layout%> menuItems={navigation} title={appInfo.title}>
+    <Switch>
+      {routes.map(item => (
+        <Route
+          exact
+          key={item.path}
+          path={item.path}
+          component={item.component}
+        />
+      ))}
+      <Redirect to={'/home'} />
+    </Switch>
+    <Footer>
+      Copyright © 2011-2019 Developer Express Inc.
+      <br />
+      All trademarks or registered trademarks are property of their
+      respective owners.
+    </Footer>
+  </<%=layout%>>
+);
 
 class App extends Component {
   constructor(props) {
@@ -42,41 +70,11 @@ class App extends Component {
       loggedIn: this.state.loggedIn
     };
 
-    const LoginContainer = () => <LoginForm onLoginClick={this.logIn} />;
-
-    const NotAuthPage = () => (
-      <SingleCard>
-        <Route path={'/'} component={LoginContainer} />
-      </SingleCard>
-    );
-
-    const AuthPage = () => (
-      <<%=layout%> menuItems={navigation} title={appInfo.title}>
-        <Switch>
-          {routes.map(item => (
-            <Route
-              exact
-              key={item.path}
-              path={item.path}
-              component={item.component}
-            />
-          ))}
-          <Redirect exact path={'/'} to={'/home'} />
-        </Switch>
-        <Footer>
-          Copyright © 2011-2019 Developer Express Inc.
-          <br />
-          All trademarks or registered trademarks are property of their
-          respective owners.
-        </Footer>
-      </<%=layout%>>
-    );
-
-    const classes = `app ${ this.state.screenSizeClass }`;
+    const classes = `app ${this.state.screenSizeClass}`;
     return (
       <div className={classes}>
         <UserContext.Provider value={auth}>
-          <Router>{auth.loggedIn ? <AuthPage /> : <NotAuthPage />}</Router>
+          <Router>{auth.loggedIn ? <AuthPage /> : <NotAuthPage logIn={this.logIn} />}</Router>
         </UserContext.Provider>
       </div>
     );

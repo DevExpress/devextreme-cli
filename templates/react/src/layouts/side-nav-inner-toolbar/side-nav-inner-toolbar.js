@@ -76,10 +76,7 @@ class SideNavInnerToolbar extends React.Component {
           <div className={'container'}>
             <Header
               menuToggleEnabled={minMenuSize === 0}
-              toggleMenu={() =>
-                this.setState({ menuOpened: !this.state.menuOpened })
-              }
-            />
+              toggleMenu={this.toggleMenu} />
 
             <ScrollView className={'layout-body with-footer'}>
               <div className={'content'}>
@@ -120,11 +117,11 @@ class SideNavInnerToolbar extends React.Component {
     this.setState({ ...this.drawerConfig });
   };
 
-  toggleMenu = e => {
+  toggleMenu = ({ event }) => {
     this.setState(({ menuOpened }) => {
       return { menuOpened: !menuOpened };
     });
-    e.event.stopPropagation();
+    event.stopPropagation();
   };
 
   get drawerConfig() {
