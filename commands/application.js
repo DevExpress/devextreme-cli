@@ -34,7 +34,7 @@ const run = (commands, options, devextremeConfig) => {
             }
 
             if(commands[1] === 'devextreme-react') {
-                reactApplication.install(options);
+                reactApplication.install();
                 return;
             }
 

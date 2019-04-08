@@ -4,6 +4,7 @@ const fs = require('fs');
 const runPrompts = require('../utility/prompts');
 const moveTemplateFilesToProject = require('../utility/move-template-to-project').moveTemplateFilesToProject;
 const addPageToProject = require('../utility/move-template-to-project').addPageToProject;
+const addStylesToApp = require('../utility/styles');
 const packageJsonUtils = require('../utility/modify-package-json');
 const modifyJson = require('../utility/modify-json-file');
 const routingUtils = require('../utility/routing');
@@ -100,19 +101,21 @@ const addTemplate = (appPath, appName, templateOptions) => {
     const templateSourcePath = path.join(__dirname, '..', 'templates', 'react');
     const packagePath = path.join(appPath, 'package.json');
     const manifestPath = path.join(appPath, 'public', 'manifest.json');
+    const styles = [
+        'devextreme/dist/css/dx.common.css',
+        './themes/generated/theme.additional.css',
+        './themes/generated/theme.base.css'];
 
     moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);
-    addDevextremeToPackageJson(appPath);
     preparePackageJsonForTemplate(packagePath, appName);
     updateJsonName(manifestPath, appName);
-    runCommand('npm', ['install'], { cwd: appPath });
+    install(appPath, styles);
 };
 
-const install = () => {
-    const appPath = process.cwd();
+const install = (appPath, styles) => {
+    appPath = appPath ? appPath : process.cwd();
     const pathToMainComponent = path.join(appPath, 'src', 'App.js');
-    moduleUtils.insertImport(pathToMainComponent, 'devextreme/dist/css/dx.common.css');
-    moduleUtils.insertImport(pathToMainComponent, 'devextreme/dist/css/dx.light.compact.css');
+    addStylesToApp(pathToMainComponent, styles);
     addDevextremeToPackageJson(appPath);
 
     runCommand('npm', ['install'], { cwd: appPath });
@@ -156,13 +159,13 @@ const createPagesIndex = () => {
 const addView = (pageName, options) => {
     const componentName = getComponentPageName(pageName);
     const pathToPage = createPathToPage(pageName);
-    const templatePagesPath = path.join(__dirname, '..', 'templates', 'pages');
+    const pageTemplatePath = path.join(__dirname, '..', 'templates', 'pages', 'react');
     const routingModulePath = path.join(process.cwd(), 'src', 'app-routes.js');
     const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js');
     const icon = options && options.icon || 'home';
     const navigationData = getNavigationData(pageName, componentName, icon);
 
-    addPageToProject(pageName, pathToPage, templatePagesPath);
+    addPageToProject(pageName, pathToPage, pageTemplatePath);
     moduleUtils.insertExport(pathToPagesIndex, componentName, `./${pageName}/${pageName}`);
     moduleUtils.insertImport(routingModulePath, './pages', componentName);
     routingUtils.addPageToAppNavigation(routingModulePath, navigationData.route);

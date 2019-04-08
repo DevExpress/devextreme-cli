@@ -4,18 +4,14 @@ const isEmptyRouting = (content) => {
     return /\[\s*\]/.test(content);
 };
 
-const getPositionIndex = (content, isEmpty) => {
-    const valueToSearch = /(\}?)\s*(].*\s*)$/;
-    const matchResult = content.match(valueToSearch);
-    const edgeIndex = matchResult && matchResult.index;
+const getPositionIndex = (content) => {
+    const edgeIndex = content.lastIndexOf(']');
 
-    if(!edgeIndex) {
+    if(edgeIndex === -1) {
         console.error('No route found.');
         process.exit();
     }
-
-    
-    return isEmpty ? edgeIndex : edgeIndex + 1;
+    return edgeIndex;
 };
 
 const addSeparatorToValue = (insertValue, isEmpty) => {
@@ -31,7 +27,7 @@ const insertToContent = (content, position, insertValue) => {
 const addPageToAppNavigation = (filePath, insertValue) => {
     const content = fs.readFileSync(filePath).toString();
     const isEmpty = isEmptyRouting(content);
-    const position = getPositionIndex(content, isEmpty);
+    const position = getPositionIndex(content);
 
     fs.writeFileSync(filePath, insertToContent(content, position, addSeparatorToValue(insertValue, isEmpty)));
 };

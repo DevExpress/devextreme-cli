@@ -1,4 +1,3 @@
-import 'devextreme/dist/css/dx.common.css';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import appInfo from './app-info';
@@ -11,8 +10,6 @@ import {
   <%=layout%>,
   SingleCard
 } from './layouts';
-import './themes/generated/theme.additional.css';
-import './themes/generated/theme.base.css';
 import UserContext from './user-context';
 import { sizes, subscibe, unsibscribe } from './utils/media-query';
 
@@ -34,8 +31,8 @@ const AuthPage = () => (
           path={item.path}
           component={item.component}
         />
-      ))}
-      <Redirect to={'/home'} />
+      ))}<%=^empty%>
+      <Redirect to={'/home'} /><%=/empty%>
     </Switch>
     <Footer>
       Copyright © 2011-2019 Developer Express Inc.
