@@ -4,6 +4,7 @@ import Button from 'devextreme-react/button';
 import UserPanel from '../user-panel/user-panel';
 import UserContext from '../..//user-context';
 import './header.scss';
+import { Template } from 'devextreme-react/core/template';
 
 const Header = ({ menuToggleEnabled, title, toggleMenu, logOut }) => {
   const userMenuItems = [
@@ -18,40 +19,30 @@ const Header = ({ menuToggleEnabled, title, toggleMenu, logOut }) => {
     }
   ];
 
-  const menutoggleComponent = menuToggleEnabled ? (
-    <Item
-      location={'before'}
-      widget={'dxButton'}
-      cssClass={'menu-button'}
-      options={{
-        icon: 'menu',
-        stylingMode: 'text',
-        onClick: toggleMenu
-      }}
-    />
-  ) : (
-    <></>
-  );
-
-  const titleComponent = title ? (
-    <Item location={'before'} cssClass={'header-title'} text={title} />
-  ) : (
-    <></>
-  );
-
-  const userMenuComponent = () => (
-    <UserPanel menuItems={userMenuItems} menuMode={'list'} />
-  );
-
   return (
     <header className={'header-component'}>
       <Toolbar className={'header-toolbar'}>
-        {menutoggleComponent}
-        {titleComponent}
+        <Item
+          visible={menuToggleEnabled}
+          location={'before'}
+          widget={'dxButton'}
+          cssClass={'menu-button'}
+          options={{
+            icon: 'menu',
+            stylingMode: 'text',
+            onClick: toggleMenu
+          }}
+        />
+        <Item
+          location={'before'}
+          cssClass={'header-title'}
+          text={title}
+          visible={!!title}
+        />
         <Item
           location={'after'}
           locateInMenu={'auto'}
-          menuItemComponent={userMenuComponent}
+          menuItemTemplate={'userPanelTemplate'}
         >
           <Button
             className={'user-button authorization'}
@@ -62,6 +53,9 @@ const Header = ({ menuToggleEnabled, title, toggleMenu, logOut }) => {
             <UserPanel menuItems={userMenuItems} menuMode={'context'} />
           </Button>
         </Item>
+        <Template name={'userPanelTemplate'}>
+          <UserPanel menuItems={userMenuItems} menuMode={'list'} />
+        </Template>
       </Toolbar>
     </header>
   );
@@ -70,7 +64,7 @@ const Header = ({ menuToggleEnabled, title, toggleMenu, logOut }) => {
 export default (props) => {
   return (
     <UserContext.Consumer>
-      { value => <Header {...props} logOut={value.logOut} />}
+      {value => <Header {...props} logOut={value.logOut} />}
     </UserContext.Consumer>
   );
 };

@@ -55,7 +55,7 @@ export default class LoginForm extends React.Component {
           </TextBox>
         </div>
         <div className={'dx-field'}>
-          <CheckBox value={false} text={'Remember me'} />
+          <CheckBox defaultValue={false} text={'Remember me'} />
         </div>
         <div className={'dx-field'}>
           <Button

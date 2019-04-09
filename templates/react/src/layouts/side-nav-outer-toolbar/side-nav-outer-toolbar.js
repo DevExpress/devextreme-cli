@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import { Header, SideNavigationMenu, Footer } from '../../components';
 import './side-nav-outer-toolbar.scss';
 import { sizes, subscibe, unsibscribe } from '../../utils/media-query';
+import { Template } from 'devextreme-react/core/template';
 
 class SideNavOuterToolbar extends React.Component {
   constructor(props) {
@@ -27,17 +28,6 @@ class SideNavOuterToolbar extends React.Component {
       minMenuSize
     } = this.state;
 
-    const menu = () => (
-      <SideNavigationMenu
-        items={menuItems}
-        compactMode={!menuOpened}
-        selectedItem={location.pathname}
-        className={'dx-swatch-additional'}
-        selectedItemChanged={this.navigationChanged}
-        openMenu={this.navigationClick}
-      />
-    );
-
     return (
       <div className={'side-nav-outer-toolbar'}>
         <Header
@@ -58,7 +48,7 @@ class SideNavOuterToolbar extends React.Component {
           minSize={minMenuSize}
           shading={shaderEnabled}
           opened={menuOpened}
-          component={menu}
+          template={'menu'}
         >
           <ScrollView className={'with-footer'}>
             <div className={'content'}>
@@ -72,6 +62,16 @@ class SideNavOuterToolbar extends React.Component {
               })}
             </div>
           </ScrollView>
+          <Template name={'menu'}>
+            <SideNavigationMenu
+              items={menuItems}
+              compactMode={!menuOpened}
+              selectedItem={location.pathname}
+              className={'dx-swatch-additional'}
+              selectedItemChanged={this.navigationChanged}
+              openMenu={this.navigationClick}
+            />
+          </Template>
         </Drawer>
       </div>
     );

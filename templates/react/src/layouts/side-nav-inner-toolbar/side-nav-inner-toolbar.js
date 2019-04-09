@@ -6,6 +6,7 @@ import { withRouter } from 'react-router';
 import { Header, SideNavigationMenu, Footer } from '../../components';
 import './side-nav-inner-toolbar.scss';
 import { sizes, subscibe, unsibscribe } from '../../utils/media-query';
+import { Template } from 'devextreme-react/core/template';
 
 class SideNavInnerToolbar extends React.Component {
   constructor(props) {
@@ -28,38 +29,6 @@ class SideNavInnerToolbar extends React.Component {
       minMenuSize
     } = this.state;
 
-    const menuToggleButton =
-      minMenuSize !== 0 ? (
-        <Item
-          location={'before'}
-          cssClass={'menu-button'}
-          widget={'dxButton'}
-          options={{
-            icon: 'menu',
-            stylingMode: 'text',
-            onClick: this.toggleMenu
-          }}
-        />
-      ) : (
-        <></>
-      );
-
-    const menu = () => (
-      <SideNavigationMenu
-        items={menuItems}
-        compactMode={!menuOpened}
-        selectedItem={location.pathname}
-        className={'dx-swatch-additional'}
-        selectedItemChanged={this.navigationChanged}
-        openMenu={this.navigationClick}
-      >
-        <Toolbar id={'navigation-header'}>
-          {menuToggleButton}
-          <Item location={'before'} cssClass={'header-title'} text={title} />
-        </Toolbar>
-      </SideNavigationMenu>
-    );
-
     return (
       <div className={'side-nav-inner-toolbar'}>
         <Drawer
@@ -71,7 +40,7 @@ class SideNavInnerToolbar extends React.Component {
           minSize={minMenuSize}
           shading={shaderEnabled}
           opened={menuOpened}
-          component={menu}
+          template={'menu'}
         >
           <div className={'container'}>
             <Header
@@ -91,6 +60,31 @@ class SideNavInnerToolbar extends React.Component {
               </div>
             </ScrollView>
           </div>
+          <Template name={'menu'}>
+            <SideNavigationMenu
+              items={menuItems}
+              compactMode={!menuOpened}
+              selectedItem={location.pathname}
+              className={'dx-swatch-additional'}
+              selectedItemChanged={this.navigationChanged}
+              openMenu={this.navigationClick}
+            >
+              <Toolbar id={'navigation-header'}>
+                <Item
+                  location={'before'}
+                  cssClass={'menu-button'}
+                  widget={'dxButton'}
+                  visible={minMenuSize !== 0}
+                  options={{
+                    icon: 'menu',
+                    stylingMode: 'text',
+                    onClick: this.toggleMenu
+                  }}
+                />
+                <Item location={'before'} cssClass={'header-title'} text={title} />
+              </Toolbar>
+            </SideNavigationMenu>
+          </Template>
         </Drawer>
       </div>
     );

@@ -12,7 +12,7 @@ const applyTemplateToFile = (filePath, templateOptions) => {
     return content;
 };
 
-const addPageToProject = (pageName, pathToPage, templatePagesPath) => {
+const addPageToApp = (pageName, pathToPage, templatePagesPath) => {
     fs.readdirSync(templatePagesPath).forEach((pageItem) => {
         const templateOption = { pageName, title: stringUtils.humanize(pageName) };
         const content = applyTemplateToFile(path.join(templatePagesPath, pageItem), templateOption);
@@ -44,5 +44,5 @@ const moveTemplateFilesToProject = (templateFolder, appPath, templateOptions, pa
 
 module.exports = {
     moveTemplateFilesToProject,
-    addPageToProject
+    addPageToApp
 };

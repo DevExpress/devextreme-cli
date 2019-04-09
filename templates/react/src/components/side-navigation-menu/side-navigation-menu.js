@@ -21,7 +21,6 @@ class SideNavigationMenu extends React.Component {
         {children}
         <div className={'menu-container'}>
           <TreeView
-            ref={this.getTreeView}
             expandEvent={'click'}
             width={'100%'}
             {...rest}
@@ -38,11 +37,16 @@ class SideNavigationMenu extends React.Component {
     );
   }
 
-  onMenuInitialized(event) {
+  componentDidUpdate() {
+    this.updateMenu();
+  }
+
+  onMenuInitialized = (event) => {
+    this.treeView = event.component;
     event.component.option('deferRendering', false);
   }
 
-  updateSelection(event) {
+  updateSelection = (event) => {
     const nodeClass = 'dx-treeview-node';
     const selectedClass = 'dx-state-selected';
     const leafNodeClass = 'dx-treeview-node-is-leaf';
@@ -63,6 +67,8 @@ class SideNavigationMenu extends React.Component {
 
       selectedNode = selectedNode.parentElement;
     }
+
+    this.updateMenu();
   }
 
   getElementRef = ref => {
@@ -76,8 +82,7 @@ class SideNavigationMenu extends React.Component {
     });
   };
 
-  getTreeView = ref => {
-    this.treeView = ref && ref.instance;
+  updateMenu() {
     if (this.treeView) {
       this.treeView.selectItem(this.props.selectedItem);
 
@@ -85,7 +90,7 @@ class SideNavigationMenu extends React.Component {
         this.treeView.collapseAll();
       }
     }
-  };
+  }
 }
 
 export default SideNavigationMenu;

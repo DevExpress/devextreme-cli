@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import appInfo from './app-info';
 import { navigation } from './app-navigation';
 import routes from './app-routes';
 import './App.scss';
+import './dx-styles.scss';
 import { Footer, LoginForm } from './components';
 import {
-  //SideNavOuterToolbar,
   <%=layout%>,
   SingleCard
 } from './layouts';

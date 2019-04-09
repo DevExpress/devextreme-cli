@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const runPrompts = require('../utility/prompts');
 const moveTemplateFilesToProject = require('../utility/move-template-to-project').moveTemplateFilesToProject;
-const addPageToProject = require('../utility/move-template-to-project').addPageToProject;
+const addPageToApp = require('../utility/move-template-to-project').addPageToApp;
 const addStylesToApp = require('../utility/styles');
 const packageJsonUtils = require('../utility/modify-package-json');
 const modifyJson = require('../utility/modify-json-file');
@@ -44,10 +44,10 @@ const preparePackageJsonForTemplate = (packagePath, appName) => {
     packageJsonUtils.addDependencies(packagePath, depends);
     packageJsonUtils.addDependencies(packagePath, devDepends, 'dev');
     packageJsonUtils.updateScripts(packagePath, scripts);
-    updateJsonName(packagePath, appName);
+    updateJsonPropName(packagePath, appName);
 };
 
-const updateJsonName = (path, name) => {
+const updateJsonPropName = (path, name) => {
     modifyJson(path, content => {
         content.name = name;
 
@@ -64,7 +64,7 @@ const getLayout = (options) => {
 };
 
 const create = (appName, options) => {
-    let commandArguments = ['create-react-app', appName];
+    const commandArguments = ['create-react-app', appName];
     const prompts = [
         {
             type: 'select',
@@ -83,18 +83,19 @@ const create = (appName, options) => {
                 skipFolder: options.empty ? 'pages' : '',
                 layout: promptsResult.layout
             });
-            changeHTMLTitleName(appPath, humanizedName);
+            modifyIndexHtml(appPath, humanizedName);
             addTemplate(appPath, appName, templateOptions);
         });
     });
 };
 
-const changeHTMLTitleName = (appPath, appName) => {
+const modifyIndexHtml = (appPath, appName) => {
     const indexHtmlPath = path.join(appPath, 'public', 'index.html');
-    let htmlCotent = fs.readFileSync(indexHtmlPath).toString();
+    let htmlContent = fs.readFileSync(indexHtmlPath).toString();
 
-    htmlCotent = htmlCotent.replace(/<title>(\w+\s*)+<\/title>/, `<title>${appName}<\/title>`);
-    fs.writeFileSync(indexHtmlPath, htmlCotent);
+    htmlContent = htmlContent.replace(/<title>(\w+\s*)+<\/title>/, `<title>${appName}<\/title>`);
+    htmlContent = htmlContent.replace('<body>', '<body class="dx-viewport">');
+    fs.writeFileSync(indexHtmlPath, htmlContent);
 };
 
 const addTemplate = (appPath, appName, templateOptions) => {
@@ -108,7 +109,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
 
     moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);
     preparePackageJsonForTemplate(packagePath, appName);
-    updateJsonName(manifestPath, appName);
+    updateJsonPropName(manifestPath, appName);
     install(appPath, styles);
 };
 
@@ -162,10 +163,9 @@ const addView = (pageName, options) => {
     const pageTemplatePath = path.join(__dirname, '..', 'templates', 'pages', 'react');
     const routingModulePath = path.join(process.cwd(), 'src', 'app-routes.js');
     const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js');
-    const icon = options && options.icon || 'home';
-    const navigationData = getNavigationData(pageName, componentName, icon);
+    const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'home');
 
-    addPageToProject(pageName, pathToPage, pageTemplatePath);
+    addPageToApp(pageName, pathToPage, pageTemplatePath);
     moduleUtils.insertExport(pathToPagesIndex, componentName, `./${pageName}/${pageName}`);
     moduleUtils.insertImport(routingModulePath, './pages', componentName);
     routingUtils.addPageToAppNavigation(routingModulePath, navigationData.route);

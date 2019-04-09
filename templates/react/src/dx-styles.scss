@@ -1,4 +1,4 @@
-.content {
+.app .content {
   line-height: 1.5;
 
   h2 {
@@ -8,15 +8,15 @@
   }
 }
 
-.content-block {
+.app .content-block {
   margin-left: 40px;
   margin-right: 40px;
   margin-top: 20px;
+}
 
-  .screen-x-small & {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
+.screen-x-small .content-block {
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .responsive-paddings {
@@ -35,7 +35,7 @@
   border-left: 0;
 }
 
-.with-footer > div > div >.dx-scrollable-content {
+.with-footer > div > div > .dx-scrollable-content {
   height: 100%;
 
   & > .dx-scrollview-content {
