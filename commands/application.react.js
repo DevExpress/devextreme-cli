@@ -5,7 +5,7 @@ const runPrompts = require('../utility/prompts');
 const templateCreator = require('../utility/template-creator');
 const packageJsonUtils = require('../utility/package-json-utils');
 const modifyJson = require('../utility/modify-json-file');
-const insertItemToArray = require('../utility/array').insertItemToArray;
+const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
 const pathToPagesIndex = path.join(process.cwd(), 'src', 'pages', 'index.js');
@@ -34,13 +34,11 @@ const preparePackageJsonForTemplate = (packagePath, appName) => {
         { name: 'react-router-dom', version: '^5.0.0' }
     ];
     const devDepends = [
-        { name: 'devextreme-cli', version: 'latest' },
-        { name: 'gh-pages', version: '^2.0.1' }
+        { name: 'devextreme-cli', version: 'latest' }
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
-        { name: 'postinstall', value: 'npm run build-themes' },
-        { name: 'deploy', value: 'gh-pages -d build' }
+        { name: 'postinstall', value: 'npm run build-themes' }
     ];
 
     packageJsonUtils.addDependencies(packagePath, depends);
@@ -118,7 +116,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
 const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
     const pathToMainComponent = path.join(appPath, 'src', 'App.js');
-    addStylesToApp(pathToMainComponent, styles);
+    addStylesToApp(pathToMainComponent, styles || defaultStyles);
     addDevextremeToPackageJson(appPath, options.dxversion || 'latest');
 
     runCommand('npm', ['install'], { cwd: appPath });
