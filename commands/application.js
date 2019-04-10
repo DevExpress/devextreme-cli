@@ -34,7 +34,7 @@ const run = (commands, options, devextremeConfig) => {
             }
 
             if(commands[1] === 'devextreme-react') {
-                reactApplication.install();
+                reactApplication.install(options);
                 return;
             }
 
@@ -50,7 +50,7 @@ const run = (commands, options, devextremeConfig) => {
                     console.error('Invalid command');
                     printHelp(commands[0]);
                 }
-            } if(devextremeConfig.applicationEngine === 'react') {
+            } else if(devextremeConfig.applicationEngine === 'react') {
                 if(commands[1] === 'view') {
                     reactApplication.addView(commands[2], options);
                 } else {

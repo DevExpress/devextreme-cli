@@ -24,7 +24,7 @@ const insertToContent = (content, position, insertValue) => {
     return `${content.slice(0, position)}${insertValue}${content.slice(position, content.length)}`;
 };
 
-const addPageToAppNavigation = (filePath, insertValue) => {
+const insertItemToArray = (filePath, insertValue) => {
     const content = fs.readFileSync(filePath).toString();
     const isEmpty = isEmptyRouting(content);
     const position = getPositionIndex(content);
@@ -34,5 +34,5 @@ const addPageToAppNavigation = (filePath, insertValue) => {
 
 
 module.exports = {
-    addPageToAppNavigation
+    insertItemToArray
 };

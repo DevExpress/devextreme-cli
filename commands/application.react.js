@@ -2,25 +2,27 @@ const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
 const runPrompts = require('../utility/prompts');
-const moveTemplateFilesToProject = require('../utility/move-template-to-project').moveTemplateFilesToProject;
-const addPageToApp = require('../utility/move-template-to-project').addPageToApp;
-const addStylesToApp = require('../utility/styles');
-const packageJsonUtils = require('../utility/modify-package-json');
+const templateCreator = require('../utility/template-creator');
+const packageJsonUtils = require('../utility/package-json-utils');
 const modifyJson = require('../utility/modify-json-file');
-const routingUtils = require('../utility/routing');
+const insertItemToArray = require('../utility/array').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
 const pathToPagesIndex = path.join(process.cwd(), 'src', 'pages', 'index.js');
+const defaultStyles = [
+    'devextreme/dist/css/dx.light.css',
+    'devextreme/dist/css/dx.common.css'
+];
 const layouts = [
     { fullName: 'side-nav-outer-toolbar', title: 'Side navigation (outer toolbar)', value: 'SideNavOuterToolbar' },
     { fullName: 'side-nav-inner-toolbar', title: 'Side navigation (inner toolbar)', value: 'SideNavInnerToolbar' }
 ];
 
-const addDevextremeToPackageJson = (appPath) => {
+const addDevextremeToPackageJson = (appPath, dxversion) => {
     const packagePath = path.join(appPath, 'package.json');
     const depends = [
-        { name: 'devextreme', version: '18.2' },
-        { name: 'devextreme-react', version: '18.2' }
+        { name: 'devextreme', version: dxversion },
+        { name: 'devextreme-react', version: dxversion }
     ];
 
     packageJsonUtils.addDependencies(packagePath, depends);
@@ -99,7 +101,7 @@ const modifyIndexHtml = (appPath, appName) => {
 };
 
 const addTemplate = (appPath, appName, templateOptions) => {
-    const templateSourcePath = path.join(__dirname, '..', 'templates', 'react');
+    const templateSourcePath = path.join(__dirname, '..', 'templates', 'react', 'application');
     const packagePath = path.join(appPath, 'package.json');
     const manifestPath = path.join(appPath, 'public', 'manifest.json');
     const styles = [
@@ -107,19 +109,25 @@ const addTemplate = (appPath, appName, templateOptions) => {
         './themes/generated/theme.additional.css',
         './themes/generated/theme.base.css'];
 
-    moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);
+    templateCreator.moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);
     preparePackageJsonForTemplate(packagePath, appName);
     updateJsonPropName(manifestPath, appName);
-    install(appPath, styles);
+    install({}, appPath, styles);
 };
 
-const install = (appPath, styles) => {
+const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
     const pathToMainComponent = path.join(appPath, 'src', 'App.js');
     addStylesToApp(pathToMainComponent, styles);
-    addDevextremeToPackageJson(appPath);
+    addDevextremeToPackageJson(appPath, options.dxversion || 'latest');
 
     runCommand('npm', ['install'], { cwd: appPath });
+};
+
+const addStylesToApp = (filePath, styles) => {
+    styles.forEach(style => {
+        moduleUtils.insertImport(filePath, style);
+    });
 };
 
 const getComponentPageName = (viewName) => {
@@ -144,7 +152,7 @@ const createPathToPage = (pageName) => {
     }
 
     if(fs.existsSync(newPagePath)) {
-        console.error('The age already exists');
+        console.error('The page already exists');
         process.exit();
     }
 
@@ -160,16 +168,16 @@ const createPagesIndex = () => {
 const addView = (pageName, options) => {
     const componentName = getComponentPageName(pageName);
     const pathToPage = createPathToPage(pageName);
-    const pageTemplatePath = path.join(__dirname, '..', 'templates', 'pages', 'react');
+    const pageTemplatePath = path.join(__dirname, '..', 'templates', 'react', 'page');
     const routingModulePath = path.join(process.cwd(), 'src', 'app-routes.js');
     const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js');
     const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'home');
 
-    addPageToApp(pageName, pathToPage, pageTemplatePath);
+    templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath);
     moduleUtils.insertExport(pathToPagesIndex, componentName, `./${pageName}/${pageName}`);
     moduleUtils.insertImport(routingModulePath, './pages', componentName);
-    routingUtils.addPageToAppNavigation(routingModulePath, navigationData.route);
-    routingUtils.addPageToAppNavigation(navigationModulePath, navigationData.navigation);
+    insertItemToArray(routingModulePath, navigationData.route);
+    insertItemToArray(navigationModulePath, navigationData.navigation);
 };
 
 module.exports = {
