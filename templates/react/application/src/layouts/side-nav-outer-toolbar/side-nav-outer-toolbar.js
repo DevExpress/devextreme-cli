@@ -1,10 +1,10 @@
-import Drawer from 'devextreme-react/ui/drawer';
-import ScrollView from 'devextreme-react/ui/scroll-view';
+import Drawer from 'devextreme-react/drawer';
+import ScrollView from 'devextreme-react/scroll-view';
 import React from 'react';
 import { withRouter } from 'react-router';
 import { Header, SideNavigationMenu, Footer } from '../../components';
 import './side-nav-outer-toolbar.scss';
-import { sizes, subscibe, unsibscribe } from '../../utils/media-query';
+import { sizes, subscribe, unsubscribe } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
 
 class SideNavOuterToolbar extends React.Component {
@@ -19,7 +19,7 @@ class SideNavOuterToolbar extends React.Component {
   }
 
   render() {
-    const { menuItems, title, location } = this.props;
+    const { menuItems, title, location, userMenuItems } = this.props;
     const {
       menuOpened,
       menuMode,
@@ -33,6 +33,7 @@ class SideNavOuterToolbar extends React.Component {
         <Header
           className={'layout-header'}
           menuToggleEnabled
+          userMenuItems={userMenuItems}
           toggleMenu={() =>
             this.setState({ menuOpened: !this.state.menuOpened })
           }
@@ -78,11 +79,11 @@ class SideNavOuterToolbar extends React.Component {
   }
 
   componentDidMount() {
-    subscibe(this.updateDrawer);
+    subscribe(this.updateDrawer);
   }
 
   componentWillUnmount() {
-    unsibscribe(this.updateDrawer);
+    unsubscribe(this.updateDrawer);
   }
 
   closeDrawer = () => {

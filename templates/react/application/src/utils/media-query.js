@@ -26,8 +26,8 @@ export const sizes = () => {
   };
 };
 
-export const subscibe = handler => handlers.push(handler);
+export const subscribe = handler => handlers.push(handler);
 
-export const unsibscribe = handler => {
+export const unsubscribe = handler => {
   handlers = handlers.filter(item => item !== handler);
 };

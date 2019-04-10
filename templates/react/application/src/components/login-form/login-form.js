@@ -1,7 +1,7 @@
 import React from 'react';
 import TextBox from 'devextreme-react/text-box';
 import ValidationGroup from 'devextreme-react/validation-group';
-import Validator, { ValidationRule } from 'devextreme-react/validator';
+import Validator, { RequiredRule } from 'devextreme-react/validator';
 import Button from 'devextreme-react/button';
 import CheckBox from 'devextreme-react/check-box';
 import './login-form.scss';
@@ -34,7 +34,7 @@ export default class LoginForm extends React.Component {
             width={'100%'}
           >
             <Validator>
-              <ValidationRule type={'required'} message={'Login is required'} />
+              <RequiredRule message={'Login is required'} />
             </Validator>
           </TextBox>
         </div>
@@ -47,10 +47,7 @@ export default class LoginForm extends React.Component {
             width={'100%'}
           >
             <Validator>
-              <ValidationRule
-                type={'required'}
-                message={'Password is required'}
-              />
+              <RequiredRule message={'Password is required'} />
             </Validator>
           </TextBox>
         </div>

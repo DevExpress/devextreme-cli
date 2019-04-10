@@ -20,6 +20,7 @@ export default () => (
 
         <p>Welcome to <b>DevExtreme React Template</b>!</p><p>The application is built with:</p>
         <ul>
+          <li><a href={'https://github.com/facebook/create-react-app'}>Create React App</a></li>
           <li><a href={'https://github.com/devexpress/devextreme-cli'}>DevExtreme CLI</a></li>
           <li><a href={'https://github.com/devexpress/devextreme-react'}>DevExtreme-React</a> components</li>
         </ul>
