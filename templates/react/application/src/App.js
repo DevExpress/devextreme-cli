@@ -7,7 +7,7 @@ import './App.scss';
 import './dx-styles.scss';
 import { Footer, LoginForm } from './components';
 import {
-  <%=layout%> as SideNavBar,
+  <%=layout%> as SideNavBarLayout,
   SingleCard
 } from './layouts';
 import { sizes, subscribe, unsubscribe } from './utils/media-query';
@@ -21,7 +21,7 @@ const NotAuthPage = (props) => (
 );
 
 const AuthPage = (props) => (
-  <SideNavBar menuItems={navigation} title={appInfo.title} {...props}>
+  <SideNavBarLayout menuItems={navigation} title={appInfo.title} {...props}>
     <Switch>
       {routes.map(item => (
         <Route
@@ -39,7 +39,7 @@ const AuthPage = (props) => (
       All trademarks or registered trademarks are property of their
       respective owners.
     </Footer>
-  </SideNavBar>
+  </SideNavBarLayout>
 );
 
 class App extends Component {
