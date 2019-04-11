@@ -46,7 +46,7 @@ Add DevExtreme to an Angular application (follow [this](https://github.com/DevEx
 
 ### <a name="add-devextreme-react"></a>React 
 
-Add DevExtreme to an React application:
+Add DevExtreme to a React application:
 
 #### <a name="add-devextreme-react-no-global"></a>Without global package usage
 
