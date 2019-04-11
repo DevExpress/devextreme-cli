@@ -119,7 +119,7 @@ Create a new DevExtreme application:
 > devextreme new react-app app-name [--layout][--empty]
 ```
 
-Add a view to an React application with the DevExtreme layout template:
+Add a view to the DevExtreme application:
 ```bash
 > devextreme add view view-name [--icon]
 ```
