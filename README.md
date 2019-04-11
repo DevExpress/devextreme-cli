@@ -5,8 +5,10 @@ DevExtreme CLI is a set of command-line tools to be used with DevExtreme control
 * [Installation](#installation)
 * [Add DevExtreme to an Existing Application](#add-devextreme)
     * [Angular](#add-devextreme-angular)
+    * [React](#add-devextreme-react)
 * [DevExtreme Application](#devextreme-app)
     * [Angular](#devextreme-app-angular)
+    * [React](#devextreme-app-react)
     * [Command Line Arguments](#devextreme-app-arguments)
 * [Theme Builder](#theme-builder)
     * [One-off Usage](#theme-builder-one-off)
@@ -40,6 +42,22 @@ Add DevExtreme to an Angular application (follow [this](https://github.com/DevEx
 
 ```bash
 > devextreme add devextreme-angular
+```
+
+### <a name="add-devextreme-react"></a>React 
+
+Add DevExtreme to a React application:
+
+#### <a name="add-devextreme-react-no-global"></a>Without global package usage
+
+```bash
+> npx -p devextreme-cli devextreme add devextreme-react
+```
+
+#### <a name="add-devextreme-react-global"></a>Global package usage
+
+```bash
+> devextreme add devextreme-react
 ```
 
 ## <a name="devextreme-app"></a>DevExtreme Application
@@ -76,6 +94,32 @@ Add the DevExtreme layout template to an Angular application (follow [this](http
 ```
 
 Add a view to an Angular application with the DevExtreme layout template:
+```bash
+> devextreme add view view-name [--icon]
+```
+
+### <a name="devextreme-app-react"></a>React
+
+#### <a name="devextreme-app-react-no-global"></a>Without global package usage
+
+Create a new DevExtreme application:
+```bash
+> npx -p devextreme-cli devextreme new react-app app-name [--layout][--empty]
+```
+
+Add a view to the DevExtreme application:
+```bash
+> npx -p devextreme-cli devextreme add view view-name [--icon]
+```
+
+#### <a name="devextreme-app-react-global"></a>Global package usage
+
+Create a new DevExtreme application:
+```bash
+> devextreme new react-app app-name [--layout][--empty]
+```
+
+Add a view to the DevExtreme application:
 ```bash
 > devextreme add view view-name [--icon]
 ```
