@@ -1,5 +1,6 @@
 const angularApplication = require('./application.angular');
 const reactApplication = require('./application.react');
+const vueApplication = require('./application.vue');
 const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
@@ -24,6 +25,11 @@ const run = (commands, options, devextremeConfig) => {
             return;
         }
 
+        if(commands[1] === 'vue-app') {
+            vueApplication.create(commands[2] || 'my-app', options);
+            return;
+        }
+
         console.error(`The '${commands[1]}' application type is not valid`);
         printHelp(commands[0]);
     } else {
@@ -35,6 +41,11 @@ const run = (commands, options, devextremeConfig) => {
 
             if(commands[1] === 'devextreme-react') {
                 reactApplication.install(options);
+                return;
+            }
+
+            if(commands[1] === 'devextreme-vue') {
+                vueApplication.install(options);
                 return;
             }
 
@@ -53,6 +64,13 @@ const run = (commands, options, devextremeConfig) => {
             } else if(devextremeConfig.applicationEngine === 'react') {
                 if(commands[1] === 'view') {
                     reactApplication.addView(commands[2], options);
+                } else {
+                    console.error('Invalid command');
+                    printHelp(commands[0]);
+                }
+            } else if(devextremeConfig.applicationEngine === 'vue') {
+                if(commands[1] === 'view') {
+                    vueApplication.addView(commands[2], options);
                 } else {
                     console.error('Invalid command');
                     printHelp(commands[0]);
