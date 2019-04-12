@@ -25,19 +25,17 @@ const moveTemplateFilesToProject = (templateFolder, appPath, templateOptions, pa
     const pathToFiles = path.join(templateFolder, relativePath);
 
     fs.readdirSync(pathToFiles).forEach(file => {
-        if(templateOptions.skipFolder !== file) {
-            const pathToAppFile = path.join(appPath, relativePath, file);
-            const nextFilePath = path.join(pathToFiles, file);
+        const pathToAppFile = path.join(appPath, relativePath, file);
+        const nextFilePath = path.join(pathToFiles, file);
 
-            if(fs.lstatSync(nextFilePath).isDirectory()) {
-                if(!fs.existsSync(pathToAppFile)) {
-                    fs.mkdirSync(pathToAppFile);
-                }
-                moveTemplateFilesToProject(templateFolder, appPath, templateOptions, path.join(relativePath, file));
-            } else {
-                const content = applyTemplateToFile(nextFilePath, templateOptions);
-                fs.writeFileSync(pathToAppFile, content);
+        if(fs.lstatSync(nextFilePath).isDirectory()) {
+            if(!fs.existsSync(pathToAppFile)) {
+                fs.mkdirSync(pathToAppFile);
             }
+            moveTemplateFilesToProject(templateFolder, appPath, templateOptions, path.join(relativePath, file));
+        } else {
+            const content = applyTemplateToFile(nextFilePath, templateOptions);
+            fs.writeFileSync(pathToAppFile, content);
         }
     });
 };

@@ -1,6 +1,6 @@
 {
   "name": "devextreme-cli",
-  "version": "1.1.0-beta.1",
+  "version": "1.1.0-beta.2",
   "description": "DevExtreme CLI",
   "keywords": [
     "devexpress",
@@ -25,6 +25,7 @@
     "minimist": "^1.2.0",
     "mustache": "^3.0.1",
     "node-sass": "^4.9.3",
+    "@vue/cli": "^3.5.5",
     "prompts": "^2.0.4",
     "semver": "^5.6.0"
   },

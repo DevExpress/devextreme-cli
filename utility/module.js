@@ -18,9 +18,9 @@ const insertImport = (filePath, moduleName, importName, isDefault) => {
         fs.writeFileSync(filePath, addImportValueToExisting(fileContent, importName, indexEndOfImport));
     } else if(importName) {
         const importValue = isDefault ? importName : `{ ${importName} }`;
-        fs.writeFileSync(filePath, `import ${importValue} from \'${moduleName}\'\n${fileContent};`);
+        fs.writeFileSync(filePath, `import ${importValue} from \'${moduleName}\';\n${fileContent}`);
     } else {
-        fs.writeFileSync(filePath, `import \'${moduleName}\'\n${fileContent};`);
+        fs.writeFileSync(filePath, `import \'${moduleName}\';\n${fileContent}`);
     }
 };
 
