@@ -10,6 +10,11 @@ const devextremeConfig = require('./utility/devextreme-config');
 const printHelp = require('./commands/help').printHelp;
 const packageJson = require('./package.json');
 
+process.on('unhandledRejection', (error) => {
+    console.log(error);
+    process.exit(1);
+});
+
 if(!commands.length) {
     if(args.version) {
         console.log(packageJson.version);
