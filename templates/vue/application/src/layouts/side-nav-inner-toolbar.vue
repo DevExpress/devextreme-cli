@@ -21,6 +21,7 @@
           <slot name="footer" />
         </dx-scroll-view>
       </div>
+      <!-- eslint-disable vue/no-unused-vars -->
       <side-nav-menu
         slot="menu"
         slot-scope="_"
@@ -29,19 +30,24 @@
         :items="menuItems"
         @click="handleSideBarClick"
       >
+      <!-- eslint-enable-->
         <dx-toolbar id="navigation-header">
           <dx-item location="before" css-class="menu-button">
+            <!-- eslint-disable vue/no-unused-vars -->
             <dx-button
               icon="menu"
               styling-mode="text"
               @click="toggleMenu"
               slot-scope="_"
             />
+            <!-- eslint-enable -->
           </dx-item>
           <dx-item location="before" css-class="header-title dx-toolbar-label">
+            <!-- eslint-disable vue/no-unused-vars -->
             <div slot-scope="_">
               <div>{{ title }}</div>
             </div>
+            <!-- eslint-enable -->
           </dx-item>
         </dx-toolbar>
       </side-nav-menu>
