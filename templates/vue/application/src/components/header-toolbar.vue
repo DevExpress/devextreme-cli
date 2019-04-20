@@ -6,12 +6,14 @@
         location="before"
         css-class="menu-button"
       >
+        <!-- eslint-disable vue/no-unused-vars -->
         <dx-button
           icon="menu"
           styling-mode="text"
           @click="toggleMenuFunc"
           slot-scope="_"
         />
+        <!-- eslint-enable -->
       </dx-item>
 
       <dx-item
@@ -19,7 +21,9 @@
         location="before"
         css-class="header-title dx-toolbar-label"
       >
+        <!-- eslint-disable vue/no-unused-vars -->
         <div slot-scope="_">{{ title }}</div>
+        <!-- eslint-enable -->
       </dx-item>
 
       <dx-item
@@ -27,7 +31,9 @@
         locate-in-menu="auto"
         menu-item-template="menuUserItem"
       >
+        <!-- eslint-disable vue/no-unused-vars -->
         <div slot-scope="_">
+        <!-- eslint-enable -->
           <dx-button
             class="user-button authorization"
             :width="170"
@@ -38,12 +44,14 @@
           </dx-button>
         </div>
       </dx-item>
+      <!-- eslint-disable vue/no-unused-vars -->
       <user-panel
         :menu-items="userMenuItems"
         menu-mode="list"
         slot-scope="_"
         slot="menuUserItem"
       />
+      <!-- eslint-enable -->
     </dx-toolbar>
   </header>
 </template>
