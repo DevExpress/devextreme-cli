@@ -112,6 +112,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
     }
     preparePackageJsonForTemplate(packagePath, appName);
     updateJsonPropName(manifestPath, appName);
+    addPolyfills(appPath);
     install({}, appPath, styles);
 };
 
@@ -122,6 +123,17 @@ const install = (options, appPath, styles) => {
     addDevextremeToPackageJson(appPath, options.dxversion || 'latest');
 
     runCommand('npm', ['install'], { cwd: appPath });
+};
+
+const addPolyfills = (appPath) => {
+    const indexFilePath = path.join(appPath, 'src', 'index.js');
+    const packagePath = path.join(appPath, 'package.json');
+    const packages = [
+        { name: 'react-app-polyfill', version: '^1.0.0' }
+    ];
+
+    packageJsonUtils.addDependencies(packagePath, packages);
+    moduleUtils.insertImport(indexFilePath, './polyfills');
 };
 
 const addStylesToApp = (filePath, styles) => {
