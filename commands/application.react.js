@@ -101,6 +101,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
     const templateSourcePath = path.join(__dirname, '..', 'templates', 'react', 'application');
     const packagePath = path.join(appPath, 'package.json');
     const manifestPath = path.join(appPath, 'public', 'manifest.json');
+    const indexPath = path.join(appPath, 'src', 'index.js');
     const styles = [
         'devextreme/dist/css/dx.common.css',
         './themes/generated/theme.additional.css',
@@ -112,7 +113,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
     }
     preparePackageJsonForTemplate(packagePath, appName);
     updateJsonPropName(manifestPath, appName);
-    addPolyfills(appPath);
+    addPolyfills(packagePath, indexPath);
     install({}, appPath, styles);
 };
 
@@ -125,15 +126,13 @@ const install = (options, appPath, styles) => {
     runCommand('npm', ['install'], { cwd: appPath });
 };
 
-const addPolyfills = (appPath) => {
-    const indexFilePath = path.join(appPath, 'src', 'index.js');
-    const packagePath = path.join(appPath, 'package.json');
+const addPolyfills = (packagePath, indexPath) => {
     const packages = [
         { name: 'react-app-polyfill', version: '^1.0.0' }
     ];
 
     packageJsonUtils.addDependencies(packagePath, packages);
-    moduleUtils.insertImport(indexFilePath, './polyfills');
+    moduleUtils.insertImport(indexPath, './polyfills');
 };
 
 const addStylesToApp = (filePath, styles) => {
