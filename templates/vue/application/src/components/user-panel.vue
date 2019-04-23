@@ -98,7 +98,7 @@ export default {
   }
 }
 
-.dx-context-menu.user-menu {
+.dx-context-menu.user-menu.dx-menu-base {
   &.dx-rtl {
     .dx-submenu .dx-menu-items-container .dx-icon {
       margin-left: 16px;
