@@ -124,7 +124,7 @@ export default {
   }
 }
 
-.dx-toolbar .dx-toolbar-item.menu-button {
+.dx-toolbar .dx-toolbar-item.dx-toolbar-button.menu-button {
   width: $side-panel-min-width;
   text-align: center;
   padding: 0;
