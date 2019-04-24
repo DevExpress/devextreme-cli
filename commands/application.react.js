@@ -163,7 +163,7 @@ const createPathToPage = (pageName) => {
     }
 
     if(!fs.existsSync(newPagePath)) {
-        fs.mkdirSync(newPagePath);;
+        fs.mkdirSync(newPagePath);
     }
 
     return newPagePath;
