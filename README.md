@@ -62,7 +62,7 @@ Add DevExtreme to a React application:
 > devextreme add devextreme-react
 ```
 
-### <a name="add-devextreme-react"></a>Vue 
+### <a name="add-devextreme-vue"></a>Vue 
 
 Add DevExtreme to a Vue application:
 
