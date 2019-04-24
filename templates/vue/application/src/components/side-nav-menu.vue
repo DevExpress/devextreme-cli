@@ -45,7 +45,7 @@ export default {
     },
 
     handleItemClick(e) {
-      if (!e.itemData.path) {
+      if (!e.itemData.path || this.compactMode) {
         return;
       }
 
