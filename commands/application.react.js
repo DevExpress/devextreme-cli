@@ -121,7 +121,7 @@ const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
     const pathToMainComponent = path.join(appPath, 'src', 'App.js');
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
-    addDevextremeToPackageJson(appPath, options.dxversion || 'latest');
+    addDevextremeToPackageJson(appPath, options.dxversion || '19.1-next');
 
     runCommand('npm', ['install'], { cwd: appPath });
 };
