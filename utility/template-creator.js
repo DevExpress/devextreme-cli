@@ -12,11 +12,16 @@ const applyTemplateToFile = (filePath, templateOptions) => {
     return content;
 };
 
-const addPageToApp = (pageName, pathToPage, templatePagesPath) => {
+const addPageToApp = (pageName, pageDir, templatePagesPath) => {
     fs.readdirSync(templatePagesPath).forEach((pageItem) => {
+        const pagePath = path.join(pageDir, `${pageName}${extname(pageItem)}`);
+        if(fs.existsSync(pagePath)) {
+            console.error('The page already exists');
+            process.exit();
+        }
         const templateOption = { pageName, title: stringUtils.humanize(pageName) };
         const content = applyTemplateToFile(path.join(templatePagesPath, pageItem), templateOption);
-        fs.writeFileSync(path.join(pathToPage, `${pageName}${extname(pageItem)}`), content);
+        fs.writeFileSync(pagePath, content);
     });
 };
 
