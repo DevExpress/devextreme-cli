@@ -162,12 +162,9 @@ const createPathToPage = (pageName) => {
         createPagesIndex();
     }
 
-    if(fs.existsSync(newPagePath)) {
-        console.error('The page already exists');
-        process.exit();
+    if(!fs.existsSync(newPagePath)) {
+        fs.mkdirSync(newPagePath);;
     }
-
-    fs.mkdirSync(newPagePath);
 
     return newPagePath;
 };
