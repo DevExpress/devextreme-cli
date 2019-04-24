@@ -92,8 +92,9 @@ export default {
       this.menuOpened = this.isLarge;
     },
     $route() {
-      if (this.menuTemporaryOpened) {
+      if (this.menuTemporaryOpened || !this.isLarge) {
         this.menuOpened = false;
+        this.menuTemporaryOpened = false;
       }
     }
   },
