@@ -93,6 +93,9 @@ export default {
   mounted() {
     this.treeView = this.$refs[treeViewRef] && this.$refs[treeViewRef].instance;
     this.updateSelection();
+    if (this.compactMode) {
+      this.treeView.collapseAll();
+    }
   },
   watch: {
     $route() {
