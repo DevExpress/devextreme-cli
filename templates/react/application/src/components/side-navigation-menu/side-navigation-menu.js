@@ -11,6 +11,7 @@ class SideNavigationMenu extends React.Component {
       children,
       selectedItemChanged,
       selectedItem,
+      onMenuReady,
       ...rest
     } = this.props;
     return (
@@ -26,7 +27,7 @@ class SideNavigationMenu extends React.Component {
             {...rest}
             onInitialized={this.onMenuInitialized}
             onItemClick={selectedItemChanged}
-            onContentReady={this.updateSelection}
+            onContentReady={this.onTreeViewReady}
             onSelectionChanged={this.updateSelection}
             selectByClick
             selectionMode={'single'}
@@ -90,6 +91,11 @@ class SideNavigationMenu extends React.Component {
         this.treeView.collapseAll();
       }
     }
+  }
+
+  onTreeViewReady = (...args) => {
+    this.props.onMenuReady && this.props.onMenuReady(...args);
+    this.updateSelection(...args);
   }
 }
 

@@ -6,6 +6,7 @@ import { Header, SideNavigationMenu, Footer } from '../../components';
 import './side-nav-outer-toolbar.scss';
 import { sizes, subscribe, unsubscribe } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
+import { menuPreInitPatch } from '../../utils/patches';
 
 class SideNavOuterToolbar extends React.Component {
   constructor(props) {
@@ -16,6 +17,8 @@ class SideNavOuterToolbar extends React.Component {
       temporaryMenuOpened: false,
       ...this.drawerConfig
     };
+
+    this.menuPatch = menuPreInitPatch(this);
   }
 
   render() {
@@ -41,7 +44,7 @@ class SideNavOuterToolbar extends React.Component {
         />
 
         <Drawer
-          className={'layout-body'}
+          className={'layout-body' + this.menuPatch.cssClass}
           position={'before'}
           closeOnOutsideClick={this.closeDrawer}
           openedStateMode={menuMode}
@@ -71,6 +74,7 @@ class SideNavOuterToolbar extends React.Component {
               className={'dx-swatch-additional'}
               selectedItemChanged={this.navigationChanged}
               openMenu={this.navigationClick}
+              onMenuReady={this.menuPatch.onReady}
             />
           </Template>
         </Drawer>
