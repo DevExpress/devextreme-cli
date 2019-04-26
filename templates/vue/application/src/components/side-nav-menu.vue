@@ -14,6 +14,7 @@
         @initialized="handleMenuInitialized"
         @item-click="handleItemClick"
         @selection-changed="handleSelectionChange"
+        @content-ready="handleSelectionChange"
       />
     </div>
   </div>
@@ -82,12 +83,19 @@ export default {
     },
 
     updateSelection() {
+      if (!this.treeView) {
+        return;
+      }
+
       this.treeView.selectItem(this.$route.path);
     }
   },
   mounted() {
     this.treeView = this.$refs[treeViewRef] && this.$refs[treeViewRef].instance;
     this.updateSelection();
+    if (this.compactMode) {
+      this.treeView.collapseAll();
+    }
   },
   watch: {
     $route() {

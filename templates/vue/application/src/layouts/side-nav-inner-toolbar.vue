@@ -110,7 +110,9 @@ export default {
   },
   watch: {
     isLarge() {
-      this.menuOpened = this.isLarge;
+      if (!this.menuTemporaryOpened) {
+        this.menuOpened = this.isLarge;
+      }
     },
     $route() {
       if (this.menuTemporaryOpened || !this.isLarge) {
