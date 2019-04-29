@@ -41,6 +41,7 @@ class SideNavInnerToolbar extends React.Component {
           openedStateMode={menuMode}
           revealMode={menuRevealMode}
           minSize={minMenuSize}
+          maxSize={250}
           shading={shaderEnabled}
           opened={menuOpened}
           template={'menu'}
