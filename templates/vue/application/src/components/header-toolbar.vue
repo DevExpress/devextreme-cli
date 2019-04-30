@@ -89,7 +89,8 @@ export default {
     onLogoutClick() {
       auth.logOut();
       this.$router.push({
-        path: "/login-form"
+        path: "/login-form",
+        query: { redirect: this.$route.path }
       });
     }
   },

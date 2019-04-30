@@ -74,7 +74,7 @@ export default {
       }
 
       auth.logIn();
-      this.$router.push("/home");
+      this.$router.push(this.$route.query.redirect || "/home");
 
       e.validationGroup.reset();
     }
