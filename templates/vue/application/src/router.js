@@ -58,7 +58,7 @@ const router = new Router({
         content: () =>
           import(/* webpackChunkName: "login" */ "./views/login-form")
       }
-    }<%=^empty%>,
+    },<%=^empty%>
     {
       path: "/",
       redirect: "/home"
@@ -70,8 +70,12 @@ const router = new Router({
     {
       path: "*",
       redirect: "/home"
-    }
-    <%=/empty%>]
+    }<%=/empty%>
+    <%=#empty%>{
+      path: "*",
+      redirect: "/"
+    }<%=/empty%>
+  ]
 });
 
 router.beforeEach((to, from, next) => {
