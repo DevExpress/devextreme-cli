@@ -80,12 +80,12 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
 
-  if (to.name === "login-form" && auth.athenticated()) {
+  if (to.name === "login-form" && auth.authenticated()) {
     next({ name: "home" });
   }
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!auth.athenticated()) {
+    if (!auth.authenticated()) {
       next({
         name: "login-form",
         query: { redirect: to.fullPath }
