@@ -1,6 +1,6 @@
 let authenticated = true;
 export default {
-  athenticated() {
+  authenticated() {
     return authenticated;
   },
   logIn() {
