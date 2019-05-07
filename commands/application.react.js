@@ -34,7 +34,7 @@ const preparePackageJsonForTemplate = (packagePath, appName) => {
         { name: 'react-router-dom', version: '^5.0.0' }
     ];
     const devDepends = [
-        { name: 'devextreme-cli', version: 'next' }
+        { name: 'devextreme-cli', version: '19.1-next' }
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
