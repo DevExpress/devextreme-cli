@@ -1,6 +1,6 @@
 {
   "name": "devextreme-cli",
-  "version": "1.1.0-beta.3",
+  "version": "1.1.0-beta.4",
   "description": "DevExtreme CLI",
   "keywords": [
     "devexpress",
@@ -20,7 +20,7 @@
   "repository": "https://github.com/DevExpress/devextreme-cli",
   "license": "MIT",
   "dependencies": {
-    "devextreme-themebuilder": "^18.2.5 || >=19.1.1-pre-19058",
+    "devextreme-themebuilder": "19.1-next",
     "less": "^3.8.1",
     "minimist": "^1.2.0",
     "mustache": "^3.0.1",
