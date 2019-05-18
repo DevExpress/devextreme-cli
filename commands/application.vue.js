@@ -34,7 +34,7 @@ const preparePackageJsonForTemplate = (packagePath, appName) => {
         { name: 'vue-router', version: '^3.0.1' }
     ];
     const devDepends = [
-        { name: 'devextreme-cli', version: 'next' },
+        { name: 'devextreme-cli', version: 'latest' },
         { name: 'sass-loader', version: '^7.1.0' }
     ];
     const scripts = [
@@ -117,7 +117,7 @@ const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
     const mainModulePath = path.join(appPath, 'src', 'main.js');
     addStylesToApp(mainModulePath, styles || defaultStyles);
-    addDevextremeToPackageJson(appPath, options.dxversion || '19.1-next');
+    addDevextremeToPackageJson(appPath, options.dxversion || 'latest');
 
     runCommand('npm', ['install'], { cwd: appPath });
 };
