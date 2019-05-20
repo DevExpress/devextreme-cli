@@ -34,7 +34,7 @@ const preparePackageJsonForTemplate = (packagePath, appName) => {
         { name: 'react-router-dom', version: '^5.0.0' }
     ];
     const devDepends = [
-        { name: 'devextreme-cli', version: 'next' }
+        { name: 'devextreme-cli', version: 'latest' }
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
@@ -121,7 +121,7 @@ const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
     const pathToMainComponent = path.join(appPath, 'src', 'App.js');
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
-    addDevextremeToPackageJson(appPath, options.dxversion || '19.1-next');
+    addDevextremeToPackageJson(appPath, options.dxversion || 'latest');
 
     runCommand('npm', ['install'], { cwd: appPath });
 };
