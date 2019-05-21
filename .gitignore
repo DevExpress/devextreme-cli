@@ -7,7 +7,7 @@ jsconfig.json
 node_modules/
 npm-debug.log*
 yarn-error.log*
-tests/sandbox/
+testing/sandbox/
 
 # Mac OSX Finder files.
 **/.DS_Store

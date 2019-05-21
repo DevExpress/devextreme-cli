@@ -1,11 +1,9 @@
 module.exports = {
     'setupFilesAfterEnv': [
-        '<rootDir>/tests/jest-setup.js'
+        '<rootDir>/testing/jest-setup.js'
     ],
     'roots': [
-        '<rootDir>/tests/__tests__'
+        '<rootDir>/testing/__tests__'
     ],
-    'setTimeout': 999999,
-    'maxConcurrency': 1,
-    'verbose': true
+    'maxConcurrency': 1
 };
