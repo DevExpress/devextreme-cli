@@ -2,81 +2,66 @@ const fs = require('fs');
 const path = require('path');
 const simpleGit = require('simple-git');
 
+const rimraf = require('./rimraf-async');
 const runCommand = require('../utility/run-command');
-const clenupFolder = require('./cleanup-folder');
 
+const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
 const schematicsDirectory = 'devextreme-schematics';
 const schematicsPath = path.join(sandboxPath, schematicsDirectory);
-const appName = 'my-app';
+const routingFilePath = path.join(sandboxPath, appName, 'src/app/app-routing.module.ts');
 
-function prepareSchematics() {
-    return new Promise((resolve, reject) => {
-        const git = simpleGit(sandboxPath);
+async function prepareSchematics() {
+    // TODO: Move devextreme-schematics to this repo
+    const git = simpleGit(sandboxPath);
 
-        console.log('Cloning schematics repo...');
+    console.log('Cloning schematics repo...');
+    await new Promise((resolve, reject) => {
         git.clone('https://github.com/DevExpress/devextreme-schematics/', (err) => {
             if(err) {
                 reject(err);
-                return;
+            } else {
+                resolve();
             }
-
-            runCommand('npm', [ 'i' ], {
-                cwd: schematicsPath
-            }).then(() => {
-                runCommand('npm', [ 'run', 'build' ], {
-                    cwd: schematicsPath
-                }).then(() => {
-                    resolve();
-                }, reject);
-            }, reject);
         });
+    });
+
+    await runCommand('npm', [ 'i' ], {
+        cwd: schematicsPath
+    });
+
+    await runCommand('npm', [ 'run', 'build' ], {
+        cwd: schematicsPath
     });
 }
 
 exports.engine = 'angular';
-exports.port = 8080;
+exports.port = 8081;
 exports.distPath = path.join(sandboxPath, appName, 'dist', appName);
 
-exports.createApp = () => {
-    return new Promise((resolve, reject) => {
-        clenupFolder(sandboxPath).then(() => {
-            prepareSchematics().then(() => {
-                runCommand('node', [
-                    '../../../index.js',
-                    'new',
-                    'angular-app',
-                    '--layout=side-nav-outer-toolbar',
-                    `--c=${schematicsDirectory}`
-                ], {
-                    cwd: sandboxPath,
-                    forceNoCmd: true
-                }).then(() => {
-                    const routingFilePath = path.join(sandboxPath, appName, 'src/app/app-routing.module.ts');
-                    fs.readFile(routingFilePath, 'utf8', (err, data) => {
-                        if(err) {
-                            reject(err);
-                            return;
-                        }
+exports.createApp = async() => {
+    await rimraf(sandboxPath);
+    fs.mkdirSync(sandboxPath, { recursive: true });
 
-                        const result = data.replace('RouterModule.forRoot(routes)', 'RouterModule.forRoot(routes, {useHash: true})');
-
-                        fs.writeFile(routingFilePath, result, 'utf8', (err) => {
-                            if(err) {
-                                reject(err);
-                            } else {
-                                resolve();
-                            }
-                        });
-                    });
-                }, reject);
-            }, reject);
-        }, reject);
+    await prepareSchematics();
+    await runCommand('node', [
+        '../../../index.js',
+        'new',
+        'angular-app',
+        '--layout=side-nav-outer-toolbar',
+        `--c=${schematicsDirectory}`
+    ], {
+        cwd: sandboxPath,
+        forceNoCmd: true
     });
+
+    const data = fs.readFileSync(routingFilePath, 'utf8');
+    const result = data.replace('RouterModule.forRoot(routes)', 'RouterModule.forRoot(routes, {useHash: true})');
+    fs.writeFileSync(routingFilePath, result, 'utf8');
 };
 
-exports.buildApp = () => {
-    return runCommand('ng', [ 'build', '--baseHref', '"./"' ], {
+exports.buildApp = async() => {
+    await runCommand('ng', [ 'build', '--baseHref', '"./"' ], {
         cwd: path.join(sandboxPath, appName)
     });
 };

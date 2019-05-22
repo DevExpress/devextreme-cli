@@ -1,51 +1,55 @@
+const path = require('path');
 const puppeteer = require('puppeteer');
-const runCommand = require('../utility/run-command');
+const httpServer = require('http-server');
 const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+async function prepareApp(env) {
+    if(skipAppCreation) {
+        return;
+    }
 
-function startServer(path, port) {
-    return new Promise((resolve, reject) => {
-        // TODO: run server with js
-        runCommand('npx', [ 'http-server', '-p', `${port}` ], {
-            cwd: path,
-            silent: true
-        });
-        setTimeout(() => {
-            resolve();
-        }, 0);
-    });
-}
-
-function logErr(err) {
-    console.log(err);
-}
-
-function prepareApp(env) {
-    return new Promise((resolve, reject) => {
-        if(skipAppCreation) {
-            resolve();
-        } else {
-            env.createApp()
-                .then(env.buildApp, reject)
-                .then(resolve, reject);
-        }
-    });
+    await env.createApp();
+    await env.buildApp();
 };
+
+async function startServer(path, port) {
+    return new Promise((resolve, reject) => {
+        const server = httpServer.createServer({
+            root: path
+        });
+        server.listen(port, '0.0.0.0', (err) => {
+            if(err) {
+                reject(err);
+            } else {
+                resolve(server);
+            }
+        });
+    });
+}
+
+async function sleep(ms) {
+    await new Promise(resolve => setTimeout(resolve, ms));
+}
 
 module.exports = (env) => {
     const appUrl = `http://127.0.0.1:${env.port}/`;
-    const diffSnapshotsDir = `testing/__tests__/__diff_snapshots__/${env.engine}`;
+    const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
     let browser;
+    let server;
 
     beforeAll(async() => {
-        await prepareApp(env)
-            .then(() => {
-                startServer(env.distPath, env.port);
-            }, logErr);
-        browser = await puppeteer.launch();
+        try {
+            await prepareApp(env);
+            server = await startServer(env.distPath, env.port);
+            browser = await puppeteer.launch();
+        } catch(e) {
+            console.log(e);
+        }
+    });
+
+    afterAll(async() => {
+        await browser.close();
+        await server.close();
     });
 
     describe(`${env.engine} app-template`, () => {
@@ -105,10 +109,5 @@ module.exports = (env) => {
         // TODO: Test User menu
         // TODO: Test Login Form
         // TODO: Test inner layout
-
-        afterAll(async() => {
-            await browser.close();
-            // TODO: Close server
-        });
     });
 };
