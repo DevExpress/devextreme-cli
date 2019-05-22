@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const runCommand = require('../utility/run-command');
+const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -22,14 +23,25 @@ function logErr(err) {
     console.log(err);
 }
 
+function prepareApp(env) {
+    return new Promise((resolve, reject) => {
+        if(skipAppCreation) {
+            resolve();
+        } else {
+            env.createApp()
+                .then(env.buildApp, reject)
+                .then(resolve, reject);
+        }
+    });
+};
+
 module.exports = (env) => {
     const appUrl = `http://127.0.0.1:${env.port}/`;
     const diffSnapshotsDir = `testing/__tests__/__diff_snapshots__/${env.engine}`;
     let browser;
 
     beforeAll(async() => {
-        await env.createApp()
-            .then(env.buildApp, logErr)
+        await prepareApp(env)
             .then(() => {
                 startServer(env.distPath, env.port);
             }, logErr);
@@ -88,8 +100,15 @@ module.exports = (env) => {
             });
         });
 
+        // TODO: Test responsiveness
+        // TODO: Test Menu toggling
+        // TODO: Test User menu
+        // TODO: Test Login Form
+        // TODO: Test inner layout
+
         afterAll(async() => {
             await browser.close();
+            // TODO: Close server
         });
     });
 };
