@@ -133,11 +133,26 @@ module.exports = (env) => {
                     compareSnapshot(image, 'app-template-user-panel');
                 });
 
+                it('Login page', async() => {
+                    // TODO: Fix Angular & React
+                    if(env.engine === 'angular' || env.engine === 'react') {
+                        expect(true).toBe(true);
+                        return;
+                    }
+                    const page = await openPage(appUrl);
+                    const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
+                    await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
+                    await page.waitFor('.dx-icon-runner');
+                    await page.click('.dx-icon-runner');
+                    await page.waitFor('.login-header');
+                    const image = await page.screenshot();
+
+                    compareSnapshot(image, 'app-template-login');
+                });
             });
         });
 
         // TODO: Deal with font blurring
-        // TODO: Test Login Form
         // TODO: Test inner layout
     });
 };
