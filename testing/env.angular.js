@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const simpleGit = require('simple-git');
 
-const rimraf = require('./rimraf-async');
+const rimraf = require('./helpers/rimraf-async');
 const runCommand = require('../utility/run-command');
 
 const appName = 'my-app';

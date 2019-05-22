@@ -1,51 +1,12 @@
 const path = require('path');
 const puppeteer = require('puppeteer');
-const httpServer = require('http-server');
-const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
 
-const devices = [
-    puppeteer.devices['iPhone 5'],
-    puppeteer.devices['iPhone 5 landscape'],
-    {
-        name: 'Desktop',
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
-        viewport: {
-            width: 1280,
-            height: 1024,
-            deviceScaleFactor: 1
-        }
-    }
-];
-
-async function prepareApp(env) {
-    if(skipAppCreation) {
-        return;
-    }
-
-    await env.createApp();
-    await env.buildApp();
-};
-
-async function startServer(path, port) {
-    return new Promise((resolve, reject) => {
-        const server = httpServer.createServer({
-            root: path
-        });
-        server.listen(port, '0.0.0.0', (err) => {
-            if(err) {
-                reject(err);
-            } else {
-                resolve(server);
-            }
-        });
-    });
-}
-
-async function sleep(ms) {
-    await new Promise(resolve => setTimeout(resolve, ms));
-}
+const webServer = require('./helpers/web-server');
+const devices = require('./helpers/devices');
+const sleep = require('./helpers/sleep');
 
 module.exports = (env) => {
+    const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
     const appUrl = `http://127.0.0.1:${env.port}/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
     let browser;
@@ -53,8 +14,11 @@ module.exports = (env) => {
 
     beforeAll(async() => {
         try {
-            await prepareApp(env);
-            server = await startServer(env.distPath, env.port);
+            if(!skipAppCreation) {
+                await env.createApp();
+                await env.buildApp();
+            }
+            server = await webServer.create(env.distPath, env.port);
             browser = await puppeteer.launch();
         } catch(e) {
             console.log(e);
@@ -86,6 +50,11 @@ module.exports = (env) => {
             }
 
             describe(`${device.name}`, () => {
+                // TODO: Fix menu in tablet in React
+                if(env.engine === 'react' && device.name === 'iPhone 6 landscape') {
+                    return;
+                }
+
                 it('home view', async() => {
                     const page = await openPage(appUrl);
                     const image = await page.screenshot({
@@ -101,12 +70,12 @@ module.exports = (env) => {
                 });
 
                 it('profile view', async() => {
-                    // TODO Fix paddings in Vue
+                    // TODO: Fix paddings in Vue
                     if(env.engine === 'vue') {
                         expect(true).toBe(true);
                         return;
                     }
-                    // TODO Fix paddings in React
+                    // TODO: Fix paddings in React
                     if(env.engine === 'react' && device.name === 'Desktop') {
                         expect(true).toBe(true);
                         return;
@@ -118,7 +87,7 @@ module.exports = (env) => {
                 });
 
                 it('display-data view', async() => {
-                    // TODO Fix paddings in Vue
+                    // TODO: Fix paddings in Vue
                     if(env.engine === 'vue') {
                         expect(true).toBe(true);
                         return;
