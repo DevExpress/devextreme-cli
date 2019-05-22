@@ -3,7 +3,6 @@ const puppeteer = require('puppeteer');
 
 const webServer = require('./helpers/web-server');
 const devices = require('./helpers/devices');
-const sleep = require('./helpers/sleep');
 
 module.exports = (env) => {
     const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
@@ -55,7 +54,7 @@ module.exports = (env) => {
                     return;
                 }
 
-                it('home view', async() => {
+                it('Home view', async() => {
                     const page = await openPage(appUrl);
                     const image = await page.screenshot({
                         clip: {
@@ -69,7 +68,7 @@ module.exports = (env) => {
                     compareSnapshot(image, 'app-template-home');
                 });
 
-                it('profile view', async() => {
+                it('Profile view', async() => {
                     // TODO: Fix paddings in Vue
                     if(env.engine === 'vue') {
                         expect(true).toBe(true);
@@ -86,7 +85,7 @@ module.exports = (env) => {
                     compareSnapshot(image, 'app-template-profile');
                 });
 
-                it('display-data view', async() => {
+                it('Display data view', async() => {
                     // TODO: Fix paddings in Vue
                     if(env.engine === 'vue') {
                         expect(true).toBe(true);
@@ -94,36 +93,50 @@ module.exports = (env) => {
                     }
                     const page = await openPage(`${appUrl}#/display-data`);
                     // NOTE: Wait for the DataGrid is loaded
-                    await sleep(1000);
+                    await page.waitFor('.dx-row-focused');
                     const image = await page.screenshot();
 
                     compareSnapshot(image, 'app-template-display-data');
                 });
 
-                it('menu toggle', async() => {
-                    // TODO: Fix paddings in Vue
-                    if(env.engine === 'vue') {
+                it('Menu toggle', async() => {
+                    // TODO: Fix Vue & React
+                    if((env.engine === 'vue' || env.engine === 'react') && device.name === 'Desktop'
+                        || env.engine === 'react' && device.name === 'iPhone 5') {
                         expect(true).toBe(true);
                         return;
                     }
-                    // TODO: Fix paddings in React
-                    if(env.engine === 'react') {
-                        expect(true).toBe(true);
-                        return;
-                    }
+
                     const page = await openPage(`${appUrl}#/profile`);
                     page.click('.menu-button .dx-button');
                     // NOTE: Wait for animation complete
-                    await sleep(1000);
+                    await page.waitFor(1000);
                     const image = await page.screenshot();
 
                     compareSnapshot(image, 'app-template-toggle');
                 });
 
+                it('User panel', async() => {
+                    // TODO: Fix Vue & React
+                    if(env.engine === 'vue' || env.engine === 'react') {
+                        expect(true).toBe(true);
+                        return;
+                    }
+
+                    const page = await openPage(`${appUrl}#/profile`);
+                    const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
+                    await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
+                    // NOTE: Wait for animation complete
+                    await page.waitFor(1000);
+                    const image = await page.screenshot();
+
+                    compareSnapshot(image, 'app-template-user-panel');
+                });
+
             });
         });
 
-        // TODO: Test User menu
+        // TODO: Deal with font blurring
         // TODO: Test Login Form
         // TODO: Test inner layout
     });
