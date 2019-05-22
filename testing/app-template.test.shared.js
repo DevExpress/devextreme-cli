@@ -69,12 +69,25 @@ module.exports = (env) => {
     describe(`${env.engine} app-template`, () => {
 
         devices.forEach((device) => {
-            const deviceName = device.name.toLowerCase().replace(/\s+/g, '-');
+            async function openPage(url) {
+                const page = await browser.newPage();
+                await page.emulate(device);
+                await page.goto(url);
+                return page;
+            }
+
+            function compareSnapshot(image, name) {
+                const deviceName = device.name.toLowerCase().replace(/\s+/g, '-');
+
+                expect(image).toMatchImageSnapshot({
+                    customSnapshotIdentifier: `${name}-${deviceName}`,
+                    customDiffDir: diffSnapshotsDir
+                });
+            }
+
             describe(`${device.name}`, () => {
                 it('home view', async() => {
-                    const page = await browser.newPage();
-                    await page.emulate(device);
-                    await page.goto(appUrl);
+                    const page = await openPage(appUrl);
                     const image = await page.screenshot({
                         clip: {
                             x: 0,
@@ -84,10 +97,7 @@ module.exports = (env) => {
                         }
                     });
 
-                    expect(image).toMatchImageSnapshot({
-                        customSnapshotIdentifier: `app-template-home-${deviceName}`,
-                        customDiffDir: diffSnapshotsDir
-                    });
+                    compareSnapshot(image, 'app-template-home');
                 });
 
                 it('profile view', async() => {
@@ -97,19 +107,14 @@ module.exports = (env) => {
                         return;
                     }
                     // TODO Fix paddings in React
-                    if(env.engine === 'react' && deviceName === 'desktop') {
+                    if(env.engine === 'react' && device.name === 'Desktop') {
                         expect(true).toBe(true);
                         return;
                     }
-                    const page = await browser.newPage();
-                    await page.emulate(device);
-                    await page.goto(`${appUrl}#/profile`);
+                    const page = await openPage(`${appUrl}#/profile`);
                     const image = await page.screenshot();
 
-                    expect(image).toMatchImageSnapshot({
-                        customSnapshotIdentifier: `app-template-profile-${deviceName}`,
-                        customDiffDir: diffSnapshotsDir
-                    });
+                    compareSnapshot(image, 'app-template-profile');
                 });
 
                 it('display-data view', async() => {
@@ -118,16 +123,12 @@ module.exports = (env) => {
                         expect(true).toBe(true);
                         return;
                     }
-                    const page = await browser.newPage();
-                    await page.emulate(device);
-                    await page.goto(`${appUrl}#/display-data`);
+                    const page = await openPage(`${appUrl}#/display-data`);
+                    // NOTE: Wait for the DataGrid is loaded
                     await sleep(1000);
                     const image = await page.screenshot();
 
-                    expect(image).toMatchImageSnapshot({
-                        customSnapshotIdentifier: `app-template-display-data-${deviceName}`,
-                        customDiffDir: diffSnapshotsDir
-                    });
+                    compareSnapshot(image, 'app-template-display-data');
                 });
             });
         });
