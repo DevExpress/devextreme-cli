@@ -99,10 +99,30 @@ module.exports = (env) => {
 
                     compareSnapshot(image, 'app-template-display-data');
                 });
+
+                it('menu toggle', async() => {
+                    // TODO: Fix paddings in Vue
+                    if(env.engine === 'vue') {
+                        expect(true).toBe(true);
+                        return;
+                    }
+                    // TODO: Fix paddings in React
+                    if(env.engine === 'react') {
+                        expect(true).toBe(true);
+                        return;
+                    }
+                    const page = await openPage(`${appUrl}#/profile`);
+                    page.click('.menu-button .dx-button');
+                    // NOTE: Wait for animation complete
+                    await sleep(1000);
+                    const image = await page.screenshot();
+
+                    compareSnapshot(image, 'app-template-toggle');
+                });
+
             });
         });
 
-        // TODO: Test Menu toggling
         // TODO: Test User menu
         // TODO: Test Login Form
         // TODO: Test inner layout
