@@ -3,6 +3,20 @@ const puppeteer = require('puppeteer');
 const httpServer = require('http-server');
 const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
 
+const devices = [
+    puppeteer.devices['iPhone 5'],
+    puppeteer.devices['iPhone 5 landscape'],
+    {
+        name: 'Desktop',
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
+        viewport: {
+            width: 1280,
+            height: 1024,
+            deviceScaleFactor: 1
+        }
+    }
+];
+
 async function prepareApp(env) {
     if(skipAppCreation) {
         return;
@@ -53,58 +67,71 @@ module.exports = (env) => {
     });
 
     describe(`${env.engine} app-template`, () => {
-        it('home view', async() => {
-            const page = await browser.newPage();
-            await page.goto(appUrl);
-            const image = await page.screenshot({
-                clip: {
-                    x: 0,
-                    y: 0,
-                    width: 800,
-                    height: 200
-                }
-            });
 
-            expect(image).toMatchImageSnapshot({
-                customSnapshotIdentifier: 'app-template-home',
-                customDiffDir: diffSnapshotsDir
+        devices.forEach((device) => {
+            const deviceName = device.name.toLowerCase().replace(/\s+/g, '-');
+            describe(`${device.name}`, () => {
+                it('home view', async() => {
+                    const page = await browser.newPage();
+                    await page.emulate(device);
+                    await page.goto(appUrl);
+                    const image = await page.screenshot({
+                        clip: {
+                            x: 0,
+                            y: 0,
+                            width: device.viewport.width,
+                            height: 200
+                        }
+                    });
+
+                    expect(image).toMatchImageSnapshot({
+                        customSnapshotIdentifier: `app-template-home-${deviceName}`,
+                        customDiffDir: diffSnapshotsDir
+                    });
+                });
+
+                it('profile view', async() => {
+                    // TODO Fix paddings in Vue
+                    if(env.engine === 'vue') {
+                        expect(true).toBe(true);
+                        return;
+                    }
+                    // TODO Fix paddings in React
+                    if(env.engine === 'react' && deviceName === 'desktop') {
+                        expect(true).toBe(true);
+                        return;
+                    }
+                    const page = await browser.newPage();
+                    await page.emulate(device);
+                    await page.goto(`${appUrl}#/profile`);
+                    const image = await page.screenshot();
+
+                    expect(image).toMatchImageSnapshot({
+                        customSnapshotIdentifier: `app-template-profile-${deviceName}`,
+                        customDiffDir: diffSnapshotsDir
+                    });
+                });
+
+                it('display-data view', async() => {
+                    // TODO Fix paddings in Vue
+                    if(env.engine === 'vue') {
+                        expect(true).toBe(true);
+                        return;
+                    }
+                    const page = await browser.newPage();
+                    await page.emulate(device);
+                    await page.goto(`${appUrl}#/display-data`);
+                    await sleep(1000);
+                    const image = await page.screenshot();
+
+                    expect(image).toMatchImageSnapshot({
+                        customSnapshotIdentifier: `app-template-display-data-${deviceName}`,
+                        customDiffDir: diffSnapshotsDir
+                    });
+                });
             });
         });
 
-        it('profile view', async() => {
-            // TODO Fix paddings in Vue
-            if(env.engine === 'vue') {
-                expect(true).toBe(true);
-                return;
-            }
-            const page = await browser.newPage();
-            await page.goto(`${appUrl}#/profile`);
-            const image = await page.screenshot();
-
-            expect(image).toMatchImageSnapshot({
-                customSnapshotIdentifier: 'app-template-profile',
-                customDiffDir: diffSnapshotsDir
-            });
-        });
-
-        it('display-data view', async() => {
-            // TODO Fix paddings in Vue
-            if(env.engine === 'vue') {
-                expect(true).toBe(true);
-                return;
-            }
-            const page = await browser.newPage();
-            await page.goto(`${appUrl}#/display-data`);
-            await sleep(1000);
-            const image = await page.screenshot();
-
-            expect(image).toMatchImageSnapshot({
-                customSnapshotIdentifier: 'app-template-display-data',
-                customDiffDir: diffSnapshotsDir
-            });
-        });
-
-        // TODO: Test responsiveness
         // TODO: Test Menu toggling
         // TODO: Test User menu
         // TODO: Test Login Form
