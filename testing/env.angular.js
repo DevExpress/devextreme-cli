@@ -10,6 +10,7 @@ const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
 const schematicsDirectory = 'devextreme-schematics';
 const schematicsPath = path.join(sandboxPath, schematicsDirectory);
 const routingFilePath = path.join(sandboxPath, appName, 'src/app/app-routing.module.ts');
+const appComponentPath = path.join(sandboxPath, appName, 'src/app/app.component.html');
 
 async function prepareSchematics() {
     // TODO: Move devextreme-schematics to this repo
@@ -64,4 +65,12 @@ exports.buildApp = async() => {
     await runCommand('ng', [ 'build', '--baseHref', '"./"' ], {
         cwd: path.join(sandboxPath, appName)
     });
+};
+
+exports.setLayout = (layoutName) => {
+    const regexToFind = /app-side-nav-\w+-toolbar/g;
+    const newSubStr = `app-${layoutName}`;
+    const data = fs.readFileSync(appComponentPath, 'utf8');
+    const result = data.replace(regexToFind, newSubStr);
+    fs.writeFileSync(appComponentPath, result, 'utf8');
 };
