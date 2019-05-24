@@ -168,7 +168,7 @@ module.exports = (env) => {
                             const page = await openPage(`${appUrl}#/profile`);
                             const menuButton = await page.waitForSelector('.menu-button .dx-button', { visible: true });
                             await menuButton.click();
-                            // await page.mouse.click(130 * device.viewport.deviceScaleFactor, 130 * device.viewport.deviceScaleFactor);
+
                             // NOTE: Wait for animation complete
                             await page.waitFor(1000);
                             const image = await page.screenshot();
@@ -226,8 +226,5 @@ module.exports = (env) => {
                 });
             });
         });
-
-        // TODO: Deal with font blurring
-        // TODO: add lint to npm task
     });
 };
