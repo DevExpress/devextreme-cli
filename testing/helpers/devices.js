@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+// NOTE: All puppeteer devices: https://github.com/GoogleChrome/puppeteer/blob/master/lib/DeviceDescriptors.js
 
 module.exports = [
     puppeteer.devices['iPhone 5'],

@@ -173,7 +173,8 @@ module.exports = (env) => {
                             await page.waitFor(1000);
                             const image = await page.screenshot();
 
-                            compareSnapshot(image, 'toggle');
+                            // NOTE: Allow 1 pixel of difference
+                            compareSnapshot(image, 'toggle', 1);
                         });
 
                         it('User panel', async() => {

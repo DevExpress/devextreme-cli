@@ -4,6 +4,5 @@ module.exports = {
     ],
     'roots': [
         '<rootDir>/testing/__tests__'
-    ],
-    'maxConcurrency': 1
+    ]
 };
