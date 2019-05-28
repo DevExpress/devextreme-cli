@@ -23,7 +23,8 @@ exports.createApp = async() => {
         '--layout=side-nav-outer-toolbar'
     ], {
         cwd: sandboxPath,
-        forceNoCmd: true
+        forceNoCmd: true,
+        silent: true
     });
 
     await rimraf(path.join(sandboxPath, appName, 'vue.config.js'));
@@ -31,7 +32,8 @@ exports.createApp = async() => {
 
 exports.buildApp = async() => {
     await runCommand('npm', [ 'run', 'build' ], {
-        cwd: path.join(sandboxPath, appName)
+        cwd: path.join(sandboxPath, appName),
+        silent: true
     });
 };
 

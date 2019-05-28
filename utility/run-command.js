@@ -12,7 +12,9 @@ module.exports = function(commandName, args = [], customConfig) {
         Object.assign(config, customConfig);
     }
 
-    console.log(`> ${command} ${args.join(' ')}`);
+    if(!customConfig.silent) {
+        console.log(`> ${command} ${args.join(' ')}`);
+    }
 
     return new Promise((resolve, reject) => {
         spawn(command, args, config).on('exit', (code) => {

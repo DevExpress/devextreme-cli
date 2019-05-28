@@ -28,11 +28,13 @@ async function prepareSchematics() {
     });
 
     await runCommand('npm', [ 'i' ], {
-        cwd: schematicsPath
+        cwd: schematicsPath,
+        silent: true
     });
 
     await runCommand('npm', [ 'run', 'build' ], {
-        cwd: schematicsPath
+        cwd: schematicsPath,
+        silent: true
     });
 }
 
@@ -53,7 +55,8 @@ exports.createApp = async() => {
         `--c=${schematicsDirectory}`
     ], {
         cwd: sandboxPath,
-        forceNoCmd: true
+        forceNoCmd: true,
+        silent: true
     });
 
     const data = fs.readFileSync(routingFilePath, 'utf8');
@@ -62,8 +65,15 @@ exports.createApp = async() => {
 };
 
 exports.buildApp = async() => {
-    await runCommand('ng', [ 'build', '--baseHref', '"./"' ], {
-        cwd: path.join(sandboxPath, appName)
+    await runCommand('ng', [
+        'build',
+        '--baseHref',
+        '"./"',
+        '--build-optimizer=false',
+        '--source-map=false'
+    ], {
+        cwd: path.join(sandboxPath, appName),
+        silent: true
     });
 };
 

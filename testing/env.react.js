@@ -24,7 +24,8 @@ exports.createApp = async() => {
         '--layout=side-nav-outer-toolbar'
     ], {
         cwd: sandboxPath,
-        forceNoCmd: true
+        forceNoCmd: true,
+        silent: true
     });
 
     fs.writeFileSync(path.join(sandboxPath, appName, '.env'), 'SKIP_PREFLIGHT_CHECK=true');
@@ -32,7 +33,8 @@ exports.createApp = async() => {
 
 exports.buildApp = async() => {
     await runCommand('npm', [ 'run', 'build' ], {
-        cwd: path.join(sandboxPath, appName)
+        cwd: path.join(sandboxPath, appName),
+        silent: true
     });
 };
 
