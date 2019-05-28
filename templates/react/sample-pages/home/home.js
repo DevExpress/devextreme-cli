@@ -25,7 +25,7 @@ export default () => (
           <li><a href={'https://github.com/devexpress/devextreme-react'}>DevExtreme-React</a> components</li>
         </ul>
 
-        <p>The application layouts are implemented using the <a href={'https://js.devexpress.com/Documentation/'}>Drawer</a> component. Several component examples are also available in the <b>Examples</b> section. For complete information on DevExtreme, check our <a href={'https://js.devexpress.com/Documentation/'}>documentation</a> and <a href={'https://js.devexpress.com/Demos/WidgetsGallery/'}>demos</a>.</p>
+        <p>The application layouts are implemented using the <a href={'https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDrawer/'}>Drawer</a> component. Several component examples are also available in the <b>Examples</b> section. For complete information on DevExtreme, check our <a href={'https://js.devexpress.com/Documentation/'}>documentation</a> and <a href={'https://js.devexpress.com/Demos/WidgetsGallery/'}>demos</a>.</p>
         <p>You can do the following to create a custom application using this template as a base point:</p>
 
         <ul>
