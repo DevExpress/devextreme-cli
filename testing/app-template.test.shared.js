@@ -6,7 +6,7 @@ const devices = require('./helpers/devices');
 const setTheme = require('./helpers/set-theme');
 
 module.exports = (env) => {
-    const skipAppCreation = 1 || process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
+    const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
     const appUrl = `http://127.0.0.1:${env.port}/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
     const defaultLayout = 'side-nav-outer-toolbar';
