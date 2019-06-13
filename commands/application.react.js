@@ -9,6 +9,7 @@ const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
 const pathToPagesIndex = path.join(process.cwd(), 'src', 'pages', 'index.js');
+const latestVersions = require('../utility/latest-versions');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
@@ -18,33 +19,23 @@ const layouts = [
     { fullName: 'side-nav-inner-toolbar', title: 'Side navigation (inner toolbar)', value: 'SideNavInnerToolbar' }
 ];
 
-const addDevextremeToPackageJson = (appPath, dxversion) => {
-    const packagePath = path.join(appPath, 'package.json');
-    const depends = [
-        { name: 'devextreme', version: dxversion },
-        { name: 'devextreme-react', version: dxversion }
-    ];
-
-    packageJsonUtils.addDependencies(packagePath, depends);
-};
-
-const preparePackageJsonForTemplate = (packagePath, appName) => {
+const preparePackageJsonForTemplate = (appPath, appName) => {
     const depends = [
         { name: 'node-sass', version: '^4.11.0' },
         { name: 'react-router-dom', version: '^5.0.0' }
     ];
     const devDepends = [
-        { name: 'devextreme-cli', version: 'latest' }
+        { name: 'devextreme-cli', version: latestVersions['devextreme-cli'] }
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
         { name: 'postinstall', value: 'npm run build-themes' }
     ];
 
-    packageJsonUtils.addDependencies(packagePath, depends);
-    packageJsonUtils.addDependencies(packagePath, devDepends, 'dev');
-    packageJsonUtils.updateScripts(packagePath, scripts);
-    updateJsonPropName(packagePath, appName);
+    packageJsonUtils.addDependencies(appPath, depends);
+    packageJsonUtils.addDependencies(appPath, devDepends, 'dev');
+    packageJsonUtils.updateScripts(appPath, scripts);
+    packageJsonUtils.updateName(appPath, appName);
 };
 
 const updateJsonPropName = (path, name) => {
@@ -99,7 +90,6 @@ const modifyIndexHtml = (appPath, appName) => {
 
 const addTemplate = (appPath, appName, templateOptions) => {
     const templateSourcePath = path.join(__dirname, '..', 'templates', 'react', 'application');
-    const packagePath = path.join(appPath, 'package.json');
     const manifestPath = path.join(appPath, 'public', 'manifest.json');
     const indexPath = path.join(appPath, 'src', 'index.js');
     const styles = [
@@ -111,9 +101,9 @@ const addTemplate = (appPath, appName, templateOptions) => {
     if(!templateOptions.empty) {
         addSamplePages(appPath);
     }
-    preparePackageJsonForTemplate(packagePath, appName);
+    preparePackageJsonForTemplate(appPath, appName);
     updateJsonPropName(manifestPath, appName);
-    addPolyfills(packagePath, indexPath);
+    addPolyfills(packageJsonUtils.getPackageJsonPath(), indexPath);
     install({}, appPath, styles);
 };
 
@@ -121,7 +111,7 @@ const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
     const pathToMainComponent = path.join(appPath, 'src', 'App.js');
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
-    addDevextremeToPackageJson(appPath, options.dxversion || 'latest');
+    packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
     runCommand('npm', ['install'], { cwd: appPath });
 };
