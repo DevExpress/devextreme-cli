@@ -5,7 +5,6 @@ const createVueApp = require('@vue/cli/lib/create');
 const runPrompts = require('../utility/prompts');
 const templateCreator = require('../utility/template-creator');
 const packageJsonUtils = require('../utility/package-json-utils');
-const modifyJson = require('../utility/modify-json-file');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
