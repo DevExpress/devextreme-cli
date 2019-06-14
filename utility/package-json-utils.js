@@ -1,9 +1,20 @@
 const modifyJson = require('./modify-json-file');
+const path = require('path');
+const latestVersions = require('./latest-versions');
+let packageJsonPath = '';
 
-const addDependencies = (path, packages, type) => {
+const getPackageJsonPath = (appPath) => {
+    if(!packageJsonPath) {
+        packageJsonPath = path.join(appPath, 'package.json');
+    }
+
+    return packageJsonPath;
+};
+
+const addDependencies = (appPath, packages, type) => {
     const propName = type === 'dev' ? 'devDependencies' : 'dependencies';
 
-    modifyJson(path, content => {
+    modifyJson(getPackageJsonPath(appPath), content => {
         if(!content[propName]) {
             content[propName] = {};
         }
@@ -16,8 +27,26 @@ const addDependencies = (path, packages, type) => {
     });
 };
 
-const updateScripts = (path, scripts) => {
-    modifyJson(path, content => {
+const addDevextreme = (appPath, dxversion, engine) => {
+    const dxWrapperPackage = `devextreme-${engine}`;
+    const depends = [
+        { name: 'devextreme', version: dxversion || latestVersions['devextreme'] },
+        { name: dxWrapperPackage, version: dxversion || latestVersions[dxWrapperPackage] }
+    ];
+
+    addDependencies(getPackageJsonPath(appPath), depends);
+};
+
+const updateName = (appPath, name) => {
+    modifyJson(getPackageJsonPath(appPath), content => {
+        content.name = name;
+
+        return content;
+    });
+};
+
+const updateScripts = (appPath, scripts) => {
+    modifyJson(getPackageJsonPath(appPath), content => {
         let packageJsonScripts = content.scripts;
         scripts.forEach((script) => {
             const name = script.name;
@@ -46,5 +75,8 @@ const updateScripts = (path, scripts) => {
 
 module.exports = {
     addDependencies,
-    updateScripts
+    getPackageJsonPath,
+    updateScripts,
+    updateName,
+    addDevextreme
 };
