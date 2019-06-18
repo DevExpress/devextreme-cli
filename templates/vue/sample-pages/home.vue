@@ -113,7 +113,7 @@
 
         <p>
           The application layouts are implemented using the
-          <a href="https://js.devexpress.com/Documentation/">Drawer</a>
+          <a href="https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDrawer/">Drawer</a>
           component. Several component examples are also available in the
           <b>Examples</b> section. For complete information on DevExtreme, check
           our

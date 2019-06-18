@@ -128,7 +128,7 @@ const runThemeBuilder = (rawOptions) => {
                 }
 
                 content = JSON.stringify({
-                    baseTheme: [ options.themeName, options.colorScheme.replace('-', '.') ].join('.'),
+                    baseTheme: [ options.themeName, options.colorScheme.replace(/-/g, '.') ].join('.'),
                     items: exportedMeta,
                     version: result.version
                 }, ' ', 4);

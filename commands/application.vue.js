@@ -5,10 +5,10 @@ const createVueApp = require('@vue/cli/lib/create');
 const runPrompts = require('../utility/prompts');
 const templateCreator = require('../utility/template-creator');
 const packageJsonUtils = require('../utility/package-json-utils');
-const modifyJson = require('../utility/modify-json-file');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
+const latestVersions = require('../utility/latest-versions');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
@@ -18,23 +18,13 @@ const layouts = [
     { value: 'side-nav-inner-toolbar', title: 'Side navigation (inner toolbar)' }
 ];
 
-const addDevextremeToPackageJson = (appPath, dxversion) => {
-    const packagePath = path.join(appPath, 'package.json');
-    const depends = [
-        { name: 'devextreme', version: dxversion },
-        { name: 'devextreme-vue', version: dxversion }
-    ];
-
-    packageJsonUtils.addDependencies(packagePath, depends);
-};
-
-const preparePackageJsonForTemplate = (packagePath, appName) => {
+const preparePackageJsonForTemplate = (appPath, appName) => {
     const depends = [
         { name: 'node-sass', version: '^4.11.0' },
         { name: 'vue-router', version: '^3.0.1' }
     ];
     const devDepends = [
-        { name: 'devextreme-cli', version: 'next' },
+        { name: 'devextreme-cli', version: latestVersions['devextreme-cli'] },
         { name: 'sass-loader', version: '^7.1.0' }
     ];
     const scripts = [
@@ -42,18 +32,10 @@ const preparePackageJsonForTemplate = (packagePath, appName) => {
         { name: 'postinstall', value: 'npm run build-themes' }
     ];
 
-    packageJsonUtils.addDependencies(packagePath, depends);
-    packageJsonUtils.addDependencies(packagePath, devDepends, 'dev');
-    packageJsonUtils.updateScripts(packagePath, scripts);
-    updateJsonPropName(packagePath, appName);
-};
-
-const updateJsonPropName = (path, name) => {
-    modifyJson(path, content => {
-        content.name = name;
-
-        return content;
-    });
+    packageJsonUtils.addDependencies(appPath, depends);
+    packageJsonUtils.addDependencies(appPath, devDepends, 'dev');
+    packageJsonUtils.updateScripts(appPath, scripts);
+    packageJsonUtils.updateName(appPath, appName);
 };
 
 const getLayout = (options) => {
@@ -99,7 +81,6 @@ const modifyIndexHtml = (appPath, appName) => {
 
 const addTemplate = (appPath, appName, templateOptions) => {
     const templateSourcePath = path.join(__dirname, '..', 'templates', 'vue', 'application');
-    const packagePath = path.join(appPath, 'package.json');
     const styles = [
         'devextreme/dist/css/dx.common.css',
         './themes/generated/theme.additional.css',
@@ -109,7 +90,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
     if(!templateOptions.empty) {
         addSamplePages(appPath);
     }
-    preparePackageJsonForTemplate(packagePath, appName);
+    preparePackageJsonForTemplate(appPath, appName);
     install({}, appPath, styles);
 };
 
@@ -117,7 +98,7 @@ const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
     const mainModulePath = path.join(appPath, 'src', 'main.js');
     addStylesToApp(mainModulePath, styles || defaultStyles);
-    addDevextremeToPackageJson(appPath, options.dxversion || '19.1-next');
+    packageJsonUtils.addDevextreme(appPath, options.dxversion, 'vue');
 
     runCommand('npm', ['install'], { cwd: appPath });
 };
