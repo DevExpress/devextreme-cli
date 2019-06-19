@@ -7,6 +7,9 @@ jobs:
     steps:
       - checkout
 
+      - add_ssh_keys:
+          fingerprints:
+              - "27:9b:1b:31:1d:cb:3b:01:8b:47:1c:f9:a7:1d:9c:14"
       - run:
           name: Install packages
           command: npm install --unsafe-perm
