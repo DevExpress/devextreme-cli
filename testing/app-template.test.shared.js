@@ -48,17 +48,23 @@ module.exports = (env) => {
                                 await setTheme(theme, env.engine);
                                 await env.buildApp();
                                 server = await webServer.create(env.distPath, env.port);
-                                browser = await puppeteer.launch({
-                                    args: ['--no-sandbox', '--disable-dev-shm-usage']
-                                });
                             } catch(e) {
-                                console.log(e);
+                                throw new Error(e);
                             }
                         });
 
                         afterAll(async() => {
-                            await browser.close();
                             await server.close();
+                        });
+
+                        beforeEach(async() => {
+                            browser = await puppeteer.launch({
+                                args: ['--no-sandbox', '--disable-dev-shm-usage']
+                            });
+                        });
+
+                        afterEach(async() => {
+                            await browser.close();
                         });
 
                         devices.forEach((device) => {
