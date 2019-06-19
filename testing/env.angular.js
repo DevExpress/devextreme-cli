@@ -65,10 +65,9 @@ exports.createApp = async() => {
 };
 
 exports.buildApp = async() => {
-    await runCommand('ng', [
+    await runCommand('npx', [
+        'ng',
         'build',
-        '--baseHref',
-        '"./"',
         '--build-optimizer=false',
         '--source-map=false'
     ], {
