@@ -1,1 +1,14 @@
-* eol=lf
+.circleci text eol=lf
+.github text eol=lf
+.eslintignore text eol=lf
+.eslintrc text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.scss text eol=lf
+*.vue text eol=lf
+
+*.png binary
