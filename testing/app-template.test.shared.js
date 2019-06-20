@@ -1,5 +1,6 @@
 const path = require('path');
 const puppeteer = require('puppeteer');
+const ip = require('ip');
 
 const webServer = require('./helpers/web-server');
 const devices = require('./helpers/devices');
@@ -7,7 +8,7 @@ const setTheme = require('./helpers/set-theme');
 
 module.exports = (env) => {
     const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
-    const appUrl = `http://localhost:${env.port}/`;
+    const appUrl = `http://${ip.address()}:${env.port}/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
     const defaultLayout = 'side-nav-outer-toolbar';
 
