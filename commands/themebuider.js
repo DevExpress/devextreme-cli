@@ -94,9 +94,9 @@ const getMeta = (fullMeta, base, filter, baseParametersList) => {
 
 const installThemeBuilder = version => {
     const rootDir = path.join(__dirname, '..');
-    const packageJsopPath = path.join(rootDir, 'node_modules', 'devextreme-themebuilder', 'package.json');
+    const packageJsonPath = path.join(rootDir, 'node_modules', 'devextreme-themebuilder', 'package.json');
 
-    if(fs.existsSync(packageJsopPath) && require(packageJsopPath).version === version) {
+    if(fs.existsSync(packageJsonPath) && require(packageJsonPath).version === version) {
         return;
     }
 
