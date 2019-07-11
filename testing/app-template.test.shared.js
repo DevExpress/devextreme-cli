@@ -72,7 +72,9 @@ module.exports = (env) => {
                             async function openPage(url) {
                                 const page = await browser.newPage();
                                 await page.emulate(device);
-                                await page.goto(url);
+                                await page.goto(url, {
+                                    timeout: 0
+                                });
                                 return page;
                             }
 
