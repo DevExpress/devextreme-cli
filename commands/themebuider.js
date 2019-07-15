@@ -1,8 +1,13 @@
-const themeBuilder = require('devextreme-themebuilder');
-const commands = require('devextreme-themebuilder/modules/commands');
-const baseParameters = require('devextreme-themebuilder/modules/base-parameters');
 const fs = require('fs');
 const path = require('path');
+const runCommand = require('../utility/run-command');
+const lock = require('../utility/file-lock');
+
+const commands = {
+    BUILD_THEME: 'build-theme',
+    BUILD_VARS: 'export-theme-vars',
+    BUILD_META: 'export-theme-meta'
+};
 
 const scssCompiler = {
     render: (scss) => {
@@ -75,11 +80,11 @@ const readInput = options => new Promise(resolve => {
     });
 });
 
-const getMeta = (fullMeta, base, filter) => {
+const getMeta = (fullMeta, base, filter, baseParametersList) => {
     let result = {};
 
     for(const key in fullMeta) {
-        if(base && baseParameters.indexOf(key) === -1) continue;
+        if(base && baseParametersList.indexOf(key) === -1) continue;
         if(filter && filter.length > 0 && filter.indexOf(key) === -1) continue;
         result[key] = fullMeta[key];
     }
@@ -87,61 +92,103 @@ const getMeta = (fullMeta, base, filter) => {
     return result;
 };
 
-const runThemeBuilder = (rawOptions) => {
+const installThemeBuilder = version => {
+    const rootDir = path.join(__dirname, '..');
+    const packageJsonPath = path.join(rootDir, 'node_modules', 'devextreme-themebuilder', 'package.json');
+
+    if(fs.existsSync(packageJsonPath) && require(packageJsonPath).version === version) {
+        return;
+    }
+
+    return runCommand('npm', [
+        'install',
+        '--no-save',
+        `devextreme-themebuilder@${version}`
+    ], {
+        cwd: rootDir,
+        stdio: 'ignore'
+    });
+};
+
+const getDevExtremeVersion = () => {
+    const installedDevExtremePackageJson = path.join(process.cwd(), 'node_modules', 'devextreme', 'package.json');
+    if(fs.existsSync(installedDevExtremePackageJson)) {
+        return require(installedDevExtremePackageJson).version;
+    }
+    return;
+};
+
+const runThemeBuilder = async rawOptions => {
     const options = camelize(rawOptions);
 
-    readInput(options).then(() => {
-        options.reader = readFile;
-        options.sassCompiler = scssCompiler;
-        options.lessCompiler = require('less/lib/less-node');
+    await readInput(options);
+    options.reader = readFile;
+    options.sassCompiler = scssCompiler;
+    options.lessCompiler = require('less/lib/less-node');
 
-        options.lessCompiler.options = options.lessCompiler.options || {};
-        options.lessCompiler.options['math'] = 'always';
-        if(options.assetsBasePath) {
-            options.lessCompiler.options['rootpath'] = options.assetsBasePath;
+    options.lessCompiler.options = options.lessCompiler.options || {};
+    options.lessCompiler.options['math'] = 'always';
+    if(options.assetsBasePath) {
+        options.lessCompiler.options['rootpath'] = options.assetsBasePath;
+    }
+
+    const version = options.version || getDevExtremeVersion() || 'latest';
+
+    await lock.acquire();
+
+    try {
+        console.log(`The ${version} version is used.`);
+        await installThemeBuilder(version);
+    } catch(e) {
+        console.log(`The devextreme-themebuilder npm package of v${version} was not installed. Please verify you are using v18.2.5 or higher and examine the installation error log to further troubleshoot the issue.`);
+        return;
+    }
+
+    const themeBuilder = require('devextreme-themebuilder/modules/builder');
+    const baseParameters = require('devextreme-themebuilder/modules/base-parameters');
+
+    lock.release();
+
+    const result = await themeBuilder.buildTheme(options);
+
+    let content = '';
+    const vars = options.vars || [];
+    let filter = (vars instanceof Array) ? vars : vars.split(',');
+    createPath(options.out);
+
+    if(options.command === commands.BUILD_THEME) {
+        content = result.css;
+        if(result.swatchSelector) {
+            console.log(`Add the '${result.swatchSelector}' class to the container to apply swatch styles to its nested elements.`);
+        }
+    } else if(options.command === commands.BUILD_VARS) {
+        const metadata = getMeta(result.compiledMetadata, options.base, filter, baseParameters);
+
+        for(const metadataKey in metadata) {
+            const formatKey = options.fileFormat === 'scss' ? metadataKey.replace('@', '$') : metadataKey;
+            content += formatKey + ': ' + metadata[metadataKey] + ';\n';
+        }
+    } else if(options.command === commands.BUILD_META) {
+        const metadata = getMeta(result.compiledMetadata, options.base, filter, baseParameters);
+        let exportedMeta = [];
+
+        for(const metadataKey in metadata) {
+            exportedMeta.push({ key: metadataKey, value: metadata[metadataKey] });
         }
 
-        themeBuilder.buildTheme(options).then((result) => {
-            let content = '';
-            const vars = options.vars || [];
-            let filter = (vars instanceof Array) ? vars : vars.split(',');
-            createPath(options.out);
+        content = JSON.stringify({
+            baseTheme: [ options.themeName, options.colorScheme.replace(/-/g, '.') ].join('.'),
+            items: exportedMeta,
+            version: result.version
+        }, ' ', 4);
+    }
 
-            if(options.command === commands.BUILD_THEME) {
-                content = result.css;
-                if(result.swatchSelector) {
-                    console.log(`Add the '${result.swatchSelector}' class to the container to apply swatch styles to its nested elements.`);
-                }
-            } else if(options.command === commands.BUILD_VARS) {
-                const metadata = getMeta(result.compiledMetadata, options.base, filter);
-
-                for(const metadataKey in metadata) {
-                    const formatKey = options.fileFormat === 'scss' ? metadataKey.replace('@', '$') : metadataKey;
-                    content += formatKey + ': ' + metadata[metadataKey] + ';\n';
-                }
-            } else if(options.command === commands.BUILD_META) {
-                const metadata = getMeta(result.compiledMetadata, options.base, filter);
-                let exportedMeta = [];
-
-                for(const metadataKey in metadata) {
-                    exportedMeta.push({ key: metadataKey, value: metadata[metadataKey] });
-                }
-
-                content = JSON.stringify({
-                    baseTheme: [ options.themeName, options.colorScheme.replace(/-/g, '.') ].join('.'),
-                    items: exportedMeta,
-                    version: result.version
-                }, ' ', 4);
-            }
-
-            fs.writeFile(options.out, content, 'utf8', error => {
-                if(error) {
-                    console.log(`Unable to write the ${options.out} file. ${error.message}`);
-                } else {
-                    console.log(`The result was written to the ${options.out} file.`);
-                }
-            });
-        });
+    fs.writeFile(options.out, content, 'utf8', error => {
+        if(error) {
+            console.log(`Unable to write the ${options.out} file. ${error.message}`);
+        } else {
+            console.log(`The result was written to the ${options.out} file.`);
+        }
     });
 };
 

@@ -6,13 +6,13 @@ const findCommand = (commandName) => {
 };
 
 const logInfo = (value) => {
-    console.info(textColor, `  ${value.name}`, ` ${value.descripttion}`);
+    console.info(textColor, `  ${value.name}`, ` ${value.description}`);
 };
 
 const printOptions = (command) => {
     console.info('    Options:');
     command.options.forEach((option) => {
-        console.info(textColor, `    ${option.name}`, ` ${option.descripttion}`);
+        console.info(textColor, `    ${option.name}`, ` ${option.description}`);
     });
 };
 
