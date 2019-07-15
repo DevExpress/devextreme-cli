@@ -140,7 +140,7 @@ const runThemeBuilder = async rawOptions => {
         console.log(`The ${version} version is used.`);
         await installThemeBuilder(version);
     } catch(e) {
-        console.log(`devextreme-themebuilder@${version} was not installed. Make sure that you specified the right ${version} version.`);
+        console.log(`The devextreme-themebuilder npm package of v${version} was not installed. Please verify you are using v${version} or higher and examine the installation error log to further troubleshoot the issue.`);
         return;
     }
 

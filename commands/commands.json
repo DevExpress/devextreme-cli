@@ -66,7 +66,7 @@
             "descripttion": "Specifies the custom color scheme name (the default value is custom-scheme)"
         }, {
             "name": "--version",
-            "descripttion": "DevExtreme version or tag (the default value is 'latest')"
+            "descripttion": "Specifies the target DevExtreme version or a tag that points to it (the default value is 'latest')"
         }]
     }, {
         "name": "export-theme-vars",
@@ -89,7 +89,7 @@
             "descripttion": "Exports only base variables which are used to produce the derived variables"
         }, {
             "name": "--version",
-            "descripttion": "DevExtreme version or tag (the default value is 'latest')"
+            "descripttion": "Specifies the target DevExtreme version or a tag that points to it (the default value is 'latest')"
         }]
     }, {
         "name": "export-theme-meta",
@@ -109,7 +109,7 @@
             "descripttion": "Exports only base variables which are used to produce the derived variables"
         }, {
             "name": "--version",
-            "descripttion": "DevExtreme version or tag (the default value is 'latest')"
+            "descripttion": "Specifies the target DevExtreme version or a tag that points to it (the default value is 'latest')"
         }]
     }]
 }
