@@ -31,6 +31,7 @@ const addDevextreme = (appPath, dxversion, engine) => {
     const dxWrapperPackage = `devextreme-${engine}`;
     const depends = [
         { name: 'devextreme', version: dxversion || latestVersions['devextreme'] },
+        { name: 'devextreme-themebuilder', version: dxversion || latestVersions['devextreme'] },
         { name: dxWrapperPackage, version: dxversion || latestVersions[dxWrapperPackage] }
     ];
 
