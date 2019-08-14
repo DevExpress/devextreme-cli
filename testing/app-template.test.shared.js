@@ -10,6 +10,7 @@ module.exports = (env) => {
     const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
     const appUrl = `http://${ip.address()}:${env.port}/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
+    const chromiumUserDataDir = path.join(process.cwd(), './testing/sandbox/user-data');
     const defaultLayout = 'side-nav-outer-toolbar';
 
     describe(`${env.engine} app-template`, () => {
@@ -60,7 +61,8 @@ module.exports = (env) => {
 
                         beforeEach(async() => {
                             browser = await puppeteer.launch({
-                                args: ['--no-sandbox', '--disable-dev-shm-usage']
+                                args: ['--no-sandbox', '--disable-dev-shm-usage'],
+                                userDataDir: chromiumUserDataDir
                             });
                         });
 
