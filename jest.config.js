@@ -5,5 +5,6 @@ module.exports = {
     'roots': [
         '<rootDir>/testing/__tests__'
     ],
+    'testRegex': '(react)|(vue)',
     'maxConcurrency': 1
 };

@@ -75,8 +75,10 @@ module.exports = (env) => {
                                 const page = await browser.newPage();
                                 await page.emulate(device);
                                 await page.goto(url, {
-                                    timeout: 0
+                                    timeout: 0,
+                                    waitUntil: 'networkidle0'
                                 });
+
                                 return page;
                             }
 
