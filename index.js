@@ -9,9 +9,13 @@ const application = require('./commands/application');
 const devextremeConfig = require('./utility/devextreme-config');
 const printHelp = require('./commands/help').printHelp;
 const packageJson = require('./package.json');
+const lock = require('./utility/file-lock');
+
+lock.release();
 
 process.on('unhandledRejection', (error) => {
     console.log(error);
+    lock.release();
     process.exit(1);
 });
 
