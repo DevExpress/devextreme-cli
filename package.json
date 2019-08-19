@@ -1,6 +1,6 @@
 {
   "name": "devextreme-cli",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "DevExtreme CLI",
   "keywords": [
     "devexpress",
@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "@vue/cli": "^3.5.5",
-    "less": "^3.8.1",
+    "less": "3.9.0",
     "minimist": "^1.2.0",
     "mustache": "^3.0.1",
     "node-sass": "^4.9.3",
