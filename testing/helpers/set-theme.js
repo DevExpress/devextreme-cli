@@ -18,11 +18,16 @@ module.exports = async(theme, engine) => {
     Object.keys(modes).forEach((modeName) => {
         const mode = modes[modeName];
         const themeFilePath = path.join(appPath, `/src/themes/metadata.${modeName}.json`);
-        const regexToFind = /"baseTheme": "[\w\.]+"/g;
-        const newSubStr = `"baseTheme": "${themes[theme]}.${mode}"`;
         const data = fs.readFileSync(themeFilePath, 'utf8');
-        const result = data.replace(regexToFind, newSubStr);
-        fs.writeFileSync(themeFilePath, result, 'utf8');
+        const metadata = JSON.parse(data);
+        metadata.baseTheme = `${themes[theme]}.${mode}`;
+        metadata.items = [
+            {
+                key: '@base-font-family',
+                value: '\'Helvetica Neue\', \'Segoe UI\', Helvetica, Verdana, sans-serif'
+            }
+        ];
+        fs.writeFileSync(themeFilePath, JSON.stringify(metadata), 'utf8');
     });
 
     await runCommand('node', [
