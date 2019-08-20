@@ -10,7 +10,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     let collectionPath = collectionName;
 
     if(options['c']) {
-        collectionPath = `"${path.join(process.cwd(), options['c'])}"`;
+        collectionPath = `${path.join(process.cwd(), options['c'])}`;
         delete options['c'];
     }
 
