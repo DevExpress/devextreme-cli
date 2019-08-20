@@ -6,12 +6,15 @@ const webServer = require('./helpers/web-server');
 const devices = require('./helpers/devices');
 const setTheme = require('./helpers/set-theme');
 
+const layouts = ['side-nav-outer-toolbar', 'side-nav-inner-toolbar'];
+const defaultLayout = 'side-nav-outer-toolbar';
+const themes = ['material', 'generic'];
+
 module.exports = (env) => {
     const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
     const appUrl = `http://${ip.address()}:${env.port}/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
     const chromiumUserDataDir = path.join(process.cwd(), './testing/sandbox/user-data');
-    const defaultLayout = 'side-nav-outer-toolbar';
 
     describe(`${env.engine} app-template`, () => {
 
@@ -25,18 +28,11 @@ module.exports = (env) => {
             }
         });
 
-        [
-            'side-nav-outer-toolbar',
-            'side-nav-inner-toolbar'
-        ].forEach((layout) => {
+        layouts.forEach((layout) => {
             const isDefaultLayout = layout === defaultLayout;
 
             describe(layout, () => {
-
-                [
-                    'material',
-                    'generic'
-                ].forEach((theme) => {
+                themes.forEach((theme) => {
 
                     describe(theme, () => {
                         let browser;
