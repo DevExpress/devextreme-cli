@@ -129,7 +129,7 @@ const runThemeBuilder = async rawOptions => {
 
     options.lessCompiler.options = options.lessCompiler.options || {};
     options.lessCompiler.options['math'] = 'always';
-    options.lessCompiler.options['paths'] = [ path.join(themeBuilderPackagePath, 'data', 'less', 'bundles', p) ];
+    options.lessCompiler.options['paths'] = [ path.join(themeBuilderPackagePath, 'data', 'less', 'bundles') ];
 
     if(options.assetsBasePath) {
         options.lessCompiler.options['rootpath'] = options.assetsBasePath;
