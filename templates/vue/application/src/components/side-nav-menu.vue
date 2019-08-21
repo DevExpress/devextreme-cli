@@ -125,6 +125,7 @@ export default {
   width: 250px !important;
 
   .menu-container {
+    min-height: 100%;
     display: flex;
     flex: 1;
 
