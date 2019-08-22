@@ -9,6 +9,8 @@ const commands = {
     BUILD_META: 'export-theme-meta'
 };
 
+const themeBuilderPackagePath = path.join(__dirname, '..', 'node_modules', 'devextreme-themebuilder');
+
 const scssCompiler = {
     render: (scss) => {
         return new Promise((resolve, reject) => {
@@ -93,8 +95,7 @@ const getMeta = (fullMeta, base, filter, baseParametersList) => {
 };
 
 const installThemeBuilder = version => {
-    const rootDir = path.join(__dirname, '..');
-    const packageJsonPath = path.join(rootDir, 'node_modules', 'devextreme-themebuilder', 'package.json');
+    const packageJsonPath = path.join(themeBuilderPackagePath, 'package.json');
 
     if(fs.existsSync(packageJsonPath) && require(packageJsonPath).version === version) {
         return;
@@ -105,7 +106,7 @@ const installThemeBuilder = version => {
         '--no-save',
         `devextreme-themebuilder@${version}`
     ], {
-        cwd: rootDir,
+        cwd: path.join(__dirname, '..'),
         stdio: 'ignore'
     });
 };
@@ -128,6 +129,8 @@ const runThemeBuilder = async rawOptions => {
 
     options.lessCompiler.options = options.lessCompiler.options || {};
     options.lessCompiler.options['math'] = 'always';
+    options.lessCompiler.options['paths'] = [ path.join(themeBuilderPackagePath, 'data', 'less', 'bundles') ];
+
     if(options.assetsBasePath) {
         options.lessCompiler.options['rootpath'] = options.assetsBasePath;
     }
