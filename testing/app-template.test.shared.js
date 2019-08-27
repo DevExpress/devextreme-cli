@@ -37,7 +37,7 @@ module.exports = (env) => {
         });
 
         afterAll(async() => {
-            devServer.stop();
+            await devServer.stop();
             await browser.close();
         });
 

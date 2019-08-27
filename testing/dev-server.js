@@ -27,8 +27,12 @@ module.exports = class DevServer {
         await this.waitForCompilation();
     }
 
-    stop() {
+    async stop() {
         kill(this.devServerProcess.pid, 'SIGKILL');
+
+        return new Promise((resolve, reject) => {
+            this.devServerProcess.on('exit', () => resolve());
+        });
     }
 
     async setLayout(layout) {
