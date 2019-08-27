@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const simpleGit = require('simple-git');
 
-const rimraf = require('./helpers/rimraf-async');
+const rimraf = require('../utility/rimraf-async');
 const runCommand = require('../utility/run-command');
 
 const appName = 'my-app';
@@ -39,8 +39,9 @@ async function prepareSchematics() {
 }
 
 exports.engine = 'angular';
-exports.port = 8081;
-exports.distPath = path.join(sandboxPath, appName, 'dist', appName);
+exports.port = 4200;
+exports.appPath = path.join(sandboxPath, appName);
+exports.npmArgs = ['start'];
 
 exports.createApp = async() => {
     await rimraf(sandboxPath);
@@ -62,18 +63,6 @@ exports.createApp = async() => {
     const data = fs.readFileSync(routingFilePath, 'utf8');
     const result = data.replace('RouterModule.forRoot(routes)', 'RouterModule.forRoot(routes, {useHash: true})');
     fs.writeFileSync(routingFilePath, result, 'utf8');
-};
-
-exports.buildApp = async() => {
-    await runCommand('npx', [
-        'ng',
-        'build',
-        '--build-optimizer=false',
-        '--source-map=false'
-    ], {
-        cwd: path.join(sandboxPath, appName),
-        silent: true
-    });
 };
 
 exports.setLayout = (layoutName) => {

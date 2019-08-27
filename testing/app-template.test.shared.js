@@ -1,24 +1,29 @@
 const path = require('path');
 const puppeteer = require('puppeteer');
-const ip = require('ip');
 
-const webServer = require('./helpers/web-server');
-const devices = require('./helpers/devices');
-const setTheme = require('./helpers/set-theme');
+const { devices, themes, layouts } = require('./constants');
+const DevServer = require('./dev-server');
 
-const layouts = ['side-nav-outer-toolbar', 'side-nav-inner-toolbar'];
 const defaultLayout = 'side-nav-outer-toolbar';
-const themes = ['material', 'generic'];
 
 module.exports = (env) => {
     const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
-    const appUrl = `http://${ip.address()}:${env.port}/`;
+    const appUrl = `http://127.0.0.1:${env.port}/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
     const chromiumUserDataDir = path.join(process.cwd(), './testing/sandbox/user-data');
 
     describe(`${env.engine} app-template`, () => {
+        let devServer;
+        let browser;
+        let page;
 
         beforeAll(async() => {
+            browser = await puppeteer.launch({
+                args: ['--no-sandbox', '--disable-dev-shm-usage'],
+                userDataDir: chromiumUserDataDir
+            });
+            page = await browser.newPage();
+
             try {
                 if(!skipAppCreation) {
                     await env.createApp();
@@ -26,49 +31,32 @@ module.exports = (env) => {
             } catch(e) {
                 console.log(e);
             }
+
+            devServer = new DevServer(env);
+            await devServer.start();
         });
 
-        layouts.forEach((layout) => {
-            const isDefaultLayout = layout === defaultLayout;
+        afterAll(async() => {
+            devServer.stop();
+            await browser.close();
+        });
 
-            describe(layout, () => {
-                themes.forEach((theme) => {
+        Object.keys(themes).forEach((theme) => {
 
-                    describe(theme, () => {
-                        let browser;
-                        let server;
+            describe(theme, () => {
+                layouts.forEach((layout) => {
+                    const isDefaultLayout = layout === defaultLayout;
+
+                    describe(layout, () => {
 
                         beforeAll(async() => {
-                            try {
-                                if(!isDefaultLayout || skipAppCreation) {
-                                    env.setLayout(layout);
-                                }
-                                await setTheme(theme, env.engine);
-                                await env.buildApp();
-                                server = await webServer.create(env.distPath, env.port);
-                            } catch(e) {
-                                throw new Error(e);
-                            }
-                        });
-
-                        afterAll(async() => {
-                            await server.close();
-                        });
-
-                        beforeEach(async() => {
-                            browser = await puppeteer.launch({
-                                args: ['--no-sandbox', '--disable-dev-shm-usage'],
-                                userDataDir: chromiumUserDataDir
-                            });
-                        });
-
-                        afterEach(async() => {
-                            await browser.close();
+                            await devServer.setLayout(layout);
+                            await devServer.setTheme(theme);
                         });
 
                         devices.forEach((device) => {
                             async function openPage(url) {
-                                const page = await browser.newPage();
+                                await page.goto('about:blank');
                                 await page.emulate(device);
                                 await page.goto(url, {
                                     timeout: 0,

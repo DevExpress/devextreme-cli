@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 // NOTE: All puppeteer devices: https://github.com/GoogleChrome/puppeteer/blob/master/lib/DeviceDescriptors.js
 
-module.exports = [
+exports.devices = [
     puppeteer.devices['iPhone 5'],
     puppeteer.devices['iPhone 6 landscape'],
     {
@@ -14,3 +14,20 @@ module.exports = [
         }
     }
 ];
+
+exports.themes = {
+    material: 'material.orange',
+    generic: 'generic'
+};
+
+exports.layouts = ['side-nav-outer-toolbar', 'side-nav-inner-toolbar'];
+
+exports.modes = {
+    base: 'light',
+    additional: 'dark'
+};
+
+exports.baseFontFamily = {
+    key: '@base-font-family',
+    value: '\'Helvetica Neue\', \'Segoe UI\', Helvetica, Verdana, sans-serif'
+};

@@ -34,12 +34,11 @@
     "cross-env": "^5.2.0",
     "eslint": "^5.10.0",
     "eslint-plugin-jest": "^22.5.1",
-    "http-server": "^0.11.1",
-    "ip": "^1.1.5",
     "jest": "^24.8.0",
     "jest-image-snapshot": "^2.8.2",
     "puppeteer": "^1.16.0",
     "rimraf": "^2.6.3",
-    "simple-git": "^1.113.0"
+    "simple-git": "^1.113.0",
+    "tree-kill": "^1.2.1"
   }
 }
