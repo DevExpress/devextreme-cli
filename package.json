@@ -13,6 +13,12 @@
   "bin": {
     "devextreme": "index.js"
   },
+  "files": [
+    "commands/**/*",
+    "templates/**/*",
+    "utility/**/*",
+    "index.js"
+  ],
   "scripts": {
     "lint": "eslint ./",
     "test": "npm run lint && jest",
