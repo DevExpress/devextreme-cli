@@ -94,21 +94,34 @@ const getMeta = (fullMeta, base, filter, baseParametersList) => {
     return result;
 };
 
-const installThemeBuilder = version => {
+const installThemeBuilder = async version => {
     const packageJsonPath = path.join(themeBuilderPackagePath, 'package.json');
+    const cwd = path.join(__dirname, '..');
+    const npmrc = './.npmrc';
+    const installationNpmrc = path.join(cwd, '.npmrc');
+    let removeNpmrc = false;
 
     if(fs.existsSync(packageJsonPath) && require(packageJsonPath).version === version) {
         return;
     }
 
-    return runCommand('npm', [
+    if(fs.existsSync(npmrc)) {
+        removeNpmrc = true;
+        fs.copyFileSync(npmrc, installationNpmrc);
+    }
+
+    await runCommand('npm', [
         'install',
         '--no-save',
         `devextreme-themebuilder@${version}`
     ], {
-        cwd: path.join(__dirname, '..'),
+        cwd,
         stdio: 'ignore'
     });
+
+    if(removeNpmrc) {
+        fs.unlinkSync(installationNpmrc);
+    }
 };
 
 const getDevExtremeVersion = () => {
