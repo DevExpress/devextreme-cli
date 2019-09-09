@@ -93,9 +93,9 @@ const addTemplate = (appPath, appName, templateOptions) => {
     const manifestPath = path.join(appPath, 'public', 'manifest.json');
     const indexPath = path.join(appPath, 'src', 'index.js');
     const styles = [
+        './themes/generated/theme.additional.css',
         './themes/generated/theme.base.css',
-        'devextreme/dist/css/dx.common.css',
-        './themes/generated/theme.additional.css'
+        'devextreme/dist/css/dx.common.css'
     ];
 
     templateCreator.moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);

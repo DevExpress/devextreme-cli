@@ -205,8 +205,8 @@ module.exports = (env) => {
                                 });
 
                                 it('Login page', async() => {
-                                    // TODO: Fix Angular & React
-                                    if(env.engine === 'angular' || env.engine === 'react') {
+                                    // TODO: Fix Angular
+                                    if(env.engine === 'angular') {
                                         expect(true).toBe(true);
                                         return;
                                     }
