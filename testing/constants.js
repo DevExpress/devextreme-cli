@@ -22,7 +22,7 @@ exports.themes = {
 
 exports.layouts = ['side-nav-outer-toolbar', 'side-nav-inner-toolbar'];
 
-exports.modes = {
+exports.swatchModes = {
     base: 'light',
     additional: 'dark'
 };

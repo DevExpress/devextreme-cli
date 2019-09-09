@@ -4,7 +4,7 @@ const path = require('path');
 const kill = require('tree-kill');
 
 const runCommand = require('../utility/run-command');
-const { themes, modes, baseFontFamily } = require('./constants');
+const { themes, swatchModes, baseFontFamily } = require('./constants');
 
 module.exports = class DevServer {
     constructor(env) {
@@ -46,8 +46,8 @@ module.exports = class DevServer {
             return;
         }
 
-        Object.keys(modes).forEach((modeName) => {
-            const mode = modes[modeName];
+        Object.keys(swatchModes).forEach((modeName) => {
+            const mode = swatchModes[modeName];
             const themeFilePath = path.join(this.env.appPath, `/src/themes/metadata.${modeName}.json`);
 
             const data = fs.readFileSync(themeFilePath, 'utf8');
