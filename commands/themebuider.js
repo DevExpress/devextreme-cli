@@ -170,6 +170,12 @@ const runThemeBuilder = async rawOptions => {
     let content = '';
     const vars = options.vars || [];
     let filter = (vars instanceof Array) ? vars : vars.split(',');
+
+    const widgets = options.widgets;
+    if(typeof widgets === 'string') {
+        options.widgets = widgets.split(',');
+    }
+
     createPath(options.out);
 
     if(options.command === commands.BUILD_THEME) {
