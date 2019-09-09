@@ -2,7 +2,7 @@ const fs = require('fs');
 const { EOL } = require('os');
 const path = require('path');
 
-const rimraf = require('../utility/rimraf-async');
+const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../utility/run-command');
 const classify = require('../utility/string').classify;
 
