@@ -67,6 +67,9 @@
         }, {
             "name": "--version",
             "description": "Specifies the target DevExtreme version or a tag that points to it (the default value is 'latest')"
+        }, {
+            "name": "--widgets",
+            "description": "Comma-separated list of widgets that will be included in the bundle (available for DevExtreme 19.2.3), all widgets included by default"
         }]
     }, {
         "name": "export-theme-vars",
