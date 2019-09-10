@@ -182,12 +182,13 @@ const runThemeBuilder = async rawOptions => {
 
     lock.release();
 
-    const result = await themeBuilder.buildTheme(options);
+    setWidgetsOption(options, version);
 
     let content = '';
 
+    const result = await themeBuilder.buildTheme(options);
     const filter = getVarsFilter(options);
-    setWidgetsOption(options, version);
+
     createPath(options.out);
 
     if(options.command === commands.BUILD_THEME) {
