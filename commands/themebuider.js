@@ -135,8 +135,8 @@ const getDevExtremeVersion = () => {
 
 const setWidgetsOption = (options, version) => {
     const widgets = options.widgets;
-    const validVersion = version === 'latest' || semver.gte(version, '19.2.3');
-    if(widgets && !validVersion) {
+    const widgetsOptionAvailable = version === 'latest' || semver.gte(version, '19.2.3');
+    if(widgets && !widgetsOptionAvailable) {
         console.log('"widgets" option is available from version 19.2.3 only and will be ignored.'); // TODO check the text
     }
     if(typeof widgets === 'string') {
@@ -210,11 +210,17 @@ const runThemeBuilder = async rawOptions => {
             exportedMeta.push({ key: metadataKey, value: metadata[metadataKey] });
         }
 
-        content = JSON.stringify({
+        const meta = {
             baseTheme: [ options.themeName, options.colorScheme.replace(/-/g, '.') ].join('.'),
             items: exportedMeta,
             version: result.version
-        }, ' ', 4);
+        };
+
+        if(result.widgets) {
+            Object.assign(meta, { widgets: result.widgets });
+        }
+
+        content = JSON.stringify(meta, ' ', 4);
     }
 
     fs.writeFile(options.out, content, 'utf8', error => {
