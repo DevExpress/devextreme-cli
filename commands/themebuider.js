@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const semver = require('semver');
 const runCommand = require('../utility/run-command');
 const lock = require('../utility/file-lock');
 
@@ -132,6 +133,22 @@ const getDevExtremeVersion = () => {
     return;
 };
 
+const setWidgetsOption = (options, version) => {
+    const widgets = options.widgets;
+    const validVersion = version === 'latest' || semver.gte(version, '19.2.3');
+    if(widgets && !validVersion) {
+        console.log('"widgets" option is available from version 19.2.3 only and will be ignored.'); // TODO check the text
+    }
+    if(typeof widgets === 'string') {
+        options.widgets = widgets.split(',');
+    }
+};
+
+const getVarsFilter = (options) => {
+    const vars = options.vars || [];
+    return (vars instanceof Array) ? vars : vars.split(',');
+};
+
 const runThemeBuilder = async rawOptions => {
     const options = camelize(rawOptions);
 
@@ -168,14 +185,9 @@ const runThemeBuilder = async rawOptions => {
     const result = await themeBuilder.buildTheme(options);
 
     let content = '';
-    const vars = options.vars || [];
-    let filter = (vars instanceof Array) ? vars : vars.split(',');
 
-    const widgets = options.widgets;
-    if(typeof widgets === 'string') {
-        options.widgets = widgets.split(',');
-    }
-
+    const filter = getVarsFilter(options);
+    setWidgetsOption(options, version);
     createPath(options.out);
 
     if(options.command === commands.BUILD_THEME) {
