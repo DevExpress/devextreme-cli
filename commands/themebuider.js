@@ -135,9 +135,10 @@ const getDevExtremeVersion = () => {
 
 const setWidgetsOption = (options, version) => {
     const widgets = options.widgets;
-    const widgetsOptionAvailable = version === 'latest' || semver.gte(version, '19.2.3');
+    const widgetsArgumentMinVersion = '19.2.3'
+    const widgetsOptionAvailable = version === 'latest' || semver.gte(version, widgetsArgumentMinVersion);
     if(widgets && !widgetsOptionAvailable) {
-        console.log('"widgets" option is available from version 19.2.3 only and will be ignored.'); // TODO check the text
+        console.log(`The "--widgets" argument is supported only starting with v${widgetsArgumentMinVersion} and will be ignored.`);
     }
     if(typeof widgets === 'string') {
         options.widgets = widgets.split(',');
