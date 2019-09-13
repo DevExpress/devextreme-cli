@@ -82,9 +82,10 @@ const modifyIndexHtml = (appPath, appName) => {
 const addTemplate = (appPath, appName, templateOptions) => {
     const templateSourcePath = path.join(__dirname, '..', 'templates', 'vue', 'application');
     const styles = [
-        'devextreme/dist/css/dx.common.css',
         './themes/generated/theme.additional.css',
-        './themes/generated/theme.base.css'];
+        './themes/generated/theme.base.css',
+        'devextreme/dist/css/dx.common.css'
+    ];
 
     templateCreator.moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);
     if(!templateOptions.empty) {
