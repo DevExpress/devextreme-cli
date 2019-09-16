@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const semver = require('semver');
 const runCommand = require('../utility/run-command');
 const lock = require('../utility/file-lock');
 
@@ -132,6 +133,23 @@ const getDevExtremeVersion = () => {
     return;
 };
 
+const setWidgetsOption = (options, version) => {
+    const widgets = options.widgets;
+    const widgetsArgumentMinVersion = '19.2.3'
+    const widgetsOptionAvailable = version === 'latest' || semver.gte(version, widgetsArgumentMinVersion);
+    if(widgets && !widgetsOptionAvailable) {
+        console.log(`The "--widgets" argument is supported only starting with v${widgetsArgumentMinVersion} and will be ignored.`);
+    }
+    if(typeof widgets === 'string') {
+        options.widgets = widgets.split(',');
+    }
+};
+
+const getVarsFilter = (options) => {
+    const vars = options.vars || [];
+    return (vars instanceof Array) ? vars : vars.split(',');
+};
+
 const runThemeBuilder = async rawOptions => {
     const options = camelize(rawOptions);
 
@@ -165,11 +183,13 @@ const runThemeBuilder = async rawOptions => {
 
     lock.release();
 
-    const result = await themeBuilder.buildTheme(options);
+    setWidgetsOption(options, version);
 
     let content = '';
-    const vars = options.vars || [];
-    let filter = (vars instanceof Array) ? vars : vars.split(',');
+
+    const result = await themeBuilder.buildTheme(options);
+    const filter = getVarsFilter(options);
+
     createPath(options.out);
 
     if(options.command === commands.BUILD_THEME) {
@@ -192,11 +212,17 @@ const runThemeBuilder = async rawOptions => {
             exportedMeta.push({ key: metadataKey, value: metadata[metadataKey] });
         }
 
-        content = JSON.stringify({
+        const meta = {
             baseTheme: [ options.themeName, options.colorScheme.replace(/-/g, '.') ].join('.'),
             items: exportedMeta,
             version: result.version
-        }, ' ', 4);
+        };
+
+        if(result.widgets) {
+            Object.assign(meta, { widgets: result.widgets });
+        }
+
+        content = JSON.stringify(meta, ' ', 4);
     }
 
     fs.writeFile(options.out, content, 'utf8', error => {
