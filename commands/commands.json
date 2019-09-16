@@ -69,7 +69,7 @@
             "description": "Specifies the target DevExtreme version or a tag that points to it (the default value is 'latest')"
         }, {
             "name": "--widgets",
-            "description": "Comma-separated list of widgets that will be included in the bundle (available for DevExtreme 19.2.3), all widgets included by default"
+            "description": "Specifies a comma-separated list of widgets whose styles should be included in the resulting CSS file (available for DevExtreme 19.2.3). If this argument is not specified, styles of all widgets are included."
         }]
     }, {
         "name": "export-theme-vars",
