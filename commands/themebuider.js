@@ -198,7 +198,7 @@ const runThemeBuilder = async rawOptions => {
             console.log(`Add the '${result.swatchSelector}' class to the container to apply swatch styles to its nested elements.`);
         }
         if(result.unusedWidgets && result.unusedWidgets.length) {
-            console.log(`The following widgets specified in --widgets option is not applicable for DevExtreme CSS themes\n`);
+            console.log('The following widgets specified in --widgets option is not applicable for DevExtreme CSS themes\n');
             result.unusedWidgets.forEach(w => console.log(`${w}\n`));
         }
     } else if(options.command === commands.BUILD_VARS) {
