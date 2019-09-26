@@ -197,6 +197,10 @@ const runThemeBuilder = async rawOptions => {
         if(result.swatchSelector) {
             console.log(`Add the '${result.swatchSelector}' class to the container to apply swatch styles to its nested elements.`);
         }
+        if(result.unusedWidgets && result.unusedWidgets.length) {
+            console.log('Styles for the following widgets were not included in the resulting theme because these widgets cannot be stylized using CSS:\n');
+            result.unusedWidgets.forEach(w => console.log(`${w}\n`));
+        }
     } else if(options.command === commands.BUILD_VARS) {
         const metadata = getMeta(result.compiledMetadata, options.base, filter, baseParameters);
 
