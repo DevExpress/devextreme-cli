@@ -171,7 +171,7 @@ const runThemeBuilder = async rawOptions => {
     await lock.acquire();
 
     try {
-        console.log(`The ${version} version is used.`);
+        console.log(`Using version ${version}.`);
         await installThemeBuilder(version);
     } catch(e) {
         console.log(`The devextreme-themebuilder npm package of v${version} was not installed. Please verify you are using v18.2.5 or higher and examine the installation error log to further troubleshoot the issue.`);
@@ -198,7 +198,7 @@ const runThemeBuilder = async rawOptions => {
             console.log(`Add the '${result.swatchSelector}' class to the container to apply swatch styles to its nested elements.`);
         }
         if(result.unusedWidgets && result.unusedWidgets.length) {
-            console.log('Styles for the following widgets were not included in the resulting theme because these widgets cannot be stylized using CSS:\n');
+            console.log('Styles for the following widgets were not included in the resulting theme because these widgets don\'t use CSS styles:\n');
             result.unusedWidgets.forEach(w => console.log(`${w}\n`));
         }
     } else if(options.command === commands.BUILD_VARS) {
