@@ -107,16 +107,6 @@ module.exports = (env) => {
                                 });
 
                                 it('Profile view', async() => {
-                                    // TODO: Fix paddings in Vue
-                                    if(env.engine === 'vue') {
-                                        expect(true).toBe(true);
-                                        return;
-                                    }
-                                    // TODO: Fix paddings in React
-                                    if(env.engine === 'react' && device.name === 'Desktop') {
-                                        expect(true).toBe(true);
-                                        return;
-                                    }
                                     // TODO: Fix user panel and content shift in Reactin inner layout
                                     if(env.engine === 'react' && !isDefaultLayout && device.name === 'iPhone 5') {
                                         expect(true).toBe(true);
