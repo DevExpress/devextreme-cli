@@ -87,12 +87,6 @@ module.exports = (env) => {
                                         return;
                                     }
 
-                                    // TODO: Fix user panel and content shift in Reactin inner layout
-                                    if(env.engine === 'react' && !isDefaultLayout && device.name === 'iPhone 5') {
-                                        expect(true).toBe(true);
-                                        return;
-                                    }
-
                                     const page = await openPage(appUrl);
                                     const image = await page.screenshot({
                                         clip: {
@@ -107,12 +101,6 @@ module.exports = (env) => {
                                 });
 
                                 it('Profile view', async() => {
-                                    // TODO: Fix user panel and content shift in Reactin inner layout
-                                    if(env.engine === 'react' && !isDefaultLayout && device.name === 'iPhone 5') {
-                                        expect(true).toBe(true);
-                                        return;
-                                    }
-
                                     const page = await openPage(`${appUrl}#/profile`);
                                     const image = await page.screenshot();
 
@@ -122,11 +110,6 @@ module.exports = (env) => {
                                 it('Display data view', async() => {
                                     // TODO: Fix paddings in Vue
                                     if(env.engine === 'vue') {
-                                        expect(true).toBe(true);
-                                        return;
-                                    }
-                                    // TODO: Fix user panel and content shift in Reactin inner layout
-                                    if(env.engine === 'react' && !isDefaultLayout && device.name === 'iPhone 5') {
                                         expect(true).toBe(true);
                                         return;
                                     }
