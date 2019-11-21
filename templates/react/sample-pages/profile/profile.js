@@ -41,10 +41,16 @@ export default () => {
           defaultFormData={employee}
           onFieldDataChanged={e => e.dataField === 'Notes' && setNotes(e.value)}
           labelLocation={'top'}
-          minColWidth={233}
-          colCount={'auto'}
+          colCountByScreen={colCountByScreen}
         />
       </div>
     </React.Fragment>
   );
+};
+
+const colCountByScreen = {
+  xs: 1,
+  sm: 2,
+  md: 3,
+  lg: 4
 };

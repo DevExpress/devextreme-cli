@@ -13,9 +13,8 @@
       <dx-form
         id="form"
         label-location="top"
-        col-count="auto"
         :form-data="formData"
-        :min-col-width="233"
+        :colCountByScreen="colCountByScreen"
       />
     </div>
   </div>
@@ -48,6 +47,12 @@ export default {
           "\r\n\r\n" +
           "Sandra has 2 daughters both of whom are accomplished gymnasts.",
         Address: "4600 N Virginia Rd."
+      },
+      colCountByScreen: {
+        xs: 1,
+        sm: 2,
+        md: 3,
+        lg: 4
       }
     };
   },
