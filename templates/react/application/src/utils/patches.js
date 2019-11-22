@@ -1,9 +1,9 @@
 export function menuPreInitPatch(component) {
-    const menuOpened = component.state.menuOpened;
+    const { menuOpened, minMenuSize } = component.state;
     component.state.preInitCssFix = true;
     return {
         get cssClass() {
-            if (menuOpened) {
+            if (menuOpened || minMenuSize === 0) {
                 return "";
             }
 
