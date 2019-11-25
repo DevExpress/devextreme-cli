@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 
 exports.devices = [
     puppeteer.devices['iPhone 5'],
-    puppeteer.devices['iPhone 6 landscape'],
+    puppeteer.devices['Galaxy S5 landscape'],
     {
         name: 'Desktop',
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
