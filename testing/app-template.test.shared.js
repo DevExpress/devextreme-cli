@@ -75,11 +75,6 @@ module.exports = (env) => {
                             }
 
                             describe(`${device.name}`, () => {
-                                // TODO: Fix menu in tablet in React
-                                if(env.engine === 'react' && device.name === 'iPhone 6 landscape') {
-                                    return;
-                                }
-
                                 it('Home view', async() => {
                                     // TODO: Fix content shift in Vue
                                     if(env.engine === 'vue' && !isDefaultLayout && device.name !== 'Desktop') {
@@ -142,9 +137,10 @@ module.exports = (env) => {
                                         return;
                                     }
 
+                                    const menuButtonSelector = '.menu-button .dx-button';
                                     const page = await openPage(`${appUrl}#/profile`);
-                                    const menuButton = await page.waitForSelector('.menu-button .dx-button', { visible: true });
-                                    await menuButton.click();
+                                    await page.waitForSelector(menuButtonSelector);
+                                    await page.click(menuButtonSelector);
 
                                     // NOTE: Wait for animation complete
                                     await page.waitFor(1000);
