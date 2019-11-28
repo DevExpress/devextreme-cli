@@ -32,7 +32,7 @@
       >
       <!-- eslint-enable-->
         <dx-toolbar id="navigation-header">
-          <dx-item location="before" css-class="menu-button">
+          <dx-item v-if="!isXSmall" location="before" css-class="menu-button">
             <!-- eslint-disable vue/no-unused-vars -->
             <dx-button
               icon="menu"
