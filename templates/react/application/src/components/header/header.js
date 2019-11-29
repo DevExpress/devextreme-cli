@@ -13,12 +13,9 @@ export default ({ menuToggleEnabled, title, toggleMenu, userMenuItems }) => (
         location={'before'}
         widget={'dxButton'}
         cssClass={'menu-button'}
-        options={{
-          icon: 'menu',
-          stylingMode: 'text',
-          onClick: toggleMenu
-        }}
-      />
+      >
+        <Button icon="menu" stylingMode="text" onClick={toggleMenu} />
+      </Item>
       <Item
         location={'before'}
         cssClass={'header-title'}

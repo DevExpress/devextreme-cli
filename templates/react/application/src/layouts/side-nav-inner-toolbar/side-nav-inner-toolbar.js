@@ -1,3 +1,4 @@
+import Button from 'devextreme-react/button';
 import Drawer from 'devextreme-react/drawer';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
@@ -76,17 +77,16 @@ class SideNavInnerToolbar extends React.Component {
               onMenuReady={this.menuPatch.onReady}
             >
               <Toolbar id={'navigation-header'}>
-                <Item
-                  location={'before'}
-                  cssClass={'menu-button'}
-                  widget={'dxButton'}
-                  visible={minMenuSize !== 0}
-                  options={{
-                    icon: 'menu',
-                    stylingMode: 'text',
-                    onClick: this.toggleMenu
-                  }}
-                />
+                {
+                  minMenuSize !== 0 &&
+                  <Item
+                    location={'before'}
+                    cssClass={'menu-button'}
+                    widget={'dxButton'}
+                  >
+                    <Button icon="menu" stylingMode="text" onClick={this.toggleMenu} />
+                  </Item>
+                }
                 <Item location={'before'} cssClass={'header-title'} text={title} />
               </Toolbar>
             </SideNavigationMenu>

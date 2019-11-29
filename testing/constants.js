@@ -1,19 +1,24 @@
-const puppeteer = require('puppeteer');
 // NOTE: All puppeteer devices: https://github.com/GoogleChrome/puppeteer/blob/master/lib/DeviceDescriptors.js
 
-exports.devices = [
-    puppeteer.devices['iPhone 5'],
-    puppeteer.devices['Galaxy S5 landscape'],
-    {
-        name: 'Desktop',
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
-        viewport: {
-            width: 1280,
-            height: 1024,
-            deviceScaleFactor: 1
-        }
+exports.viewports = {
+    xsmall: {
+        width: 320,
+        height: 568,
+        isMobile: true,
+        hasTouch: true,
+    },
+    small: {
+        width: 667,
+        height: 375,
+        isMobile: true,
+        hasTouch: true,
+        isLandscape: true
+    },
+    large: {
+        width: 1280,
+        height: 1024,
     }
-];
+};
 
 exports.themes = {
     material: 'material.orange',

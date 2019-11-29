@@ -89,7 +89,7 @@ export default {
 .user-panel {
   .dx-list-item .dx-icon {
     vertical-align: middle;
-    color: rgba(0, 0, 0, 0.87);
+    color: $base-text-color;
     margin-right: 16px;
   }
   .dx-rtl .dx-list-item .dx-icon {
