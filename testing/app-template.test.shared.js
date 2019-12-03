@@ -137,12 +137,6 @@ module.exports = (env) => {
                                 });
 
                                 it('Login page', async() => {
-                                    // TODO: Fix Angular
-                                    if(env.engine === 'angular') {
-                                        expect(true).toBe(true);
-                                        return;
-                                    }
-
                                     // NOTE: Test only once
                                     if(!isDefaultLayout) {
                                         return;
