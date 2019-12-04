@@ -1,23 +1,19 @@
 .single-card {
-  width: 100%;
-  height: 100%;
-  display: flex;
-}
 
-.single-card.dx-card {
-  width: 330px;
-  margin: auto auto;
-
-  .screen-x-small & {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-    box-shadow: none;
-    margin: 0;
-    border: 0;
-  }  
-  
-  .content {
+  .dx-card {
+    width: 330px;
+    margin: auto auto;
     padding: 40px;
-  }  
+    flex-grow: 0;
+
+    .screen-x-small & {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      box-shadow: none;
+      margin: 0;
+      border: 0;
+      flex-grow: 1;
+    }
+  }
 }
