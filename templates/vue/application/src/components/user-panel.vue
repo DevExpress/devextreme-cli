@@ -12,10 +12,11 @@
       target=".user-button"
       :items="menuItems"
       :width="170"
-      :position="menuPositionConfig"
       show-event="dxclick"
       css-class="user-menu"
-    />
+    >
+      <dx-position my="top center" at="bottom center" />
+    </dx-context-menu>
 
     <dx-list
       v-if="menuMode === 'list'"
@@ -26,7 +27,7 @@
 </template>
 
 <script>
-import DxContextMenu from "devextreme-vue/context-menu";
+import DxContextMenu, { DxPosition } from "devextreme-vue/context-menu";
 import DxList from "devextreme-vue/list";
 
 export default {
@@ -34,16 +35,9 @@ export default {
     menuMode: String,
     menuItems: Array
   },
-  data() {
-    return {
-      menuPositionConfig: {
-        my: "top center",
-        at: "bottom center"
-      }
-    };
-  },
   components: {
     DxContextMenu,
+    DxPosition,
     DxList
   }
 };
