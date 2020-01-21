@@ -1,5 +1,5 @@
 import React from 'react';
-import ContextMenu from 'devextreme-react/context-menu';
+import ContextMenu, { Position } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
 import './user-panel.scss';
 
@@ -21,9 +21,10 @@ export default class UserPanel extends React.Component {
             target={'.user-button'}
             showEvent={'dxclick'}
             width={170}
-            position={{ my: 'top center', at: 'bottom center' }}
             cssClass={'user-menu'}
-          />
+          >
+            <Position my={'top center'} at={'bottom center'} />
+          </ContextMenu>
         )}
         {menuMode === 'list' && (
           <List className={'dx-toolbar-menu-action'} items={menuItems} />
