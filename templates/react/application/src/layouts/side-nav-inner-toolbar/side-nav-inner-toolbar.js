@@ -20,6 +20,7 @@ class SideNavInnerToolbar extends React.Component {
       ...this.drawerConfig
     };
 
+    this.scrollViewRef = React.createRef();
     this.menuPatch = menuPreInitPatch(this);
   }
 
@@ -53,7 +54,7 @@ class SideNavInnerToolbar extends React.Component {
               menuToggleEnabled={minMenuSize === 0}
               toggleMenu={this.toggleMenu} />
 
-            <ScrollView className={'layout-body with-footer'}>
+            <ScrollView ref={this.scrollViewRef} className={'layout-body with-footer'}>
               <div className={'content'}>
                 {React.Children.map(this.props.children, item => {
                   return item.type !== Footer && item;
@@ -124,6 +125,10 @@ class SideNavInnerToolbar extends React.Component {
     event.stopPropagation();
   };
 
+  get scrollView() {
+    return this.scrollViewRef.current.instance;
+  }
+
   get drawerConfig() {
     const isXSmall = sizes()['screen-x-small'];
     const isLarge = sizes()['screen-large'];
@@ -150,6 +155,7 @@ class SideNavInnerToolbar extends React.Component {
         pointerEvent.preventDefault();
       } else {
         this.props.history.push(path);
+        this.scrollView.scrollTo(0);
       }
 
       if (this.hideMenuAfterNavigation) {

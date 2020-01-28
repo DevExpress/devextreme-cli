@@ -16,7 +16,7 @@
           :menu-toggle-enabled="headerMenuTogglerEnabled"
           :toggle-menu-func="toggleMenu"
         />
-        <dx-scroll-view class="layout-body with-footer">
+        <dx-scroll-view ref="scrollViewRef" class="layout-body with-footer">
           <slot />
           <slot name="footer" />
         </dx-scroll-view>
@@ -106,6 +106,9 @@ export default {
     },
     headerMenuTogglerEnabled() {
       return this.isXSmall;
+    },
+    scrollView() {
+      return this.$refs["scrollViewRef"].instance;
     }
   },
   watch: {
@@ -119,6 +122,7 @@ export default {
         this.menuOpened = false;
         this.menuTemporaryOpened = false;
       }
+      this.scrollView.scrollTo(0);
     }
   },
   components: {
