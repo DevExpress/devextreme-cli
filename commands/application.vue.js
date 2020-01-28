@@ -62,7 +62,8 @@ const create = (appName, options) => {
             const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {
                 project: humanizedName,
-                layout: promptsResult.layout
+                layout: promptsResult.layout,
+                copyrightYear: new Date().getFullYear()
             });
             modifyIndexHtml(appPath, humanizedName);
             addTemplate(appPath, appName, templateOptions);
