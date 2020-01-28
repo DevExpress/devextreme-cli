@@ -126,10 +126,14 @@ const installThemeBuilder = async version => {
 };
 
 const getDevExtremeVersion = () => {
-    const installedDevExtremePackageJson = path.join(process.cwd(), 'node_modules', 'devextreme', 'package.json');
-    if(fs.existsSync(installedDevExtremePackageJson)) {
-        return require(installedDevExtremePackageJson).version;
+    const lockFileName = path.join(process.cwd(), 'package-lock.json');
+    if(fs.existsSync(lockFileName)) {
+        const dependencies = require(lockFileName).dependencies;
+        if(dependencies && dependencies.devextreme) {
+            return dependencies.devextreme.version;
+        }
     }
+
     return;
 };
 
