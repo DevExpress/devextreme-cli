@@ -18,6 +18,7 @@ class SideNavOuterToolbar extends React.Component {
       ...this.drawerConfig
     };
 
+    this.scrollViewRef = React.createRef();
     this.menuPatch = menuPreInitPatch(this);
   }
 
@@ -55,7 +56,7 @@ class SideNavOuterToolbar extends React.Component {
           opened={menuOpened}
           template={'menu'}
         >
-          <ScrollView className={'with-footer'}>
+          <ScrollView ref={this.scrollViewRef} className={'with-footer'}>
             <div className={'content'}>
               {React.Children.map(this.props.children, item => {
                 return item.type !== Footer && item;
@@ -104,6 +105,10 @@ class SideNavOuterToolbar extends React.Component {
     this.setState({ ...this.drawerConfig });
   };
 
+  get scrollView() {
+    return this.scrollViewRef.current.instance;
+  }
+
   get drawerConfig() {
     const isXSmall = sizes()['screen-x-small'];
     const isLarge = sizes()['screen-large'];
@@ -130,6 +135,7 @@ class SideNavOuterToolbar extends React.Component {
         pointerEvent.preventDefault();
       } else {
         this.props.history.push(path);
+        this.scrollView.scrollTo(0);
       }
 
       if (this.hideMenuAfterNavigation) {
