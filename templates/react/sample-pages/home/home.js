@@ -1,5 +1,6 @@
 import React from 'react';
 import './home.scss';
+import appInfo from '../../app-info';
 
 export default () => (
   <React.Fragment>
@@ -18,7 +19,7 @@ export default () => (
           </svg>
         </div>
 
-        <p>Welcome to <b>DevExtreme React Template</b>!</p><p>The application is built with:</p>
+        <p>Welcome to <b>{appInfo.title}</b>!</p><p>The application is built with:</p>
         <ul>
           <li><a href={'https://github.com/facebook/create-react-app'}>Create React App</a></li>
           <li><a href={'https://github.com/devexpress/devextreme-cli'}>DevExtreme CLI</a></li>
