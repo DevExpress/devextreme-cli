@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
 import TextBox from 'devextreme-react/text-box';
 import ValidationGroup from 'devextreme-react/validation-group';
-import Validator, { RequiredRule } from 'devextreme-react/validator';
+import Validator, { RequiredRule, CompareRule } from 'devextreme-react/validator';
 import Button from 'devextreme-react/button';
 import CheckBox from 'devextreme-react/check-box';
-import './login-form.scss';
-import { Link, useHistory } from 'react-router-dom';
-import appInfo from '../../app-info';
+import { Link } from 'react-router-dom';
 
 export default function LoginForm(props) {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-
-  const history = useHistory();
 
   function loginChanged(e) {
     setLogin(e.value);
@@ -22,21 +18,10 @@ export default function LoginForm(props) {
     setPassword(password);
   };
 
-  function onLoginClick(args) {
-    if (!args.validationGroup.validate().isValid) {
-      return;
-    }
-
-    props.onLoginClick(login, password);
-
-    args.validationGroup.reset();
-  };
-
   return (
     <ValidationGroup>
       <div className={'login-header'}>
-        <div className={'title'}>{appInfo.title}</div>
-        <div>Sign In to your account</div>
+        <div className={'title'}>Sign Up</div>
       </div>
       <div className={'dx-field'}>
         <TextBox
@@ -64,8 +49,29 @@ export default function LoginForm(props) {
         </TextBox>
       </div>
       <div className={'dx-field'}>
-        <CheckBox defaultValue={false} text='Remember me' />
+        <TextBox
+          mode={'password'}
+          value={password}
+          onValueChanged={passwordChanged}
+          placeholder={'Re-type Your Password'}
+          width={'100%'}
+        >
+          <Validator>
+            <RequiredRule message='Both passwords need to be the same' />
+          </Validator>
+        </TextBox>
       </div>
+      <div className={'dx-field'}>
+        <CheckBox
+          defaultValue={false}
+        >
+          <Validator>
+            <CompareRule message='You must agree to the Terms and Conditions' />
+          </Validator>
+        </CheckBox>
+        {` `} I agree with the <Link > Terms of Use and Privacy Policy</Link>
+      </div>
+
       <div className={'dx-field'}>
         <Button
           type={'default'}
@@ -75,11 +81,15 @@ export default function LoginForm(props) {
         />
       </div>
       <div className={'dx-field'}>
-        <Link to={'recovery'} >Forgot password ?</Link>
+        Have an account? <Link to={'/home'}> Sign In</Link>
       </div>
       <div className={'dx-field'}>
-        <Button type={'normal'} text={'Create an account'} width={'100%'} onClick={() => history.push('registration')} />
+        <Button type={'normal'} text='Create a new account' width={'100%'} />
       </div>
     </ValidationGroup>
   );
 }
+
+function onLoginClick(args) {
+  args.validationGroup.reset();
+};

@@ -11,12 +11,24 @@ import {
   SingleCard
 } from './layouts';
 import { sizes, subscribe, unsubscribe } from './utils/media-query';
+import RegistrationForm from './components/registration-form/registration-form.js';
+import RecoveryForm from './components/recovery-form/recovery-form.js';
 
 const LoginContainer = ({ logIn }) => <LoginForm onLoginClick={logIn} />;
 
 const NotAuthPage = (props) => (
   <SingleCard>
-    <Route render={() => <LoginContainer {...props} />} />
+    <Switch>
+      <Route
+        path="/recovery"
+        component={RecoveryForm}
+      />
+      <Route
+        path="/registration"
+        component={RegistrationForm}
+      />
+      <Route render={() => <LoginContainer {...props} />} />
+    </Switch>
   </SingleCard>
 );
 
