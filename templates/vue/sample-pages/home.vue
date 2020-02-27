@@ -91,7 +91,7 @@
 
         <p>
           Welcome to
-          <b>DevExtreme Vue Template</b>!
+          <b>{{this.$appInfo.title}}</b>!
         </p>
         <p>The application is built with:</p>
         <ul>
