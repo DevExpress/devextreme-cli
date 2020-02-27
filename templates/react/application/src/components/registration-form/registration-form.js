@@ -6,16 +6,30 @@ import Button from 'devextreme-react/button';
 import CheckBox from 'devextreme-react/check-box';
 import { Link } from 'react-router-dom';
 
-export default function LoginForm(props) {
+export default function RegistrationForm() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [checkComparison, setCheckComparison] = useState(false);
 
   function loginChanged(e) {
     setLogin(e.value);
   };
 
   function passwordChanged(e) {
-    setPassword(password);
+    setPassword(e.value);
+  };
+
+  function confirmPasswordChanged(e) {
+    setConfirmPassword(e.value);
+  };
+
+  function onCreateClick(args) {
+    if (!args.validationGroup.validate().isValid) {
+      return;
+    }
+
+    args.validationGroup.reset();
   };
 
   return (
@@ -51,45 +65,39 @@ export default function LoginForm(props) {
       <div className={'dx-field'}>
         <TextBox
           mode={'password'}
-          value={password}
-          onValueChanged={passwordChanged}
+          value={confirmPassword}
+          onValueChanged={confirmPasswordChanged}
           placeholder={'Re-type Your Password'}
           width={'100%'}
         >
           <Validator>
-            <RequiredRule message='Both passwords need to be the same' />
+            <RequiredRule message="Confirm Password is required" />
+            <CompareRule message='Both passwords need to be the same' comparisonTarget={password} />
           </Validator>
         </TextBox>
       </div>
       <div className={'dx-field'}>
         <CheckBox
-          defaultValue={false}
+          defaultValue={checkComparison}
+          onClick={(e) => { setCheckComparison(e.value) }}
         >
           <Validator>
-            <CompareRule message='You must agree to the Terms and Conditions' />
+            <CompareRule message='You must agree to the Terms and Conditions' comparisonTarget={() => { return true }} />
           </Validator>
         </CheckBox>
         {` `} I agree with the <Link > Terms of Use and Privacy Policy</Link>
       </div>
-
       <div className={'dx-field'}>
         <Button
-          type={'default'}
-          text={'Login'}
-          onClick={onLoginClick}
+          type={'normal'}
+          text='Create a new account'
           width={'100%'}
+          onClick={onCreateClick}
         />
       </div>
       <div className={'dx-field'}>
         Have an account? <Link to={'/home'}> Sign In</Link>
       </div>
-      <div className={'dx-field'}>
-        <Button type={'normal'} text='Create a new account' width={'100%'} />
-      </div>
     </ValidationGroup>
   );
 }
-
-function onLoginClick(args) {
-  args.validationGroup.reset();
-};

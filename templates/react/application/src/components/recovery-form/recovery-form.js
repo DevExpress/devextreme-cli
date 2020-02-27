@@ -7,6 +7,14 @@ import Button from 'devextreme-react/button';
 export default function RecoveryForm() {
   const [email, setEmail] = useState()
 
+  function onResetClick(args) {
+    if (!args.validationGroup.validate().isValid) {
+      return;
+    }
+  
+    args.validationGroup.reset();
+  };
+
   return (
     <ValidationGroup>
       <div className={'login-header'}>
@@ -26,7 +34,12 @@ export default function RecoveryForm() {
         </TextBox>
       </div>
       <div className={'dx-field'}>
-        <Button type={'normal'} text='Reset my password' width={'100%'} />
+        <Button
+          type={'normal'}
+          text='Reset my password'
+          width={'100%'}
+          onClick={onResetClick}
+        />
       </div>
     </ValidationGroup>
   );
