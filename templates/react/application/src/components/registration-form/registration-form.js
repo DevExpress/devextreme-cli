@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import TextBox from 'devextreme-react/text-box';
 import ValidationGroup from 'devextreme-react/validation-group';
-import Validator, { RequiredRule, CompareRule } from 'devextreme-react/validator';
+import Validator, { RequiredRule, CompareRule, EmailRule } from 'devextreme-react/validator';
 import Button from 'devextreme-react/button';
 import CheckBox from 'devextreme-react/check-box';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function RegistrationForm() {
-  const [login, setLogin] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [checkComparison, setCheckComparison] = useState(false);
+  const [comparison, setComparison] = useState(false);
 
-  function loginChanged(e) {
-    setLogin(e.value);
+  const history = useHistory();
+
+  function emailChanged(e) {
+    setEmail(e.value);
   };
 
   function passwordChanged(e) {
@@ -30,6 +32,7 @@ export default function RegistrationForm() {
     }
 
     args.validationGroup.reset();
+    history.push('/home');
   };
 
   return (
@@ -39,13 +42,14 @@ export default function RegistrationForm() {
       </div>
       <div className={'dx-field'}>
         <TextBox
-          value={login}
-          onValueChanged={loginChanged}
-          placeholder={'Login'}
+          value={email}
+          onValueChanged={emailChanged}
+          placeholder={'Email'}
           width={'100%'}
         >
           <Validator>
-            <RequiredRule message='Login is required' />
+            <RequiredRule message='Email is required' />
+            <EmailRule message="Email is invalid" />
           </Validator>
         </TextBox>
       </div>
@@ -72,14 +76,14 @@ export default function RegistrationForm() {
         >
           <Validator>
             <RequiredRule message="Confirm Password is required" />
-            <CompareRule message='Both passwords need to be the same' comparisonTarget={password} />
+            <CompareRule message='Both passwords need to be the same' comparisonTarget={() => { return password }} />
           </Validator>
         </TextBox>
       </div>
       <div className={'dx-field'}>
         <CheckBox
-          defaultValue={checkComparison}
-          onClick={(e) => { setCheckComparison(e.value) }}
+          defaultValue={comparison}
+          onClick={(e) => { setComparison(e.value) }}
         >
           <Validator>
             <CompareRule message='You must agree to the Terms and Conditions' comparisonTarget={() => { return true }} />

@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import TextBox from 'devextreme-react/text-box';
 import ValidationGroup from 'devextreme-react/validation-group';
-import Validator, { RequiredRule } from 'devextreme-react/validator';
+import Validator, { RequiredRule, EmailRule } from 'devextreme-react/validator';
 import Button from 'devextreme-react/button';
+import { useHistory } from 'react-router-dom';
 
 export default function RecoveryForm() {
   const [email, setEmail] = useState()
+  const history = useHistory();
+
+  function emailChanged(e) {
+    setEmail(e.value);
+  };
 
   function onResetClick(args) {
     if (!args.validationGroup.validate().isValid) {
       return;
     }
-  
+
     args.validationGroup.reset();
+    history.push('/home');
   };
 
   return (
@@ -26,10 +33,11 @@ export default function RecoveryForm() {
           value={email}
           placeholder={'Email'}
           width={'100%'}
-          onChange={(e) => setEmail(e.value)}
+          onChange={(e) => emailChanged(e)}
         >
           <Validator>
-            <RequiredRule message='Login is required' />
+            <RequiredRule message='Email is required' />
+            <EmailRule message="Email is invalid" />
           </Validator>
         </TextBox>
       </div>

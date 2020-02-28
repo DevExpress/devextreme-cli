@@ -19,7 +19,7 @@ export default function LoginForm(props) {
   };
 
   function passwordChanged(e) {
-    setPassword(password);
+    setPassword(e.value);
   };
 
   function onLoginClick(args) {
@@ -78,7 +78,12 @@ export default function LoginForm(props) {
         <Link to={'recovery'} >Forgot password ?</Link>
       </div>
       <div className={'dx-field'}>
-        <Button type={'normal'} text={'Create an account'} width={'100%'} onClick={() => history.push('registration')} />
+        <Button type={'normal'}
+          text={'Create an account'}
+          width={'100%'}
+          onClick={() => history.push('registration')}
+          useSubmitBehavior={true}
+        />
       </div>
     </ValidationGroup>
   );
