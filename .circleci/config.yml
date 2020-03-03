@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: Install npm packages
-          command: npx lerna bootstrap
+          command: npm i
       - run:
           name: Run test
           command: npm run test
