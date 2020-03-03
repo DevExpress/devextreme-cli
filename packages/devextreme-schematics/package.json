@@ -1,0 +1,36 @@
+{
+  "name": "devextreme-schematics",
+  "version": "1.0.13",
+  "description": "DevExtreme schematics",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "tslint -c tslint.json 'src/*/*.ts' -e '**/*.d.ts'",
+    "test": "npm run lint && npm run build && jasmine **/*_spec.js"
+  },
+  "author": "Developer Express Inc.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/DevExpress/devextreme-schematics.git"
+  },
+  "files": [
+    "src/**/*",
+    "!*.ts",
+    "*.d.ts",
+    "src/*/files/**/*.ts"
+  ],
+  "schematics": "./src/collection.json",
+  "dependencies": {
+    "@angular-devkit/core": "^8.0.0",
+    "@angular-devkit/schematics": "^8.0.0",
+    "@schematics/angular": "^8.0.0",
+    "rxjs": "~6.4.0",
+    "typescript": "3.5.3"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^3.3.8",
+    "@types/node": "^8.10.39",
+    "jasmine": "^2.8.0",
+    "tslint": "^5.15.0"
+  }
+}

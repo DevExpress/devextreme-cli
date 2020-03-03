@@ -13,3 +13,8 @@ packages/devextreme-cli/testing/__tests__/__diff_snapshots__/
 # Mac OSX Finder files.
 **/.DS_Store
 .DS_Store
+
+# Schematics Outputs
+packages/devextreme-schematics/src/**/*.js
+packages/devextreme-schematics/src/**/*.js.map
+packages/devextreme-schematics/src/**/*.d.ts

@@ -1,0 +1,390 @@
+import {
+  Rule,
+  SchematicContext,
+  Tree,
+  apply,
+  url,
+  move,
+  chain,
+  filter,
+  forEach,
+  mergeWith,
+  callRule,
+  FileEntry,
+  template
+} from '@angular-devkit/schematics';
+
+import {
+  getPackageJsonDependency
+} from '@schematics/angular/utility/dependencies';
+
+import { of } from 'rxjs';
+
+import {
+  SourceFile
+} from 'typescript';
+
+import { strings } from '@angular-devkit/core';
+
+import { join, basename } from 'path';
+
+import {
+  getApplicationPath,
+  getSourceRootPath,
+  getProjectName
+ } from '../utility/project';
+
+import {
+  humanize
+} from '../utility/string';
+
+import {
+  addStylesToApp
+ } from '../utility/styles';
+
+import {
+  modifyJSONFile
+ } from '../utility/modify-json-file';
+
+import {
+  NodeDependencyType,
+  addPackageJsonDependency
+} from '@schematics/angular/utility/dependencies';
+
+import {
+  NodePackageInstallTask
+} from '@angular-devkit/schematics/tasks';
+
+import { getSourceFile } from '../utility/source';
+
+import {
+  applyChanges,
+  insertItemToArray
+} from '../utility/change';
+
+import {
+  hasComponentInRoutes,
+  getRoute,
+  findRoutesInSource
+} from '../utility/routing';
+
+import {
+  addImportToModule, addProviderToModule, insertImport
+} from '@schematics/angular/utility/ast-utils';
+
+import { getWorkspace } from '@schematics/angular/utility/config';
+import { Change } from '@schematics/angular/utility/change';
+
+const projectFilesSource = './files/src';
+const workspaceFilesSource = './files';
+const ngRequireStaticFlag = /^(\W*[8-9][0-9]*)/;
+
+function addScriptSafe(scripts: any, name: string, value: string) {
+  const currentValue = scripts[name];
+
+  if (!currentValue) {
+    scripts[name] = value;
+    return;
+  }
+
+  const alterName = `origin-${name}`;
+  const safeValue = `npm run ${alterName} && ${value}`;
+
+  if (currentValue === value || currentValue === safeValue) {
+    return;
+  }
+
+  scripts[alterName] = currentValue;
+  scripts[name] = safeValue;
+}
+
+function addBuildThemeScript() {
+  return (host: Tree) => {
+    modifyJSONFile(host, './package.json', config => {
+      const scripts = config['scripts'];
+
+      addScriptSafe(scripts, 'build-themes', 'devextreme build');
+      addScriptSafe(scripts, 'postinstall', 'npm run build-themes');
+
+      return config;
+    });
+
+    return host;
+  };
+}
+
+function addCustomThemeStyles(options: any, sourcePath: string) {
+  return (host: Tree) => {
+    modifyJSONFile(host, './angular.json', config => {
+      const stylesList = [
+        `${sourcePath}/dx-styles.scss`,
+        `${sourcePath}/themes/generated/theme.additional.css`,
+        `${sourcePath}/themes/generated/theme.base.css`,
+        'node_modules/devextreme/dist/css/dx.common.css'
+      ];
+
+      return addStylesToApp(host, options.project, config, stylesList);
+    });
+
+    return host;
+  };
+}
+
+function updateBudgets(options: any) {
+  return (host: Tree) => {
+    modifyJSONFile(host, './angular.json', config => {
+      const projectName = getProjectName(host, options.project);
+      const budgets: any[] = config.projects[projectName].architect.build.configurations.production.budgets;
+
+      const budget = budgets.find((item) => item.type === 'initial');
+      if (budget) {
+        budget.maximumWarning = '4mb';
+        budget.maximumError = '6mb';
+      }
+
+      return config;
+    });
+
+    return host;
+  };
+}
+
+function addViewportToBody(sourcePath: string) {
+  return (host: Tree) => {
+    const indexPath =  join(sourcePath, 'index.html');
+    let indexContent = host.read(indexPath)!.toString();
+
+    indexContent = indexContent.replace(/<body>/, '<body class="dx-viewport">');
+    host.overwrite(indexPath, indexContent);
+
+    return host;
+  };
+}
+
+function modifyFileRule(path: string, callback: (source: SourceFile) => Change[]) {
+  return (host: Tree) => {
+    const source = getSourceFile(host, path);
+
+    if (!source) {
+      return host;
+    }
+
+    const changes = callback(source);
+
+    return applyChanges(host, changes, path);
+  };
+}
+
+function updateAppModule(host: Tree, sourcePath: string) {
+  const appModulePath = sourcePath + 'app.module.ts';
+
+  const importSetter = (importName: string, path: string) => {
+    return (source: SourceFile) => {
+      return addImportToModule(source, appModulePath, importName, path);
+    };
+  };
+
+  const providerSetter = (importName: string, path: string) => {
+    return (source: SourceFile) => {
+      return addProviderToModule(source, appModulePath, importName, path);
+    };
+  };
+
+  const rules = [
+    modifyFileRule(appModulePath, importSetter('SideNavOuterToolbarModule', './layouts')),
+    modifyFileRule(appModulePath, importSetter('SideNavInnerToolbarModule', './layouts')),
+    modifyFileRule(appModulePath, importSetter('SingleCardModule', './layouts')),
+    modifyFileRule(appModulePath, importSetter('FooterModule', './shared/components')),
+    modifyFileRule(appModulePath, importSetter('LoginFormModule', './shared/components')),
+    modifyFileRule(appModulePath, providerSetter('AuthService', './shared/services')),
+    modifyFileRule(appModulePath, providerSetter('ScreenService', './shared/services')),
+    modifyFileRule(appModulePath, providerSetter('AppInfoService', './shared/services'))
+  ];
+
+  if (!hasRoutingModule(host, sourcePath)) {
+    rules.push(modifyFileRule(appModulePath, importSetter('AppRoutingModule', './app-routing.module')));
+  }
+
+  return chain(rules);
+}
+
+function getComponentName(host: Tree, sourcePath: string) {
+  let name = '';
+  const index = 1;
+
+  if (!host.exists(sourcePath + 'app.component.ts')) {
+    name = 'app';
+  }
+
+  while (!name) {
+    const componentName = `app${index}`;
+    if (!host.exists(`${sourcePath}${componentName}.component.ts`)) {
+      name = componentName;
+    }
+  }
+
+  return name;
+}
+
+function hasRoutingModule(host: Tree, sourcePath: string) {
+  return host.exists(sourcePath + 'app-routing.module.ts');
+}
+
+function addPackagesToDependency() {
+  return (host: Tree) => {
+    addPackageJsonDependency(host, {
+      type: NodeDependencyType.Default,
+      name: '@angular/cdk',
+      version: '^8.0.0'
+    });
+
+    return host;
+  };
+}
+
+function modifyContentByTemplate(
+  sourcePath: string,
+  templateSourcePath: string,
+  filePath: string | null,
+  templateOptions: any = {},
+  modifyContent?: (templateContent: string, currentContent: string, filePath: string ) => string)
+: Rule {
+  return (host: Tree, context: SchematicContext) => {
+    const modifyIfExists = (fileEntry: FileEntry) => {
+      const fileEntryPath = join(sourcePath, fileEntry.path.toString());
+      if (!host.exists(fileEntryPath)) {
+        return fileEntry;
+      }
+
+      const templateContent = fileEntry.content!.toString();
+      let modifiedContent = templateContent;
+
+      const currentContent = host.read(fileEntryPath)!.toString();
+      if (modifyContent) {
+        modifiedContent = modifyContent(templateContent, currentContent, fileEntryPath);
+      }
+
+      // NOTE: Workaround for https://github.com/angular/angular-cli/issues/11337
+      if (modifiedContent !== currentContent) {
+        host.overwrite(fileEntryPath,  modifiedContent);
+      }
+      return null;
+    };
+
+    const rules = [
+      filter(path => {
+        return !filePath || join('./', path) === join('./', filePath);
+      }),
+      template(templateOptions),
+      forEach(modifyIfExists),
+      move(sourcePath)
+    ];
+
+    const modifiedSource = apply(url(templateSourcePath), rules);
+    const resultRule = mergeWith(modifiedSource);
+
+    return callRule(resultRule, of(host), context);
+  };
+}
+
+function updateDevextremeConfig(sourcePath: string) {
+  const devextremeConfigPath = '/devextreme.json';
+  const templateOptions = {
+    engine: 'angular',
+    sourcePath
+  };
+
+  const modifyConfig = (templateContent: string, currentContent: string) => {
+    const oldConfig = JSON.parse(currentContent);
+    const newConfig = JSON.parse(templateContent);
+
+    [].push.apply(oldConfig.build.commands, newConfig.build.commands);
+
+    return JSON.stringify(oldConfig, null, '   ');
+  };
+
+  return modifyContentByTemplate('./', workspaceFilesSource, devextremeConfigPath, templateOptions, modifyConfig);
+}
+
+const modifyRoutingModule = (host: Tree, routingModulePath: string) => {
+  // TODO: Try to use the isolated host to generate the result string
+  let source = getSourceFile(host, routingModulePath)!;
+  const importChange = insertImport(source, routingModulePath, 'LoginFormComponent', './shared/components');
+  const providerChanges = addProviderToModule(source, routingModulePath, 'AuthGuardService', './shared/services');
+  applyChanges(host, [ importChange, ...providerChanges], routingModulePath);
+
+  source = getSourceFile(host, routingModulePath)!;
+  const routes = findRoutesInSource(source)!;
+  if (!hasComponentInRoutes(routes, 'login-form')) {
+    const loginFormRoute = getRoute('login-form');
+    insertItemToArray(host, routingModulePath, routes, loginFormRoute);
+  }
+};
+
+export default function(options: any): Rule {
+  return (host: Tree) => {
+    const project = getProjectName(host, options.project);
+    const workspace = getWorkspace(host);
+    const prefix = workspace.projects[project].prefix;
+    const title = humanize(project);
+    const appPath = getApplicationPath(host, project);
+    const sourcePath = getSourceRootPath(host, project);
+    const layout = options.layout;
+    const override = options.resolveConflicts === 'override';
+    const componentName = override ? 'app' : getComponentName(host, appPath);
+    const pathToCss = sourcePath.replace(/\/?(\w)+\/?/g, '../');
+    const ngVersion = getPackageJsonDependency(host, '@angular/core')!.version;
+    const templateOptions = {
+      name: componentName,
+      layout,
+      title,
+      strings,
+      path: pathToCss,
+      prefix,
+      // https://github.com/angular/angular/blob/master/CHANGELOG.md#800-2019-05-28
+      requireStaticFlag: ngRequireStaticFlag.test(ngVersion)
+    };
+
+    const modifyContent = (templateContent: string, currentContent: string, filePath: string) => {
+      if (basename(filePath) === 'styles.scss') {
+        return `${currentContent}\n${templateContent}`;
+      }
+
+      if (basename(filePath) === 'app-routing.module.ts' && hasRoutingModule(host, appPath)) {
+        modifyRoutingModule(host, filePath);
+        return currentContent;
+      }
+
+      return templateContent;
+    };
+
+    const rules = [
+      modifyContentByTemplate(sourcePath, projectFilesSource, null, templateOptions, modifyContent),
+      updateDevextremeConfig(sourcePath),
+      updateAppModule(host, appPath),
+      addBuildThemeScript(),
+      addCustomThemeStyles(options, sourcePath),
+      addViewportToBody(sourcePath),
+      addPackagesToDependency()
+    ];
+
+    if (options.updateBudgets) {
+      rules.push(updateBudgets(options));
+    }
+
+    if (!options.skipInstall) {
+      rules.push((_: Tree, context: SchematicContext) => {
+        context.addTask(new NodePackageInstallTask());
+      });
+    }
+
+    if (override) {
+      if (project === workspace.defaultProject) {
+        rules.push(modifyContentByTemplate('./', workspaceFilesSource, 'e2e/src/app.e2e-spec.ts', { title }));
+        rules.push(modifyContentByTemplate('./', workspaceFilesSource, 'e2e/src/app.po.ts'));
+      }
+    }
+
+    return chain(rules);
+  };
+}
