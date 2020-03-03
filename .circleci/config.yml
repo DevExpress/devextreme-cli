@@ -10,7 +10,7 @@ jobs:
           command: npx lerna bootstrap
       - run:
           name: Run test
-          command: npx lerna test
+          command: npm run test
       - store_artifacts:
           path: test-results.xml
           prefix: tests
