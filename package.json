@@ -2,10 +2,11 @@
   "name": "devextreme-cli-monorepo",
   "version": "1.1.10",
   "scripts": {
-    "test": "oao run-script test",
-    "test-dev": "oao run-script test-dev"
+    "test": "lerna run --stream test",
+    "test-local": "lerna run --parallel test-local",
+    "watch": "lerna run --stream test-dev"
   },
   "devDependencies": {
-    "oao": "^1.8.0"
+    "lerna": "^3.20.2"
   }
 }

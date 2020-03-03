@@ -7,8 +7,8 @@
 **/node_modules/
 **/npm-debug.log*
 **/yarn-error.log*
-projects/devextreme-cli/testing/sandbox/
-projects/devextreme-cli/testing/__tests__/__diff_snapshots__/
+packages/devextreme-cli/testing/sandbox/
+packages/devextreme-cli/testing/__tests__/__diff_snapshots__/
 
 # Mac OSX Finder files.
 **/.DS_Store

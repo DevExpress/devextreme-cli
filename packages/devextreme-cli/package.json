@@ -21,7 +21,8 @@
   ],
   "scripts": {
     "lint": "eslint ./",
-    "test": "npm run lint && jest",
+    "test": "npm run lint",
+    "test-local": "npm run lint && jest",
     "test-dev": "cross-env TEST_MODE=dev jest"
   },
   "author": "Developer Express Inc.",
