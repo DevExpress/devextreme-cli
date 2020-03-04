@@ -89,7 +89,7 @@ export default function RegistrationForm() {
             <CompareRule message='You must agree to the Terms and Conditions' comparisonTarget={() => { return true }} />
           </Validator>
         </CheckBox>
-        {` `} I agree with the <Link > Terms of Use and Privacy Policy</Link>
+        <span> I agree with the <Link > Terms of Use and Privacy Policy</Link></span>
       </div>
       <div className={'dx-field'}>
         <Button
