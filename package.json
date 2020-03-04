@@ -4,7 +4,7 @@
   "scripts": {
     "test": "lerna run --stream test",
     "test-local": "lerna run --parallel test-local",
-    "watch": "lerna run --stream test-dev",
+    "test-dev": "lerna run --stream test-dev",
     "postinstall": "lerna bootstrap"
   },
   "devDependencies": {
