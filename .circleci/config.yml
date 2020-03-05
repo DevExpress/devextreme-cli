@@ -7,7 +7,10 @@ jobs:
       - checkout
       - run:
           name: Install npm packages
-          command: npm install
+          command: npm i
       - run:
-          name: Run lint
-          command: npm run lint
+          name: Run test
+          command: npm run test
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests

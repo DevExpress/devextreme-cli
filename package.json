@@ -1,50 +1,13 @@
 {
-  "name": "devextreme-cli",
+  "name": "devextreme-cli-monorepo",
   "version": "1.1.10",
-  "description": "DevExtreme CLI",
-  "keywords": [
-    "devexpress",
-    "devextreme",
-    "cli",
-    "themebuilder",
-    "theme",
-    "application"
-  ],
-  "bin": {
-    "devextreme": "index.js"
-  },
-  "files": [
-    "commands/**/*",
-    "templates/**/*",
-    "utility/**/*",
-    "index.js"
-  ],
   "scripts": {
-    "lint": "eslint ./",
-    "test": "npm run lint && jest",
-    "test-dev": "cross-env TEST_MODE=dev jest"
-  },
-  "author": "Developer Express Inc.",
-  "repository": "https://github.com/DevExpress/devextreme-cli",
-  "license": "MIT",
-  "dependencies": {
-    "@vue/cli": "^3.5.5",
-    "less": "3.9.0",
-    "minimist": "^1.2.0",
-    "mustache": "^3.0.1",
-    "node-sass": "^4.9.3",
-    "prompts": "^2.0.4",
-    "semver": "^5.6.0"
+    "test": "lerna run --stream test",
+    "test-local": "lerna run --parallel test-local",
+    "test-dev": "lerna run --stream test-dev",
+    "postinstall": "lerna bootstrap"
   },
   "devDependencies": {
-    "cross-env": "^5.2.0",
-    "eslint": "^5.10.0",
-    "eslint-plugin-jest": "^22.5.1",
-    "jest": "^24.9.0",
-    "jest-image-snapshot": "^2.8.2",
-    "puppeteer": "^1.16.0",
-    "rimraf": "^2.6.3",
-    "simple-git": "^1.113.0",
-    "tree-kill": "^1.2.1"
+    "lerna": "^3.20.2"
   }
 }

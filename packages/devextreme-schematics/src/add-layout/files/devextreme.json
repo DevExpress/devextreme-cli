@@ -1,0 +1,35 @@
+{
+    "applicationEngine": "<%= engine %>",
+    "build": {
+        "commands": [
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "<%= sourcePath %>/themes/metadata.base.json",
+                    "outputFile": "<%= sourcePath %>/themes/generated/theme.base.css"
+                }
+            },
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "<%= sourcePath %>/themes/metadata.additional.json",
+                    "outputFile": "<%= sourcePath %>/themes/generated/theme.additional.css"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "<%= sourcePath %>/themes/metadata.base.json",
+                    "outputFile": "<%= sourcePath %>/themes/generated/variables.base.scss"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "<%= sourcePath %>/themes/metadata.additional.json",
+                    "outputFile": "<%= sourcePath %>/themes/generated/variables.additional.scss"
+                }
+            }
+        ]
+    }
+}

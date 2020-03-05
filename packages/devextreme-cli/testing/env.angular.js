@@ -1,32 +1,17 @@
 const fs = require('fs');
 const path = require('path');
-const simpleGit = require('simple-git');
 
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../utility/run-command');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
-const schematicsDirectory = 'devextreme-schematics';
+const schematicsDirectory = '../../../../devextreme-schematics';
 const schematicsPath = path.join(sandboxPath, schematicsDirectory);
 const routingFilePath = path.join(sandboxPath, appName, 'src/app/app-routing.module.ts');
 const appComponentPath = path.join(sandboxPath, appName, 'src/app/app.component.html');
 
 async function prepareSchematics() {
-    // TODO: Move devextreme-schematics to this repo
-    const git = simpleGit(sandboxPath);
-
-    console.log('Cloning schematics repo...');
-    await new Promise((resolve, reject) => {
-        git.clone('https://github.com/DevExpress/devextreme-schematics/', (err) => {
-            if(err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
-
     await runCommand('npm', [ 'i' ], {
         cwd: schematicsPath,
         silent: true

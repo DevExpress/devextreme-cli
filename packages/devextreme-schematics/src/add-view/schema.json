@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsDevextremeAddView",
+  "title": "Add a view to a DevExtreme Angular application",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The view name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "addRoute": {
+      "type": "boolean",
+      "description": "Specifies whether to register a route for the view",
+      "default": true
+    },
+    "icon": {
+      "type": "string",
+      "description": "The view's icon name",
+      "default": "folder"
+    },
+    "module": {
+      "type": "string",
+      "description": "Allows you to specify the declaring module"
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of a project to modify"
+    },
+    "spec": {
+      "type": "boolean",
+      "description": "Specifies whether to generate a spec file",
+      "default": true
+    },
+    "inlineStyle": {
+      "description": "Specifies whether to define styles in the ts file",
+      "type": "boolean",
+      "default": false
+    },
+    "prefix": {
+      "type": "string",
+      "description": "The prefix to apply to generated selectors"
+    }
+  }
+}

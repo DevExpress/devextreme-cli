@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsDevextremeAddLayout",
+  "title": "Add a DevExtreme layout to a DevExtreme Angular application",
+  "type": "object",
+  "properties": {
+    "layout": {
+      "type": "string",
+      "enum": ["side-nav-outer-toolbar", "side-nav-inner-toolbar"],
+      "description": "The type of a DevExtreme layout to add",
+      "default": "side-nav-outer-toolbar",
+      "x-prompt": {
+        "message": "What layout do you want to add?",
+        "type": "list",
+        "items": [
+          { "value": "side-nav-outer-toolbar", "label": "Side navigation (outer toolbar)" },
+          { "value": "side-nav-inner-toolbar", "label": "Side navigation (inner toolbar)" }
+        ]
+      }
+    },
+    "resolveConflicts": {
+      "type": "string",
+      "enum": ["createNew", "override"],
+      "description": "Specifies whether to override the existing app component or create a component with another name.",
+      "default": "createNew",
+      "x-prompt": {
+        "message": "How do you want to resolve the conflicts?",
+        "type": "list",
+        "items": [
+          { "value": "createNew", "label": "Create a new file" },
+          { "value": "override", "label": "Override the existing file" }
+        ]
+      }
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of a project to modify",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "description": "Specifies whether to skip the dependency package installation.",
+      "default": false
+    },
+    "updateBudgets": {
+      "type": "boolean"
+    }
+  }
+}

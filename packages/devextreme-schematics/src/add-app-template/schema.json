@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsDevextremeAddAppTemplate",
+  "title": "Add a DevExtreme layout template to an Anular application",
+  "type": "object",
+  "properties": {
+    "layout": {
+      "type": "string",
+      "enum": ["side-nav-outer-toolbar", "side-nav-inner-toolbar"],
+      "description": "The type of a DevExtreme layout to add",
+      "default": "side-nav-outer-toolbar",
+      "x-prompt": {
+        "message": "What layout do you want to add?",
+        "type": "list",
+        "items": [
+          { "value": "side-nav-outer-toolbar", "label": "Side navigation (outer toolbar)" },
+          { "value": "side-nav-inner-toolbar", "label": "Side navigation (inner toolbar)" }
+        ]
+      }
+    },
+    "resolveConflicts": {
+      "type": "string",
+      "enum": ["createNew", "override"],
+      "description": "Specifies whether to override the existing app component or create a component with another name.",
+      "default": "createNew",
+      "x-prompt": {
+        "message": "How do you want to resolve conflicts?",
+        "type": "list",
+        "items": [
+          { "value": "createNew", "label": "Create a new file" },
+          { "value": "override", "label": "Override the existing file" }
+        ]
+      }
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of a project to modify"
+    },
+    "dxversion": {
+      "type": "string",
+      "description": "The DevExtreme version",
+      "default": "latest"
+    },
+    "empty": {
+      "type": "boolean",
+      "description": "Specifies whether to skip sample views generation",
+      "default": false
+    },
+    "updateBudgets": {
+      "type": "boolean",
+      "visible": false
+    }
+  }
+}

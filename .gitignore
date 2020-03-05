@@ -1,15 +1,20 @@
 # IDEs
-.idea/
-jsconfig.json
-.vscode/
+**/.idea/
+**/jsconfig.json
+**/.vscode/
 
 # Misc
-node_modules/
-npm-debug.log*
-yarn-error.log*
-testing/sandbox/
-testing/__tests__/__diff_snapshots__/
+**/node_modules/
+**/npm-debug.log*
+**/yarn-error.log*
+packages/devextreme-cli/testing/sandbox/
+packages/devextreme-cli/testing/__tests__/__diff_snapshots__/
 
 # Mac OSX Finder files.
 **/.DS_Store
 .DS_Store
+
+# Schematics Outputs
+packages/devextreme-schematics/src/**/*.js
+packages/devextreme-schematics/src/**/*.js.map
+packages/devextreme-schematics/src/**/*.d.ts
