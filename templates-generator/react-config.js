@@ -121,4 +121,4 @@ const config = {
   ]
 }
 
-module.exports.config = config;
+exports.default = config;
