@@ -1,31 +1,31 @@
 const fs = require('fs');
 const path = require('path');
-const args = require('minimist')(process.argv.slice(2), {
-  alias: {
-    p: 'platform',
-    r: 'react'
+const buildOptions = require('minimist-options');
+const args = require('minimist')(process.argv.slice(2), buildOptions({
+  platform: {
+    type: 'string',
+    alias: 'p',
+    default: 'react'
   }
-});
+}));
+
 const commands = args['_'];
-
-if (!commands.length && args.platform) {
-  if (args.react) {
-    const config = require('./react-config.js', 'utf8').config;
-    getTemplate(config);
-  } else {
-    console.error('The DevExtreme command is not specified.');
-  }
-  process.exit();
+if (!commands.length && args.platform === 'react') {
+  const config = require('./react-config.js', 'utf8').config;
+  templateGenarator(config);
+} else {
+  console.error('The DevExtreme command is not specified.');
 }
+process.exit();
 
-function getTemplate(config) {
+function templateGenarator(config) {
   const sourcePath = path.normalize(`${config.commonPath}${config.sourcePath}`);
   const targetPath = `${config.commonPath}${config.targetPath}`;
 
   function getFiles(dir) {
     return fs.readdirSync(dir).reduce(function (list, file) {
-      var name = path.join(dir, file);
-      var isDir = fs.statSync(name).isDirectory();
+      const name = path.join(dir, file);
+      const isDir = fs.statSync(name).isDirectory();
       return list.concat(isDir ? getFiles(name) : [name]);
     }, []);
   }
