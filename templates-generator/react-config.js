@@ -1,124 +1,122 @@
 const config = {
-  commonPath: "packages/devextreme-cli/",
-  sourcePath: "testing/sandbox/react/my-app/src/",
-  targetPath: "templates/react/application/src/",
+  sourcePath: 'packages/devextreme-cli/testing/sandbox/react/my-app/src/',
+  targetPath: 'packages/devextreme-cli/templates/react/application/src/',
   update: [
-
     {
-      fileName: "app-routes.js",
+      fileName: 'app-routes.js',
       rules: [
         {
-          before: "import",
-          after: "<%=^empty%>import"
+          before: 'import',
+          after: '<%=^empty%>import'
         },
         {
-          before: "\];",
-          after: "<%=/empty%>];"
+          before: '];',
+          after: '<%=/empty%>];'
         },
         {
-          before: "export default \\[",
-          after: "<%=/empty%>export default [<%=^empty%>"
+          before: 'export default [',
+          after: '<%=/empty%>export default [<%=^empty%>'
         }
       ]
     },
     {
-      fileName: "app-info.js",
+      fileName: 'app-info.js',
       rules: [
         {
-          before: "My App",
-          after: "<%=project%>"
+          before: 'My App',
+          after: '<%=project%>'
         }
       ]
     },
     {
-      fileName: "app-navigation.js",
+      fileName: 'app-navigation.js',
       rules: [
         {
-          before: "= \\[",
-          after: "= [<%=^empty%>"
+          before: '= [',
+          after: '= [<%=^empty%>'
         },
         {
-          before: "\\];",
-          after: "<%=/empty%>];"
+          before: '];',
+          after: '<%=/empty%>];'
         }
       ]
     },
     {
-      fileName: "App.js",
+      fileName: 'App.js',
       rules: [
         {
-          before: "SideNavOuterToolbar",
-          after: "<%=layout%>"
+          before: 'SideNavOuterToolbar',
+          after: '<%=layout%>'
         },
         {
-          before: "SideNavInnerToolbar",
-          after: "<%=layout%>"
+          before: 'SideNavInnerToolbar',
+          after: '<%=layout%>'
         },
         {
-          before: "import 'devextreme/dist/css/dx.common.css';\n",
-          after: ""
+          before: 'import \'devextreme/dist/css/dx.common.css\';\n',
+          after: ''
         },
         {
-          before: "import './themes/generated/theme.base.css';\n",
-          after: ""
+          before: 'import \'./themes/generated/theme.base.css\';\n',
+          after: ''
         },
         {
-          before: "import './themes/generated/theme.additional.css';\n",
-          after: ""
+          before: 'import \'./themes/generated/theme.additional.css\';\n',
+          after: ''
         },
         {
-          before: "\\)\\)}",
-          after: "))}<%=^empty%>"
+          before: '))}',
+          after: '))}<%=^empty%>'
         },
         {
-          before: "<Redirect to={'/home'} />",
-          after: "<Redirect to={'/home'} /><%=/empty%>"
+          before: '<Redirect to={\'home\'} />',
+          after: '<Redirect to={\'home\'} /><%=/empty%>'
         }
       ]
     },
     {
-      fileName: "metadata.additional.json",
+      fileName: 'metadata.additional.json',
       rules: [
         {
-          before: "\"items\":\s+\[[^]*?\]",
-          after: "\"items\": []"
+          before: /"items":\s+\[[^]*?\]/,
+          after: '"items": []'
         },
         {
-          before: "\"baseTheme\": \".*?\"",
-          after: "\"baseTheme\": \"material.orange.dark\""
+          before: /"baseTheme": ".*?"/,
+          after: '"baseTheme": "material.orange.dark"'
         }
       ]
     },
     {
-      fileName: "metadata.base.json",
+      fileName: 'metadata.base.json',
       rules: [
         {
-          before: "\"items\":\s+\[[^]*?\]",
-          after: "\"items\": []"
+          before: /"items":\s+\[[^]*?\]/,
+          after: '"items": []'
         },
         {
-          before: "\"baseTheme\": \".*?\"",
-          after: "\"baseTheme\": \"material.orange.light\""
+          before: /"baseTheme":".*?"/,
+          after: '"baseTheme": "material.orange.light"'
         }
       ]
     }
   ],
   replace: [
     {
-      from: "pages",
-      to: "templates/react/sample-pages"
+      from: 'pages',
+      to: 'packages/devextreme-cli/templates/react/sample-pages'
     }
   ],
   ignore: [
-    "themes/generated",
-    "App.css",
-    "App.test.js",
-    "logo.svg",
-    "serviceWorker.js",
-    "setupTests.js",
-    "index.css",
-    "index.js"
+    'themes/generated',
+    'App.css',
+    'App.test.js',
+    'logo.svg',
+    'serviceWorker.js',
+    'setupTests.js',
+    'index.css',
+    'index.js'
   ]
 }
 
-exports.default = config;
+module.exports = config;
