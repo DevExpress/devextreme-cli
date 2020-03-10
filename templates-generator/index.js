@@ -3,13 +3,13 @@ const path = require('path');
 const args = require('minimist')(process.argv.slice(2), {
   alias: {
     p: 'platform',
-    react: 'react'
+    r: 'react'
   }
 });
 const commands = args['_'];
 
 if (!commands.length && args.platform) {
-  if (args.r) {
+  if (args.react) {
     const config = require('./react-config.js', 'utf8').config;
     getTemplate(config);
   } else {
