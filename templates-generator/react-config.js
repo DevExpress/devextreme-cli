@@ -1,4 +1,4 @@
-const config = {
+module.exports = {
   sourcePath: 'packages/devextreme-cli/testing/sandbox/react/my-app/src/',
   targetPath: 'packages/devextreme-cli/templates/react/application/src/',
   update: [
@@ -118,5 +118,3 @@ const config = {
     'index.js'
   ]
 }
-
-module.exports = config;
