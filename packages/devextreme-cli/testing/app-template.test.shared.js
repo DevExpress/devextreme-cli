@@ -19,7 +19,7 @@ module.exports = (env) => {
 
         beforeAll(async() => {
             browser = await puppeteer.launch({
-                args: ['--no-sandbox', '--disable-dev-shm-usage'],
+                args: ['--no-sandbox'],
                 userDataDir: chromiumUserDataDir
             });
             page = await browser.newPage();
