@@ -20,7 +20,7 @@ export default class UserPanel extends React.Component {
             items={menuItems}
             target={'.user-button'}
             showEvent={'dxclick'}
-            width={170}
+            width={172}
             cssClass={'user-menu'}
           >
             <Position my={'top center'} at={'bottom center'} />

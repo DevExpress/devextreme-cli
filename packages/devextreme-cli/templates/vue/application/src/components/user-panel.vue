@@ -11,7 +11,7 @@
       v-if="menuMode === 'context'"
       target=".user-button"
       :items="menuItems"
-      :width="170"
+      :width="172"
       show-event="dxclick"
       css-class="user-menu"
     >
