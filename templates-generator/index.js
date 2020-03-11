@@ -12,16 +12,17 @@ const args = require('minimist')(process.argv.slice(2), buildOptions({
 const commands = args['_'];
 (() => {
   if (commands.length) {
-    console.error('');
+    console.error(`Command doesn't need`);
     return;
   }
 
   const platforms = {
     react: './react-config.js'
   };
+
   function getConfg(platform) {
     if (!args.platform) {
-      console.error('The platform is not defined.');
+      console.error(`The platform is not defined.`);
       return;
     }
     if (platforms[platform]) {
@@ -65,12 +66,10 @@ const commands = args['_'];
     const updateRules = config.update.filter(updatedFile => file.includes(updatedFile.fileName))[0];
     if (updateRules) {
       updateRules.rules.forEach(element => {
-        return content.replace(element.before, element.after);
+        content = content.replace(element.before, element.after);
       });
     }
-    else {
-      return content;
-    }
+    return content;
   }
 
   function genarateTemplate(config) {

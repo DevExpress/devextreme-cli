@@ -69,8 +69,8 @@ const config = {
           after: '))}<%=^empty%>'
         },
         {
-          before: '<Redirect to={\'home\'} />',
-          after: '<Redirect to={\'home\'} /><%=/empty%>'
+          before: '<Redirect to={\'/home\'} />',
+          after: '<Redirect to={\'/home\'} /><%=/empty%>'
         }
       ]
     },
@@ -95,7 +95,7 @@ const config = {
           after: '"items": []'
         },
         {
-          before: /"baseTheme":".*?"/,
+          before: /"baseTheme": ".*?"/,
           after: '"baseTheme": "material.orange.light"'
         }
       ]
