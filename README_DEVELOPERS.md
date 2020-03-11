@@ -1,22 +1,29 @@
 # Testing
-To run tests for all target frameworks use command:
+
+To run tests for all target frameworks, use the following command:
+
 ```sh
 $ npm run test
 ```
-Test applications will be created in `testing/sandbox` folder. Script will run web server for each framework and perform snapshot testing.
-Etalon images are located in `testing/__tests__/__image_snapshots__` folder.
-Diff snapshots for failed tests can be found in `testing/__tests__/__diff_snapshots__` directory.
 
-Web server logs for each framework are stored in *logs* folder: `testing/sanbox/logs`.
+This script creates test applications in the `testing/sandbox` folder, starts a web server per framework, and runs the snapshot tests.
 
-### Run tests for already created applications
-To speed up local development and testing it is possible to run tests for already created applications:
+You can find test results in the following folders:
+
+- `testing/__tests__/__image_snapshots__` - reference snapshots
+- `testing/__tests__/__diff_snapshots__` - diff snapshots for failed tests
+- `testing/sandbox/logs` - server logs for each framework
+
+## Run Tests for Existing Test Applications
+
 ```sh
 npm run test-dev
 ```
 
-### Specify target framework
-To run tests for a separate target framework use `-t` flag. The following command runs only React tests:
+## Run Tests for an Individual Framework
+
 ```sh
+npm run test -t angular
+npm run test -t vue
 npm run test -t react
 ```
