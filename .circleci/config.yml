@@ -14,3 +14,5 @@ jobs:
       - store_artifacts:
           path: test-results.xml
           prefix: tests
+      - store_artifacts:
+          path: ./packages/devextreme-cli/testing/__tests__/__diff_snapshots__
