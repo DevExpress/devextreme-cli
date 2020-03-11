@@ -26,7 +26,7 @@ async function prepareSchematics() {
 exports.engine = 'angular';
 exports.port = 4200;
 exports.appPath = path.join(sandboxPath, appName);
-exports.npmArgs = ['start'];
+exports.npmArgs = ['start', '--', '--host', '0.0.0.0'];
 
 exports.createApp = async() => {
     await rimraf(sandboxPath);
