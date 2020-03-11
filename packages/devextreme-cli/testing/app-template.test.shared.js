@@ -61,8 +61,7 @@ module.exports = (env) => {
                                 await page.goto('about:blank');
                                 await page.setViewport(viewport);
                                 await page.goto(url, {
-                                    timeout: 0,
-                                    waitUntil: 'networkidle0'
+                                    timeout: 0
                                 });
 
                                 return page;
