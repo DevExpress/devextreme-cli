@@ -12,28 +12,44 @@ const args = require('minimist')(process.argv.slice(2), buildOptions({
 const commands = args['_'];
 (() => {
   if (commands.length) {
-    console.error(`Command doesn't need`);
+    console.error(`Command is redundent`);
     return;
   }
 
-  const platforms = {
+  const platformsConfig = {
     react: './react-config.js'
   };
 
-  function getConfg(platform) {
+  const config = getConfig(args.platform);
+
+  function getConfig(platform) {
     if (!args.platform) {
       console.error(`The platform is not defined.`);
       return;
     }
-    if (platforms[platform]) {
-      return require(platforms[platform], 'utf8');
+    if (platformsConfig[platform]) {
+      return require(platformsConfig[platform], 'utf8');
     } else {
       console.error(`Unknown platform '${platform}'`);
     }
   }
 
-  const config = getConfg(args.platform);
-  config && genarateTemplate(config);
+  config && generateTemplate();
+
+  function generateTemplate() {
+    const sourcePath = path.normalize(`${config.sourcePath}`);
+    const ignoredPaths = config.ignore.map(ignoredPath => path.join(sourcePath, ignoredPath));
+
+    const files = getFileList(sourcePath);
+    files.forEach(file => {
+      if (ignoredPaths.some(rule => file.includes(rule))) {
+        return;
+      }
+      let content = fs.readFileSync(file, 'utf8');
+      content = updateContent(file, content);
+      writeFile(file, content, sourcePath);
+    });
+  }
 
   function getFileList(dir) {
     return fs.readdirSync(dir).reduce(function (list, file) {
@@ -43,15 +59,24 @@ const commands = args['_'];
     }, []);
   }
 
-  function writeFile(file, content, sourcePath, config) {
-    const targetPath = `${config.targetPath}`;
+  function updateContent(file, content) {
+    const updateRules = config.update.filter(updatedFile => file.includes(updatedFile.fileName))[0];
+    if (updateRules) {
+      updateRules.rules.forEach(element => {
+        content = content.replace(element.before, element.after);
+      });
+    }
+    return content;
+  }
+
+  function writeFile(file, content, sourcePath) {
     const replaceRule = config.replace.filter(item => file.includes(item.from))[0];
     if (replaceRule) {
       const filePath = file.replace(`${sourcePath}${replaceRule.from}`, '');
       fs.writeFileSync(`${replaceRule.to}${filePath}`, content);
     }
     else {
-      const fullPath = `${targetPath}${file.replace(sourcePath, '')}`;
+      const fullPath = `${config.targetPath}${file.replace(sourcePath, '')}`;
       const fileName = path.basename(file);
       const shortPath = fullPath.replace(fileName, '');
       if (!fs.existsSync(shortPath)) {
@@ -62,29 +87,5 @@ const commands = args['_'];
     }
   }
 
-  function defineContent(file, content, config) {
-    const updateRules = config.update.filter(updatedFile => file.includes(updatedFile.fileName))[0];
-    if (updateRules) {
-      updateRules.rules.forEach(element => {
-        content = content.replace(element.before, element.after);
-      });
-    }
-    return content;
-  }
-
-  function genarateTemplate(config) {
-    const sourcePath = path.normalize(`${config.sourcePath}`);
-    const ignoredPaths = config.ignore.map(ignoredPath => path.join(sourcePath, ignoredPath));
-
-    const files = getFileList(sourcePath);
-    files.forEach(file => {
-      if (ignoredPaths.some(rule => file.includes(rule))) {
-        return;
-      }
-      let content = fs.readFileSync(file, 'utf8');
-      content = defineContent(file, content, config);
-      writeFile(file, content, sourcePath, config);
-    });
-  }
   process.exit();
 })();
