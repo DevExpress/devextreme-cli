@@ -3,6 +3,8 @@ jobs:
   build:
     docker:
       - image: circleci/node:12-browsers
+    environment:
+        LAUNCH_BROWSER: true
     steps:
       - checkout
       - run:
