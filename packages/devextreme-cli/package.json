@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "lint": "eslint ./",
-    "test": "npm run lint",
+    "test": "npm run lint && jest",
     "test-local": "npm run lint && jest",
     "test-dev": "cross-env TEST_MODE=dev jest"
   },
@@ -43,7 +43,7 @@
     "eslint-plugin-jest": "^22.5.1",
     "jest": "^24.9.0",
     "jest-image-snapshot": "^2.8.2",
-    "puppeteer": "^1.16.0",
+    "puppeteer": "^2.1.1",
     "rimraf": "^2.6.3",
     "tree-kill": "^1.2.1"
   }
