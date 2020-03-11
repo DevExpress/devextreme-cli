@@ -5,7 +5,7 @@ const args = require('minimist')(process.argv.slice(2), buildOptions({
   platform: {
     type: 'string',
     alias: 'p',
-    default: 'react'
+    default: ''
   }
 }));
 
@@ -16,28 +16,31 @@ const commands = args['_'];
     return;
   }
 
-  const platformsConfig = {
-    react: './react-config.js'
+  const platformsConfigs = {
+    'react': './react-config.js'
   };
 
-  const config = getConfig(args.platform);
-
   function getConfig(platform) {
-    if (!args.platform) {
-      console.error(`The platform is not defined.`);
-      return;
+    if (platformsConfigs[platform]) {
+      return require(platformsConfigs[platform], 'utf8');
     }
-    if (platformsConfig[platform]) {
-      return require(platformsConfig[platform], 'utf8');
-    } else {
-      console.error(`Unknown platform '${platform}'`);
+    else return;
+  }
+
+  if ((!args.platform)) {
+    for (platform in platformsConfigs) {
+      const config = getConfig(platform);
+      generateTemplate(config)
     }
   }
 
-  config && generateTemplate();
+  if (args.platform === 'react') {
+    const config = getConfig(args.platform);
+    config && generateTemplate(config);
+  }
 
-  function generateTemplate() {
-    const sourcePath = path.normalize(`${config.sourcePath}`);
+  function generateTemplate(config) {
+    const sourcePath = path.normalize(config.sourcePath);
     const ignoredPaths = config.ignore.map(ignoredPath => path.join(sourcePath, ignoredPath));
 
     const files = getFileList(sourcePath);
@@ -46,8 +49,8 @@ const commands = args['_'];
         return;
       }
       let content = fs.readFileSync(file, 'utf8');
-      content = updateContent(file, content);
-      writeFile(file, content, sourcePath);
+      content = updateContent(file, content, config);
+      writeFile(file, content, sourcePath, config);
     });
   }
 
@@ -59,8 +62,8 @@ const commands = args['_'];
     }, []);
   }
 
-  function updateContent(file, content) {
-    const updateRules = config.update.filter(updatedFile => file.includes(updatedFile.fileName))[0];
+  function updateContent(file, content, { update }) {
+    const updateRules = update.filter(updatedFile => file.includes(updatedFile.fileName))[0];
     if (updateRules) {
       updateRules.rules.forEach(element => {
         content = content.replace(element.before, element.after);
@@ -69,14 +72,14 @@ const commands = args['_'];
     return content;
   }
 
-  function writeFile(file, content, sourcePath) {
-    const replaceRule = config.replace.filter(item => file.includes(item.from))[0];
+  function writeFile(file, content, sourcePath, { replace, targetPath }) {
+    const replaceRule = replace.filter(item => file.includes(item.from))[0];
     if (replaceRule) {
       const filePath = file.replace(`${sourcePath}${replaceRule.from}`, '');
       fs.writeFileSync(`${replaceRule.to}${filePath}`, content);
     }
     else {
-      const fullPath = `${config.targetPath}${file.replace(sourcePath, '')}`;
+      const fullPath = `${targetPath}${file.replace(sourcePath, '')}`;
       const fileName = path.basename(file);
       const shortPath = fullPath.replace(fileName, '');
       if (!fs.existsSync(shortPath)) {
