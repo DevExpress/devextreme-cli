@@ -4,8 +4,7 @@ const buildOptions = require('minimist-options');
 const args = require('minimist')(process.argv.slice(2), buildOptions({
   platform: {
     type: 'string',
-    alias: 'p',
-    default: ''
+    alias: 'p'
   }
 }));
 
@@ -41,7 +40,7 @@ const commands = args['_'];
 
   function generateTemplate(config) {
     const sourcePath = path.normalize(config.sourcePath);
-    const ignoredPaths = config.ignore.map(ignoredPath => path.join(sourcePath, ignoredPath));
+    const ignoredPaths = config.ignoreList.map(ignoredPath => path.join(sourcePath, ignoredPath));
 
     const files = getFileList(sourcePath);
     files.forEach(file => {
@@ -62,18 +61,18 @@ const commands = args['_'];
     }, []);
   }
 
-  function updateContent(file, content, { update }) {
-    const updateRules = update.filter(updatedFile => file.includes(updatedFile.fileName))[0];
-    if (updateRules) {
-      updateRules.rules.forEach(element => {
+  function updateContent(file, content, { updateRules }) {
+    const rulesKey = Object.keys(updateRules).find(element => file.includes(element));
+    if (rulesKey) {
+      updateRules[rulesKey].forEach((element) => {
         content = content.replace(element.before, element.after);
-      });
+      })
     }
     return content;
   }
 
-  function writeFile(file, content, sourcePath, { replace, targetPath }) {
-    const replaceRule = replace.filter(item => file.includes(item.from))[0];
+  function writeFile(file, content, sourcePath, { replaceRules, targetPath }) {
+    const replaceRule = replaceRules.find(item => file.includes(item.from));
     if (replaceRule) {
       const filePath = file.replace(`${sourcePath}${replaceRule.from}`, '');
       fs.writeFileSync(`${replaceRule.to}${filePath}`, content);
