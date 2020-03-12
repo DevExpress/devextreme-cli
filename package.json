@@ -6,7 +6,7 @@
     "test-local": "lerna run --parallel test-local",
     "test-dev": "lerna run --stream test-dev",
     "postinstall": "lerna bootstrap",
-    "update-template": "node .\\templates-generator\\index.js"
+    "update-template": "node ./templates-generator/index.js"
   },
   "devDependencies": {
     "lerna": "^3.20.2"

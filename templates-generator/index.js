@@ -11,7 +11,7 @@ const args = require('minimist')(process.argv.slice(2), buildOptions({
 const commands = args['_'];
 (() => {
   if (commands.length) {
-    console.error(`Command is redundent`);
+    console.error(`Command is redundant`);
     return;
   }
 
@@ -23,7 +23,9 @@ const commands = args['_'];
     if (platformsConfigs[platform]) {
       return require(platformsConfigs[platform], 'utf8');
     }
-    else return;
+    else {
+      return;
+    }
   }
 
   if ((!args.platform)) {
