@@ -3,7 +3,7 @@
 To run tests for all target frameworks, use the following command:
 
 ```sh
-$ npm run test
+$ npm run test-local
 ```
 
 This script creates test applications in the `testing/sandbox` folder, starts a web server per framework, and runs the snapshot tests.
@@ -23,7 +23,7 @@ npm run test-dev
 ## Run Tests for an Individual Framework
 
 ```sh
-npm run test -t angular
-npm run test -t vue
-npm run test -t react
+npm run test-local -- -- -t angular
+npm run test-local -- -- -t vue
+npm run test-local -- -- -t react
 ```
