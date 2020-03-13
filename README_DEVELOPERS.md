@@ -10,9 +10,9 @@ This script creates test applications in the `testing/sandbox` folder, starts a 
 
 You can find test results in the following folders:
 
-- `testing/__tests__/__image_snapshots__` - reference snapshots
-- `testing/__tests__/__diff_snapshots__` - diff snapshots for failed tests
-- `testing/sandbox/logs` - server logs for each framework
+- `packages/devextreme-cli/testing/__tests__/__image_snapshots__` - reference snapshots
+- `packages/devextreme-cli/testing/__tests__/__diff_snapshots__` - diff snapshots for failed tests
+- `packages/devextreme-cli/testing/sandbox/logs` - server logs for each framework
 
 ## Run Tests for Existing Test Applications
 
