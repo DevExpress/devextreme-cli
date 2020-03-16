@@ -1,8 +1,8 @@
 const fs = require('fs');
-const path = require('path');
 const buildOptions = require('minimist-options');
+const path = require('path');
 const glob = require('glob');
-const micromatch = require("micromatch")
+const micromatch = require("micromatch");
 const args = require('minimist')(process.argv.slice(2), buildOptions({
   platform: {
     type: 'string',
@@ -81,7 +81,8 @@ const commands = args['_'];
     if (!fs.existsSync(shortPath)) {
       fs.mkdirSync(shortPath, { recursive: true });
     }
-    fs.writeFileSync(path.normalize(fullPath), content);
+
+    fs.writeFileSync(fullPath, content);
   }
   process.exit();
 })();
