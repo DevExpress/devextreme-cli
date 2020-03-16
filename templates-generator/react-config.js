@@ -1,8 +1,8 @@
 module.exports = {
-  sourcePath: 'packages/devextreme-cli/testing/sandbox/react/my-app/src/',
-  targetPath: 'packages/devextreme-cli/templates/react/application/src/',
+  sourcePath: 'packages/devextreme-cli/testing/sandbox/react/my-app/',
+  targetPath: 'packages/devextreme-cli/templates/react/application/',
   updateRules: {
-    'app-routes.js': [
+    '**/src/app-routes.js': [
       {
         before: 'import',
         after: '<%=^empty%>import'
@@ -16,13 +16,13 @@ module.exports = {
         after: '<%=/empty%>export default [<%=^empty%>'
       }
     ],
-    'app-info.js': [
+    '**/src/app-info.js': [
       {
         before: 'My App',
         after: '<%=project%>'
       }
     ],
-    'app-navigation.js': [
+    '**/src/app-navigation.js': [
       {
         before: '= [',
         after: '= [<%=^empty%>'
@@ -32,7 +32,7 @@ module.exports = {
         after: '<%=/empty%>];'
       }
     ],
-    'App.js': [
+    '**/src/App.js': [
       {
         before: 'SideNavOuterToolbar',
         after: '<%=layout%>'
@@ -62,7 +62,7 @@ module.exports = {
         after: '<Redirect to={\'/home\'} /><%=/empty%>'
       }
     ],
-    'themes/metadata.additional.json': [
+    '**/themes/metadata.additional.json': [
       {
         before: /"items":\s+\[[^]*?\]/,
         after: '"items": []'
@@ -72,7 +72,7 @@ module.exports = {
         after: '"baseTheme": "material.orange.dark"'
       }
     ],
-    'themes/metadata.base.json': [
+    '**/themes/metadata.base.json': [
       {
         before: /"items":\s+\[[^]*?\]/,
         after: '"items": []'
@@ -83,20 +83,26 @@ module.exports = {
       }
     ],
   },
-  replaceRules: [
-    {
-      from: 'pages',
+  replaceRules: {
+    '**/src/pages/**/*.*': {
+      from: 'src/pages',
       to: 'packages/devextreme-cli/templates/react/sample-pages'
+    },
+    '**/devextreme.json': {
+      from: '',
+      to: 'packages/devextreme-cli/templates/react/application/'
     }
-  ],
+  },
   ignoreList: [
-    'themes/generated',
-    'App.css',
-    'App.test.js',
-    'logo.svg',
-    'serviceWorker.js',
-    'setupTests.js',
-    'index.css',
-    'index.js'
+    '**/themes/generated/**/*.*',
+    '**/src/App.test.js',
+    '**/src/serviceWorker.js',
+    '**/src/setupTests.js',
+    '**/src/index.css',
+    '**/src/index.js',
+    '**/node_modules/**/*.*',
+    '**/public/**/*.*',
+    'package.json',
+    'package-lock.json'
   ]
 }

@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const buildOptions = require('minimist-options');
+const glob = require('glob');
+const micromatch = require("micromatch")
 const args = require('minimist')(process.argv.slice(2), buildOptions({
   platform: {
     type: 'string',
@@ -22,8 +24,7 @@ const commands = args['_'];
   function getConfig(platform) {
     if (platformsConfigs[platform]) {
       return require(platformsConfigs[platform], 'utf8');
-    }
-    else {
+    } else {
       return;
     }
   }
@@ -31,7 +32,7 @@ const commands = args['_'];
   if ((!args.platform)) {
     for (platform in platformsConfigs) {
       const config = getConfig(platform);
-      generateTemplate(config)
+      generateTemplate(config);
     }
   }
 
@@ -41,55 +42,46 @@ const commands = args['_'];
   }
 
   function generateTemplate(config) {
-    const sourcePath = path.normalize(config.sourcePath);
-    const ignoredPaths = config.ignoreList.map(ignoredPath => path.join(sourcePath, ignoredPath));
-
-    const files = getFileList(sourcePath);
+    const files = glob.sync('**/*.{js,scss,json}', {
+      cwd: config.sourcePath,
+      ignore: config.ignoreList
+    });
     files.forEach(file => {
-      if (ignoredPaths.some(rule => file.includes(rule))) {
-        return;
-      }
-      let content = fs.readFileSync(file, 'utf8');
+      let content = fs.readFileSync(`${config.sourcePath}${file}`, 'utf8');
       content = updateContent(file, content, config);
-      writeFile(file, content, sourcePath, config);
+      writeFile(file, content, config);
     });
   }
 
-  function getFileList(dir) {
-    return fs.readdirSync(dir).reduce(function (list, file) {
-      const name = path.join(dir, file);
-      const isDir = fs.statSync(name).isDirectory();
-      return list.concat(isDir ? getFileList(name) : [name]);
-    }, []);
-  }
-
   function updateContent(file, content, { updateRules }) {
-    const rulesKey = Object.keys(updateRules).find(element => file.includes(element));
-    if (rulesKey) {
-      updateRules[rulesKey].forEach((element) => {
-        content = content.replace(element.before, element.after);
+    const updateKey = Object.keys(updateRules).find(item => micromatch.isMatch(file, item))
+    if (updateKey) {
+      updateRules[updateKey].forEach((updateRule) => {
+        content = content.replace(updateRule.before, updateRule.after);
       })
     }
+
     return content;
   }
 
-  function writeFile(file, content, sourcePath, { replaceRules, targetPath }) {
-    const replaceRule = replaceRules.find(item => file.includes(item.from));
-    if (replaceRule) {
-      const filePath = file.replace(`${sourcePath}${replaceRule.from}`, '');
-      fs.writeFileSync(`${replaceRule.to}${filePath}`, content);
+  function writeFile(file, content, { replaceRules, targetPath }) {
+    const replaceKey = Object.keys(replaceRules).find(item => micromatch.isMatch(file, item))
+    let fullPath = '';
+    if (replaceKey) {
+      fullPath = `${replaceRules[replaceKey].to}${file.replace(replaceRules[replaceKey].from, '')}`;
+    } else {
+      fullPath = `${targetPath}${file}`;
     }
-    else {
-      const fullPath = `${targetPath}${file.replace(sourcePath, '')}`;
-      const fileName = path.basename(file);
-      const shortPath = fullPath.replace(fileName, '');
-      if (!fs.existsSync(shortPath)) {
-        fs.mkdirSync(shortPath, { recursive: true });
-      }
-
-      fs.writeFileSync(fullPath, content);
-    }
+    createNestedFolder(fullPath, content);
   }
 
+  function createNestedFolder(fullPath, content) {
+    const fileName = path.basename(fullPath);
+    const shortPath = fullPath.replace(fileName, '');
+    if (!fs.existsSync(shortPath)) {
+      fs.mkdirSync(shortPath, { recursive: true });
+    }
+    fs.writeFileSync(path.normalize(fullPath), content);
+  }
   process.exit();
 })();
