@@ -6,7 +6,7 @@ To run tests for all target frameworks, use the following command:
 $ npm run test-local
 ```
 
-This script creates test applications in the `testing/sandbox` folder, starts a web server per framework, and runs the snapshot tests.
+This script creates test applications in the `testing/sandbox` folder, starts a web server for each framework, and runs the snapshot tests.
 
 You can find test results in the following folders:
 
