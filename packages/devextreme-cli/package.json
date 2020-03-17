@@ -21,7 +21,10 @@
   ],
   "scripts": {
     "lint": "eslint ./",
-    "test": "npm run lint && jest",
+    "test": "npm run test:angular && npm run test:react && npm run test:vue",
+    "test:angular": "jest ./testing/__tests__/angular.test.js",
+    "test:react": "jest ./testing/__tests__/react.test.js",
+    "test:vue": "jest ./testing/__tests__/vue.test.js",
     "test-local": "npm run lint && jest",
     "test-dev": "cross-env TEST_MODE=dev jest"
   },

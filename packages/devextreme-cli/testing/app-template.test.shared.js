@@ -35,7 +35,7 @@ module.exports = (env) => {
 
         afterAll(async() => {
             await devServer.stop();
-            await browser.close();
+            await page.close();
         });
 
         Object.keys(themes).forEach((theme) => {
