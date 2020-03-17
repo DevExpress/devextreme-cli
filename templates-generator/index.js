@@ -54,9 +54,9 @@ const commands = args['_'];
   }
 
   function updateContent(file, content, { updateRules }) {
-    const updateKey = Object.keys(updateRules).find(item => micromatch.isMatch(file, item))
-    if (updateKey) {
-      updateRules[updateKey].forEach((updateRule) => {
+    const ruleKey = Object.keys(updateRules).find(key => micromatch.isMatch(file, key))
+    if (ruleKey) {
+      updateRules[ruleKey].forEach((updateRule) => {
         content = content.replace(updateRule.before, updateRule.after);
       })
     }
@@ -65,24 +65,24 @@ const commands = args['_'];
   }
 
   function writeFile(file, content, { replaceRules, targetPath }) {
-    const replaceKey = Object.keys(replaceRules).find(item => micromatch.isMatch(file, item))
     let fullPath = '';
-    if (replaceKey) {
-      fullPath = `${replaceRules[replaceKey].to}${file.replace(replaceRules[replaceKey].from, '')}`;
+    const ruleKey = Object.keys(replaceRules).find(key => micromatch.isMatch(file, key))
+    if (ruleKey) {
+      fullPath = `${replaceRules[ruleKey].to}${file.replace(replaceRules[ruleKey].from, '')}`;
     } else {
       fullPath = `${targetPath}${file}`;
     }
+
     createNestedFolder(fullPath, content);
-  }
-
-  function createNestedFolder(fullPath, content) {
-    const fileName = path.basename(fullPath);
-    const shortPath = fullPath.replace(fileName, '');
-    if (!fs.existsSync(shortPath)) {
-      fs.mkdirSync(shortPath, { recursive: true });
-    }
-
     fs.writeFileSync(fullPath, content);
   }
+
+  function createNestedFolder(fullPath) {
+    const dirName = path.dirname(fullPath);
+    if (!fs.existsSync(dirName)) {
+      fs.mkdirSync(dirName, { recursive: true });
+    }
+  }
+  
   process.exit();
 })();
