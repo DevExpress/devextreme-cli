@@ -42,37 +42,39 @@ const commands = args['_'];
   }
 
   function generateTemplate(config) {
-    const files = glob.sync('**/*.{js,scss,json}', {
+    const relativePaths = glob.sync(config.sourceGlob, {
       cwd: config.sourcePath,
       ignore: config.ignoreList
     });
-    files.forEach(file => {
-      let content = fs.readFileSync(`${config.sourcePath}${file}`, 'utf8');
-      content = updateContent(file, content, config);
-      writeFile(file, content, config);
+    relativePaths.forEach(relativePath => {
+      let content = fs.readFileSync(`${config.sourcePath}${relativePath}`, 'utf8');
+      content = updateContent(relativePath, content, config.updateRules);
+
+      writeFile(relativePath, content, config);
     });
   }
 
-  function updateContent(file, content, { updateRules }) {
-    const ruleKey = Object.keys(updateRules).find(key => micromatch.isMatch(file, key))
-    if (ruleKey) {
-      updateRules[ruleKey].forEach((updateRule) => {
-        content = content.replace(updateRule.before, updateRule.after);
+  function updateContent(relativePath, content, updateRules) {
+    const rules = updateRules.filter(rule => micromatch.isMatch(relativePath, rule.pattern));
+    if (rules) {
+      rules.forEach(rule => {
+        rule.conditions.forEach(condition => {
+          content = content.replace(condition.before, condition.after);
+        })
       })
     }
 
     return content;
   }
 
-  function writeFile(file, content, { replaceRules, targetPath }) {
+  function writeFile(relativePath, content, { replaceRules, targetPath, sourcePath }) {
     let fullPath = '';
-    const ruleKey = Object.keys(replaceRules).find(key => micromatch.isMatch(file, key))
+    const ruleKey = replaceRules.find(rule => micromatch.isMatch(relativePath, rule.pattern));
     if (ruleKey) {
-      fullPath = `${replaceRules[ruleKey].to}${file.replace(replaceRules[ruleKey].from, '')}`;
+      fullPath = `${ruleKey.rule.to}${relativePath.replace(ruleKey.rule.from, '')}`;
     } else {
-      fullPath = `${targetPath}${file}`;
+      fullPath = `${targetPath}${relativePath}`;
     }
-
     createNestedFolder(fullPath, content);
     fs.writeFileSync(fullPath, content);
   }
@@ -83,6 +85,6 @@ const commands = args['_'];
       fs.mkdirSync(dirName, { recursive: true });
     }
   }
-  
+
   process.exit();
 })();
