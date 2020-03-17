@@ -18,73 +18,63 @@ const commands = args['_'];
   }
 
   const platformsConfigs = {
-    'react': './react-config.js'
+    react: './react-config.js'
   };
 
-  function getConfig(platform) {
-    if (platformsConfigs[platform]) {
-      return require(platformsConfigs[platform], 'utf8');
-    } else {
-      return;
-    }
+  if (Object.keys(platformsConfigs).some(item => item === args.platform)) {
+    const config = require(platformsConfigs[args.platform], 'utf8');
+    generateTemplate(config);
   }
-
-  if ((!args.platform)) {
+  else if (!args.platform) {
     for (platform in platformsConfigs) {
-      const config = getConfig(platform);
+      const config = require(platformsConfigs[platform], 'utf8');
       generateTemplate(config);
     }
   }
-
-  if (args.platform === 'react') {
-    const config = getConfig(args.platform);
-    config && generateTemplate(config);
+  else {
+    console.error(`Platform doesn't exist`);
   }
 
-  function generateTemplate(config) {
-    const relativePaths = glob.sync(config.sourceGlob, {
-      cwd: config.sourcePath,
-      ignore: config.ignoreList
-    });
-    relativePaths.forEach(relativePath => {
-      let content = fs.readFileSync(`${config.sourcePath}${relativePath}`, 'utf8');
-      content = updateContent(relativePath, content, config.updateRules);
+    function generateTemplate(config) {
+      const relativePaths = glob.sync(config.sourceGlob, {
+        cwd: config.sourcePath,
+        ignore: config.ignoreList
+      });
+      relativePaths.forEach(relativePath => {
+        let content = fs.readFileSync(`${config.sourcePath}${relativePath}`, 'utf8');
+        content = updateContent(relativePath, content, config.updateRules);
 
-      writeFile(relativePath, content, config);
-    });
-  }
+        writeFile(relativePath, content, config);
+      });
+    }
 
-  function updateContent(relativePath, content, updateRules) {
-    const rules = updateRules.filter(rule => micromatch.isMatch(relativePath, rule.pattern));
-    if (rules) {
+    function updateContent(relativePath, content, updateRules) {
+      const rules = updateRules.filter(rule => micromatch.isMatch(relativePath, rule.pattern));
       rules.forEach(rule => {
         rule.conditions.forEach(condition => {
           content = content.replace(condition.before, condition.after);
         })
       })
+
+      return content;
     }
 
-    return content;
-  }
+    function writeFile(relativePath, content, { replaceRules, targetPath, sourcePath }) {
+      const ruleKey = replaceRules.find(rule => micromatch.isMatch(relativePath, rule.pattern));
+      const fullPath = ruleKey
+        ? `${ruleKey.rule.to}${relativePath.replace(ruleKey.rule.from, '')}`
+        : `${targetPath}${relativePath}`;
 
-  function writeFile(relativePath, content, { replaceRules, targetPath, sourcePath }) {
-    let fullPath = '';
-    const ruleKey = replaceRules.find(rule => micromatch.isMatch(relativePath, rule.pattern));
-    if (ruleKey) {
-      fullPath = `${ruleKey.rule.to}${relativePath.replace(ruleKey.rule.from, '')}`;
-    } else {
-      fullPath = `${targetPath}${relativePath}`;
+      createNestedFolder(fullPath, content);
+      fs.writeFileSync(fullPath, content);
     }
-    createNestedFolder(fullPath, content);
-    fs.writeFileSync(fullPath, content);
-  }
 
-  function createNestedFolder(fullPath) {
-    const dirName = path.dirname(fullPath);
-    if (!fs.existsSync(dirName)) {
-      fs.mkdirSync(dirName, { recursive: true });
+    function createNestedFolder(fullPath) {
+      const dirName = path.dirname(fullPath);
+      if (!fs.existsSync(dirName)) {
+        fs.mkdirSync(dirName, { recursive: true });
+      }
     }
-  }
 
-  process.exit();
+    process.exit();
 })();
