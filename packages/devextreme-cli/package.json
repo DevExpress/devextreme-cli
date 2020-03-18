@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "lint": "eslint ./",
-    "test": "npm run test:angular && npm run test:react && npm run test:vue",
+    "test": "jest --runInBand",
     "test:angular": "jest ./testing/__tests__/angular.test.js",
     "test:react": "jest ./testing/__tests__/react.test.js",
     "test:vue": "jest ./testing/__tests__/vue.test.js",
