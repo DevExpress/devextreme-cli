@@ -2,10 +2,10 @@ module.exports = {
   sourcePath: 'packages/devextreme-cli/testing/sandbox/react/my-app/',
   targetPath: 'packages/devextreme-cli/templates/react/application/',
   sourceGlob: '**/*.{js,scss,json}',
-  updateRules: [
+  updateInfo: [
     {
       pattern: '**/src/app-routes.js',
-      conditions: [
+      definitions: [
         {
           before: 'import',
           after: '<%=^empty%>import'
@@ -22,7 +22,7 @@ module.exports = {
     },
     {
       pattern: '**/src/app-info.js',
-      conditions: [{
+      definitions: [{
         before: 'My App',
         after: '<%=project%>'
       }
@@ -30,7 +30,7 @@ module.exports = {
     },
     {
       pattern: '**/src/app-navigation.js',
-      conditions: [
+      definitions: [
         {
           before: '= [',
           after: '= [<%=^empty%>'
@@ -43,7 +43,7 @@ module.exports = {
     },
     {
       pattern: '**/src/App.js',
-      conditions: [
+      definitions: [
         {
           before: 'SideNavOuterToolbar',
           after: '<%=layout%>'
@@ -76,7 +76,7 @@ module.exports = {
     },
     {
       pattern: '**/themes/metadata.additional.json',
-      conditions: [
+      definitions: [
         {
           before: /"baseTheme": ".*?"/,
           after: '"baseTheme": "material.orange.dark"'
@@ -85,7 +85,7 @@ module.exports = {
     },
     {
       pattern: '**/themes/metadata.base.json',
-      conditions: [
+      definitions: [
         {
           before: /"baseTheme": ".*?"/,
           after: '"baseTheme": "material.orange.light"'
@@ -94,7 +94,7 @@ module.exports = {
     },
     {
       pattern: '**/themes/metadata.**.json',
-      conditions: [
+      definitions: [
         {
           before: /"items":\s+\[[^]*?\]/,
           after: '"items": []'
@@ -102,19 +102,19 @@ module.exports = {
       ]
     }
   ],
-  replaceRules: [
+  moveRules: [
     {
       pattern: '**/src/pages/**/*.*',
-      rule: {
-        from: 'src/pages',
-        to: 'packages/devextreme-cli/templates/react/sample-pages'
+      definition: {
+        sourcePath: 'src/pages',
+        targetPath: 'packages/devextreme-cli/templates/react/sample-pages'
       }
     },
     {
       pattern: '**/devextreme.json',
-      rule: {
-        from: '',
-        to: 'packages/devextreme-cli/templates/react/application/'
+      definition: {
+        sourcePath: '',
+        targetPath: 'packages/devextreme-cli/templates/react/application/'
       }
     }
   ],

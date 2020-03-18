@@ -42,27 +42,27 @@ const commands = args['_'];
       });
       relativePaths.forEach(relativePath => {
         let content = fs.readFileSync(`${config.sourcePath}${relativePath}`, 'utf8');
-        content = updateContent(relativePath, content, config.updateRules);
+        content = updateContent(relativePath, content, config.updateInfo);
 
         writeFile(relativePath, content, config);
       });
     }
 
-    function updateContent(relativePath, content, updateRules) {
-      const rules = updateRules.filter(rule => micromatch.isMatch(relativePath, rule.pattern));
+    function updateContent(relativePath, content, updateInfo) {
+      const rules = updateInfo.filter(info => micromatch.isMatch(relativePath, info.pattern));
       rules.forEach(rule => {
-        rule.conditions.forEach(condition => {
-          content = content.replace(condition.before, condition.after);
+        rule.definitions.forEach(definition => {
+          content = content.replace(definition.before, definition.after);
         })
       })
 
       return content;
     }
 
-    function writeFile(relativePath, content, { replaceRules, targetPath, sourcePath }) {
-      const ruleKey = replaceRules.find(rule => micromatch.isMatch(relativePath, rule.pattern));
-      const fullPath = ruleKey
-        ? `${ruleKey.rule.to}${relativePath.replace(ruleKey.rule.from, '')}`
+    function writeFile(relativePath, content, { moveRules, targetPath }) {
+      const rule = moveRules.find(rule => micromatch.isMatch(relativePath, rule.pattern));
+      const fullPath = rule
+        ? `${rule.definition.targetPath}${relativePath.replace(rule.definition.sourcePath, '')}`
         : `${targetPath}${relativePath}`;
 
       createNestedFolder(fullPath, content);
