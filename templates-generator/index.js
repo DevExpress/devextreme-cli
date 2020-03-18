@@ -10,16 +10,16 @@ const args = require('minimist')(process.argv.slice(2), buildOptions({
     }
 }));
 
+const platformsConfigs = {
+    react: './react-config.js'
+};
+
 const commands = args['_'];
 (() => {
     if(commands.length) {
         console.error('Command is redundant');
         return;
     }
-
-    const platformsConfigs = {
-        react: './react-config.js'
-    };
 
     if(args.platform in platformsConfigs) {
         generateTemplate(args.platform);
