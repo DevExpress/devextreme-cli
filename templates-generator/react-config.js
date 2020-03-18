@@ -119,9 +119,9 @@ module.exports = {
         }
     ],
     ignoreList: [
-        '**/themes/generated/**/*.*',
+        'src/themes/generated/*.*',
         'node_modules/**/*.*',
-        'public/**/*.*',
+        'public/*.*',
         'src/App.test.js',
         'src/setupTests.js',
         'src/serviceWorker.js',
