@@ -4,7 +4,7 @@ module.exports = {
     sourceGlob: '**/*.{js,scss,json}',
     updateInfo: [
         {
-            pattern: '**/src/app-routes.js',
+            glob: '**/src/app-routes.js',
             definitions: [
                 {
                     before: 'import',
@@ -21,7 +21,7 @@ module.exports = {
             ],
         },
         {
-            pattern: '**/src/app-info.js',
+            glob: '**/src/app-info.js',
             definitions: [{
                 before: 'My App',
                 after: '<%=project%>'
@@ -29,7 +29,7 @@ module.exports = {
             ],
         },
         {
-            pattern: '**/src/app-navigation.js',
+            glob: '**/src/app-navigation.js',
             definitions: [
                 {
                     before: '= [',
@@ -42,7 +42,7 @@ module.exports = {
             ]
         },
         {
-            pattern: '**/src/App.js',
+            glob: '**/src/App.js',
             definitions: [
                 {
                     before: 'SideNavOuterToolbar',
@@ -75,7 +75,7 @@ module.exports = {
             ]
         },
         {
-            pattern: '**/themes/metadata.additional.json',
+            glob: '**/themes/metadata.additional.json',
             definitions: [
                 {
                     before: /"baseTheme": ".*?"/,
@@ -84,7 +84,7 @@ module.exports = {
             ]
         },
         {
-            pattern: '**/themes/metadata.base.json',
+            glob: '**/themes/metadata.base.json',
             definitions: [
                 {
                     before: /"baseTheme": ".*?"/,
@@ -93,7 +93,7 @@ module.exports = {
             ]
         },
         {
-            pattern: '**/themes/metadata.**.json',
+            glob: '**/themes/metadata.**.json',
             definitions: [
                 {
                     before: /"items":\s+\[[^]*?\]/,
@@ -104,14 +104,14 @@ module.exports = {
     ],
     moveRules: [
         {
-            pattern: '**/src/pages/**/*.*',
+            glob: '**/src/pages/**/*.*',
             definition: {
                 sourcePath: 'src/pages',
                 targetPath: 'packages/devextreme-cli/templates/react/sample-pages'
             }
         },
         {
-            pattern: '**/devextreme.json',
+            glob: '**/devextreme.json',
             definition: {
                 sourcePath: '',
                 targetPath: 'packages/devextreme-cli/templates/react/application/'

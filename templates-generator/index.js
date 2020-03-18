@@ -46,7 +46,7 @@ const commands = args['_'];
     }
 
     function updateContent(relativePath, content, updateInfo) {
-        const rules = updateInfo.filter(info => micromatch.isMatch(relativePath, info.pattern));
+        const rules = updateInfo.filter(info => micromatch.isMatch(relativePath, info.glob));
         rules.forEach(rule => {
             rule.definitions.forEach(definition => {
                 content = content.replace(definition.before, definition.after);
@@ -57,7 +57,7 @@ const commands = args['_'];
     }
 
     function writeFile(relativePath, content, { moveRules, targetPath }) {
-        const rule = moveRules.find(rule => micromatch.isMatch(relativePath, rule.pattern));
+        const rule = moveRules.find(rule => micromatch.isMatch(relativePath, rule.glob));
         const fullPath = rule
             ? `${rule.definition.targetPath}${relativePath.replace(rule.definition.sourcePath, '')}`
             : `${targetPath}${relativePath}`;
