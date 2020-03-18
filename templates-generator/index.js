@@ -3,12 +3,12 @@ const buildOptions = require('minimist-options');
 const path = require('path');
 const glob = require('glob');
 const micromatch = require('micromatch');
-const args = require('minimist')(process.argv.slice(2), buildOptions({
-    platform: {
+const args = require('minimist')(process.argv.slice(2),
+    buildOptions({ platform: {
         type: 'string',
         alias: 'p'
     }
-}));
+    }));
 
 const platformsConfigs = {
     react: './react-config.js'
@@ -17,7 +17,7 @@ const platformsConfigs = {
 const commands = args['_'];
 (() => {
     if(commands.length) {
-        console.error('Command is redundant');
+        console.error(`Unexpected command(s) '${args._}'`);
         return;
     }
 
@@ -29,6 +29,7 @@ const commands = args['_'];
         }
     } else {
         console.error('Platform doesn\'t exist');
+        process.exit(1);
     }
 
     function generateTemplate(platform) {
@@ -43,6 +44,8 @@ const commands = args['_'];
 
             writeFile(relativePath, content, config);
         });
+
+        process.exit();
     }
 
     function updateContent(relativePath, content, updateInfo) {
@@ -72,6 +75,4 @@ const commands = args['_'];
             fs.mkdirSync(dirName, { recursive: true });
         }
     }
-
-    process.exit();
 })();
