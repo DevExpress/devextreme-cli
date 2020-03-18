@@ -17,7 +17,6 @@ const platformsConfigs = {
 const commands = args['_'];
     if(commands.length) {
         throw new Error(`Unexpected command(s) '${args._}'`);
-        process.exit(1);
     }
 
     if(args.platform in platformsConfigs) {
@@ -42,8 +41,6 @@ const commands = args['_'];
 
             writeFile(relativePath, content, config);
         });
-
-        process.exit();
     }
 
     function updateContent(relativePath, content, updateInfo) {
