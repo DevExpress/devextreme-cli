@@ -22,9 +22,6 @@
   "scripts": {
     "lint": "eslint ./",
     "test": "npm run lint && jest --runInBand",
-    "test:angular": "jest ./testing/__tests__/angular.test.js",
-    "test:react": "jest ./testing/__tests__/react.test.js",
-    "test:vue": "jest ./testing/__tests__/vue.test.js",
     "test-dev": "cross-env TEST_MODE=dev jest"
   },
   "author": "Developer Express Inc.",
