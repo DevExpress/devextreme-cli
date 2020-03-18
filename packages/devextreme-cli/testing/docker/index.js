@@ -1,6 +1,5 @@
 const puppeteer = require('puppeteer');
 
-
 puppeteer.launch({
     headless: true,
     args: [
