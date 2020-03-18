@@ -15,10 +15,9 @@ const platformsConfigs = {
 };
 
 const commands = args['_'];
-(() => {
     if(commands.length) {
-        console.error(`Unexpected command(s) '${args._}'`);
-        return;
+        throw new Error(`Unexpected command(s) '${args._}'`);
+        process.exit(1);
     }
 
     if(args.platform in platformsConfigs) {
@@ -28,8 +27,7 @@ const commands = args['_'];
             generateTemplate(platform);
         }
     } else {
-        console.error('Platform doesn\'t exist');
-        process.exit(1);
+        throw new Error('Platform doesn\'t exist');
     }
 
     function generateTemplate(platform) {
@@ -75,4 +73,3 @@ const commands = args['_'];
             fs.mkdirSync(dirName, { recursive: true });
         }
     }
-})();
