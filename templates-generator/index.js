@@ -21,7 +21,7 @@ const commands = args['_'];
         react: './react-config.js'
     };
 
-    if(Object.keys(platformsConfigs).some(item => item === args.platform)) {
+    if(args.platform in platformsConfigs) {
         generateTemplate(args.platform);
     } else if(!args.platform) {
         for(let platform in platformsConfigs) {
