@@ -37,14 +37,14 @@ const commands = args['_'];
         });
         relativePaths.forEach(relativePath => {
             let content = fs.readFileSync(`${config.sourcePath}${relativePath}`, 'utf8');
-            content = updateContent(relativePath, content, config.updateInfo);
+            content = updateContent(relativePath, content, config.updateRules);
 
             writeFile(relativePath, content, config);
         });
     }
 
-    function updateContent(relativePath, content, updateInfo) {
-        const rules = updateInfo.filter(info => micromatch.isMatch(relativePath, info.glob));
+    function updateContent(relativePath, content, updateRules) {
+        const rules = updateRules.filter(info => micromatch.isMatch(relativePath, info.glob));
         rules.forEach(rule => {
             rule.definitions.forEach(definition => {
                 content = content.replace(definition.before, definition.after);

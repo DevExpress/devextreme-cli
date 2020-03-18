@@ -2,9 +2,9 @@ module.exports = {
     sourcePath: 'packages/devextreme-cli/testing/sandbox/react/my-app/',
     targetPath: 'packages/devextreme-cli/templates/react/application/',
     sourceGlob: '**/*.{js,scss,json}',
-    updateInfo: [
+    updateRules: [
         {
-            glob: '**/src/app-routes.js',
+            glob: 'src/app-routes.js',
             definitions: [
                 {
                     before: 'import',
@@ -21,7 +21,7 @@ module.exports = {
             ],
         },
         {
-            glob: '**/src/app-info.js',
+            glob: 'src/app-info.js',
             definitions: [{
                 before: 'My App',
                 after: '<%=project%>'
@@ -29,7 +29,7 @@ module.exports = {
             ],
         },
         {
-            glob: '**/src/app-navigation.js',
+            glob: 'src/app-navigation.js',
             definitions: [
                 {
                     before: '= [',
@@ -42,7 +42,7 @@ module.exports = {
             ]
         },
         {
-            glob: '**/src/App.js',
+            glob: 'src/App.js',
             definitions: [
                 {
                     before: 'SideNavOuterToolbar',
@@ -75,7 +75,7 @@ module.exports = {
             ]
         },
         {
-            glob: '**/themes/metadata.additional.json',
+            glob: 'themes/metadata.additional.json',
             definitions: [
                 {
                     before: /"baseTheme": ".*?"/,
@@ -84,7 +84,7 @@ module.exports = {
             ]
         },
         {
-            glob: '**/themes/metadata.base.json',
+            glob: 'themes/metadata.base.json',
             definitions: [
                 {
                     before: /"baseTheme": ".*?"/,
@@ -93,7 +93,7 @@ module.exports = {
             ]
         },
         {
-            glob: '**/themes/metadata.**.json',
+            glob: 'themes/metadata.**.json',
             definitions: [
                 {
                     before: /"items":\s+\[[^]*?\]/,
@@ -104,14 +104,14 @@ module.exports = {
     ],
     moveRules: [
         {
-            glob: '**/src/pages/**/*.*',
+            glob: 'src/pages/**/*.*',
             definition: {
                 sourcePath: 'src/pages',
                 targetPath: 'packages/devextreme-cli/templates/react/sample-pages'
             }
         },
         {
-            glob: '**/devextreme.json',
+            glob: 'devextreme.json',
             definition: {
                 sourcePath: '',
                 targetPath: 'packages/devextreme-cli/templates/react/application/'
@@ -120,12 +120,12 @@ module.exports = {
     ],
     ignoreList: [
         '**/themes/generated/**/*.*',
-        '**/src/App.test.js',
-        '**/src/setupTests.js',
-        '**/src/serviceWorker.js',
-        '**/src/index.js',
-        '**/node_modules/**/*.*',
-        '**/public/**/*.*',
+        'node_modules/**/*.*',
+        'public/**/*.*',
+        'src/App.test.js',
+        'src/setupTests.js',
+        'src/serviceWorker.js',
+        'src/index.js',
         'package.json',
         'package-lock.json'
     ]
