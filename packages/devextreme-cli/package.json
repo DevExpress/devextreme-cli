@@ -22,7 +22,9 @@
   "scripts": {
     "lint": "eslint ./",
     "test": "npm run lint && jest --runInBand",
-    "test-dev": "cross-env TEST_MODE=dev jest"
+    "test-dev": "cross-env TEST_MODE=dev jest",
+    "docker:build": "docker build --rm -f \"testing/docker/Dockerfile\" -t devextreme-cli:latest \"testing/docker\"",
+    "docker:run": "docker run --rm -d  -p 9222:9222/tcp devextreme-cli:latest"
   },
   "author": "Developer Express Inc.",
   "repository": "https://github.com/DevExpress/devextreme-cli",
