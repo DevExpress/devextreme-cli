@@ -61,7 +61,7 @@ module.exports = class DevServer {
             metadata.items = items;
             metadata.baseTheme = `${themes[theme]}.${mode}`;
 
-            fs.writeFileSync(themeFilePath, JSON.stringify(metadata, null, '  ').concat('\n'), 'utf8');
+            fs.writeFileSync(themeFilePath, `${JSON.stringify(metadata, null, '  ')}\n`, 'utf8');
         });
 
         await runCommand('node', [
