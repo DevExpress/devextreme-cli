@@ -1,9 +1,20 @@
 # Testing
 
+## Build and run docker image with browser
+
+```sh
+$ lerna run docker:build
+```
+```sh
+$ lerna run docker:run
+```
+
+## Run tests 
+
 To run tests for all target frameworks, use the following command:
 
 ```sh
-$ npm run test-local
+$ npm run test
 ```
 
 This script creates test applications in the `testing/sandbox` folder, starts a web server for each framework, and runs the snapshot tests.
@@ -23,7 +34,7 @@ npm run test-dev
 ## Run Tests for an Individual Framework
 
 ```sh
-npm run test-local -- -- -t angular
-npm run test-local -- -- -t vue
-npm run test-local -- -- -t react
+npm run test -- -- -t angular
+npm run test -- -- -t vue
+npm run test -- -- -t react
 ```
