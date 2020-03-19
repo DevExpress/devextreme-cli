@@ -4,7 +4,8 @@
   "scripts": {
     "test": "lerna run --stream test",
     "test-dev": "lerna run --stream test-dev",
-    "postinstall": "lerna bootstrap"
+    "postinstall": "lerna bootstrap",
+    "update-template": "node ./templates-generator/index.js"
   },
   "devDependencies": {
     "lerna": "^3.20.2"

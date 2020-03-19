@@ -65,7 +65,7 @@ const camelize = (object) => {
 
 const readInput = options => new Promise(resolve => {
     const fileName = options.inputFile;
-    if(!fileName) resolve();
+    if(!fileName) resolve(options);
 
     fs.readFile(fileName, (error, data) => {
         if(error) {
@@ -76,10 +76,10 @@ const readInput = options => new Promise(resolve => {
                 options.data = data;
             } else {
                 const inputObject = JSON.parse(data);
-                Object.assign(options, inputObject);
+                options = Object.assign({}, inputObject, options);
             }
         }
-        resolve();
+        resolve(options);
     });
 });
 
@@ -159,9 +159,7 @@ const getVarsFilter = (options) => {
 };
 
 const runThemeBuilder = async rawOptions => {
-    const options = camelize(rawOptions);
-
-    await readInput(options);
+    const options = await readInput(camelize(rawOptions));
     options.reader = readFile;
     options.sassCompiler = scssCompiler;
     options.lessCompiler = require('less/lib/less-node');
