@@ -38,3 +38,7 @@ npm run test -- -- -t angular
 npm run test -- -- -t vue
 npm run test -- -- -t react
 ```
+
+## Replace etalon
+
+To replace etalon image just remove it from `packages/devextreme-cli/testing/__tests__/__image_snapshots__` folder and run tests again
