@@ -3,7 +3,6 @@
   "version": "1.1.10",
   "scripts": {
     "test": "lerna run --stream test",
-    "test-local": "lerna run --parallel test-local",
     "test-dev": "lerna run --stream test-dev",
     "postinstall": "lerna bootstrap",
     "update-template": "node ./templates-generator/index.js"

@@ -29,7 +29,7 @@ export default ({ menuToggleEnabled, title, toggleMenu, userMenuItems }) => (
       >
         <Button
           className={'user-button authorization'}
-          width={170}
+          width={172}
           height={'100%'}
           stylingMode={'text'}
         >

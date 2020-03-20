@@ -1,5 +1,6 @@
 const path = require('path');
-const puppeteer = require('puppeteer');
+const ip = require('ip');
+const getBrowser = require('./utils/puppeteer').getBrowser;
 
 const { viewports, themes, layouts } = require('./constants');
 const DevServer = require('./dev-server');
@@ -8,9 +9,8 @@ const defaultLayout = 'side-nav-outer-toolbar';
 
 module.exports = (env) => {
     const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
-    const appUrl = `http://127.0.0.1:${env.port}/`;
+    const appUrl = `http://${ip.address()}:${env.port}/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
-    const chromiumUserDataDir = path.join(process.cwd(), './testing/sandbox/user-data');
 
     describe(`${env.engine} app-template`, () => {
         let devServer;
@@ -18,10 +18,7 @@ module.exports = (env) => {
         let page;
 
         beforeAll(async() => {
-            browser = await puppeteer.launch({
-                args: ['--no-sandbox', '--disable-dev-shm-usage'],
-                userDataDir: chromiumUserDataDir
-            });
+            browser = await getBrowser();
             page = await browser.newPage();
 
             try {
@@ -38,7 +35,7 @@ module.exports = (env) => {
 
         afterAll(async() => {
             await devServer.stop();
-            await browser.close();
+            await (Boolean(process.env.LAUNCH_BROWSER) ? browser : page).close();
         });
 
         Object.keys(themes).forEach((theme) => {
@@ -61,7 +58,8 @@ module.exports = (env) => {
                                 await page.goto('about:blank');
                                 await page.setViewport(viewport);
                                 await page.goto(url, {
-                                    timeout: 0
+                                    timeout: 0,
+                                    waitUntil: 'networkidle0'
                                 });
 
                                 return page;
