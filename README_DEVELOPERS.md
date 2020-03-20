@@ -1,10 +1,11 @@
 # Testing
 
-## Build and run docker image with browser
-
+## Build docker image 
 ```sh
 $ lerna run docker:build
 ```
+
+## Run docker image with browser
 ```sh
 $ lerna run docker:run
 ```
