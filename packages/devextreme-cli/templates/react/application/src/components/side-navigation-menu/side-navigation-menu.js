@@ -1,102 +1,82 @@
-import React from 'react';
+import React, { useEffect, useRef, useCallback, useContext } from 'react';
 import TreeView from 'devextreme-react/tree-view';
+import { navigation } from '../../app-navigation';
+import { NavigationContext } from '../../contexts/navigation';
+import { sizes } from '../../utils/media-query';
 import './side-navigation-menu.scss';
 
 import * as events from 'devextreme/events';
 
-class SideNavigationMenu extends React.Component {
-  render() {
-    const {
-      className,
-      children,
-      selectedItemChanged,
-      selectedItem,
-      onMenuReady,
-      ...rest
-    } = this.props;
-    return (
-      <div
-        className={`${className} side-navigation-menu`}
-        ref={this.getElementRef}
-      >
-        {children}
-        <div className={'menu-container'}>
-          <TreeView
-            expandEvent={'click'}
-            width={'100%'}
-            {...rest}
-            onInitialized={this.onMenuInitialized}
-            onItemClick={selectedItemChanged}
-            onContentReady={this.onTreeViewReady}
-            onSelectionChanged={this.updateSelection}
-            selectByClick
-            selectionMode={'single'}
-            keyExpr={'path'}
-          />
-        </div>
+export default function (props) {
+  const {
+    children,
+    selectedItemChanged,
+    openMenu,
+    compactMode,
+    onMenuReady
+  } = props;
+
+  const { navigationData: { currentPath } } = useContext(NavigationContext);
+
+  const treeViewRef = useRef();
+  const wrapperRef = useRef();
+  const getWrapperRef = useCallback((element) => {
+    const prevElement = wrapperRef.current;
+    if (prevElement) {
+      events.off(prevElement, 'dxclick');
+    }
+
+    wrapperRef.current = element;
+    events.on(element, 'dxclick', e => {
+      openMenu(e);
+    });
+  }, [openMenu]);
+
+  useEffect(() => {
+    const treeView = treeViewRef.current && treeViewRef.current.instance;
+    if (!treeView) {
+      return;
+    }
+
+    if (currentPath !== undefined) {
+      treeView.selectItem(currentPath);
+      treeView.expandItem(currentPath);
+    }
+
+    if (compactMode) {
+      treeView.collapseAll();
+    }
+  }, [currentPath, compactMode]);
+
+  return (
+    <div
+      className={'dx-swatch-additional side-navigation-menu'}
+      ref={getWrapperRef}
+    >
+      {children}
+      <div className={'menu-container'}>
+        <TreeView
+          ref={treeViewRef}
+          items={items}
+          keyExpr={'path'}
+          selectionMode={'single'}
+          focusStateEnabled={false}
+          expandEvent={'click'}
+          onItemClick={selectedItemChanged}
+          onContentReady={onMenuReady}
+          width={'100%'}
+        />
       </div>
-    );
-  }
-
-  componentDidUpdate() {
-    this.updateMenu();
-  }
-
-  onMenuInitialized = (event) => {
-    this.treeView = event.component;
-    event.component.option('deferRendering', false);
-  }
-
-  updateSelection = (event) => {
-    const nodeClass = 'dx-treeview-node';
-    const selectedClass = 'dx-state-selected';
-    const leafNodeClass = 'dx-treeview-node-is-leaf';
-    const element = event.element;
-
-    const rootNodes = element.querySelectorAll(
-      `.${nodeClass}:not(.${leafNodeClass})`
-    );
-    Array.from(rootNodes).forEach(node => {
-      node.classList.remove(selectedClass);
-    });
-
-    let selectedNode = element.querySelector(`.${nodeClass}.${selectedClass}`);
-    while (selectedNode && selectedNode.parentElement) {
-      if (selectedNode.classList.contains(nodeClass)) {
-        selectedNode.classList.add(selectedClass);
-      }
-
-      selectedNode = selectedNode.parentElement;
-    }
-
-    this.updateMenu();
-  }
-
-  getElementRef = ref => {
-    if (this.elementRef) {
-      events.off(this.elementRef, 'dxclick');
-    }
-
-    this.elementRef = ref;
-    events.on(this.elementRef, 'dxclick', e => {
-      this.props.openMenu(e);
-    });
-  };
-
-  updateMenu() {
-    if (this.treeView) {
-      this.treeView.selectItem(this.props.selectedItem);
-
-      if (this.props.compactMode) {
-        this.treeView.collapseAll();
-      }
-    }
-  }
-
-  onTreeViewReady = (...args) => {
-    this.props.onMenuReady && this.props.onMenuReady(...args);
-    this.updateSelection(...args);
-  }
+    </div>
+  );
 }
 
-export default SideNavigationMenu;
+const items = navigation.map((item) => {
+  const newItem = { ...item };
+
+  if (sizes()['screen-large']) {
+    newItem.expanded = true;
+  }
+
+  return newItem;
+});

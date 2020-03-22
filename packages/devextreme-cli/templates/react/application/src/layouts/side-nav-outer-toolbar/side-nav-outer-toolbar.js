@@ -23,7 +23,7 @@ class SideNavOuterToolbar extends React.Component {
   }
 
   render() {
-    const { menuItems, title, location, userMenuItems } = this.props;
+    const { title, userMenuItems } = this.props;
     const {
       menuOpened,
       menuMode,
@@ -70,10 +70,7 @@ class SideNavOuterToolbar extends React.Component {
           </ScrollView>
           <Template name={'menu'}>
             <SideNavigationMenu
-              items={menuItems}
               compactMode={!menuOpened}
-              selectedItem={location.pathname}
-              className={'dx-swatch-additional'}
               selectedItemChanged={this.navigationChanged}
               openMenu={this.navigationClick}
               onMenuReady={this.menuPatch.onReady}
