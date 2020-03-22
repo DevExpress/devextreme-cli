@@ -10,7 +10,7 @@ import * as events from 'devextreme/events';
   styleUrls: ['./side-navigation-menu.component.scss']
 })
 export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
-  @ViewChild(DxTreeViewComponent, { static: true })
+  @ViewChild(DxTreeViewComponent<% if(requireStaticFlag) { %>, { static: true }<% } %>)
   menu: DxTreeViewComponent;
 
   @Output()
