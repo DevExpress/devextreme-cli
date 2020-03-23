@@ -34,7 +34,8 @@ export default {
   },
   data() {
     return {
-      treeViewRef, items
+      treeViewRef,
+      items
     };
   },
   methods: {
