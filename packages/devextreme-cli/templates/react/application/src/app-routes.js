@@ -1,4 +1,5 @@
-import { withNavigationWatcher } from './contexts/navigation';
+import React, { useEffect, useContext } from 'react';
+import { NavigationContext } from './contexts/navigation';
 <%=^empty%>import { HomePage, DisplayDataPage, ProfilePage } from './pages';
 
 <%=/empty%>const routes = [<%=^empty%>
@@ -14,10 +15,24 @@ import { withNavigationWatcher } from './contexts/navigation';
     path: '/home',
     component: HomePage
   }
-  <%=/empty%>];
+<%=/empty%>];
 
-routes.forEach(route => {
-  route.component = withNavigationWatcher(route.component);
+export default routes.map(route => {
+  return {
+    ...route,
+    component: withNavigationWatcher(route.component)
+  };
 });
 
-export default routes;
+function withNavigationWatcher(Component) {
+  return function (props) {
+    const { path } = props.match;
+    const { setNavigationData } = useContext(NavigationContext);
+
+    useEffect(() => {
+      setNavigationData({ currentPath: path });
+    }, [path, setNavigationData]);
+
+    return React.createElement(Component, props);
+  }
+}

@@ -72,12 +72,4 @@ export default function (props) {
 }
 
 const isLargeScreen = sizes()['screen-large'];
-const items = navigation.map((item) => {
-  const newItem = { ...item };
-
-  if (isLargeScreen) {
-    newItem.expanded = true;
-  }
-
-  return newItem;
-});
+const items = navigation.map((item) => ({ ...item, expanded: isLargeScreen }));
