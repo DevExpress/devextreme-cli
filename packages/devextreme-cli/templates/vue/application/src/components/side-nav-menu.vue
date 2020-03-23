@@ -25,16 +25,8 @@ import { sizes } from '../utils/media-query';
 import navigation from '../app-navigation';
 
 const treeViewRef = "treeViewRef";
-const items = navigation.map((item) => {
-  const newItem = { ...item };
-  const isLargeScreen = sizes()['screen-large'];
-
-  if (isLargeScreen) {
-    newItem.expanded = true;
-  }
-
-  return newItem;
-});
+const isLargeScreen = sizes()['screen-large'];
+const items = navigation.map((item) => ({ ...item, expanded: isLargeScreen }));
 
 export default {
   props: {
