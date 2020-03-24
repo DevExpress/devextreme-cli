@@ -65,22 +65,13 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/app/shared/services/app-info.service.ts',
+            glob: '{src/app/shared/services/app-info.service.ts,e2e/src/app.e2e-spec.ts}',
             definitions: [
                 {
                     before: 'My App',
                     after: '<%= title %>'
                 }
             ]
-        },
-        {
-            glob: 'e2e/src/app.e2e-spec.ts',
-            definitions: [
-                {
-                    before: 'My App',
-                    after: '<%= title %>'
-                }
-            ], 
         },
         {
             glob:'src/app/pages/home/home.component.html',
