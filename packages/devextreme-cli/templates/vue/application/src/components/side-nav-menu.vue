@@ -1,20 +1,19 @@
 <template>
-  <div class="side-navigation-menu" @click="forwardClick">
+  <div
+    class="dx-swatch-additional side-navigation-menu"
+    @click="forwardClick"
+  >
     <slot />
     <div class="menu-container">
       <dx-tree-view
-        expand-event="click"
-        width="100%"
-        selection-mode="single"
-        key-expr="path"
-        :select-nodes-recursive="true"
-        :select-by-click="true"
-        :items="items"
         :ref="treeViewRef"
-        @initialized="handleMenuInitialized"
+        :items="items"
+        key-expr="path"
+        selection-mode="single"
+        :focus-state-enabled="true"
+        expand-event="click"
         @item-click="handleItemClick"
-        @selection-changed="handleSelectionChange"
-        @content-ready="handleSelectionChange"
+        width="100%"
       />
     </div>
   </div>
@@ -22,27 +21,26 @@
 
 <script>
 import DxTreeView from "devextreme-vue/ui/tree-view";
+import { sizes } from '../utils/media-query';
+import navigation from '../app-navigation';
 
 const treeViewRef = "treeViewRef";
+const isLargeScreen = sizes()['screen-large'];
+const items = navigation.map((item) => ({ ...item, expanded: isLargeScreen }));
 
 export default {
   props: {
-    items: Array,
-    selectedItem: String,
     compactMode: Boolean
   },
   data() {
     return {
-      treeViewRef
+      treeViewRef,
+      items
     };
   },
   methods: {
     forwardClick(...args) {
       this.$emit("click", args);
-    },
-
-    handleMenuInitialized(event) {
-      event.component.option("deferRendering", false);
     },
 
     handleItemClick(e) {
@@ -56,38 +54,13 @@ export default {
       pointerEvent.stopPropagation();
     },
 
-    handleSelectionChange(e) {
-      this.updateSelection();
-      const nodeClass = "dx-treeview-node";
-      const selectedClass = "dx-state-selected";
-      const leafNodeClass = "dx-treeview-node-is-leaf";
-      const element = e.element;
-
-      const rootNodes = element.querySelectorAll(
-        `.${nodeClass}:not(.${leafNodeClass})`
-      );
-      Array.from(rootNodes).forEach(node => {
-        node.classList.remove(selectedClass);
-      });
-
-      let selectedNode = element.querySelector(
-        `.${nodeClass}.${selectedClass}`
-      );
-
-      while (selectedNode && selectedNode.parentElement) {
-        if (selectedNode.classList.contains(nodeClass)) {
-          selectedNode.classList.add(selectedClass);
-        }
-        selectedNode = selectedNode.parentElement;
-      }
-    },
-
     updateSelection() {
       if (!this.treeView) {
         return;
       }
 
       this.treeView.selectItem(this.$route.path);
+      this.treeView.expandItem(this.$route.path);
     }
   },
   mounted() {
@@ -104,6 +77,8 @@ export default {
     compactMode() {
       if (this.compactMode) {
         this.treeView.collapseAll();
+      } else {
+        this.updateSelection();
       }
     }
   },

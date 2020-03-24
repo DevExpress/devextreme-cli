@@ -25,10 +25,7 @@
       <side-nav-menu
         slot="menu"
         slot-scope="_"
-        class="dx-swatch-additional"
         :compact-mode="!menuOpened"
-        :selected-item="$route.path"
-        :items="menuItems"
         @click="handleSideBarClick"
       />
       <!-- eslint-enable -->

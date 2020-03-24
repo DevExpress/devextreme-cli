@@ -25,7 +25,7 @@ class SideNavInnerToolbar extends React.Component {
   }
 
   render() {
-    const { menuItems, title, location, userMenuItems } = this.props;
+    const { title, userMenuItems } = this.props;
     const {
       menuOpened,
       menuMode,
@@ -69,10 +69,7 @@ class SideNavInnerToolbar extends React.Component {
           </div>
           <Template name={'menu'}>
             <SideNavigationMenu
-              items={menuItems}
               compactMode={!menuOpened}
-              selectedItem={location.pathname}
-              className={'dx-swatch-additional'}
               selectedItemChanged={this.navigationChanged}
               openMenu={this.navigationClick}
               onMenuReady={this.menuPatch.onReady}

@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { HashRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import appInfo from './app-info';
-import { navigation } from './app-navigation';
 import routes from './app-routes';
 import './App.scss';
 import './dx-styles.scss';
@@ -10,6 +9,7 @@ import {
   <%=layout%> as SideNavBarLayout,
   SingleCard
 } from './layouts';
+import { NavigationContext } from './contexts/navigation';
 import { sizes, subscribe, unsubscribe } from './utils/media-query';
 
 const LoginContainer = ({ logIn }) => <LoginForm onLoginClick={logIn} />;
@@ -20,27 +20,33 @@ const NotAuthPage = (props) => (
   </SingleCard>
 );
 
-const AuthPage = (props) => (
-  <SideNavBarLayout menuItems={navigation} title={appInfo.title} {...props}>
-    <Switch>
-      {routes.map(item => (
-        <Route
-          exact
-          key={item.path}
-          path={item.path}
-          component={item.component}
-        />
-      ))}<%=^empty%>
-      <Redirect to={'/home'} /><%=/empty%>
-    </Switch>
-    <Footer>
-      Copyright © 2011-2019 Developer Express Inc.
-      <br />
-      All trademarks or registered trademarks are property of their
-      respective owners.
-    </Footer>
-  </SideNavBarLayout>
-);
+const AuthPage = (props) => {
+  const [navigationData, setNavigationData] = useState({});
+
+  return (
+    <NavigationContext.Provider value={{ navigationData, setNavigationData }}>
+      <SideNavBarLayout title={appInfo.title} {...props}>
+        <Switch>
+          {routes.map(({ path, component }) => (
+            <Route
+              exact
+              key={path}
+              path={path}
+              component={component}
+            />
+          ))}<%=^empty%>
+          <Redirect to={'/home'} /><%=/empty%>
+        </Switch>
+        <Footer>
+          Copyright © 2011-2019 Developer Express Inc.
+          <br />
+          All trademarks or registered trademarks are property of their
+          respective owners.
+        </Footer>
+      </SideNavBarLayout>
+    </NavigationContext.Provider>
+  )
+};
 
 class App extends Component {
   constructor(props) {
