@@ -25,7 +25,7 @@ module.exports = {
             glob: 'src/themes/**/*.*',
             definitions: [
                 {
-                    before: /"items":\s+\[[^]*?\]/,
+                    before: /"items":\s+\[.*?\]/,
                     after: '"items": []'
                 },
                 {
@@ -38,7 +38,7 @@ module.exports = {
             glob: 'src/themes/**/*.*',
             definitions: [
                 {
-                    before: /"items":\s+\[[^]*?\]/,
+                    before: /"items":\s+\[.*?\]/s,
                     after: '"items": []'
                 },
                 {
@@ -86,7 +86,7 @@ module.exports = {
             glob: 'components/side-navigation-menu/side-navigation-menu.component.ts',
             definitions: [
                 {
-                    before: /@ViewChild\([^\)]*?/,
+                    before: /@ViewChild\(DxTreeViewComponent.*?\)/,
                     after: '@ViewChild(DxTreeViewComponent, { static: true })'
                 }
             ]
@@ -95,7 +95,7 @@ module.exports = {
             glob: 'src/app/app-navigation.ts',
             definitions: [
                 {
-                    before: /export\s+const\s+navigation\s+=\s+\[[\s\S]*?\];/,
+                    before: /export\s+const\s+navigation\s+=\s+\[.*?\];/s,
                     after: 'export const navigation = [];'
                 }
             ]
@@ -129,16 +129,20 @@ module.exports = {
                     after: ''
                 },
                 {
-                    before: /const\s+routes:\s+Routes\s+=\s+\[[\s\S]*?\];/,
-                    after: 'const routes: Routes = [\n  {\n    path: \'login-form\',\n    component: LoginFormComponent,\n    canActivate: [ AuthGuardService ]\n\  }\n];'
+                    before:'import { AuthGuardService } from \'./shared/services\';\n',
+                    after:'import { AuthGuardService } from \'./shared/services\';\r\n'
                 },
                 {
-                    before: /imports:\s+[RouterModule.forRoot(routes[\s\S]*?]/,
+                    before: /const\s+routes:\s+Routes\s+=\s+\[.*?\];/s,
+                    after: 'const routes: Routes = [\r\n  {\r\n    path: \'login-form\',\r\n    component: LoginFormComponent,\r\n    canActivate: [ AuthGuardService ]\r\n\  }\r\n];'
+                },
+                {
+                    before: /imports:\s+\[RouterModule.forRoot\(routes.*?\]/,
                     after: 'imports: [RouterModule.forRoot(routes)]'
                 },
                 {
-                    before: /exports:\s+\[RouterModule\],[\s\S]*?\}\)/,
-                    after: 'exports: [RouterModule]\r\n})'
+                    before: /exports:\s+\[RouterModule\],.*?\}\)/s,
+                    after: 'exports: [RouterModule]\r\n})' 
                 }
             ]
         },
