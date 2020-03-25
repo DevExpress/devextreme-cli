@@ -7,7 +7,7 @@ module.exports = {
             glob: 'src/themes/metadata.base.json',
             definitions: [
                 {
-                    before: /"baseTheme": ".*?"/,
+                    before: /"baseTheme":\s+".*?"/,
                     after: '"baseTheme": "material.orange.light"'
                 }
             ]
@@ -16,7 +16,7 @@ module.exports = {
             glob: 'src/themes/metadata.additional.json',
             definitions: [
                 {
-                    before: /"baseTheme": ".*?"/,
+                    before: /"baseTheme":\s+".*?"/,
                     after: '"baseTheme": "material.orange.dark"'
                 }
             ]
@@ -42,7 +42,7 @@ module.exports = {
                     after: '"items": []'
                 },
                 {
-                    before: /"assetsBasePath": ".*?"/,
+                    before: /"assetsBasePath":\s+".*?"/,
                     after: '"assetsBasePath": "<%= path %>../../node_modules/devextreme/dist/css/"'
                 }
             ]
@@ -51,15 +51,15 @@ module.exports = {
             glob: 'devextreme.json',
             definitions: [
                 {
-                    before: /"applicationEngine": ".*?"/,
+                    before: /"applicationEngine":\s+".*?"/,
                     after: '"applicationEngine": "<%= engine %>"'
                 },
                 {
-                    before: /"outputFile": "src/g,
+                    before: /"outputFile":\s+"src/g,
                     after: '"outputFile": "<%= sourcePath %>'
                 },
                 {
-                    before: /"inputFile": "src/g,
+                    before: /"inputFile":\s+"src/g,
                     after: '"inputFile": "<%= sourcePath %>'
                 }
             ]
@@ -95,7 +95,7 @@ module.exports = {
             glob: 'src/app/app-navigation.ts',
             definitions: [
                 {
-                    before: /export const navigation =\s+\[[\s\S]*?\];/,
+                    before: /export\s+const\s+navigation\s+=\s+\[[\s\S]*?\];/,
                     after: 'export const navigation = [];'
                 }
             ]
@@ -113,31 +113,31 @@ module.exports = {
             glob: 'src/app/app-routing.module.ts',
             definitions: [
                 {
-                    before: /import { HomeComponent } from '.\/pages\/home\/home.component';[\r\n]/,
+                    before: /import\s+{\s+HomeComponent\s+}\s+from\s+'.\/pages\/home\/home.component';[\r\n]/,
                     after: ''
                 },
                 {
-                    before: /import { ProfileComponent } from \'.\/pages\/profile\/profile.component\';[\r\n]/,
+                    before: /import\s+{\s+ProfileComponent\s+}\s+from\s+\'.\/pages\/profile\/profile.component\';[\r\n]/,
                     after: ''
                 },
                 {
-                    before: /import { DisplayDataComponent } from \'.\/pages\/display-data\/display-data.component\';[\r\n]/,
+                    before: /import\s+{\s+DisplayDataComponent\s+}\s+from\s+\'.\/pages\/display-data\/display-data.component\';[\r\n]/,
                     after: ''
                 },
                 {
-                    before: /import { DxDataGridModule, DxFormModule } from \'devextreme-angular\';[\r\n][\r\n]/,
+                    before: /import\s+{\s+DxDataGridModule,\s+DxFormModule\s+}\s+from\s+\'devextreme-angular\';[\r\n][\r\n]/,
                     after: ''
                 },
                 {
-                    before: /const routes: Routes =\s+\[[\s\S]*?\];/,
+                    before: /const\s+routes:\s+Routes\s+=\s+\[[\s\S]*?\];/,
                     after: 'const routes: Routes = [\n  {\n    path: \'login-form\',\n    component: LoginFormComponent,\n    canActivate: [ AuthGuardService ]\n\  }\n];'
                 },
                 {
-                    before: /imports: [RouterModule.forRoot(routes[\s\S]*?]/,
+                    before: /imports:\s+[RouterModule.forRoot(routes[\s\S]*?]/,
                     after: 'imports: [RouterModule.forRoot(routes)]'
                 },
                 {
-                    before: /exports: \[RouterModule\],[\s\S]*?\}\)/,
+                    before: /exports:\s+\[RouterModule\],[\s\S]*?\}\)/,
                     after: 'exports: [RouterModule]\r\n})'
                 }
             ]
