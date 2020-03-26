@@ -83,15 +83,6 @@ module.exports = {
             ]
         },
         {
-            glob: 'components/side-navigation-menu/side-navigation-menu.component.ts',
-            definitions: [
-                {
-                    before: /@ViewChild\(DxTreeViewComponent.*?\)/,
-                    after: '@ViewChild(DxTreeViewComponent, { static: true })'
-                }
-            ]
-        },
-        {
             glob: 'src/app/app-navigation.ts',
             definitions: [
                 {
