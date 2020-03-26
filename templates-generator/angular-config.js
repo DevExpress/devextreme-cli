@@ -161,23 +161,7 @@ module.exports = {
             }
         },
         {
-            glob: 'src/themes/**/*.*',
-            definition:
-            {
-                sourcePath: '',
-                targetPath: 'packages/devextreme-schematics/src/add-layout/files/'
-            }
-        },
-        {
-            glob: 'devextreme.json',
-            definition:
-            {
-                sourcePath: '',
-                targetPath: 'packages/devextreme-schematics/src/add-layout/files/'
-            }
-        },
-        {
-            glob: 'e2e/**/*.*',
+            glob: '{src/**/!(app.component).*,devextreme.json,e2e/**/*.*}',
             definition:
             {
                 sourcePath: '',
@@ -191,14 +175,6 @@ module.exports = {
                 sourcePath: 'src/app/app',
                 targetPath: 'packages/devextreme-schematics/src/add-layout/files/src/app/__name__'
             }
-        },
-        {
-            glob: 'src/app/**/*.*',
-            definition:
-            {
-                sourcePath: '',
-                targetPath: 'packages/devextreme-schematics/src/add-layout/files/'
-            }
         }
     ],
     ignoreList: [
@@ -211,7 +187,7 @@ module.exports = {
         'src/test.ts',
         'src/index.html',
         'src/app/app.module.ts',
-        'src/e2e/protractor.conf.js',
+        'e2e/protractor.conf.js',
         'src/main.ts',
         'node_modules/**/*.*',
         'karma.conf.js',
