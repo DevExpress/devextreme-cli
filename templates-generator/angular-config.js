@@ -25,19 +25,6 @@ module.exports = {
             glob: 'src/themes/**/*.*',
             definitions: [
                 {
-                    before: /"items":\s+\[.*?\]/,
-                    after: '"items": []'
-                },
-                {
-                    before: '"assetsBasePath": "../',
-                    after: '"assetsBasePath": "<%= path %>'
-                }
-            ]
-        },
-        {
-            glob: 'src/themes/**/*.*',
-            definitions: [
-                {
                     before: /"items":\s+\[.*?\]/s,
                     after: '"items": []'
                 },
@@ -177,8 +164,8 @@ module.exports = {
             glob: 'src/themes/**/*.*',
             definition:
             {
-                sourcePath: 'src/themes/',
-                targetPath: 'packages/devextreme-schematics/src/add-layout/files/src/themes/'
+                sourcePath: '',
+                targetPath: 'packages/devextreme-schematics/src/add-layout/files/'
             }
         },
         {
@@ -198,22 +185,6 @@ module.exports = {
             }
         },
         {
-            glob: 'src/app/layouts/**/*.*',
-            definition:
-            {
-                sourcePath: 'src/app/',
-                targetPath: 'packages/devextreme-schematics/src/add-layout/files/src/app/'
-            }
-        },
-        {
-            glob: 'src/app/shared/**/*.*',
-            definition:
-            {
-                sourcePath: 'src/app/',
-                targetPath: 'packages/devextreme-schematics/src/add-layout/files/src/app/'
-            }
-        },
-        {
             glob: 'src/app/app.component.{scss,ts,html}',
             definition:
             {
@@ -225,8 +196,8 @@ module.exports = {
             glob: 'src/app/**/*.*',
             definition:
             {
-                sourcePath: 'src/app/',
-                targetPath: 'packages/devextreme-schematics/src/add-layout/files/src/app/'
+                sourcePath: '',
+                targetPath: 'packages/devextreme-schematics/src/add-layout/files/'
             }
         }
     ],
