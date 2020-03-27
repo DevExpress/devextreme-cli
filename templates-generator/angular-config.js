@@ -7,7 +7,7 @@ module.exports = {
             glob: 'src/themes/metadata.base.json',
             definitions: [
                 {
-                    before: /"baseTheme": "[^]*?"/,
+                    before: /"baseTheme": "[^"]*"/,
                     after: '"baseTheme": "material.orange.light"'
                 }
             ]
@@ -16,7 +16,7 @@ module.exports = {
             glob: 'src/themes/metadata.additional.json',
             definitions: [
                 {
-                    before: /"baseTheme": "[^]*?"/,
+                    before: /"baseTheme": "[^"]*"/,
                     after: '"baseTheme": "material.orange.dark"'
                 }
             ]
@@ -25,11 +25,11 @@ module.exports = {
             glob: 'src/themes/**/*.*',
             definitions: [
                 {
-                    before: /"items": \[[^]*?\]/s,
+                    before: /"items": \[[^\]]*]/s,
                     after: '"items": []'
                 },
                 {
-                    before: /"assetsBasePath": "[^]*?"/,
+                    before: /"assetsBasePath": "[^"]*"/,
                     after: '"assetsBasePath": "<%= path %>../../node_modules/devextreme/dist/css/"'
                 }
             ]
@@ -69,7 +69,7 @@ module.exports = {
             glob: 'src/app/app-navigation.ts',
             definitions: [
                 {
-                    before: /export const navigation = \[[^]*?\];/s,
+                    before: /export const navigation = \[.*?];/s,
                     after: 'export const navigation = [];'
                 }
             ]
@@ -78,7 +78,7 @@ module.exports = {
             glob: 'src/app/shared/components/side-navigation-menu/side-navigation-menu.component.ts',
             definitions: [
                 {
-                    before: /\(DxTreeViewComponent[^]*?\)/,
+                    before: /\(DxTreeViewComponent[^\]]*?\)/,
                     after: '(DxTreeViewComponent<% if(requireStaticFlag) { %>, { static: true }<% } %>)'
                 }
             ]
@@ -87,36 +87,48 @@ module.exports = {
             glob: 'src/app/app-routing.module.ts',
             definitions: [
                 {
-                    before: /import { HomeComponent } from '.\/pages\/home\/home.component';[\r\n]/,
+                    before: /import { HomeComponent } [^\n]*?\r?\n/,
                     after: ''
                 },
                 {
-                    before: /import { ProfileComponent } from \'.\/pages\/profile\/profile.component\';[\r\n]/,
+                    before: /import { ProfileComponent } [^\n]*?\r?\n/,
                     after: ''
                 },
                 {
-                    before: /import { DisplayDataComponent } from \'.\/pages\/display-data\/display-data.component\';[\r\n]/,
+                    before: /import { DisplayDataComponent } [^\n]*?\r?\n/,
                     after: ''
                 },
                 {
-                    before: /import { DxDataGridModule, DxFormModule } from \'devextreme-angular\';[\r\n][\r\n]/,
+                    before: /import { DxDataGridModule, DxFormModule } [^\n]*?\r?\n/,
                     after: ''
                 },
                 {
-                    before:'import { AuthGuardService } from \'./shared/services\';\n',
-                    after:'import { AuthGuardService } from \'./shared/services\';\r\n'
+                    before: /{\r?\n\s+path: 'display-data',\r?\n\s+component: DisplayDataComponent,\r?\n\s+canActivate: \[ AuthGuardService \]\r?\n\s+},\r?\n\s+/,
+                    after: ''
                 },
                 {
-                    before: /const routes: Routes = \[[^]*?\];/s,
-                    after: 'const routes: Routes = [\r\n  {\r\n    path: \'login-form\',\r\n    component: LoginFormComponent,\r\n    canActivate: [ AuthGuardService ]\r\n\  }\r\n];'
+                    before: /{\r?\n\s+path: 'profile',\r?\n\s+component: ProfileComponent,\r?\n\s+canActivate: \[ AuthGuardService \]\r?\n\s+},\r?\n\s+/,
+                    after: ''
                 },
                 {
-                    before: ', {useHash: true}), DxDataGridModule, DxFormModule',
+                    before: /{\r?\n\s+path: 'home',\r?\n\s+component: HomeComponent,\r?\n\s+canActivate: \[ AuthGuardService \]\r?\n\s+},\r?\n\s+/,
+                    after: ''
+                },
+                {
+                    before: /},\r?\n\s+{\r?\n\s+path: '\*\*',\r?\n\s+redirectTo: 'home',\r?\n\s+canActivate: \[ AuthGuardService \]\r?\n\s+/,
+                    after: ''
+                },
+                {
+                    before: ', {useHash: true}),',
                     after: ')'
                 },
                 {
-                    before: /exports: \[RouterModule\],[^]*?\}\)/s,
-                    after: 'exports: [RouterModule]\r\n})' 
+                    before: ' DxDataGridModule, DxFormModule',
+                    after: ''
+                },
+                {
+                    before: /,\r?\n\s+declarations: [^\]]*?]/s,
+                    after: '' 
                 }
             ]
         },
@@ -174,6 +186,7 @@ module.exports = {
         }
     ],
     ignoreList: [
+        'node_modules/**/*.*',
         'src/{themes/generated,environments}/**/*.*',
         'src/{polyfills,test,app/app.module,main}.ts',
         'src/{dx-styles,styles}.scss',
@@ -184,7 +197,6 @@ module.exports = {
         'tsconfig.json',
         'angular.json',
         'tslint.json',
-        'node_modules/**/*.*',
         'karma.conf.js'
     ]
 };
