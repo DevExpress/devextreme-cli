@@ -7,7 +7,7 @@ module.exports = {
             glob: 'src/themes/metadata.base.json',
             definitions: [
                 {
-                    before: /"baseTheme":\s+".*?"/,
+                    before: /"baseTheme": "[^]*?"/,
                     after: '"baseTheme": "material.orange.light"'
                 }
             ]
@@ -16,7 +16,7 @@ module.exports = {
             glob: 'src/themes/metadata.additional.json',
             definitions: [
                 {
-                    before: /"baseTheme":\s+".*?"/,
+                    before: /"baseTheme": "[^]*?"/,
                     after: '"baseTheme": "material.orange.dark"'
                 }
             ]
@@ -25,11 +25,11 @@ module.exports = {
             glob: 'src/themes/**/*.*',
             definitions: [
                 {
-                    before: /"items":\s+\[.*?\]/s,
+                    before: /"items": \[[^]*?\]/s,
                     after: '"items": []'
                 },
                 {
-                    before: /"assetsBasePath":\s+".*?"/,
+                    before: /"assetsBasePath": "[^]*?"/,
                     after: '"assetsBasePath": "<%= path %>../../node_modules/devextreme/dist/css/"'
                 }
             ]
@@ -38,16 +38,12 @@ module.exports = {
             glob: 'devextreme.json',
             definitions: [
                 {
-                    before: /"applicationEngine":\s+".*?"/,
-                    after: '"applicationEngine": "<%= engine %>"'
+                    before: 'angular',
+                    after: '<%= engine %>'
                 },
                 {
-                    before: /"outputFile":\s+"src/g,
-                    after: '"outputFile": "<%= sourcePath %>'
-                },
-                {
-                    before: /"inputFile":\s+"src/g,
-                    after: '"inputFile": "<%= sourcePath %>'
+                    before: /src/g,
+                    after: '<%= sourcePath %>'
                 }
             ]
         },
@@ -73,7 +69,7 @@ module.exports = {
             glob: 'src/app/app-navigation.ts',
             definitions: [
                 {
-                    before: /export\s+const\s+navigation\s+=\s+\[.*?\];/s,
+                    before: /export const navigation = \[[^]*?\];/s,
                     after: 'export const navigation = [];'
                 }
             ]
@@ -82,8 +78,8 @@ module.exports = {
             glob: 'src/app/shared/components/side-navigation-menu/side-navigation-menu.component.ts',
             definitions: [
                 {
-                    before: /@ViewChild\(DxTreeViewComponent.*?\)/,
-                    after: '@ViewChild(DxTreeViewComponent<% if(requireStaticFlag) { %>, { static: true }<% } %>)'
+                    before: /\(DxTreeViewComponent[^]*?\)/,
+                    after: '(DxTreeViewComponent<% if(requireStaticFlag) { %>, { static: true }<% } %>)'
                 }
             ]
         },
@@ -91,19 +87,19 @@ module.exports = {
             glob: 'src/app/app-routing.module.ts',
             definitions: [
                 {
-                    before: /import\s+{\s+HomeComponent\s+}\s+from\s+'.\/pages\/home\/home.component';[\r\n]/,
+                    before: /import { HomeComponent } from '.\/pages\/home\/home.component';[\r\n]/,
                     after: ''
                 },
                 {
-                    before: /import\s+{\s+ProfileComponent\s+}\s+from\s+\'.\/pages\/profile\/profile.component\';[\r\n]/,
+                    before: /import { ProfileComponent } from \'.\/pages\/profile\/profile.component\';[\r\n]/,
                     after: ''
                 },
                 {
-                    before: /import\s+{\s+DisplayDataComponent\s+}\s+from\s+\'.\/pages\/display-data\/display-data.component\';[\r\n]/,
+                    before: /import { DisplayDataComponent } from \'.\/pages\/display-data\/display-data.component\';[\r\n]/,
                     after: ''
                 },
                 {
-                    before: /import\s+{\s+DxDataGridModule,\s+DxFormModule\s+}\s+from\s+\'devextreme-angular\';[\r\n][\r\n]/,
+                    before: /import { DxDataGridModule, DxFormModule } from \'devextreme-angular\';[\r\n][\r\n]/,
                     after: ''
                 },
                 {
@@ -111,15 +107,15 @@ module.exports = {
                     after:'import { AuthGuardService } from \'./shared/services\';\r\n'
                 },
                 {
-                    before: /const\s+routes:\s+Routes\s+=\s+\[.*?\];/s,
+                    before: /const routes: Routes = \[[^]*?\];/s,
                     after: 'const routes: Routes = [\r\n  {\r\n    path: \'login-form\',\r\n    component: LoginFormComponent,\r\n    canActivate: [ AuthGuardService ]\r\n\  }\r\n];'
                 },
                 {
-                    before: /imports:\s+\[RouterModule.forRoot\(routes.*?\]/,
-                    after: 'imports: [RouterModule.forRoot(routes)]'
+                    before: ', {useHash: true}), DxDataGridModule, DxFormModule',
+                    after: ')'
                 },
                 {
-                    before: /exports:\s+\[RouterModule\],.*?\}\)/s,
+                    before: /exports: \[RouterModule\],[^]*?\}\)/s,
                     after: 'exports: [RouterModule]\r\n})' 
                 }
             ]
@@ -178,25 +174,11 @@ module.exports = {
         }
     ],
     ignoreList: [
-        'e2e/tsconfig.json',
-        'src/themes/generated/**/*.*',
-        'src/styles.scss',
-        'src/environments/**/*.*',
-        'src/dx-styles.scss',
-        'src/polyfills.ts',
-        'src/test.ts',
-        'src/index.html',
-        'src/app/app.module.ts',
-        'e2e/protractor.conf.js',
-        'src/main.ts',
-        'node_modules/**/*.*',
-        'karma.conf.js',
-        'package-lock.json',
-        'package.json',
-        'angular.json',
-        'tsconfig.app.json',
-        'tsconfig.spec.json',
-        'tsconfig.json',
-        'tslint.json'
+        '{src/{themes/generated,environments},node_modules/}/**/*.*',
+        '{e2e/tsconfig,package-lock,package,angular,tsconfig.app,tsconfig.spec,tsconfig,tslint}.json',
+        'src/{polyfills,test,app/app.module,main}.ts',
+        'src/{dx-styles,styles}.scss',
+        '{e2e/protractor.conf,karma.conf}.js',
+        'src/index.html'
     ]
 };
