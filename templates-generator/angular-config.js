@@ -174,11 +174,17 @@ module.exports = {
         }
     ],
     ignoreList: [
-        '{src/{themes/generated,environments},node_modules/}/**/*.*',
-        '{e2e/tsconfig,package-lock,package,angular,tsconfig.app,tsconfig.spec,tsconfig,tslint}.json',
+        'src/{themes/generated,environments}/**/*.*',
         'src/{polyfills,test,app/app.module,main}.ts',
         'src/{dx-styles,styles}.scss',
-        '{e2e/protractor.conf,karma.conf}.js',
-        'src/index.html'
+        'src/index.html',
+        'e2e/{tsconfig.json,protractor.conf.js}',
+        '{package-lock,package}.json',
+        'tsconfig.{app,spec}.json',
+        'tsconfig.json',
+        'angular.json',
+        'tslint.json',
+        'node_modules/**/*.*',
+        'karma.conf.js'
     ]
 };
