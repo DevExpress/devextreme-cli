@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useCallback, useContext } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import { navigation } from '../../app-navigation';
-import { NavigationContext } from '../../contexts/navigation';
+import { useNavigation } from '../../contexts/navigation';
 import { sizes } from '../../utils/media-query';
 import './side-navigation-menu.scss';
 
@@ -16,7 +16,7 @@ export default function (props) {
     onMenuReady
   } = props;
 
-  const { navigationData: { currentPath } } = useContext(NavigationContext);
+  const { navigationData: { currentPath } } = useNavigation();
 
   const treeViewRef = useRef();
   const wrapperRef = useRef();

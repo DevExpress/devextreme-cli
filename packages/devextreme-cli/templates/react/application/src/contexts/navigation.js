@@ -1,3 +1,20 @@
-import { createContext } from 'react';
+import React, { useState, createContext, useContext } from 'react';
 
-export const NavigationContext = createContext();
+const NavigationContext = createContext({});
+const useNavigation = () => useContext(NavigationContext);
+
+function NavigationProvider(props) {
+  const [navigationData, setNavigationData] = useState({});
+
+  return (
+    <NavigationContext.Provider
+      value={{ navigationData, setNavigationData }}
+      {...props}
+    />
+  );
+}
+
+export {
+  NavigationProvider,
+  useNavigation
+}

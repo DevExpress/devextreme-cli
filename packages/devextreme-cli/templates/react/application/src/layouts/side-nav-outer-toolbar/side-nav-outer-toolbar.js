@@ -23,7 +23,7 @@ class SideNavOuterToolbar extends React.Component {
   }
 
   render() {
-    const { title, userMenuItems } = this.props;
+    const { title } = this.props;
     const {
       menuOpened,
       menuMode,
@@ -37,7 +37,6 @@ class SideNavOuterToolbar extends React.Component {
         <Header
           className={'layout-header'}
           menuToggleEnabled
-          userMenuItems={userMenuItems}
           toggleMenu={() =>
             this.setState({ menuOpened: !this.state.menuOpened })
           }

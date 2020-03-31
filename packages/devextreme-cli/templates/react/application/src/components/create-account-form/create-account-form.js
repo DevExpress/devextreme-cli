@@ -6,15 +6,14 @@ import Form, {
   ButtonItem,
   ButtonOptions,
   RequiredRule,
+  CustomRule,
   EmailRule
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
-import { useAuth } from '../../contexts/auth';
-import './login-form.scss';
+import './create-account-form.scss';
 
 export default function (props) {
   const history = useHistory();
-  const { logIn } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const formData = useRef({});
 
@@ -23,15 +22,19 @@ export default function (props) {
     const { email, password } = formData.current;
     setIsLoading(true);
 
-    await logIn(email, password);
-  }, [logIn]);
+    // Send create account request
+    console.log(email, password);
 
-  const onCreateAccountClick = useCallback(() => {
-    history.push('/create-account');
+    history.push('/login');
   }, [history]);
 
+  const validatePasswords = useCallback(
+    ({ value }) => value === formData.current.password ? true : false,
+    []
+  );
+
   return (
-    <form className={'login-form'} onSubmit={onSubmit}>
+    <form className={'create-account-form'} onSubmit={onSubmit}>
       <Form formData={formData.current} disabled={isLoading}>
         <Item
           dataField={'email'}
@@ -47,15 +50,25 @@ export default function (props) {
           editorType={'dxTextBox'}
           editorOptions={passwordEditorOptions}
         >
-          <RequiredRule message="Email is required" />
+          <RequiredRule message="Password is required" />
           <Label visible={false} />
         </Item>
         <Item
-          dataField={'rememberMe'}
-          editorType={'dxCheckBox'}
-          editorOptions={rememberMeEditorOptions}
+          dataField={'passwordConfirmation'}
+          editorType={'dxTextBox'}
+          editorOptions={passwordConfirmationEditorOptions}
         >
+          <RequiredRule message="Password is required" />
+          <CustomRule
+            message={'Passwords do not match'}
+            validationCallback={validatePasswords}
+          />
           <Label visible={false} />
+        </Item>
+        <Item>
+          <div className='policy-info'>
+            By creating an account, you agree to the <Link>Terms of Service</Link> and <Link>Privacy Policy</Link>
+          </div>
         </Item>
         <ButtonItem>
           <ButtonOptions
@@ -67,23 +80,16 @@ export default function (props) {
               {
                 isLoading
                   ? <LoadIndicator width={'24px'} height={'24px'} visible={isLoading} />
-                  : 'Sign in'
+                  : 'Create a new account'
               }
             </span>
           </ButtonOptions>
         </ButtonItem>
         <Item>
-          <div className={'link'}>
-            <Link to={'/reset-password'}>Forgot password?</Link>
+          <div className={'login-link'}>
+            Have an account? <Link to={'/login'}>Sign In</Link>
           </div>
         </Item>
-        <ButtonItem>
-          <ButtonOptions
-            text={'Create an account'}
-            width={'100%'}
-            onClick={onCreateAccountClick}
-          />
-        </ButtonItem>
       </Form>
     </form>
   );
@@ -91,4 +97,4 @@ export default function (props) {
 
 const emailEditorOptions = { stylingMode: 'filled', placeholder: 'Email', mode: 'email' };
 const passwordEditorOptions = { stylingMode: 'filled', placeholder: 'Password', mode: 'password' };
-const rememberMeEditorOptions = { text: 'Remember me', elementAttr: { class: 'form-text' } };
+const passwordConfirmationEditorOptions = { stylingMode: 'filled', placeholder: 'Re-type Your Password', mode: 'password' };

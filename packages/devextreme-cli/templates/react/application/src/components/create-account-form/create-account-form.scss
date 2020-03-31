@@ -1,0 +1,19 @@
+@import "../../themes/generated/variables.base.scss";
+
+.create-account-form {
+  .policy-info {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 14px;
+    font-style: normal;
+
+    a {
+      color: rgba(0, 0, 0, 0.54);
+    }
+  }
+
+  .login-link {
+    color: $base-accent;
+    font-size: 16px;
+    text-align: center;
+  }
+}

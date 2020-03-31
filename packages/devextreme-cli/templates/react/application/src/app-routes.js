@@ -1,5 +1,5 @@
-import React, { useEffect, useContext } from 'react';
-import { NavigationContext } from './contexts/navigation';
+import React, { useEffect } from 'react';
+import { useNavigation } from './contexts/navigation';
 <%=^empty%>import { HomePage, DisplayDataPage, ProfilePage } from './pages';
 
 <%=/empty%>const routes = [<%=^empty%>
@@ -27,7 +27,7 @@ export default routes.map(route => {
 function withNavigationWatcher(Component) {
   return function (props) {
     const { path } = props.match;
-    const { setNavigationData } = useContext(NavigationContext);
+    const { setNavigationData } = useNavigation();
 
     useEffect(() => {
       setNavigationData({ currentPath: path });
