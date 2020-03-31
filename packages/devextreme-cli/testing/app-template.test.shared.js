@@ -124,9 +124,9 @@ module.exports = (env) => {
                                     await page.waitFor(1000);
                                     const image = await page.screenshot({
                                         clip: {
-                                            x: viewport.width - 250,
+                                            x: viewport.width - 300,
                                             y: 0,
-                                            width: 250,
+                                            width: 300,
                                             height: 300
                                         }
                                     });
@@ -145,7 +145,7 @@ module.exports = (env) => {
                                     await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
                                     await page.waitFor('.dx-icon-runner', { timeout: 0 });
                                     await page.click('.dx-icon-runner');
-                                    await page.waitFor('.login-header', { timeout: 0 });
+                                    await page.waitFor('.login-header, .login-form', { timeout: 0 });
                                     const image = await page.screenshot();
 
                                     compareSnapshot(image, 'login');

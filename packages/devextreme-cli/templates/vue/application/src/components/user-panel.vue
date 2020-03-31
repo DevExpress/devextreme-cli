@@ -4,14 +4,14 @@
       <div class="image-container">
         <div class="user-image" />
       </div>
-      <div class="user-name">Sandra Johnson</div>
+      <div class="user-name">sandra@example.com</div>
     </div>
 
     <dx-context-menu
       v-if="menuMode === 'context'"
       target=".user-button"
       :items="menuItems"
-      :width="172"
+      :width="210"
       show-event="dxclick"
       css-class="user-menu"
     >

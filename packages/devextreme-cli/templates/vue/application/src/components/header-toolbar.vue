@@ -36,7 +36,7 @@
         <!-- eslint-enable -->
           <dx-button
             class="user-button authorization"
-            :width="172"
+            :width="210"
             height="100%"
             styling-mode="text"
           >
