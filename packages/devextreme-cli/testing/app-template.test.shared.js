@@ -140,6 +140,7 @@ module.exports = (env) => {
                                         return;
                                     }
 
+                                    const name = env.engine === 'react' ? 'login-react' : 'login';
                                     const page = await openPage(appUrl);
                                     const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                     await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
@@ -148,7 +149,7 @@ module.exports = (env) => {
                                     await page.waitFor('.login-header, .login-form', { timeout: 0 });
                                     const image = await page.screenshot();
 
-                                    compareSnapshot(image, 'login');
+                                    compareSnapshot(image, name);
                                 });
                             });
                         });
