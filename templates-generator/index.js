@@ -38,20 +38,26 @@ const commands = args['_'];
         });
         relativePaths.forEach(relativePath => {
             let content = fs.readFileSync(`${config.sourcePath}${relativePath}`, 'utf8');
-            content = updateContent(relativePath, content, config.updateRules);
+            content = updateContent(relativePath, content, config.updateRules, config.removeRules);
 
             writeFile(relativePath, content, config);
         });
     }
 
-    function updateContent(relativePath, content, updateRules) {
-        const rules = updateRules.filter(info => micromatch.isMatch(relativePath, info.glob));
-        rules.forEach(rule => {
-            rule.definitions.forEach(definition => {
+    function updateContent(relativePath, content, updateRules, removeRules) {
+        const replacements = updateRules.filter(info => micromatch.isMatch(relativePath, info.glob));
+        replacements.forEach(replacement => {
+            replacement.definitions.forEach(definition => {
                 content = content.replace(definition.before, definition.after);
             });
         });
 
+        const removals = removeRules.filter(info => micromatch.isMatch(relativePath, info.glob));
+        removals.forEach(removal => {
+            removal.definitions.forEach(definition => {
+                content = content.replace(definition, '');
+            });
+        });
         return content;
     }
 

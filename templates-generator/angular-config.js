@@ -71,7 +71,7 @@ module.exports = {
             ]
         },
         {
-            glob:'src/app/pages/home/home.component.html',
+            glob: 'src/app/pages/home/home.component.html',
             definitions: [
                 {
                     before: 'My App',
@@ -98,55 +98,6 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/app/app-routing.module.ts',
-            definitions: [
-                {
-                    before: /import { HomeComponent } [^\n]*?;\n/,
-                    after: ''
-                },
-                {
-                    before: /import { ProfileComponent } [^\n]*?\r?\n/,
-                    after: ''
-                },
-                {
-                    before: /import { DisplayDataComponent } [^\n]*?\r?\n/,
-                    after: ''
-                },
-                {
-                    before: /import { DxDataGridModule, DxFormModule } [^\n]*?\r?\n/,
-                    after: ''
-                },
-                {
-                    before: /{\r?\n\s+path: 'display-data',[^}]*?},r?\n\s+/,
-                    after: ''
-                },
-                {
-                    before: /{\r?\n\s+path: 'profile',[^}]*?},r?\n\s+/,
-                    after: ''
-                },
-                {
-                    before: /{\r?\n\s+path: 'home',[^}]*?\r?\n\s+},\r?\n\s+/,
-                    after: ''
-                },
-                {
-                    before: /},\r?\n\s+{\r?\n\s+path: '\*\*',[^}]*/,
-                    after: ''
-                },
-                {
-                    before: /, {\s?useHash: true\s?}/,
-                    after: ''
-                },
-                {
-                    before: ', DxDataGridModule, DxFormModule',
-                    after: ''
-                },
-                {
-                    before: /,\r?\n\s+declarations: [^\]]*?]/s,
-                    after: '' 
-                }
-            ]
-        },
-        {
             glob: 'src/app/app.component.html',
             definitions: [
                 {
@@ -163,15 +114,33 @@ module.exports = {
                     after: '<%= prefix %>'
                 },
                 {
-                    before:/app.component/g,
-                    after:'<%= name %>.component'
+                    before: /app.component/g,
+                    after: '<%= name %>.component'
                 },
                 {
-                    before:'AppComponent',
-                    after:'<%= strings.classify(name) %>Component'
+                    before: 'AppComponent',
+                    after: '<%= strings.classify(name) %>Component'
                 }
             ]
         }
+    ],
+    removeRules: [
+        {
+            glob: 'src/app/app-routing.module.ts',
+            definitions: [
+                /import { HomeComponent } [^\n]*?;\n/,
+                /import { ProfileComponent } [^\n]*?\r?\n/,
+                /import { DisplayDataComponent } [^\n]*?\r?\n/,
+                /import { DxDataGridModule, DxFormModule } [^\n]*?\r?\n/,
+                /{\r?\n\s+path: 'display-data',[^}]*?},r?\n\s+/,
+                /{\r?\n\s+path: 'profile',[^}]*?},r?\n\s+/,
+                /{\r?\n\s+path: 'home',[^}]*?\r?\n\s+},\r?\n\s+/,
+                /},\r?\n\s+{\r?\n\s+path: '\*\*',[^}]*/,
+                /, {\s?useHash: true\s?}/,
+                ', DxDataGridModule, DxFormModule',
+                /,\r?\n\s+declarations: [^\]]*?]/s
+            ]
+        },
     ],
     moveRules: [
         {
