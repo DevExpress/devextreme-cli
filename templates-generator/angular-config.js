@@ -36,7 +36,7 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/themes/*.json',
+            glob: 'src/themes/metadata.*.json',
             definitions: [
                 {
                     before: /"items": \[[^\]]*]/s,
