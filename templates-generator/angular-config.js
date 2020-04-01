@@ -39,7 +39,7 @@ module.exports = {
             glob: 'src/themes/metadata.*.json',
             definitions: [
                 {
-                    before: /"items": \[[^\]]*]/s,
+                    before: /"items": \[[^\]]*]/,
                     after: '"items": []'
                 },
                 {
@@ -83,7 +83,7 @@ module.exports = {
             glob: 'src/app/app-navigation.ts',
             definitions: [
                 {
-                    before: /export const navigation = [^;]*?;/s,
+                    before: /export const navigation = [^;]*?;/,
                     after: 'export const navigation = [];'
                 }
             ]
@@ -138,7 +138,7 @@ module.exports = {
                 /},[^}]*?path: '\*\*'[^}]*/,
                 /, {\s?useHash: true\s?}/,
                 ', DxDataGridModule, DxFormModule',
-                /,\r?\n\s+declarations: [^\]]*?]/s
+                /,\r?\n\s+declarations: [^\]]*?]/
             ]
         },
     ],
