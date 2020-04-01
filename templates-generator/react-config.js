@@ -2,7 +2,18 @@ module.exports = {
     sourcePath: 'packages/devextreme-cli/testing/sandbox/react/my-app/',
     targetPath: 'packages/devextreme-cli/templates/react/application/',
     sourceGlob: '**/*.{js,scss,json}',
-    updateRules: [
+    ignoreList: [
+        'src/themes/generated/*.*',
+        'node_modules/**/*.*',
+        'public/*.*',
+        'src/App.test.js',
+        'src/setupTests.js',
+        'src/serviceWorker.js',
+        'src/index.js',
+        'package.json',
+        'package-lock.json'
+    ],
+    replaceRules: [
         {
             glob: 'src/app-routes.js',
             definitions: [
@@ -53,18 +64,6 @@ module.exports = {
                     after: '<%=layout%>'
                 },
                 {
-                    before: 'import \'devextreme/dist/css/dx.common.css\';\n',
-                    after: ''
-                },
-                {
-                    before: 'import \'./themes/generated/theme.base.css\';\n',
-                    after: ''
-                },
-                {
-                    before: 'import \'./themes/generated/theme.additional.css\';\n',
-                    after: ''
-                },
-                {
                     before: '))}',
                     after: '))}<%=^empty%>'
                 },
@@ -102,6 +101,16 @@ module.exports = {
             ]
         }
     ],
+    removeRules: [
+        {
+            glob: 'src/App.js',
+            definitions: [
+                'import \'devextreme/dist/css/dx.common.css\';\n',
+                'import \'./themes/generated/theme.base.css\';\n',
+                'import \'./themes/generated/theme.additional.css\';\n',
+            ]
+        },
+    ],
     moveRules: [
         {
             glob: 'src/pages/**/*.*',
@@ -117,16 +126,5 @@ module.exports = {
                 targetPath: 'packages/devextreme-cli/templates/react/application/'
             }
         }
-    ],
-    ignoreList: [
-        'src/themes/generated/*.*',
-        'node_modules/**/*.*',
-        'public/*.*',
-        'src/App.test.js',
-        'src/setupTests.js',
-        'src/serviceWorker.js',
-        'src/index.js',
-        'package.json',
-        'package-lock.json'
     ]
 };

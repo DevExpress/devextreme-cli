@@ -38,14 +38,14 @@ const commands = args['_'];
         });
         relativePaths.forEach(relativePath => {
             let content = fs.readFileSync(`${config.sourcePath}${relativePath}`, 'utf8');
-            content = updateContent(relativePath, content, config.updateRules, config.removeRules);
+            content = updateContent(relativePath, content, config.replaceRules, config.removeRules);
 
             writeFile(relativePath, content, config);
         });
     }
 
-    function updateContent(relativePath, content, updateRules, removeRules) {
-        const replacements = updateRules.filter(info => micromatch.isMatch(relativePath, info.glob));
+    function updateContent(relativePath, content, replaceRules, removeRules) {
+        const replacements = replaceRules.filter(info => micromatch.isMatch(relativePath, info.glob));
         replacements.forEach(replacement => {
             replacement.definitions.forEach(definition => {
                 content = content.replace(definition.before, definition.after);

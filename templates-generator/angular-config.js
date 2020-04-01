@@ -16,7 +16,7 @@ module.exports = {
         'tslint.json',
         'karma.conf.js'
     ],
-    updateRules: [
+    replaceRules: [
         {
             glob: 'src/themes/metadata.base.json',
             definitions: [
@@ -129,9 +129,9 @@ module.exports = {
             glob: 'src/app/app-routing.module.ts',
             definitions: [
                 /import { HomeComponent } [^\n]*?;\n/,
-                /import { ProfileComponent } [^\n]*?\r?\n/,
-                /import { DisplayDataComponent } [^\n]*?\r?\n/,
-                /import { DxDataGridModule, DxFormModule } [^\n]*?\r?\n/,
+                /import { ProfileComponent } [^\n]*?\n/,
+                /import { DisplayDataComponent } [^\n]*?\n/,
+                /import { DxDataGridModule, DxFormModule } [^\n]*?\n/,
                 /{\r?\n\s+path: 'display-data',[^}]*?},r?\n\s+/,
                 /{\r?\n\s+path: 'profile',[^}]*?},r?\n\s+/,
                 /{\r?\n\s+path: 'home',[^}]*?\r?\n\s+},\r?\n\s+/,
