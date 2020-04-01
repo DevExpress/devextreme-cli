@@ -128,14 +128,14 @@ module.exports = {
         {
             glob: 'src/app/app-routing.module.ts',
             definitions: [
-                /import { HomeComponent } [^\n]*?;\n/,
+                /import { HomeComponent } [^\n]*?\n/,
                 /import { ProfileComponent } [^\n]*?\n/,
                 /import { DisplayDataComponent } [^\n]*?\n/,
                 /import { DxDataGridModule, DxFormModule } [^\n]*?\n/,
-                /{\r?\n\s+path: 'display-data',[^}]*?},r?\n\s+/,
-                /{\r?\n\s+path: 'profile',[^}]*?},r?\n\s+/,
-                /{\r?\n\s+path: 'home',[^}]*?\r?\n\s+},\r?\n\s+/,
-                /},\r?\n\s+{\r?\n\s+path: '\*\*',[^}]*/,
+                /{[^}]*?path: 'display-data',[^}]*?},\s+/,
+                /{[^}]*?path: 'profile',[^}]*?},\s+/,
+                /{[^}]*?path: 'home',[^}]*?},\s+/,
+                /},[^}]*?path: '\*\*',[^}]*/,
                 /, {\s?useHash: true\s?}/,
                 ', DxDataGridModule, DxFormModule',
                 /,\r?\n\s+declarations: [^\]]*?]/s
