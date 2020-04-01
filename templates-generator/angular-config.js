@@ -2,6 +2,20 @@ module.exports = {
     sourcePath: 'packages/devextreme-cli/testing/sandbox/angular/my-app/',
     targetPath: 'packages/devextreme-schematics/',
     sourceGlob: '**/*.{js,scss,json,html,ts}',
+    ignoreList: [
+        'node_modules/**/*.*',
+        'src/{themes/generated,environments}/**/*.*',
+        'src/{polyfills,test,app/app.module,main}.ts',
+        'src/{dx-styles,styles}.scss',
+        'src/index.html',
+        'e2e/{tsconfig.json,protractor.conf.js}',
+        '{package-lock,package}.json',
+        'tsconfig.{app,spec}.json',
+        'tsconfig.json',
+        'angular.json',
+        'tslint.json',
+        'karma.conf.js'
+    ],
     updateRules: [
         {
             glob: 'src/themes/metadata.base.json',
@@ -69,7 +83,7 @@ module.exports = {
             glob: 'src/app/app-navigation.ts',
             definitions: [
                 {
-                    before: /export const navigation = \[.*?];/s,
+                    before: /export const navigation = \[.*?\];/s,
                     after: 'export const navigation = [];'
                 }
             ]
@@ -87,7 +101,7 @@ module.exports = {
             glob: 'src/app/app-routing.module.ts',
             definitions: [
                 {
-                    before: /import { HomeComponent } [^\n]*?\r?\n/,
+                    before: /import { HomeComponent } [^\n]*?;\n/,
                     after: ''
                 },
                 {
@@ -103,27 +117,27 @@ module.exports = {
                     after: ''
                 },
                 {
-                    before: /{\r?\n\s+path: 'display-data',\r?\n\s+component: DisplayDataComponent,\r?\n\s+canActivate: \[ AuthGuardService \]\r?\n\s+},\r?\n\s+/,
+                    before: /{\r?\n\s+path: 'display-data',[^}]*?},r?\n\s+/,
                     after: ''
                 },
                 {
-                    before: /{\r?\n\s+path: 'profile',\r?\n\s+component: ProfileComponent,\r?\n\s+canActivate: \[ AuthGuardService \]\r?\n\s+},\r?\n\s+/,
+                    before: /{\r?\n\s+path: 'profile',[^}]*?},r?\n\s+/,
                     after: ''
                 },
                 {
-                    before: /{\r?\n\s+path: 'home',\r?\n\s+component: HomeComponent,\r?\n\s+canActivate: \[ AuthGuardService \]\r?\n\s+},\r?\n\s+/,
+                    before: /{\r?\n\s+path: 'home',[^}]*?\r?\n\s+},\r?\n\s+/,
                     after: ''
                 },
                 {
-                    before: /},\r?\n\s+{\r?\n\s+path: '\*\*',\r?\n\s+redirectTo: 'home',\r?\n\s+canActivate: \[ AuthGuardService \]\r?\n\s+/,
+                    before: /},\r?\n\s+{\r?\n\s+path: '\*\*',[^}]*/,
                     after: ''
                 },
                 {
-                    before: ', {useHash: true}),',
-                    after: ')'
+                    before: /, {\s?useHash: true\s?}/,
+                    after: ''
                 },
                 {
-                    before: ' DxDataGridModule, DxFormModule',
+                    before: ', DxDataGridModule, DxFormModule',
                     after: ''
                 },
                 {
@@ -184,19 +198,5 @@ module.exports = {
                 targetPath: 'packages/devextreme-schematics/src/add-layout/files/src/app/__name__'
             }
         }
-    ],
-    ignoreList: [
-        'node_modules/**/*.*',
-        'src/{themes/generated,environments}/**/*.*',
-        'src/{polyfills,test,app/app.module,main}.ts',
-        'src/{dx-styles,styles}.scss',
-        'src/index.html',
-        'e2e/{tsconfig.json,protractor.conf.js}',
-        '{package-lock,package}.json',
-        'tsconfig.{app,spec}.json',
-        'tsconfig.json',
-        'angular.json',
-        'tslint.json',
-        'karma.conf.js'
     ]
 };
