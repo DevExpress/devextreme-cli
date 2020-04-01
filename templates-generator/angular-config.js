@@ -140,7 +140,7 @@ module.exports = {
                 ', DxDataGridModule, DxFormModule',
                 /,\r?\n\s+declarations: [^\]]*?]/
             ]
-        },
+        }
     ],
     moveRules: [
         {
