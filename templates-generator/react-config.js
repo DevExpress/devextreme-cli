@@ -77,7 +77,7 @@ module.exports = {
             glob: 'src/themes/metadata.additional.json',
             definitions: [
                 {
-                    before: /"baseTheme": ".*?"/,
+                    before: /"baseTheme": "[^"]*?"/,
                     after: '"baseTheme": "material.orange.dark"'
                 }
             ]
@@ -86,7 +86,7 @@ module.exports = {
             glob: 'src/themes/metadata.base.json',
             definitions: [
                 {
-                    before: /"baseTheme": ".*?"/,
+                    before: /baseTheme": "[^"]*?"/,
                     after: '"baseTheme": "material.orange.light"'
                 }
             ]
@@ -95,7 +95,7 @@ module.exports = {
             glob: 'src/themes/metadata.*.json',
             definitions: [
                 {
-                    before: /"items":\s+\[[^]*?\]/,
+                    before: /"items":\s+\[[^\]]*?\]/,
                     after: '"items": []'
                 }
             ]
