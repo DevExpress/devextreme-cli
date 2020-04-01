@@ -1,4 +1,5 @@
 # DevExtreme CLI
+[![CircleCI](https://circleci.com/gh/DevExpress/devextreme-cli.svg?style=svg)](https://circleci.com/gh/DevExpress/devextreme-cli)
 
 DevExtreme CLI is a set of command-line tools to be used with the DevExtreme controls library.
 
