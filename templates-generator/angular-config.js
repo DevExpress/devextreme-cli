@@ -83,7 +83,7 @@ module.exports = {
             glob: 'src/app/app-navigation.ts',
             definitions: [
                 {
-                    before: /export const navigation = \[.*?\];/s,
+                    before: /export const navigation = [^;]*?;/s,
                     after: 'export const navigation = [];'
                 }
             ]
@@ -92,7 +92,7 @@ module.exports = {
             glob: 'src/app/shared/components/side-navigation-menu/side-navigation-menu.component.ts',
             definitions: [
                 {
-                    before: /\(DxTreeViewComponent[^\]]*?\)/,
+                    before: /\(DxTreeViewComponent[^\)]*?\)/,
                     after: '(DxTreeViewComponent<% if(requireStaticFlag) { %>, { static: true }<% } %>)'
                 }
             ]
