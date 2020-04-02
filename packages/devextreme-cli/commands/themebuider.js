@@ -15,7 +15,7 @@ const themeBuilderPackagePath = path.join(__dirname, '..', 'node_modules', 'deve
 const scssCompiler = {
     render: (scss) => {
         return new Promise((resolve, reject) => {
-            require('node-sass').render({
+            require('dart-sass').render({
                 data: scss
             }, (error, result) => {
                 if(error) {
