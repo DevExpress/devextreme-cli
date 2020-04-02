@@ -43,7 +43,7 @@ export const ScreenSize = {
 
 function getScreenSize() {
   if (largeMedia.matches) {
-    return ScreenSize.Large
+    return ScreenSize.Large;
   }
 
   if (mediumMedia.matches) {

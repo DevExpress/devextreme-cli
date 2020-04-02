@@ -9,15 +9,15 @@ const defaultUser = {
 
 function AuthProvider(props) {
   const [user, setUser] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const logIn = useCallback(async (email, password) => {
     // Send login request
     console.log(email, password);
 
     setUser({
-      ...defaultUser,
-      email
+      email,
+      avatarUrl: defaultUser.avatarUrl
     });
   }, []);
 
@@ -31,11 +31,11 @@ function AuthProvider(props) {
     // Retrieve and save user data on initial load
 
     setUser(defaultUser);
-    setIsLoading(false);
+    setLoading(false);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, logIn, logOut, isLoading }} {...props} />
+    <AuthContext.Provider value={{ user, logIn, logOut, loading }} {...props} />
   );
 }
 

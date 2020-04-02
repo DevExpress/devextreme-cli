@@ -15,13 +15,13 @@ const notificationText = 'Check your email for a message with a link to update y
 
 export default function (props) {
   const history = useHistory();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const formData = useRef({});
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
     const { email } = formData.current;
-    setIsLoading(true);
+    setLoading(true);
 
     // Send reset password request
     console.log(email);
@@ -32,7 +32,7 @@ export default function (props) {
 
   return (
     <form onSubmit={onSubmit}>
-      <Form formData={formData.current} disabled={isLoading}>
+      <Form formData={formData.current} disabled={loading}>
         <Item
           dataField={'email'}
           editorType={'dxTextBox'}
@@ -50,8 +50,8 @@ export default function (props) {
           >
             <span className="dx-button-text">
               {
-                isLoading
-                  ? <LoadIndicator width={'24px'} height={'24px'} visible={isLoading} />
+                loading
+                  ? <LoadIndicator width={'24px'} height={'24px'} visible={true} />
                   : 'Reset my password'
               }
             </span>

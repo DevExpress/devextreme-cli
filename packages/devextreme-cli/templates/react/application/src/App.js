@@ -10,10 +10,10 @@ import AuthenticatedApp from './AuthenticatedApp';
 import PublicApp from './PublicApp';
 
 function App() {
-  const { user, isLoading } = useAuth();
+  const { user, loading } = useAuth();
   const screenSize = useScreenSize();
 
-  if (isLoading) {
+  if (loading) {
     return <LoadPanel visible={true} />
   }
 

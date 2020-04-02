@@ -15,13 +15,13 @@ import './login-form.scss';
 export default function (props) {
   const history = useHistory();
   const { logIn } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const formData = useRef({});
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
     const { email, password } = formData.current;
-    setIsLoading(true);
+    setLoading(true);
 
     await logIn(email, password);
   }, [logIn]);
@@ -32,7 +32,7 @@ export default function (props) {
 
   return (
     <form className={'login-form'} onSubmit={onSubmit}>
-      <Form formData={formData.current} disabled={isLoading}>
+      <Form formData={formData.current} disabled={loading}>
         <Item
           dataField={'email'}
           editorType={'dxTextBox'}
@@ -65,8 +65,8 @@ export default function (props) {
           >
             <span className="dx-button-text">
               {
-                isLoading
-                  ? <LoadIndicator width={'24px'} height={'24px'} visible={isLoading} />
+                loading
+                  ? <LoadIndicator width={'24px'} height={'24px'} visible={true} />
                   : 'Sign in'
               }
             </span>

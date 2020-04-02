@@ -14,13 +14,13 @@ import './create-account-form.scss';
 
 export default function (props) {
   const history = useHistory();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const formData = useRef({});
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
     const { email, password } = formData.current;
-    setIsLoading(true);
+    setLoading(true);
 
     // Send create account request
     console.log(email, password);
@@ -28,14 +28,14 @@ export default function (props) {
     history.push('/login');
   }, [history]);
 
-  const validatePasswords = useCallback(
+  const confirmPassword = useCallback(
     ({ value }) => value === formData.current.password ? true : false,
     []
   );
 
   return (
     <form className={'create-account-form'} onSubmit={onSubmit}>
-      <Form formData={formData.current} disabled={isLoading}>
+      <Form formData={formData.current} disabled={loading}>
         <Item
           dataField={'email'}
           editorType={'dxTextBox'}
@@ -54,14 +54,14 @@ export default function (props) {
           <Label visible={false} />
         </Item>
         <Item
-          dataField={'passwordConfirmation'}
+          dataField={'confirmedPassword'}
           editorType={'dxTextBox'}
-          editorOptions={passwordConfirmationEditorOptions}
+          editorOptions={confirmedPasswordEditorOptions}
         >
           <RequiredRule message="Password is required" />
           <CustomRule
             message={'Passwords do not match'}
-            validationCallback={validatePasswords}
+            validationCallback={confirmPassword}
           />
           <Label visible={false} />
         </Item>
@@ -78,8 +78,8 @@ export default function (props) {
           >
             <span className="dx-button-text">
               {
-                isLoading
-                  ? <LoadIndicator width={'24px'} height={'24px'} visible={isLoading} />
+                loading
+                  ? <LoadIndicator width={'24px'} height={'24px'} visible={true} />
                   : 'Create a new account'
               }
             </span>
@@ -97,4 +97,4 @@ export default function (props) {
 
 const emailEditorOptions = { stylingMode: 'filled', placeholder: 'Email', mode: 'email' };
 const passwordEditorOptions = { stylingMode: 'filled', placeholder: 'Password', mode: 'password' };
-const passwordConfirmationEditorOptions = { stylingMode: 'filled', placeholder: 'Re-type Your Password', mode: 'password' };
+const confirmedPasswordEditorOptions = { stylingMode: 'filled', placeholder: 'Re-type Your Password', mode: 'password' };
