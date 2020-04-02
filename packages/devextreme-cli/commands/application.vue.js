@@ -19,21 +19,18 @@ const layouts = [
 ];
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
-    const depends = [
+    const dependencies = [
         { name: 'node-sass', version: '^4.11.0' },
-        { name: 'vue-router', version: '^3.0.1' }
-    ];
-    const devDepends = [
-        { name: 'devextreme-cli', version: latestVersions['devextreme-cli'] },
-        { name: 'sass-loader', version: '^7.1.0' }
+        { name: 'vue-router', version: '^3.0.1' },
+        { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
+        { name: 'sass-loader', version: '^7.1.0', dev: true }
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
         { name: 'postinstall', value: 'npm run build-themes' }
     ];
 
-    packageJsonUtils.addDependencies(appPath, depends);
-    packageJsonUtils.addDependencies(appPath, devDepends, 'dev');
+    packageJsonUtils.addDependencies(appPath, dependencies);
     packageJsonUtils.updateScripts(appPath, scripts);
     packageJsonUtils.updateName(appPath, appName);
 };

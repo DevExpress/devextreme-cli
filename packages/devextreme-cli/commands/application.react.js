@@ -20,20 +20,17 @@ const layouts = [
 ];
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
-    const depends = [
+    const dependencies = [
         { name: 'node-sass', version: '^4.11.0' },
+        { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
         { name: 'react-router-dom', version: '^5.0.0' }
-    ];
-    const devDepends = [
-        { name: 'devextreme-cli', version: latestVersions['devextreme-cli'] }
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
         { name: 'postinstall', value: 'npm run build-themes' }
     ];
 
-    packageJsonUtils.addDependencies(appPath, depends);
-    packageJsonUtils.addDependencies(appPath, devDepends, 'dev');
+    packageJsonUtils.addDependencies(appPath, dependencies);
     packageJsonUtils.updateScripts(appPath, scripts);
     packageJsonUtils.updateName(appPath, appName);
 };
