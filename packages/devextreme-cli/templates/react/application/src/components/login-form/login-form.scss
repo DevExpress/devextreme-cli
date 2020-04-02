@@ -1,13 +1,15 @@
-@import "../../themes/generated/variables.base.scss";
+.login-form {
+  .link {
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
 
-.login-header {
-  text-align: center;
-  margin-bottom: 40px;
+    a {
+      text-decoration: none;
+    }
+  }
 
-  .title {
-    color: $base-accent;
-    font-weight: bold;
-    font-size: 30px;
-    margin: 0;
+  .form-text {
+    color: rgba(0, 0, 0, 0.54);
   }
 }

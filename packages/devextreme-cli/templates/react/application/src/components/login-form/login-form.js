@@ -1,93 +1,94 @@
-import React from 'react';
-import TextBox from 'devextreme-react/text-box';
-import ValidationGroup from 'devextreme-react/validation-group';
-import Validator, { RequiredRule } from 'devextreme-react/validator';
-import Button from 'devextreme-react/button';
-import CheckBox from 'devextreme-react/check-box';
+import React, { useState, useRef, useCallback } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import Form, {
+  Item,
+  Label,
+  ButtonItem,
+  ButtonOptions,
+  RequiredRule,
+  EmailRule
+} from 'devextreme-react/form';
+import LoadIndicator from 'devextreme-react/load-indicator';
+import { useAuth } from '../../contexts/auth';
 import './login-form.scss';
-import appInfo from '../../app-info';
-import { Link } from 'react-router-dom';
 
-export default class LoginForm extends React.Component {
-  constructor(props) {
-    super(props);
+export default function (props) {
+  const history = useHistory();
+  const { logIn } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const formData = useRef({});
 
-    this.state = {
-      login: '',
-      password: ''
-    };
-  }
+  const onSubmit = useCallback(async (e) => {
+    e.preventDefault();
+    const { email, password } = formData.current;
+    setLoading(true);
 
-  render() {
-    const { login, password } = this.state;
-    return (
-      <ValidationGroup>
-        <div className={'login-header'}>
-          <div className={'title'}>{appInfo.title}</div>
-          <div>Sign In to your account</div>
-        </div>
-        <div className={'dx-field'}>
-          <TextBox
-            value={login}
-            onValueChanged={this.loginChanged}
-            placeholder={'Login'}
+    await logIn(email, password);
+  }, [logIn]);
+
+  const onCreateAccountClick = useCallback(() => {
+    history.push('/create-account');
+  }, [history]);
+
+  return (
+    <form className={'login-form'} onSubmit={onSubmit}>
+      <Form formData={formData.current} disabled={loading}>
+        <Item
+          dataField={'email'}
+          editorType={'dxTextBox'}
+          editorOptions={emailEditorOptions}
+        >
+          <RequiredRule message="Email is required" />
+          <EmailRule message="Email is invalid" />
+          <Label visible={false} />
+        </Item>
+        <Item
+          dataField={'password'}
+          editorType={'dxTextBox'}
+          editorOptions={passwordEditorOptions}
+        >
+          <RequiredRule message="Email is required" />
+          <Label visible={false} />
+        </Item>
+        <Item
+          dataField={'rememberMe'}
+          editorType={'dxCheckBox'}
+          editorOptions={rememberMeEditorOptions}
+        >
+          <Label visible={false} />
+        </Item>
+        <ButtonItem>
+          <ButtonOptions
             width={'100%'}
-          >
-            <Validator>
-              <RequiredRule message={'Login is required'} />
-            </Validator>
-          </TextBox>
-        </div>
-        <div className={'dx-field'}>
-          <TextBox
-            mode={'password'}
-            value={password}
-            onValueChanged={this.passwordChanged}
-            placeholder={'Password'}
-            width={'100%'}
-          >
-            <Validator>
-              <RequiredRule message={'Password is required'} />
-            </Validator>
-          </TextBox>
-        </div>
-        <div className={'dx-field'}>
-          <CheckBox defaultValue={false} text={'Remember me'} />
-        </div>
-        <div className={'dx-field'}>
-          <Button
             type={'default'}
-            text={'Login'}
-            onClick={this.onLoginClick}
+            useSubmitBehavior={true}
+          >
+            <span className="dx-button-text">
+              {
+                loading
+                  ? <LoadIndicator width={'24px'} height={'24px'} visible={true} />
+                  : 'Sign in'
+              }
+            </span>
+          </ButtonOptions>
+        </ButtonItem>
+        <Item>
+          <div className={'link'}>
+            <Link to={'/reset-password'}>Forgot password?</Link>
+          </div>
+        </Item>
+        <ButtonItem>
+          <ButtonOptions
+            text={'Create an account'}
             width={'100%'}
+            onClick={onCreateAccountClick}
           />
-        </div>
-        <div className={'dx-field'}>
-          <Link to={'/recovery'} onClick={e => e.preventDefault()}>Forgot password ?</Link>
-        </div>
-        <div className={'dx-field'}>
-          <Button type={'normal'} text={'Create an account'} width={'100%'} />
-        </div>
-      </ValidationGroup>
-    );
-  }
-
-  loginChanged = e => {
-    this.setState({ login: e.value });
-  };
-
-  passwordChanged = e => {
-    this.setState({ password: e.value });
-  };
-
-  onLoginClick = args => {
-    if (!args.validationGroup.validate().isValid) {
-      return;
-    }
-
-    const { login, password } = this.state;
-    this.props.onLoginClick(login, password);
-
-    args.validationGroup.reset();
-  };
+        </ButtonItem>
+      </Form>
+    </form>
+  );
 }
+
+const emailEditorOptions = { stylingMode: 'filled', placeholder: 'Email', mode: 'email' };
+const passwordEditorOptions = { stylingMode: 'filled', placeholder: 'Password', mode: 'password' };
+const rememberMeEditorOptions = { text: 'Remember me', elementAttr: { class: 'form-text' } };

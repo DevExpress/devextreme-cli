@@ -25,7 +25,7 @@ class SideNavInnerToolbar extends React.Component {
   }
 
   render() {
-    const { title, userMenuItems } = this.props;
+    const { title } = this.props;
     const {
       menuOpened,
       menuMode,
@@ -50,7 +50,6 @@ class SideNavInnerToolbar extends React.Component {
         >
           <div className={'container'}>
             <Header
-              userMenuItems={userMenuItems}
               menuToggleEnabled={minMenuSize === 0}
               toggleMenu={this.toggleMenu} />
 

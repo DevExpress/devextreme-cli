@@ -1,3 +1,5 @@
+import { useState, useCallback, useEffect } from 'react';
+
 const Breakpoints = {
   XSmall: '(max-width: 599.99px)',
   Small: '(min-width: 600px) and (max-width: 959.99px)',
@@ -30,4 +32,44 @@ export const subscribe = handler => handlers.push(handler);
 
 export const unsubscribe = handler => {
   handlers = handlers.filter(item => item !== handler);
+};
+
+export const ScreenSize = {
+  XSmall: 'screen-x-small',
+  Small: 'screen-small',
+  Medium: 'screen-medium',
+  Large: 'screen-large'
+};
+
+function getScreenSize() {
+  if (largeMedia.matches) {
+    return ScreenSize.Large;
+  }
+
+  if (mediumMedia.matches) {
+    return ScreenSize.Medium;
+  }
+
+  if (smallMedia.matches) {
+    return ScreenSize.Small;
+  }
+
+  return ScreenSize.XSmall;
+}
+
+export const useScreenSize = () => {
+  const [screenSize, setScreenSize] = useState(getScreenSize());
+  const onSizeChanged = useCallback(() => {
+    setScreenSize(getScreenSize);
+  }, []);
+
+  useEffect(() => {
+    subscribe(onSizeChanged);
+
+    return () => {
+      unsubscribe(onSizeChanged);
+    };
+  }, [onSizeChanged]);
+
+  return screenSize;
 };

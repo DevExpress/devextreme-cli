@@ -8,7 +8,7 @@ const classify = require('../utility/string').classify;
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/react');
-const appPath = path.join(sandboxPath, appName, 'src/App.js');
+const appPath = path.join(sandboxPath, appName, 'src/AuthenticatedApp.js');
 
 exports.engine = 'react';
 exports.port = 3000;

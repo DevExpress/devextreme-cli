@@ -29,15 +29,15 @@ export default ({ menuToggleEnabled, title, toggleMenu, userMenuItems }) => (
       >
         <Button
           className={'user-button authorization'}
-          width={172}
+          width={210}
           height={'100%'}
           stylingMode={'text'}
         >
-          <UserPanel menuItems={userMenuItems} menuMode={'context'} />
+          <UserPanel menuMode={'context'} />
         </Button>
       </Item>
       <Template name={'userPanelTemplate'}>
-        <UserPanel menuItems={userMenuItems} menuMode={'list'} />
+        <UserPanel menuMode={'list'} />
       </Template>
     </Toolbar>
   </header>

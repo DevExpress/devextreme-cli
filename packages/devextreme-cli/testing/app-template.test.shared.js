@@ -65,6 +65,14 @@ module.exports = (env) => {
                                 return page;
                             }
 
+                            async function logOut() {
+                                const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
+                                await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
+                                await page.waitFor('.dx-icon-runner', { timeout: 0 });
+                                await page.click('.dx-icon-runner');
+                                await page.waitFor('.login-header, .login-form', { timeout: 0 });
+                            }
+
                             function compareSnapshot(image, name) {
                                 expect(image).toMatchImageSnapshot({
                                     customSnapshotIdentifier: `${layout}-${theme}-${viewportName}-${name}`,
@@ -124,9 +132,9 @@ module.exports = (env) => {
                                     await page.waitFor(1000);
                                     const image = await page.screenshot({
                                         clip: {
-                                            x: viewport.width - 250,
+                                            x: viewport.width - 300,
                                             y: 0,
-                                            width: 250,
+                                            width: 300,
                                             height: 300
                                         }
                                     });
@@ -140,15 +148,44 @@ module.exports = (env) => {
                                         return;
                                     }
 
+                                    const name = env.engine === 'react' ? 'login-react' : 'login';
                                     const page = await openPage(appUrl);
-                                    const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
-                                    await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
-                                    await page.waitFor('.dx-icon-runner', { timeout: 0 });
-                                    await page.click('.dx-icon-runner');
-                                    await page.waitFor('.login-header', { timeout: 0 });
+                                    await logOut();
                                     const image = await page.screenshot();
 
-                                    compareSnapshot(image, 'login');
+                                    compareSnapshot(image, name);
+                                });
+
+                                it('Create account page', async() => {
+                                    // NOTE: Test only once
+                                    if(!isDefaultLayout || env.engine !== 'react') {
+                                        return;
+                                    }
+
+                                    const page = await openPage(appUrl);
+                                    await logOut();
+                                    await page.click('.dx-button-normal');
+                                    await page.waitFor('.create-account-form', { timeout: 0 });
+
+                                    const image = await page.screenshot();
+
+                                    compareSnapshot(image, 'create-account');
+                                });
+
+                                it('Reset password page', async() => {
+                                    // NOTE: Test only once
+                                    if(!isDefaultLayout || env.engine !== 'react') {
+                                        return;
+                                    }
+
+                                    const page = await openPage(appUrl);
+                                    await logOut();
+                                    await page.click('a');
+                                    await page.waitFor('form', { timeout: 0 });
+
+                                    const image = await page.screenshot();
+
+                                    compareSnapshot(image, 'reset-password');
                                 });
                             });
                         });

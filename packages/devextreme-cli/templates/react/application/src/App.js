@@ -1,111 +1,39 @@
-import React, { Component, useState } from 'react';
-import { HashRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import appInfo from './app-info';
-import routes from './app-routes';
+import React from 'react';
+import { HashRouter as Router } from 'react-router-dom';
 import './App.scss';
 import './dx-styles.scss';
-import { Footer, LoginForm } from './components';
-import {
-  <%=layout%> as SideNavBarLayout,
-  SingleCard
-} from './layouts';
-import { NavigationContext } from './contexts/navigation';
-import { sizes, subscribe, unsubscribe } from './utils/media-query';
+import LoadPanel from 'devextreme-react/load-panel';
+import { NavigationProvider } from './contexts/navigation';
+import { AuthProvider, useAuth } from './contexts/auth';
+import { useScreenSize } from './utils/media-query';
+import AuthenticatedApp from './AuthenticatedApp';
+import PublicApp from './PublicApp';
 
-const LoginContainer = ({ logIn }) => <LoginForm onLoginClick={logIn} />;
+function App() {
+  const { user, loading } = useAuth();
+  const screenSize = useScreenSize();
 
-const NotAuthPage = (props) => (
-  <SingleCard>
-    <Route render={() => <LoginContainer {...props} />} />
-  </SingleCard>
-);
-
-const AuthPage = (props) => {
-  const [navigationData, setNavigationData] = useState({});
+  if (loading) {
+    return <LoadPanel visible={true} />
+  }
 
   return (
-    <NavigationContext.Provider value={{ navigationData, setNavigationData }}>
-      <SideNavBarLayout title={appInfo.title} {...props}>
-        <Switch>
-          {routes.map(({ path, component }) => (
-            <Route
-              exact
-              key={path}
-              path={path}
-              component={component}
-            />
-          ))}<%=^empty%>
-          <Redirect to={'/home'} /><%=/empty%>
-        </Switch>
-        <Footer>
-          Copyright © 2011-2019 Developer Express Inc.
-          <br />
-          All trademarks or registered trademarks are property of their
-          respective owners.
-        </Footer>
-      </SideNavBarLayout>
-    </NavigationContext.Provider>
-  )
-};
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loggedIn: true,
-      screenSizeClass: this.getScreenSizeClass()
-    };
-
-    this.userMenuItems = [
+    <div className={`app ${screenSize}`}>
       {
-        text: 'Profile',
-        icon: 'user'
-      },
-      {
-        text: 'Logout',
-        icon: 'runner',
-        onClick: this.logOut
+        user ? <AuthenticatedApp /> : <PublicApp />
       }
-    ];
-  }
-
-  componentDidMount() {
-    subscribe(this.screenSizeChanged);
-  }
-
-  componentWillUnmount() {
-    unsubscribe(this.screenSizeChanged);
-  }
-
-  render() {
-    const { loggedIn } = this.state;
-
-    return (
-      <div className={`app ${this.state.screenSizeClass}`}>
-        <Router>{loggedIn ? <AuthPage userMenuItems={this.userMenuItems} /> : <NotAuthPage logIn={this.logIn} />}</Router>
-      </div>
-    );
-  }
-
-  getScreenSizeClass() {
-    const screenSizes = sizes();
-    return Object.keys(screenSizes).filter(cl => screenSizes[cl]).join(' ');
-  }
-
-  screenSizeChanged = () => {
-    this.setState({
-      screenSizeClass: this.getScreenSizeClass()
-    });
-  }
-
-  logIn = () => {
-    this.setState({ loggedIn: true });
-  };
-
-  logOut = () => {
-    this.setState({ loggedIn: false });
-  };
+    </div>
+  );
 }
 
-export default App;
+export default function () {
+  return (
+    <Router>
+      <AuthProvider>
+        <NavigationProvider>
+          <App />
+        </NavigationProvider>
+      </AuthProvider>
+    </Router>
+  );
+}
