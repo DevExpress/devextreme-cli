@@ -31,11 +31,14 @@ const addDevextreme = (appPath, dxversion, engine) => {
     const dxWrapperPackage = `devextreme-${engine}`;
     const depends = [
         { name: 'devextreme', version: dxversion || latestVersions['devextreme'] },
-        { name: 'devextreme-themebuilder', version: dxversion || latestVersions['devextreme'] },
         { name: dxWrapperPackage, version: dxversion || latestVersions[dxWrapperPackage] }
+    ];
+    const devDepends = [
+        { name: 'devextreme-themebuilder', version: dxversion || latestVersions['devextreme'] }
     ];
 
     addDependencies(getPackageJsonPath(appPath), depends);
+    addDependencies(getPackageJsonPath(appPath), devDepends, 'dev');
 };
 
 const updateName = (appPath, name) => {
