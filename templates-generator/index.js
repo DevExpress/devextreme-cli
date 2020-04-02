@@ -17,14 +17,14 @@ const platformsConfigs = {
 };
 
 const commands = args['_'];
-if (commands.length) {
+if(commands.length) {
     throw new Error(`Unexpected command(s) '${args._}'`);
 }
 
-if (args.platform in platformsConfigs) {
+if(args.platform in platformsConfigs) {
     generateTemplate(args.platform);
-} else if (!args.platform) {
-    for (let platform in platformsConfigs) {
+} else if(!args.platform) {
+    for(let platform in platformsConfigs) {
         generateTemplate(platform);
     }
 } else {
@@ -40,15 +40,14 @@ function generateTemplate(platform) {
     relativePaths.forEach(relativePath => {
         let content = fs.readFileSync(`${config.sourcePath}${relativePath}`, 'utf8');
         content = updateContent(relativePath, content, config.replaceRules, config.removeRules);
-        
+
         writeFile(relativePath, content, config);
     });
 }
 
 function updateContent(relativePath, content, replaceRules, removeRules) {
     replaceRules.forEach(replacement => {
-        if (micromatch.isMatch(relativePath, replacement.glob))
-        {
+        if(micromatch.isMatch(relativePath, replacement.glob)) {
             replacement.definitions.forEach(definition => {
                 content = content.replace(definition.before, definition.after);
             });
@@ -56,7 +55,7 @@ function updateContent(relativePath, content, replaceRules, removeRules) {
     });
 
     removeRules.forEach(removal => {
-        if (micromatch.isMatch(relativePath, removal.glob)) {
+        if(micromatch.isMatch(relativePath, removal.glob)) {
             removal.definitions.forEach(definition => {
                 content = content.replace(definition, '');
             });
@@ -77,7 +76,7 @@ function writeFile(relativePath, content, { moveRules, targetPath }) {
 
 function createNestedFolder(fullPath) {
     const dirName = path.dirname(fullPath);
-    if (!fs.existsSync(dirName)) {
+    if(!fs.existsSync(dirName)) {
         fs.mkdirSync(dirName, { recursive: true });
     }
 }
