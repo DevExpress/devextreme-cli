@@ -6,32 +6,33 @@ import LoadPanel from 'devextreme-react/load-panel';
 import { NavigationProvider } from './contexts/navigation';
 import { AuthProvider, useAuth } from './contexts/auth';
 import { useScreenSize } from './utils/media-query';
-import AuthenticatedApp from './AuthenticatedApp';
-import PublicApp from './PublicApp';
+import Content from './Content';
+import NotAuthenticatedContent from './NotAuthenticatedContent';
 
 function App() {
   const { user, loading } = useAuth();
-  const screenSize = useScreenSize();
 
   if (loading) {
-    return <LoadPanel visible={true} />
+    return <LoadPanel visible={true} />;
   }
 
-  return (
-    <div className={`app ${screenSize}`}>
-      {
-        user ? <AuthenticatedApp /> : <PublicApp />
-      }
-    </div>
-  );
+  if (user) {
+    return <Content />;
+  }
+
+  return <NotAuthenticatedContent />;
 }
 
 export default function () {
+  const screenSize = useScreenSize();
+
   return (
     <Router>
       <AuthProvider>
         <NavigationProvider>
-          <App />
+          <div className={`app ${screenSize}`}>
+            <App />
+          </div>
         </NavigationProvider>
       </AuthProvider>
     </Router>

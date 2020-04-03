@@ -2,12 +2,13 @@
 
 .create-account-form {
   .policy-info {
-    color: rgba(0, 0, 0, 0.54);
+    margin: 10px 0;
+    color: rgba($base-text-color, alpha($base-text-color) * 0.7);
     font-size: 14px;
     font-style: normal;
 
     a {
-      color: rgba(0, 0, 0, 0.54);
+      color: rgba($base-text-color, alpha($base-text-color) * 0.7);
     }
   }
 

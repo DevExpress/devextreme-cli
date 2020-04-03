@@ -8,7 +8,7 @@ const classify = require('../utility/string').classify;
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/react');
-const appPath = path.join(sandboxPath, appName, 'src/AuthenticatedApp.js');
+const appLayoutPath = path.join(sandboxPath, appName, 'src/Content.js');
 
 exports.engine = 'react';
 exports.port = 3000;
@@ -36,7 +36,7 @@ exports.createApp = async() => {
 exports.setLayout = (layoutName) => {
     const regexToFind = /SideNav\w+Toolbar as SideNavBarLayout/g;
     const newSubStr = `${classify(layoutName)} as SideNavBarLayout`;
-    const data = fs.readFileSync(appPath, 'utf8');
+    const data = fs.readFileSync(appLayoutPath, 'utf8');
     const result = data.replace(regexToFind, newSubStr);
-    fs.writeFileSync(appPath, result, 'utf8');
+    fs.writeFileSync(appLayoutPath, result, 'utf8');
 };

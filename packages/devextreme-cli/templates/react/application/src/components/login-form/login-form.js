@@ -67,7 +67,7 @@ export default function (props) {
               {
                 loading
                   ? <LoadIndicator width={'24px'} height={'24px'} visible={true} />
-                  : 'Sign in'
+                  : 'Sign In'
               }
             </span>
           </ButtonOptions>
