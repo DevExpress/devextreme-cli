@@ -1,4 +1,5 @@
 const path = require('path');
+const packageManager = require('../utility/package-manager');
 const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
 const fs = require('fs');
@@ -20,20 +21,31 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
         additionalOptions.push(schematicOption);
     };
 
-
     let commandArguments = [
-        'ng', 'g', `${collectionName}:${schematicCommand}`
+        'g', `${collectionName}:${schematicCommand}`
     ].concat(additionalOptions);
 
-    optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
+    hasSutableNgCli().then(() => {
         if(!localPackageExists(collectionPath)) {
-            runCommand('npm', ['install', collectionPath], evaluatingOptions).then(() => {
-                runCommand('npx', optimizedArguments, evaluatingOptions);
+            packageManager.installPackage(collectionPath, evaluatingOptions).then(() => {
+                runAngularCliCommand(commandArguments, evaluatingOptions);
             });
         } else {
-            runCommand('npx', optimizedArguments, evaluatingOptions);
+            runAngularCliCommand(commandArguments, evaluatingOptions);
         }
+    },
+    () => {
+        if(packageManager.isYarn()) {
+            console.error('You don`t have an installed angular\\cli');
+            rocess.exit();
+        }
+
+        packageManager.run(['-p', '@angular/cli', 'ng'].concat(commandArguments), evaluatingOptions);
     });
+}
+
+function runAngularCliCommand(commandArguments, evaluatingOptions) {
+    return runCommand('ng', commandArguments, evaluatingOptions);
 }
 
 function localPackageExists(packageName) {
@@ -44,12 +56,6 @@ function localPackageExists(packageName) {
 
     const packageJsonPath = path.join(nodeModulesPath, packageName, 'package.json');
     return fs.existsSync(packageJsonPath);
-}
-
-function optimizeNgCommandArguments(args) {
-    return new Promise((resolve, reject) => {
-        hasSutableNgCli().then(() => resolve(args), () => resolve(['-p', '@angular/cli', ...args]));
-    });
 }
 
 function hasSutableNgCli() {
@@ -71,14 +77,23 @@ const install = (options) => {
 };
 
 const create = (appName, options) => {
-    let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-install=true', '--skip-tests=true'];
-    optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
-        runCommand('npx', optimizedArguments).then(() => {
-            options.resolveConflicts = 'override';
-            options.updateBudgets = true;
-            addTemplate(appName, options, {
-                cwd: path.join(process.cwd(), appName)
-            });
+    const commandArguments = ['new', appName, '--style=scss', '--routing=false', '--skip-install=true', '--skip-tests=true'];
+    const evaluatingOptions = { cwd: path.join(process.cwd(), appName) };
+    options.resolveConflicts = 'override';
+    options.updateBudgets = true;
+
+    hasSutableNgCli().then(() => {
+        runAngularCliCommand(commandArguments).then(() => {
+            addTemplate(appName, options, evaluatingOptions);
+        });
+    },
+    () => {
+        if(packageManager.isYarn()) {
+            cconsole.error('You don`t have an installed angular\\cli');
+            rocess.exit();
+        }
+        packageManager.run(['-p', '@angular/cli', 'ng'].concat(commandArguments), evaluatingOptions).then(() => {
+            addTemplate(appName, options, evaluatingOptions);
         });
     });
 };

@@ -17,6 +17,7 @@
     "commands/**/*",
     "templates/**/*",
     "utility/**/*",
+    "cli-config.json",
     "index.js"
   ],
   "scripts": {
