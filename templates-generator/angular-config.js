@@ -138,7 +138,7 @@ module.exports = {
                 /},[^}]*?path: '\*\*'[^}]*/,
                 /, {\s?useHash: true\s?}/,
                 ', DxDataGridModule, DxFormModule',
-                /,\r?\n\s+declarations: [^\]]*?]/
+                /,\n\s+declarations: [^\]]*?]/
             ]
         }
     ],
