@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Form, {
   Item,
   Label,
@@ -10,8 +10,9 @@ import Form, {
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
+import './reset-password-form.scss'
 
-const notificationText = 'Check your email for a message with a link to update your password';
+const notificationText = 'We\'ve sent a link to reset your password. Check your inbox.';
 
 export default function (props) {
   const history = useHistory();
@@ -31,7 +32,7 @@ export default function (props) {
   }, [history]);
 
   return (
-    <form onSubmit={onSubmit}>
+    <form className={'reset-password-form'} onSubmit={onSubmit}>
       <Form formData={formData.current} disabled={loading}>
         <Item
           dataField={'email'}
@@ -44,6 +45,7 @@ export default function (props) {
         </Item>
         <ButtonItem>
           <ButtonOptions
+            elementAttr={submitButtonAttributes}
             width={'100%'}
             type={'default'}
             useSubmitBehavior={true}
@@ -57,9 +59,15 @@ export default function (props) {
             </span>
           </ButtonOptions>
         </ButtonItem>
+        <Item>
+          <div className={'login-link'}>
+            Return to <Link to={'/login'}>Sign In</Link>
+          </div>
+        </Item>
       </Form>
     </form>
   );
 }
 
 const emailEditorOptions = { stylingMode: 'filled', placeholder: 'Email', mode: 'email' };
+const submitButtonAttributes = { class: 'submit-button' };
