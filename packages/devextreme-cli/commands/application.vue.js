@@ -28,8 +28,8 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
         { name: 'sass-loader', version: '^7.1.0' }
     ];
     const scripts = [
-        { name: 'build-themes', value: `devextreme build --packageManager=${packageManager.getPackageManager()}` },
-        { name: 'postinstall', value: 'npm run build-themes' }
+        { name: 'build-themes', value: 'devextreme build' },
+        { name: 'postinstall', value: `devextreme --packageManager=${packageManager.getPackageManager()} && npm run build-themes` }
     ];
 
     packageJsonUtils.addDependencies(appPath, depends);

@@ -111,12 +111,11 @@ const installThemeBuilder = async version => {
         fs.copyFileSync(npmrc, installationNpmrc);
     }
 
-    await packageManager.installPackage([
-        '--no-save',
-        `devextreme-themebuilder@${version}`
-    ], {
+    await packageManager.installPackage(`devextreme-themebuilder@${version}`, {
         cwd,
         stdio: 'ignore'
+    }, {
+        noSave: true
     });
 
     if(removeNpmrc) {

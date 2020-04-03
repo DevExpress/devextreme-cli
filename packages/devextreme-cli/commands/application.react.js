@@ -29,8 +29,8 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'] }
     ];
     const scripts = [
-        { name: 'build-themes', value: `devextreme build --packageManager=${packageManager.getPackageManager()}` },
-        { name: 'postinstall', value: 'npm run build-themes' }
+        { name: 'build-themes', value: 'devextreme build' },
+        { name: 'postinstall', value: `devextreme --packageManager=${packageManager.getPackageManager()} && npm run build-themes` }
     ];
 
     packageJsonUtils.addDependencies(appPath, depends);
@@ -56,7 +56,7 @@ const getLayout = (options) => {
 };
 
 function getCommandArguments(appName) {
-    return isYarn ? 
+    return isYarn ?
         ['create', 'react-app', appName] :
         ['create-react-app', '--use-npm', appName];
 }

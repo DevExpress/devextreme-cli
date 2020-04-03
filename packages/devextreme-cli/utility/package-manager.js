@@ -1,10 +1,6 @@
 const configUtils = require('./config-utils');
 const runCommand = require('./run-command');
 
-const setPackageManager = (value) => {
-    packageManager = value;
-};
-
 const getPackageManager = () => {
     return configUtils.getValue('defaultPackageManager');
 };
@@ -17,9 +13,14 @@ const isYarn = () => {
     return getPackageManager() === 'yarn';
 };
 
-const installPackage = (package, evaluatingOptions) => {
+const installPackage = (packageName, evaluatingOptions, installOptions) => {
     const command = isYarn() ? ['add'] : ['install'];
-    return runCommand(getPackageManager(), command.concat(package), evaluatingOptions);
+
+    if(installOptions && installOptions.noSave && !isYarn()) {
+        command.push('--no-save');
+    }
+
+    return runCommand(getPackageManager(), command.push(packageName), evaluatingOptions);
 };
 
 const installDependencies = (evaluatingOptions) => {
@@ -34,10 +35,9 @@ const run = (commandArguments, evaluatingOptions) => {
 
 module.exports = {
     setDefaultPackageManager,
-    setPackageManager,
     getPackageManager,
     isYarn,
     installPackage,
     installDependencies,
     run
-}
+};

@@ -3,6 +3,7 @@ const path = require('path');
 
 const rimraf = require('./utils/rimraf-async');
 const packageManager = require('../utility/package-manager');
+const runCommand = require('../utility/run-command');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');

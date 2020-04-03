@@ -35,12 +35,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
         }
     },
     () => {
-        if(packageManager.isYarn()) {
-            console.error('You don`t have an installed angular\\cli');
-            rocess.exit();
-        }
-
-        packageManager.run(['-p', '@angular/cli', 'ng'].concat(commandArguments), evaluatingOptions);
+        executeLatestAngularCli(commandArguments, evaluatingOptions);
     });
 }
 
@@ -72,6 +67,14 @@ function parseNgCliVersion(stdout) {
     return new semver(/angular.cli:\s*(\S+)/ig.exec(stdout.toString())[1]);
 }
 
+function executeLatestAngularCli(commandArguments, evaluatingOptions) {
+    if(packageManager.isYarn()) {
+        console.error('You don`t have an installed angular\\cli');
+        process.exit();
+    }
+    return packageManager.run(['-p', '@angular/cli', 'ng'].concat(commandArguments), evaluatingOptions);
+}
+
 const install = (options) => {
     runSchematicCommand('install', options);
 };
@@ -88,13 +91,7 @@ const create = (appName, options) => {
         });
     },
     () => {
-        if(packageManager.isYarn()) {
-            cconsole.error('You don`t have an installed angular\\cli');
-            rocess.exit();
-        }
-        packageManager.run(['-p', '@angular/cli', 'ng'].concat(commandArguments), evaluatingOptions).then(() => {
-            addTemplate(appName, options, evaluatingOptions);
-        });
+        executeLatestAngularCli(commandArguments, evaluatingOptions).then(() => addTemplate(appName, options, evaluatingOptions));
     });
 };
 
