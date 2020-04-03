@@ -11,31 +11,37 @@ const getPackageJsonPath = (appPath) => {
     return packageJsonPath;
 };
 
-const addDependencies = (appPath, packages, type) => {
-    const propName = type === 'dev' ? 'devDependencies' : 'dependencies';
-
-    modifyJson(getPackageJsonPath(appPath), content => {
-        if(!content[propName]) {
-            content[propName] = {};
-        }
-
-        packages.forEach(item => {
-            content[propName][item.name] = item.version;
+const addDependencies = (appPath, dependencies) => {
+    modifyJson(getPackageJsonPath(appPath), packageConfig => {
+        dependencies.forEach(dependency => {
+            const sectionName = dependency.dev ? 'devDependencies' : 'dependencies';
+            const section = packageConfig[sectionName] = packageConfig[sectionName] || {};
+            section[dependency.name] = dependency.version;
         });
 
-        return content;
+        return packageConfig;
     });
 };
 
 const addDevextreme = (appPath, dxversion, engine) => {
     const dxWrapperPackage = `devextreme-${engine}`;
-    const depends = [
-        { name: 'devextreme', version: dxversion || latestVersions['devextreme'] },
-        { name: 'devextreme-themebuilder', version: dxversion || latestVersions['devextreme'] },
-        { name: dxWrapperPackage, version: dxversion || latestVersions[dxWrapperPackage] }
+    const dependencies = [
+        {
+            name: 'devextreme',
+            version: dxversion || latestVersions['devextreme']
+        },
+        {
+            name: 'devextreme-themebuilder',
+            version: dxversion || latestVersions['devextreme'],
+            dev: true
+        },
+        {
+            name: dxWrapperPackage,
+            version: dxversion || latestVersions[dxWrapperPackage]
+        }
     ];
 
-    addDependencies(getPackageJsonPath(appPath), depends);
+    addDependencies(getPackageJsonPath(appPath), dependencies);
 };
 
 const updateName = (appPath, name) => {
