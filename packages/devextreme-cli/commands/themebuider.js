@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const semver = require('semver');
-const runCommand = require('../utility/run-command');
+const packageManager = require('../utility/package-manager');
 const lock = require('../utility/file-lock');
 
 const commands = {
@@ -111,8 +111,7 @@ const installThemeBuilder = async version => {
         fs.copyFileSync(npmrc, installationNpmrc);
     }
 
-    await runCommand('npm', [
-        'install',
+    await packageManager.installPackage([
         '--no-save',
         `devextreme-themebuilder@${version}`
     ], {

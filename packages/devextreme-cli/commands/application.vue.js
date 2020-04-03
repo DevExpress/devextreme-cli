@@ -1,10 +1,10 @@
-const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
 const createVueApp = require('@vue/cli/lib/create');
 const runPrompts = require('../utility/prompts');
 const templateCreator = require('../utility/template-creator');
 const packageJsonUtils = require('../utility/package-json-utils');
+const packageManager = require('../utility/package-manager');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
@@ -28,7 +28,7 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
         { name: 'sass-loader', version: '^7.1.0' }
     ];
     const scripts = [
-        { name: 'build-themes', value: 'devextreme build' },
+        { name: 'build-themes', value: `devextreme build --packageManager=${packageManager.getPackageManager()}` },
         { name: 'postinstall', value: 'npm run build-themes' }
     ];
 
@@ -56,8 +56,8 @@ const create = (appName, options) => {
         }
     ];
 
-    runPrompts(options, prompts, getLayout).then((promptsResult) => {
-        createVueApp(appName, { default: true }).then(() => {
+    runPrompts(prompts, getLayout(options)).then((promptsResult) => {
+        createVueApp(appName, { default: true, packageManager: packageManager.getPackageManager() }).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {
@@ -101,7 +101,7 @@ const install = (options, appPath, styles) => {
     addStylesToApp(mainModulePath, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'vue');
 
-    runCommand('npm', ['install'], { cwd: appPath });
+    packageManager.installDependencies({ cwd: appPath });
 };
 
 const addStylesToApp = (filePath, styles) => {

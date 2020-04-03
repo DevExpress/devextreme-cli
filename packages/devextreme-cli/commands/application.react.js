@@ -1,15 +1,16 @@
-const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
 const runPrompts = require('../utility/prompts');
 const templateCreator = require('../utility/template-creator');
 const packageJsonUtils = require('../utility/package-json-utils');
+const packageManager = require('../utility/package-manager');
 const modifyJson = require('../utility/modify-json-file');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
 const pathToPagesIndex = path.join(process.cwd(), 'src', 'pages', 'index.js');
 const latestVersions = require('../utility/latest-versions');
+const isYarn = packageManager.isYarn();
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
@@ -28,7 +29,7 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'] }
     ];
     const scripts = [
-        { name: 'build-themes', value: 'devextreme build' },
+        { name: 'build-themes', value: `devextreme build --packageManager=${packageManager.getPackageManager()}` },
         { name: 'postinstall', value: 'npm run build-themes' }
     ];
 
@@ -54,8 +55,14 @@ const getLayout = (options) => {
     return currentLayout.length ? [currentLayout[0].value] : undefined;
 };
 
+function getCommandArguments(appName) {
+    return isYarn ? 
+        ['create', 'react-app', appName] :
+        ['create-react-app', '--use-npm', appName];
+}
+
 const create = (appName, options) => {
-    const commandArguments = ['create-react-app', appName];
+    const commandArguments = getCommandArguments(appName);
     const prompts = [
         {
             type: 'select',
@@ -65,8 +72,8 @@ const create = (appName, options) => {
         }
     ];
 
-    runPrompts(options, prompts, getLayout).then((promptsResult) => {
-        runCommand('npx', commandArguments).then(() => {
+    runPrompts(prompts, getLayout(options)).then((promptsResult) => {
+        packageManager.run(commandArguments).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {
@@ -114,7 +121,7 @@ const install = (options, appPath, styles) => {
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
-    runCommand('npm', ['install'], { cwd: appPath });
+    packageManager.installDependencies({ cwd: appPath });
 };
 
 const addPolyfills = (packagePath, indexPath) => {
