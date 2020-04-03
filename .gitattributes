@@ -10,5 +10,7 @@
 *.yml text eol=lf
 *.scss text eol=lf
 *.vue text eol=lf
+*.ts text eol=lf
+*.html text eol=lf
 
 *.png binary
