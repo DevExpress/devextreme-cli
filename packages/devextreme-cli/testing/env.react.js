@@ -23,7 +23,8 @@ exports.createApp = async() => {
         '../../../index.js',
         'new',
         'react-app',
-        '--layout=side-nav-outer-toolbar'
+        '--layout=side-nav-outer-toolbar',
+        '--packageManager=npm'
     ], {
         cwd: sandboxPath,
         forceNoCmd: true,

@@ -21,7 +21,8 @@ exports.createApp = async() => {
         '../../../index.js',
         'new',
         'vue-app',
-        '--layout=side-nav-outer-toolbar'
+        '--layout=side-nav-outer-toolbar',
+        '--packageManager=npm'
     ], {
         cwd: sandboxPath,
         forceNoCmd: true,
