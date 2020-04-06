@@ -53,7 +53,7 @@ const router = new Router({
       components: {
         layout: simpleLayout,
         // route level code-splitting
-        // this generates a separate chunk (login.[hash].js) for this route
+        // this generates a separate chunk for this route
         // which is lazy-loaded when the route is visited.
         content: () =>
           import(/* webpackChunkName: "login" */ "./views/login-form")
