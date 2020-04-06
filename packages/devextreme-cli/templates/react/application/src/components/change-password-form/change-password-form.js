@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import Form, {
   Item,
   Label,
@@ -7,26 +7,25 @@ import Form, {
   ButtonOptions,
   RequiredRule,
   CustomRule,
-  EmailRule
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
-import './create-account-form.scss';
 
 export default function (props) {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const formData = useRef({});
+  const { recoveryCode } = useParams();
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
-    const { email, password } = formData.current;
+    const { password } = formData.current;
     setLoading(true);
 
-    // Send create account request
-    console.log(email, password);
+    // Send reset password request
+    console.log(password, recoveryCode);
 
     history.push('/login');
-  }, [history]);
+  }, [history, recoveryCode]);
 
   const confirmPassword = useCallback(
     ({ value }) => value === formData.current.password,
@@ -34,17 +33,8 @@ export default function (props) {
   );
 
   return (
-    <form className={'create-account-form'} onSubmit={onSubmit}>
+    <form onSubmit={onSubmit}>
       <Form formData={formData.current} disabled={loading}>
-        <Item
-          dataField={'email'}
-          editorType={'dxTextBox'}
-          editorOptions={emailEditorOptions}
-        >
-          <RequiredRule message="Email is required" />
-          <EmailRule message="Email is invalid" />
-          <Label visible={false} />
-        </Item>
         <Item
           dataField={'password'}
           editorType={'dxTextBox'}
@@ -65,11 +55,6 @@ export default function (props) {
           />
           <Label visible={false} />
         </Item>
-        <Item>
-          <div className='policy-info'>
-            By creating an account, you agree to the <Link>Terms of Service</Link> and <Link>Privacy Policy</Link>
-          </div>
-        </Item>
         <ButtonItem>
           <ButtonOptions
             width={'100%'}
@@ -80,21 +65,15 @@ export default function (props) {
               {
                 loading
                   ? <LoadIndicator width={'24px'} height={'24px'} visible={true} />
-                  : 'Create a new account'
+                  : 'Continue'
               }
             </span>
           </ButtonOptions>
         </ButtonItem>
-        <Item>
-          <div className={'login-link'}>
-            Have an account? <Link to={'/login'}>Sign In</Link>
-          </div>
-        </Item>
       </Form>
     </form>
   );
 }
 
-const emailEditorOptions = { stylingMode: 'filled', placeholder: 'Email', mode: 'email' };
 const passwordEditorOptions = { stylingMode: 'filled', placeholder: 'Password', mode: 'password' };
 const confirmedPasswordEditorOptions = { stylingMode: 'filled', placeholder: 'Confirm Password', mode: 'password' };

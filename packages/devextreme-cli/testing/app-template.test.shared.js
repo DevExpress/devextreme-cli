@@ -190,6 +190,24 @@ module.exports = (env) => {
 
                                     compareSnapshot(image, 'reset-password');
                                 });
+
+                                it('Change password page', async() => {
+                                    // NOTE: Test only once
+                                    if(!isDefaultLayout || env.engine !== 'react') {
+                                        return;
+                                    }
+
+                                    const page = await openPage(appUrl);
+                                    await logOut();
+                                    await page.evaluate(
+                                        'const a = document.createElement("a");a.href="#/change-password/123";a.click()'
+                                    );
+                                    await page.waitFor('form', { timeout: 0 });
+
+                                    const image = await page.screenshot();
+
+                                    compareSnapshot(image, 'change-password');
+                                });
                             });
                         });
                     });
