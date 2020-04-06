@@ -18,7 +18,7 @@ export default function () {
       </Route>
       <Route exact path='/reset-password' >
         <SingleCard
-          title="Password Reset"
+          title="Reset Password"
           description="Please enter the email address that you used to register, and we will send you an email with a link to reset your password."
         >
           <ResetPasswordForm />
