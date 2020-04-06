@@ -73,7 +73,7 @@ const create = (appName, options) => {
     ];
 
     runPrompts(prompts, getLayout(options)).then((promptsResult) => {
-        packageManager.run(commandArguments).then(() => {
+        packageManager.executeCommand(commandArguments).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {

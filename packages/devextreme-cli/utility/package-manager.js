@@ -28,13 +28,20 @@ const installDependencies = (evaluatingOptions) => {
     return runCommand(getPackageManager(), ['install'], evaluatingOptions);
 };
 
-const run = (commandArguments, evaluatingOptions) => {
+const executeCommand = (commandArguments, evaluatingOptions) => {
     const command = isYarn() ? 'yarn' : 'npx';
 
     return runCommand(command, commandArguments, evaluatingOptions);
 };
 
+const run = (commandArguments, evaluatingOptions) => {
+    const command = isYarn() ? 'yarn' : 'npm';
+
+    return runCommand(command, commandArguments, evaluatingOptions);
+};
+
 module.exports = {
+    executeCommand,
     setDefaultPackageManager,
     getPackageManager,
     isYarn,

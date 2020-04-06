@@ -8,7 +8,8 @@ export default function(options: any): Rule {
   const rules = [
     schematic('install', {
       dxversion: options.dxversion,
-      project: options.project
+      project: options.project,
+      packageManager: options.packageManager
     }),
     schematic('add-layout', {
       layout: options.layout,

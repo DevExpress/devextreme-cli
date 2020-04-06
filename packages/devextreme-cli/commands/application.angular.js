@@ -73,7 +73,7 @@ function executeLatestAngularCli(commandArguments, evaluatingOptions) {
         console.error('You don`t have an installed angular\\cli');
         process.exit();
     }
-    return packageManager.run(['-p', '@angular/cli', 'ng'].concat(commandArguments), evaluatingOptions);
+    return packageManager.executeCommand(['-p', '@angular/cli', 'ng'].concat(commandArguments), evaluatingOptions);
 }
 
 const install = (options) => {

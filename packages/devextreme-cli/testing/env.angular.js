@@ -39,7 +39,7 @@ exports.createApp = async() => {
         'new',
         'angular-app',
         '--layout=side-nav-outer-toolbar',
-        '--packageManager=npm'
+        '--packageManager=npm',
         `--c=${schematicsDirectory}`
     ], {
         cwd: sandboxPath,
