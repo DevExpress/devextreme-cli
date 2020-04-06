@@ -5,7 +5,7 @@ const isEmptyRouting = (content) => {
 };
 
 const getPositionIndex = (content) => {
-    const edgeIndex = content.indexOf(']');
+    const edgeIndex = content.lastIndexOf(']');
 
     if(edgeIndex === -1) {
         console.error('No route found.');
