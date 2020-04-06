@@ -98,13 +98,17 @@ function addScriptSafe(scripts: any, name: string, value: string) {
   scripts[name] = safeValue;
 }
 
-function addBuildThemeScript() {
+function addBuildThemeScript(packageManager?: string) {
   return (host: Tree) => {
     modifyJSONFile(host, './package.json', config => {
       const scripts = config['scripts'];
+      const buildTheme = 'npm run build-themes';
+      const postInstall = packageManager ?
+        `devextreme --packageManager=${packageManager} && ${buildTheme}` :
+        buildTheme;
 
       addScriptSafe(scripts, 'build-themes', 'devextreme build');
-      addScriptSafe(scripts, 'postinstall', 'npm run build-themes');
+      addScriptSafe(scripts, 'postinstall', postInstall);
 
       return config;
     });
@@ -323,6 +327,7 @@ const modifyRoutingModule = (host: Tree, routingModulePath: string) => {
 
 export default function(options: any): Rule {
   return (host: Tree) => {
+    const packageManager = options.packageManager;
     const project = getProjectName(host, options.project);
     const workspace = getWorkspace(host);
     const prefix = workspace.projects[project].prefix;
@@ -362,7 +367,7 @@ export default function(options: any): Rule {
       modifyContentByTemplate(sourcePath, projectFilesSource, null, templateOptions, modifyContent),
       updateDevextremeConfig(sourcePath),
       updateAppModule(host, appPath),
-      addBuildThemeScript(),
+      addBuildThemeScript(packageManager),
       addCustomThemeStyles(options, sourcePath),
       addViewportToBody(sourcePath),
       addPackagesToDependency()
@@ -374,7 +379,7 @@ export default function(options: any): Rule {
 
     if (!options.skipInstall) {
       rules.push((_: Tree, context: SchematicContext) => {
-        context.addTask(new NodePackageInstallTask());
+        context.addTask(new NodePackageInstallTask({ packageManager }));
       });
     }
 

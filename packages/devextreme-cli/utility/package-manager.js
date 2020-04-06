@@ -14,13 +14,14 @@ const isYarn = () => {
 };
 
 const installPackage = (packageName, evaluatingOptions, installOptions) => {
-    const command = isYarn() ? ['add'] : ['install'];
+    const commandArguments = isYarn() ? ['add'] : ['install'];
 
     if(installOptions && installOptions.noSave && !isYarn()) {
-        command.push('--no-save');
+        commandArguments.push('--no-save');
     }
+    commandArguments.push(packageName);
 
-    return runCommand(getPackageManager(), command.push(packageName), evaluatingOptions);
+    return runCommand(getPackageManager(), commandArguments, evaluatingOptions);
 };
 
 const installDependencies = (evaluatingOptions) => {

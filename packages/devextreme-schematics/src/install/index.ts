@@ -25,7 +25,7 @@ export default function(options: any): Rule {
     (host: Tree) => addDevExtremeCSS(host, { project: options.project }),
     (host: Tree) => reqisterJSZip(host),
     (_, context: SchematicContext) => {
-      context.addTask(new NodePackageInstallTask());
+      context.addTask(new NodePackageInstallTask({ packageManager: options.packageManager }));
     }
   ]);
 }

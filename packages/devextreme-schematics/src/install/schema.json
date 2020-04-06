@@ -12,6 +12,10 @@
     "project": {
       "type": "string",
       "description": "The name of a project to modify"
+    },
+    "packageManager": {
+      "type": "string",
+      "visible": false
     }
   }
 }

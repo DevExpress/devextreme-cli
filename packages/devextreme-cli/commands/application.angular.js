@@ -9,6 +9,7 @@ const minNgCliVersion = new semver('8.0.0');
 function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
     let collectionPath = collectionName;
+    options.packageManager = packageManager.getPackageManager();
 
     if(options['c']) {
         collectionPath = `${path.join(process.cwd(), options['c'])}`;
