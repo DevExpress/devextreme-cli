@@ -61,6 +61,9 @@ module.exports = (env) => {
                                     timeout: 0,
                                     waitUntil: 'networkidle0'
                                 });
+                                await page.waitFor('.full-height-scrollable, .with-footer', {
+                                    timeout: 0
+                                });
 
                                 return page;
                             }
