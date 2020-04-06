@@ -70,7 +70,7 @@ function parseNgCliVersion(stdout) {
 
 function executeLatestAngularCli(commandArguments, evaluatingOptions) {
     if(packageManager.isYarn()) {
-        console.error('You don`t have an installed angular\\cli');
+        console.error('Angular CLI is not found on your computer.');
         process.exit();
     }
     return packageManager.executeCommand(['-p', '@angular/cli', 'ng'].concat(commandArguments), evaluatingOptions);

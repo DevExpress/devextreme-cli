@@ -44,7 +44,7 @@ if(packageManager.getPackageManager()) {
         {
             type: 'select',
             name: 'packageManager',
-            message: 'What package manager do you prefer?',
+            message: 'Which package manager do you want to use?',
             choices: [
                 { title: 'npm', value: 'npm' },
                 { title: 'yarn', value: 'yarn' }
