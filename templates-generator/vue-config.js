@@ -50,12 +50,8 @@ module.exports = {
             glob: 'src/app-navigation.js',
             definitions: [
                 {
-                    before: 'export default [',
-                    after: 'export default [<%=^empty%>'
-                },
-                {
-                    before: '];',
-                    after: '<%=/empty%>];'
+                    before: /\[(.*?)\];/s,
+                    after: '[<%=^empty%>$1<%=/empty%>];'
                 }
             ]
         },
@@ -67,24 +63,28 @@ module.exports = {
                     after: '<%=^empty%>import Home'
                 },
                 {
-                    before: /import defaultLayout[^;]*/,
-                    after: '<%=/empty%>import defaultLayout from "./layouts/<%=layout%>"'
+                    before: /(import defaultLayout)[^;]*/,
+                    after: '<%=/empty%>$1 from "./layouts/<%=layout%>"'
                 },
                 {
-                    before: 'routes: [',
-                    after: 'routes: [<%=^empty%>'
+                    before: /\[/,
+                    after: '[\n    <%=#empty%>{\n      path: "*",\n      redirect: "/"\n    },<%=/empty%>\n    <%=^empty%>'
                 },
                 {
-                    before: /},\n\s+\n/,
-                    after: '},<%=/empty%>\n    <%=#empty%>{\n      path: "/",\n      components: {\n        layout: defaultLayout\n      }\n    },<%=/empty%>\n'
+                    before: /\[/,
+                    after: '[<%=#empty%>\n    {\n      path: "/",\n      components: {\n        layout: defaultLayout\n      }\n    },<%=/empty%>'
                 },
                 {
-                    before: /}\n\s+\n/,
-                    after: '}<%=/empty%>\n    <%=#empty%>{\n      path: "*",\n      redirect: "/"\n    }<%=/empty%>\n'
+                    before: /(".\/views\/login-form"\)\n\s+}\n\s+\},)/,
+                    after: '$1<%=^empty%>'
                 },
                 {
-                    before: /".\/views\/login-form"\)\n\s+}\n\s+\},/,
-                    after: '"./views/login-form")\n      }\n    },<%=^empty%>'
+                    before: /(path: "\*"[^}]*home[^}]*})/,
+                    after: '$1<%=/empty%>'
+                },
+                {
+                    before: /},([^}]*\/login-form",)/,
+                    after:'},<%=/empty%>$1'
                 }
             ]
         }
