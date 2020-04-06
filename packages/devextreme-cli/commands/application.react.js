@@ -57,7 +57,7 @@ const getLayout = (options) => {
 
 function getCommandArguments(appName) {
     return isYarn ?
-        ['create', 'react-app', appName] :
+        ['create-react-app', appName] :
         ['create-react-app', '--use-npm', appName];
 }
 

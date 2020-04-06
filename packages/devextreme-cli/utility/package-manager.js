@@ -29,9 +29,7 @@ const installDependencies = (evaluatingOptions) => {
 };
 
 const executeCommand = (commandArguments, evaluatingOptions) => {
-    const command = isYarn() ? 'yarn' : 'npx';
-
-    return runCommand(command, commandArguments, evaluatingOptions);
+    return runCommand('npx', commandArguments, evaluatingOptions);
 };
 
 const run = (commandArguments, evaluatingOptions) => {
