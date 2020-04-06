@@ -28,7 +28,7 @@ export default function (props) {
   }, [history, recoveryCode]);
 
   const confirmPassword = useCallback(
-    ({ value }) => value === formData.current.password ? true : false,
+    ({ value }) => value === formData.current.password,
     []
   );
 

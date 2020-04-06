@@ -29,7 +29,7 @@ export default function (props) {
   }, [history]);
 
   const confirmPassword = useCallback(
-    ({ value }) => value === formData.current.password ? true : false,
+    ({ value }) => value === formData.current.password,
     []
   );
 
