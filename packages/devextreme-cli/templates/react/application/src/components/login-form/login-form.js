@@ -47,7 +47,7 @@ export default function (props) {
           editorType={'dxTextBox'}
           editorOptions={passwordEditorOptions}
         >
-          <RequiredRule message="Email is required" />
+          <RequiredRule message="Password is required" />
           <Label visible={false} />
         </Item>
         <Item
