@@ -21,7 +21,7 @@ const getLayout = (layouts, options) => {
             message: 'What layout do you want to add?',
             choices: layouts
         }
-    ];    
+    ];
 
     return runPrompts(prompts, getLayoutFromOptions(options, layouts));
 };
