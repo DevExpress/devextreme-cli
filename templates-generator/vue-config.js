@@ -67,12 +67,25 @@ module.exports = {
                     after: '<%=/empty%>$1 from "./layouts/<%=layout%>"'
                 },
                 {
-                    before: /\[\s+{/,
-                    after: '[\n    <%=#empty%>{\n      path: "*",\n      redirect: "/"\n    },<%=/empty%>\n    <%=^empty%>\n    {'
+                    before: /\[\s+/,
+                    after: '[\n'+
+                    '<%=#empty%>{\n'+
+                    '      path: "*",\n'+
+                    '      redirect: "/"\n'+
+                    '    },<%=/empty%>\n'+
+                    '    <%=^empty%>\n'+
+                    '    '
                 },
                 {
                     before: /\[[^{*]/,
-                    after: '[<%=#empty%>\n    {\n      path: "/",\n      components: {\n        layout: defaultLayout\n      }\n    },<%=/empty%>\n'
+                    after: '[<%=#empty%>\n'+
+                    '    {\n'+
+                    '      path: "/",\n'+
+                    '      components: {\n'+
+                    '        layout: defaultLayout\n'+
+                    '      }\n'+
+                    '    },<%=/empty%>\n'+
+                    '    '
                 },
                 {
                     before: /(".\/views\/login-form"\)\n\s+}\n\s+\},)/,
