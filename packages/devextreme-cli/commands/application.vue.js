@@ -1,9 +1,9 @@
-const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
 const createVueApp = require('@vue/cli/lib/create');
-const runPrompts = require('../utility/prompts');
+const layoutUtils = require('../utility/layout');
 const templateCreator = require('../utility/template-creator');
+const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
@@ -35,31 +35,14 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     packageJsonUtils.updateName(appPath, appName);
 };
 
-const getLayout = (options) => {
-    const currentLayout = layouts.filter((layout) => {
-        return layout.value === options.layout;
-    });
-
-    return currentLayout.length ? [currentLayout[0].value] : undefined;
-};
-
 const create = (appName, options) => {
-    const prompts = [
-        {
-            type: 'select',
-            name: 'layout',
-            message: 'What layout do you want to add?',
-            choices: layouts
-        }
-    ];
-
-    runPrompts(options, prompts, getLayout).then((promptsResult) => {
+    layoutUtils.getLayout(layouts, options).then((layoutResult) => {
         createVueApp(appName, { default: true }).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {
                 project: humanizedName,
-                layout: promptsResult.layout
+                layout: layoutResult.layout
             });
             modifyIndexHtml(appPath, humanizedName);
             addTemplate(appPath, appName, templateOptions);
@@ -98,7 +81,7 @@ const install = (options, appPath, styles) => {
     addStylesToApp(mainModulePath, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'vue');
 
-    runCommand('npm', ['install'], { cwd: appPath });
+    packageManager.runInstall({ cwd: appPath });
 };
 
 const addStylesToApp = (filePath, styles) => {
