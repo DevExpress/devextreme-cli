@@ -92,7 +92,7 @@ module.exports = {
                 },
                 {
                     before: /({\s+path: "\/home".*content: DisplayData\s+}\s+},)/s,
-                    after: '<%=^empty%>\n    $1<%=/empty%>'
+                    after: '<%=^empty%>$1<%=/empty%>'
                 }
             ]
         }
