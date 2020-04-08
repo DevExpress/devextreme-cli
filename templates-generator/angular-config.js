@@ -103,6 +103,10 @@ module.exports = {
                 {
                     before: /side-nav-inner-toolbar/g,
                     after: '<%= layout %>'
+                },
+                {
+                    before: /side-nav-outer-toolbar/g,
+                    after: '<%= layout %>'
                 }
             ]
         },
