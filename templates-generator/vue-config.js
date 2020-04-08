@@ -68,24 +68,24 @@ module.exports = {
                 },
                 {
                     before: /\[\s+/,
-                    after: '[\n'+
-                    '<%=#empty%>{\n'+
-                    '      path: "*",\n'+
-                    '      redirect: "/"\n'+
-                    '    },<%=/empty%>\n'+
-                    '    <%=^empty%>\n'+
-                    '    '
-                },
+                        after: `[
+<%=#empty%>{
+      path: "*",
+      redirect: "/"
+    },<%=/empty%>
+    <%=^empty%>
+    `
+            },
                 {
                     before: /\[[^{*]/,
-                    after: '[<%=#empty%>\n'+
-                    '    {\n'+
-                    '      path: "/",\n'+
-                    '      components: {\n'+
-                    '        layout: defaultLayout\n'+
-                    '      }\n'+
-                    '    },<%=/empty%>\n'+
-                    '    '
+                    after: `[<%=#empty%>
+    {
+      path: "/",
+      components: {
+        layout: defaultLayout
+      }
+    },<%=/empty%>
+    `
                 },
                 {
                     before: /(".\/views\/login-form"\)\n\s+}\n\s+\},)/,
