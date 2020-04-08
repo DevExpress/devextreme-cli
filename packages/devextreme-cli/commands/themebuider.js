@@ -123,14 +123,24 @@ const installThemeBuilder = async version => {
     }
 };
 
-const getDevExtremeVersion = () => {
-    const lockFileName = path.join(process.cwd(), 'package-lock.json');
-    const installedDevExtremePackageJson = path.join(process.cwd(), 'node_modules', 'devextreme', 'package.json');
+const getDevextremeInfo = (dependencies) => {
+    const keyValue = Object.keys(dependencies).filter((key) => {
+        return /devextreme@/.test(key);
+    })[0];
 
-    if(fs.existsSync(lockFileName)) {
-        const dependencies = require(lockFileName).dependencies;
-        if(dependencies && dependencies.devextreme) {
-            return dependencies.devextreme.version;
+    return dependencies[keyValue];
+};
+
+const getDevExtremeVersion = () => {
+    const cwd = process.cwd();
+    const lockFile = packageManager.getLockFile(cwd);
+    const dependencies = packageManager.isYarn(cwd) ? lockFile.object : lockFile.dependencies;
+    const installedDevExtremePackageJson = path.join(cwd, 'node_modules', 'devextreme', 'package.json');
+
+    if(dependencies) {
+        const devextremeInfo = dependencies.devextreme || getDevextremeInfo(dependencies);
+        if(devextremeInfo) {
+            return devextremeInfo.version;
         }
     } else if(fs.existsSync(installedDevExtremePackageJson)) {
         return require(installedDevExtremePackageJson).version;
