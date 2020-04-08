@@ -23,8 +23,7 @@ const router = new Router({
       path: "*",
       redirect: "/"
     },<%=/empty%>
-    <%=^empty%>
-    {
+    <%=^empty%>{
       path: "/home",
       name: "home",
       meta: { requiresAuth: true },

@@ -67,6 +67,10 @@ module.exports = {
                     after: '<%=layout%>'
                 },
                 {
+                    before: 'side-nav-outer-toolbar',
+                    after: '<%=layout%>'
+                },
+                {
                     before: /(,)(\s+{\s+path: "\/".*redirect: "\/home"[^}]*})/s,
                     after: '$1<%=^empty%>$2<%=/empty%>'
                 },
