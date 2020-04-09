@@ -1,7 +1,7 @@
 const packageJson = require('../package.json');
 module.exports = {
-    'devextreme': '19.2-stable',
-    'devextreme-react': '19.2-stable',
-    'devextreme-vue': '19.2.5',
+    'devextreme': '20.1-next',
+    'devextreme-react': '20.1-next',
+    'devextreme-vue': '20.1-next',
     'devextreme-cli': packageJson.version
 };

@@ -1,6 +1,6 @@
 // TODO: implement
 export const latestVersions = {
-  'devextreme': 'latest',
-  'devextreme-angular': 'latest',
-  'devextreme-cli': 'latest'
+  'devextreme': '20.1-next',
+  'devextreme-angular': '20.1-next',
+  'devextreme-cli': 'next'
 };
