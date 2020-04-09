@@ -101,11 +101,7 @@ module.exports = {
             glob: 'src/app/app.component.html',
             definitions: [
                 {
-                    before: /side-nav-inner-toolbar/g,
-                    after: '<%= layout %>'
-                },
-                {
-                    before: /side-nav-outer-toolbar/g,
+                    before: /side-nav-(inner|outer)-toolbar/g,
                     after: '<%= layout %>'
                 }
             ]

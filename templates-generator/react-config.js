@@ -56,11 +56,7 @@ module.exports = {
             glob: 'src/App.js',
             definitions: [
                 {
-                    before: 'SideNavOuterToolbar',
-                    after: '<%=layout%>'
-                },
-                {
-                    before: 'SideNavInnerToolbar',
+                    before: /SideNav(Outer|Inner)Toolbar/,
                     after: '<%=layout%>'
                 },
                 {
