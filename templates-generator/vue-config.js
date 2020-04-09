@@ -63,11 +63,7 @@ module.exports = {
                     after: '<%=^empty%>$1<%=/empty%>$2'
                 },
                 {
-                    before: 'side-nav-inner-toolbar',
-                    after: '<%=layout%>'
-                },
-                {
-                    before: 'side-nav-outer-toolbar',
+                    before: /side-nav-(inner|outer)-toolbar/,
                     after: '<%=layout%>'
                 },
                 {
@@ -76,13 +72,13 @@ module.exports = {
                 },
                 {
                     before: /\[\s+/,
-                        after: `[
+                    after: `[
 <%=#empty%>{
       path: "*",
       redirect: "/"
     },<%=/empty%>
     `
-            },
+                },
                 {
                     before: /\[[^{*]/,
                     after: `[<%=#empty%>
