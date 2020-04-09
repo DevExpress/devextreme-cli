@@ -123,7 +123,7 @@ const installThemeBuilder = async version => {
     }
 };
 
-const getDevextremeInfo = (dependencies) => {
+const getDevExtremeInfo = (dependencies) => {
     const keyValue = Object.keys(dependencies).filter((key) => {
         return /devextreme@/.test(key);
     })[0];
@@ -138,7 +138,7 @@ const getDevExtremeVersion = () => {
     const installedDevExtremePackageJson = path.join(cwd, 'node_modules', 'devextreme', 'package.json');
 
     if(dependencies) {
-        const devextremeInfo = dependencies.devextreme || getDevextremeInfo(dependencies);
+        const devextremeInfo = dependencies.devextreme || getDevExtremeInfo(dependencies);
         if(devextremeInfo) {
             return devextremeInfo.version;
         }
