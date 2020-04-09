@@ -81,7 +81,7 @@ const install = (options) => {
 const create = (appName, options) => {
     let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-tests=true'];
     optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
-        layoutUtils.getLayout(layouts, options).then(layoutResult => {
+        layoutUtils.getLayout(layouts, options.layout).then(layoutResult => {
             runCommand('npx', optimizedArguments).then(() => {
                 options.resolveConflicts = 'override';
                 options.updateBudgets = true;

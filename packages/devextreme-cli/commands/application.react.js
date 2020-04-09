@@ -47,7 +47,7 @@ const updateJsonPropName = (path, name) => {
 const create = (appName, options) => {
     const commandArguments = ['create-react-app', appName];
 
-    layoutUtils.getLayout(layouts, options).then((layoutResult) => {
+    layoutUtils.getLayout(layouts, options.layout).then((layoutResult) => {
         runCommand('npx', commandArguments).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);

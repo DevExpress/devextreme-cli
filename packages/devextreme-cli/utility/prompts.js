@@ -2,7 +2,7 @@ const prompts = require('prompts');
 
 const runPrompts = async(promptsValue, options) => {
     if(options) {
-        prompts.inject(options);
+        prompts.inject([options]);
     }
 
     return await prompts(promptsValue);

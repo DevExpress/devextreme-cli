@@ -36,7 +36,7 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
 };
 
 const create = (appName, options) => {
-    layoutUtils.getLayout(layouts, options).then((layoutResult) => {
+    layoutUtils.getLayout(layouts, options.layout).then((layoutResult) => {
         createVueApp(appName, { default: true }).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);

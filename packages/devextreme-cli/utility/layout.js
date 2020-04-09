@@ -1,29 +1,29 @@
 const runPrompts = require('../utility/prompts');
 
-const getLayoutFromOptions = (options, layouts) => {
-    if(!options.layout) {
+const getValidLayoutName = (layoutsList, layoutName) => {
+    if(!layoutName) {
         return;
     }
 
-    const currentLayout = layouts.filter((layout) => {
-        const layoutName = layout.fullName || layout.value;
-        return layoutName === options.layout;
+    const currentLayout = layoutsList.find((layout) => {
+        const name = layout.fullName || layout.value;
+        return name === layoutName;
     });
 
-    return currentLayout.length ? [currentLayout[0].value] : undefined;
+    return currentLayout && currentLayout.value;
 };
 
-const getLayout = (layouts, options) => {
+const getLayout = (layoutsList, layoutName) => {
     const prompts = [
         {
             type: 'select',
             name: 'layout',
             message: 'What layout do you want to add?',
-            choices: layouts
+            choices: layoutsList
         }
     ];
 
-    return runPrompts(prompts, getLayoutFromOptions(options, layouts));
+    return runPrompts(prompts, getValidLayoutName(layoutsList, layoutName));
 };
 
 module.exports = {
