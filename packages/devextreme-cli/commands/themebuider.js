@@ -124,9 +124,7 @@ const installThemeBuilder = async version => {
 };
 
 const getDevExtremeInfo = (dependencies) => {
-    const keyValue = Object.keys(dependencies).filter((key) => {
-        return /devextreme@/.test(key);
-    })[0];
+    const keyValue = Object.keys(dependencies).filter((key) => /devextreme@/.test(key))[0];
 
     return dependencies[keyValue];
 };
