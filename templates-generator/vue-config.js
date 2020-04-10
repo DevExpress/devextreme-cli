@@ -59,20 +59,16 @@ module.exports = {
             glob: 'src/router.js',
             definitions: [
                 {
-                    before: /(import Home .*?)(import defaultLayout[^;]*)/s,
-                    after: '<%=^empty%>$1<%=/empty%>$2'
+                    before: /((import (Home|Profile|DisplayData).*\n)+)/,
+                    after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
                     before: /side-nav-(inner|outer)-toolbar/,
                     after: '<%=layout%>'
                 },
                 {
-                    before: /(,)(\s+{\s+path: "\/".*redirect: "\/home"[^}]*})/s,
-                    after: '$1<%=^empty%>$2<%=/empty%>'
-                },
-                {
-                    before: /\[\s+/,
-                    after: `[
+                    before: /routes: \[\s+/,
+                    after: `routes: [
 <%=#empty%>{
       path: "*",
       redirect: "/"
@@ -80,8 +76,8 @@ module.exports = {
     `
                 },
                 {
-                    before: /\[[^{*]/,
-                    after: `[<%=#empty%>
+                    before: /routes: \[[^{*]/,
+                    after: `routes: [<%=#empty%>
     {
       path: "/",
       components: {
@@ -92,6 +88,10 @@ module.exports = {
                 },
                 {
                     before: /({\s+path: "\/home".*content: DisplayData\s+}\s+},)/s,
+                    after: '<%=^empty%>$1<%=/empty%>'
+                },
+                {
+                    before: /((\s+{[^}]*redirect: "\/home"\s+},?)+)/,
                     after: '<%=^empty%>$1<%=/empty%>'
                 }
             ]
