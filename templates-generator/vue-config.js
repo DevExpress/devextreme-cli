@@ -68,21 +68,16 @@ module.exports = {
                 },
                 {
                     before: /routes: \[\s+/,
-                    after: `routes: [
-<%=#empty%>{
-      path: "*",
-      redirect: "/"
-    },<%=/empty%>
-    `
-                },
-                {
-                    before: /routes: \[[^{*]/,
                     after: `routes: [<%=#empty%>
     {
       path: "/",
       components: {
         layout: defaultLayout
       }
+    },<%=/empty%>
+    <%=#empty%>{
+      path: "*",
+      redirect: "/"
     },<%=/empty%>
     `
                 },
@@ -91,7 +86,7 @@ module.exports = {
                     after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
-                    before: /((\s+{[^}]*redirect: "\/home"\s+},?)+)/,
+                    before: /((\s+({[^}]*redirect: "\/home"[^}]*},?))+)/,
                     after: '<%=^empty%>$1<%=/empty%>'
                 }
             ]
