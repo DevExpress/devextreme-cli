@@ -19,10 +19,6 @@ const router = new Router({
         layout: defaultLayout
       }
     },<%=/empty%>
-    <%=#empty%>{
-      path: "*",
-      redirect: "/"
-    },<%=/empty%>
     <%=^empty%>{
       path: "/home",
       name: "home",
@@ -74,6 +70,10 @@ const router = new Router({
     {
       path: "*",
       redirect: "/home"
+    }<%=/empty%>
+    <%=#empty%>{
+      path: "*",
+      redirect: "/"
     }<%=/empty%>
   ]
 });

@@ -75,10 +75,6 @@ module.exports = {
         layout: defaultLayout
       }
     },<%=/empty%>
-    <%=#empty%>{
-      path: "*",
-      redirect: "/"
-    },<%=/empty%>
     `
                 },
                 {
@@ -88,6 +84,15 @@ module.exports = {
                 {
                     before: /((\s+({[^}]*redirect: "\/home"[^}]*},?))+)/,
                     after: '<%=^empty%>$1<%=/empty%>'
+                },
+                {
+                    before: /(}<%=\/empty%>)\s+]/,
+                    after: `$1
+    <%=#empty%>{
+      path: "*",
+      redirect: "/"
+    }<%=/empty%>
+  ]`
                 }
             ]
         }
