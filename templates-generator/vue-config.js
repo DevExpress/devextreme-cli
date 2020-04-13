@@ -78,11 +78,11 @@ module.exports = {
     `
                 },
                 {
-                    before: /({\s+path: "\/home".*content: DisplayData\s+}\s+},)/s,
+                    before: /({\s+path: "\/home".*content: DisplayData(\s+})+,)/s,
                     after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
-                    before: /((\s+({[^}]*redirect: "\/home"[^}]*},?))+)\s+]/,
+                    before: /({[^}]*redirect: "\/home"[^\]]*})\s+]/,
                     after: `<%=^empty%>$1<%=/empty%>
     <%=#empty%>{
       path: "*",

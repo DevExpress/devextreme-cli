@@ -58,8 +58,8 @@ const router = new Router({
         content: () =>
           import(/* webpackChunkName: "login" */ "./views/login-form")
       }
-    },<%=^empty%>
-    {
+    },
+    <%=^empty%>{
       path: "/",
       redirect: "/home"
     },
