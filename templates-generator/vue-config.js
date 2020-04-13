@@ -82,12 +82,8 @@ module.exports = {
                     after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
-                    before: /((\s+({[^}]*redirect: "\/home"[^}]*},?))+)/,
-                    after: '<%=^empty%>$1<%=/empty%>'
-                },
-                {
-                    before: /(}<%=\/empty%>)\s+]/,
-                    after: `$1
+                    before: /((\s+({[^}]*redirect: "\/home"[^}]*},?))+)\s+]/,
+                    after: `<%=^empty%>$1<%=/empty%>
     <%=#empty%>{
       path: "*",
       redirect: "/"
