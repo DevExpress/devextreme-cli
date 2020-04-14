@@ -49,7 +49,7 @@ exports.createApp = async() => {
     const result = data.replace('RouterModule.forRoot(routes)', 'RouterModule.forRoot(routes, {useHash: true})');
     fs.writeFileSync(routingFilePath, result, 'utf8');
 
-    await runCommand('npx', ['@angular/compiler-cli', 'ngcc', '--properties', 'es2015', 'browser', 'module', 'main', '--async', 'false']);
+    await runCommand('npx', ['ngcc', '--properties', 'es2015', 'browser', 'module', 'main', '--async', 'false']);
 };
 
 exports.setLayout = (layoutName) => {
