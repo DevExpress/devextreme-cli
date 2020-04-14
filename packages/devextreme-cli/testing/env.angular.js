@@ -48,7 +48,7 @@ exports.createApp = async() => {
     });
 
     const scripts = [
-        { name: 'postinstall', value: 'ngcc --properties es2015 browser module main --async false' }
+        { name: 'prestart', value: 'ngcc --properties es2015 browser module main --async false' }
     ];
     // https://github.com/angular/angular/issues/36278
     packageJsonUtils.updateScripts(path.join(sandboxPath, appName), scripts);
