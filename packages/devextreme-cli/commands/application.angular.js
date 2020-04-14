@@ -54,9 +54,7 @@ function localPackageExists(packageName) {
 
 function optimizeNgCommandArguments(args) {
     return new Promise((resolve, reject) => {
-        // https://github.com/angular/angular/issues/36278
-        const ngVersion = '@9.0.5';
-        hasSutableNgCli().then(() => resolve(args), () => resolve(['-p', `@angular/cli${ngVersion}`, ...args]));
+        hasSutableNgCli().then(() => resolve(args), () => resolve(['-p', '@angular/cli', ...args]));
     });
 }
 
