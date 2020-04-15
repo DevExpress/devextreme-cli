@@ -12,8 +12,14 @@ import simpleLayout from "./layouts/single-card";
 Vue.use(Router);
 
 const router = new Router({
-  routes: [<%=^empty%>
+  routes: [<%=#empty%>
     {
+      path: "/",
+      components: {
+        layout: defaultLayout
+      }
+    },<%=/empty%>
+    <%=^empty%>{
       path: "/home",
       name: "home",
       meta: { requiresAuth: true },
@@ -39,14 +45,7 @@ const router = new Router({
         layout: defaultLayout,
         content: DisplayData
       }
-    },<%=/empty%>
-    <%=#empty%>{
-      path: "/",
-      components: {
-        layout: defaultLayout
-      }
-    },<%=/empty%>
-    {
+    },<%=/empty%>{
       path: "/login-form",
       name: "login-form",
       meta: { requiresAuth: false },
@@ -58,8 +57,8 @@ const router = new Router({
         content: () =>
           import(/* webpackChunkName: "login" */ "./views/login-form")
       }
-    },<%=^empty%>
-    {
+    },
+    <%=^empty%>{
       path: "/",
       redirect: "/home"
     },
