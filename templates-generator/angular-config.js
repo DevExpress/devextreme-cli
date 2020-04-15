@@ -39,8 +39,8 @@ module.exports = {
             glob: 'src/themes/metadata.*.json',
             definitions: [
                 {
-                    before: /"items": \[[^\]]*]/,
-                    after: '"items": []'
+                    before: /"items": \[[^\]]*],/,
+                    after: '"items": [],'
                 },
                 {
                     before: /"assetsBasePath": "[^"]*"/,
