@@ -3,36 +3,33 @@ const path = require('path');
 const runCommand = require('./run-command');
 const yarnLockfile = require('@yarnpkg/lockfile');
 const defaultPackageManager = 'npm';
-let packageManager = '';
+let currentPackageManager = '';
 
 const packageManagerConfig = {
     npm: {
         installCommand: 'install',
         lockFileName: 'package-lock.json',
-        getLockFile: getPackageLock,
+        getLockFile: (cwd) => require(path.join(cwd, 'package-lock.json')),
         getDependencies: (obj) => obj.dependencies
     },
     yarn: {
         installCommand: 'add',
         lockFileName: 'yarn.lock',
-        getLockFile: getYarnLock,
+        getLockFile: (cwd) => yarnLockfile.parse(fs.readFileSync(path.join(cwd, 'yarn.lock'), 'utf8')),
         getDependencies: (obj) => obj.object
     }
 };
 
 const getPackageManager = (cwd) => {
-    if(!packageManager) {
-        for(let prop in packageManagerConfig) {
-            const lockFileName = packageManagerConfig[prop].lockFileName;
+    if(!currentPackageManager) {
+        currentPackageManager = Object.keys(packageManagerConfig).find((packageManager) => {
+            const lockFileName = packageManagerConfig[packageManager].lockFileName;
             const lockPath = path.join(cwd, lockFileName);
-            if(fs.existsSync(lockPath)) {
-                packageManager = prop;
-                break;
-            }
-        }
+            return fs.existsSync(lockPath);
+        });
     }
 
-    return packageManager || defaultPackageManager;
+    return currentPackageManager || defaultPackageManager;
 };
 
 const getDependencies = (cwd) => {
@@ -42,18 +39,9 @@ const getDependencies = (cwd) => {
     return packageManager.getDependencies(lockFile);
 };
 
-function getPackageLock(cwd) {
-    return require(path.join(cwd, 'package-lock.json'));
-};
-
-function getYarnLock(cwd) {
-    return yarnLockfile.parse(fs.readFileSync(path.join(cwd, 'yarn.lock'), 'utf8'));
-};
-
-const installPackage = (packageName, evaluatingOptions, options) => {
-    const cwd = evaluatingOptions && evaluatingOptions.cwd;
-    const packageManager = getPackageManager(cwd);
-    const instalationOptions = options && options[packageManager];
+const installPackage = (packageName, evaluatingOptions = {}, options = {}) => {
+    const packageManager = getPackageManager(evaluatingOptions.cwd);
+    const instalationOptions = options[packageManager];
     const commandArguments = [packageManagerConfig[packageManager].installCommand];
 
     if(instalationOptions) {
@@ -65,15 +53,9 @@ const installPackage = (packageName, evaluatingOptions, options) => {
     return runCommand(packageManager, commandArguments, evaluatingOptions);
 };
 
-const run = (commands, evaluatingOptions) => {
-    const cwd = evaluatingOptions && evaluatingOptions.cwd;
-    return runCommand(getPackageManager(cwd), commands, evaluatingOptions);
-};
+const run = (commands, evaluatingOptions = {}) => runCommand(getPackageManager(evaluatingOptions.cwd), commands, evaluatingOptions);
 
-const runInstall = (evaluatingOptions) => {
-    const cwd = evaluatingOptions && evaluatingOptions.cwd;
-    return runCommand(getPackageManager(cwd), ['install'], evaluatingOptions);
-};
+const runInstall = (evaluatingOptions = {}) => runCommand(getPackageManager(evaluatingOptions.cwd), ['install'], evaluatingOptions);
 
 module.exports = {
     getDependencies,

@@ -1,4 +1,4 @@
-const layout = require('../layout');
+const getLayoutInfo = require('../layout').getLayoutInfo;
 const packageManager = require('../utility/package-manager');
 const path = require('path');
 const runCommand = require('../utility/run-command');
@@ -75,11 +75,11 @@ const install = (options) => {
 const create = (appName, options) => {
     let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-tests=true'];
     optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
-        layout.getLayout(options.layout).then(layoutResult => {
+        getLayoutInfo(options.layout).then(layoutInfo => {
             runCommand('npx', optimizedArguments).then(() => {
                 options.resolveConflicts = 'override';
                 options.updateBudgets = true;
-                options.layout = layoutResult.layout;
+                options.layout = layoutInfo.layout;
                 addTemplate(appName, options, {
                     cwd: path.join(process.cwd(), appName)
                 });

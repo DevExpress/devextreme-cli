@@ -9,14 +9,12 @@ const getValidLayoutName = (layoutName) => {
         return;
     }
 
-    const currentLayout = layouts.find((layout) => {
-        return layoutName === layout.value;
-    });
+    const currentLayout = layouts.find((layout) => layoutName === layout.value);
 
     return currentLayout && currentLayout.value;
 };
 
-const getLayout = (layoutName) => {
+const getLayoutInfo = (layoutName) => {
     const prompts = [
         {
             type: 'select',
@@ -30,5 +28,5 @@ const getLayout = (layoutName) => {
 };
 
 module.exports = {
-    getLayout
+    getLayoutInfo
 };
