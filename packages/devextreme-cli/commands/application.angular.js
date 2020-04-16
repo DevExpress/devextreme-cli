@@ -4,10 +4,12 @@ const semver = require('semver').SemVer;
 const fs = require('fs');
 const exec = require('child_process').exec;
 const minNgCliVersion = new semver('8.0.0');
+const latestVersions = require('../utility/latest-versions');
+const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
 function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
-    let collectionPath = collectionName;
+    let collectionPath = `${collectionName}@${schematicsVersion}`;
 
     if(options['c']) {
         collectionPath = `${path.join(process.cwd(), options['c'])}`;
