@@ -10,7 +10,7 @@ const getValidLayoutName = (layoutName) => {
     }
 
     const currentLayout = layouts.find((layout) => {
-        return name === layout.value;
+        return layoutName === layout.value;
     });
 
     return currentLayout && currentLayout.value;
