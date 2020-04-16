@@ -17,8 +17,7 @@
     "commands/**/*",
     "templates/**/*",
     "utility/**/*",
-    "index.js",
-    "layout.js"
+    "index.js"
   ],
   "scripts": {
     "lint": "eslint ./",

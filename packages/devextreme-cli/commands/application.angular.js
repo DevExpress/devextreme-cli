@@ -1,4 +1,4 @@
-const getLayoutInfo = require('../layout').getLayoutInfo;
+const getLayoutInfo = require('./layout').getLayoutInfo;
 const packageManager = require('../utility/package-manager');
 const path = require('path');
 const runCommand = require('../utility/run-command');
