@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const runCommand = require('./run-command');
 const yarnLockfile = require('@yarnpkg/lockfile');
+const defaultPackageManager = 'npm';
+let packageManager = '';
 
 const packageManagerConfig = {
     npm: {
@@ -19,17 +21,18 @@ const packageManagerConfig = {
 };
 
 const getPackageManager = (cwd) => {
-    let packageManager = 'npm';
-    for(let prop in packageManagerConfig) {
-        const lockFileName = packageManagerConfig[prop].lockFileName;
-        const lockPath = path.join(cwd, lockFileName);
-        if(fs.existsSync(lockPath)) {
-            packageManager = prop;
-            break;
+    if(!packageManager) {
+        for(let prop in packageManagerConfig) {
+            const lockFileName = packageManagerConfig[prop].lockFileName;
+            const lockPath = path.join(cwd, lockFileName);
+            if(fs.existsSync(lockPath)) {
+                packageManager = prop;
+                break;
+            }
         }
     }
 
-    return packageManager;
+    return packageManager || defaultPackageManager;
 };
 
 const getDependencies = (cwd) => {
