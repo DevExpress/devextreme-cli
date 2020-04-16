@@ -3,35 +3,55 @@ const path = require('path');
 const runCommand = require('./run-command');
 const yarnLockfile = require('@yarnpkg/lockfile');
 
-const getLockFileName = (cwd) => {
-    return isYarn(cwd) ? 'yarn.lock' : 'package-lock.json';
+const packageManagerConfig = {
+    npm: {
+        installCommand: 'install',
+        lockFileName: 'package-lock.json',
+        getLockFile: getPackageLock,
+        getDependencies: (obj) => obj.dependencies
+    },
+    yarn: {
+        installCommand: 'add',
+        lockFileName: 'yarn.lock',
+        getLockFile: getYarnLock,
+        getDependencies: (obj) => obj.object
+    }
 };
 
 const getPackageManager = (cwd) => {
-    return isYarn(cwd) ? 'yarn' : 'npm';
-};
-
-const getLockFile = (cwd) => {
-    const lockFilePath = path.join(cwd, getLockFileName(cwd));
-    if(!fs.existsSync(lockFilePath)) {
-        return;
+    let packageManager = 'npm';
+    for(let prop in packageManagerConfig) {
+        const lockFileName = packageManagerConfig[prop].lockFileName;
+        const lockPath = path.join(cwd, lockFileName);
+        if(fs.existsSync(lockPath)) {
+            packageManager = prop;
+            break;
+        }
     }
 
-    return isYarn(cwd) ? getYarnLock(lockFilePath) : getPackageLock(lockFilePath);
+    return packageManager;
 };
 
-const getPackageLock = (packageLockPath) => {
-    return require(packageLockPath);
+const getDependencies = (cwd) => {
+    const packageManager = packageManagerConfig[getPackageManager(cwd)];
+    const lockFile = packageManager.getLockFile(cwd);
+
+    return packageManager.getDependencies(lockFile);
 };
 
-const getYarnLock = (yarnLockPath) => {
-    return yarnLockfile.parse(fs.readFileSync(yarnLockPath, 'utf8'));
+function getPackageLock(cwd) {
+    return require(path.join(cwd, 'package-lock.json'));
+};
+
+function getYarnLock(cwd) {
+    return yarnLockfile.parse(fs.readFileSync(path.join(cwd, 'yarn.lock'), 'utf8'));
 };
 
 const installPackage = (packageName, evaluatingOptions, options) => {
     const cwd = evaluatingOptions && evaluatingOptions.cwd;
-    const instalationOptions = options && options[getPackageManager()];
-    const commandArguments = isYarn(cwd) ? ['add'] : ['install'];
+    const packageManager = getPackageManager(cwd);
+    const instalationOptions = options && options[packageManager];
+    const commandArguments = [packageManagerConfig[packageManager].installCommand];
 
     if(instalationOptions) {
         commandArguments.concat(instalationOptions);
@@ -39,16 +59,12 @@ const installPackage = (packageName, evaluatingOptions, options) => {
 
     commandArguments.push(packageName);
 
-    return runCommand(getPackageManager(cwd), commandArguments, evaluatingOptions);
-};
-
-const isYarn = (cwd) => {
-    const lockFile = 'yarn.lock';
-    return cwd ? fs.existsSync(path.join(cwd, lockFile)) : fs.existsSync(lockFile);
+    return runCommand(packageManager, commandArguments, evaluatingOptions);
 };
 
 const run = (commands, evaluatingOptions) => {
-    return runCommand(getPackageManager(), commands, evaluatingOptions);
+    const cwd = evaluatingOptions && evaluatingOptions.cwd;
+    return runCommand(getPackageManager(cwd), commands, evaluatingOptions);
 };
 
 const runInstall = (evaluatingOptions) => {
@@ -57,9 +73,8 @@ const runInstall = (evaluatingOptions) => {
 };
 
 module.exports = {
-    getLockFile,
+    getDependencies,
     installPackage,
-    isYarn,
     run,
     runInstall
 };
