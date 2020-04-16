@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const createVueApp = require('@vue/cli/lib/create');
-const layoutUtils = require('../utility/layout');
+const layout = require('../layout');
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
@@ -12,10 +12,6 @@ const latestVersions = require('../utility/latest-versions');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
-];
-const layouts = [
-    { value: 'side-nav-outer-toolbar', title: 'Side navigation (outer toolbar)' },
-    { value: 'side-nav-inner-toolbar', title: 'Side navigation (inner toolbar)' }
 ];
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
@@ -36,7 +32,7 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
 };
 
 const create = (appName, options) => {
-    layoutUtils.getLayout(layouts, options.layout).then((layoutResult) => {
+    layout.getLayout(options.layout).then((layoutResult) => {
         createVueApp(appName, { default: true }).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);

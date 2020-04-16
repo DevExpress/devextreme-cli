@@ -1,7 +1,7 @@
 const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
-const layoutUtils = require('../utility/layout');
+const layout = require('../layout');
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
@@ -14,10 +14,6 @@ const latestVersions = require('../utility/latest-versions');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
-];
-const layouts = [
-    { fullName: 'side-nav-outer-toolbar', title: 'Side navigation (outer toolbar)', value: 'SideNavOuterToolbar' },
-    { fullName: 'side-nav-inner-toolbar', title: 'Side navigation (inner toolbar)', value: 'SideNavInnerToolbar' }
 ];
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
@@ -47,13 +43,13 @@ const updateJsonPropName = (path, name) => {
 const create = (appName, options) => {
     const commandArguments = ['create-react-app', appName];
 
-    layoutUtils.getLayout(layouts, options.layout).then((layoutResult) => {
+    layout.getLayout(options.layout).then((layoutResult) => {
         runCommand('npx', commandArguments).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {
                 project: humanizedName,
-                layout: layoutResult.layout
+                layout: stringUtils.classify(layoutResult.layout)
             });
             modifyIndexHtml(appPath, humanizedName);
             addTemplate(appPath, appName, templateOptions);

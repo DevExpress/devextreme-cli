@@ -1,4 +1,4 @@
-const layoutUtils = require('../utility/layout');
+const layout = require('../layout');
 const packageManager = require('../utility/package-manager');
 const path = require('path');
 const runCommand = require('../utility/run-command');
@@ -6,10 +6,6 @@ const semver = require('semver').SemVer;
 const fs = require('fs');
 const exec = require('child_process').exec;
 const minNgCliVersion = new semver('8.0.0');
-const layouts = [
-    { value: 'side-nav-outer-toolbar', title: 'Side navigation (outer toolbar)' },
-    { value: 'side-nav-inner-toolbar', title: 'Side navigation (inner toolbar)' }
-];
 
 function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -79,7 +75,7 @@ const install = (options) => {
 const create = (appName, options) => {
     let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-tests=true'];
     optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
-        layoutUtils.getLayout(layouts, options.layout).then(layoutResult => {
+        layout.getLayout(options.layout).then(layoutResult => {
             runCommand('npx', optimizedArguments).then(() => {
                 options.resolveConflicts = 'override';
                 options.updateBudgets = true;
