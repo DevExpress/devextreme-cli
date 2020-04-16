@@ -13,7 +13,8 @@ const args = require('minimist')(process.argv.slice(2),
 
 const platformsConfigs = {
     react: './react-config.js',
-    angular: './angular-config.js'
+    angular: './angular-config.js',
+    vue: './vue-config.js'
 };
 
 const commands = args['_'];
