@@ -5,7 +5,7 @@ const yarnLockfile = require('@yarnpkg/lockfile');
 const defaultPackageManager = 'npm';
 let currentPackageManager;
 
-const packageManagerConfig = {
+const packageManagers = {
     npm: {
         installCommand: 'install',
         lockFileName: 'package-lock.json',
@@ -22,8 +22,8 @@ const packageManagerConfig = {
 
 const getPackageManager = (cwd) => {
     if(!currentPackageManager) {
-        currentPackageManager = Object.keys(packageManagerConfig).find((packageManager) => {
-            const lockFileName = packageManagerConfig[packageManager].lockFileName;
+        currentPackageManager = Object.keys(packageManagers).find((packageManager) => {
+            const lockFileName = packageManagers[packageManager].lockFileName;
             const lockPath = path.join(cwd, lockFileName);
             return fs.existsSync(lockPath);
         });
@@ -32,8 +32,9 @@ const getPackageManager = (cwd) => {
     return currentPackageManager || defaultPackageManager;
 };
 
-const getDependencies = (cwd) => {
-    const packageManager = packageManagerConfig[getPackageManager(cwd)];
+const getDependencies = (evaluatingOptions = {}) => {
+    const cwd = evaluatingOptions.cwd;
+    const packageManager = packageManagers[getPackageManager(cwd)];
     const lockFile = packageManager.getLockFile(cwd);
 
     return packageManager.getDependencies(lockFile);
@@ -42,7 +43,7 @@ const getDependencies = (cwd) => {
 const installPackage = (packageName, evaluatingOptions = {}, options = {}) => {
     const packageManager = getPackageManager(evaluatingOptions.cwd);
     const instalationOptions = options[packageManager];
-    const commandArguments = [packageManagerConfig[packageManager].installCommand];
+    const commandArguments = [packageManagers[packageManager].installCommand];
 
     if(instalationOptions) {
         commandArguments.concat(instalationOptions);
@@ -55,7 +56,7 @@ const installPackage = (packageName, evaluatingOptions = {}, options = {}) => {
 
 const run = (commands, evaluatingOptions = {}) => runCommand(getPackageManager(evaluatingOptions.cwd), commands, evaluatingOptions);
 
-const runInstall = (evaluatingOptions = {}) => runCommand(getPackageManager(evaluatingOptions.cwd), ['install'], evaluatingOptions);
+const runInstall = (evaluatingOptions = {}) => run(['install'], evaluatingOptions);
 
 module.exports = {
     getDependencies,

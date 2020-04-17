@@ -131,7 +131,7 @@ const getDevExtremeInfo = (dependencies) => {
 
 const getDevExtremeVersion = () => {
     const cwd = process.cwd();
-    const dependencies = packageManager.getDependencies(cwd);
+    const dependencies = packageManager.getDependencies({ cwd });
     const installedDevExtremePackageJson = path.join(cwd, 'node_modules', 'devextreme', 'package.json');
 
     if(dependencies) {
