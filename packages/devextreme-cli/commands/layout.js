@@ -5,13 +5,10 @@ const layouts = [
 ];
 
 const getValidLayoutName = (layoutName) => {
-    if(!layoutName) {
+    if(!layoutName || !layouts.some((layout) => layoutName === layout.value)) {
         return;
     }
-
-    const currentLayout = layouts.find((layout) => layoutName === layout.value);
-
-    return currentLayout && currentLayout.value;
+    return layoutName;
 };
 
 const getLayoutInfo = (layoutName) => {
