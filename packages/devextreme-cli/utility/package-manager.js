@@ -3,7 +3,7 @@ const path = require('path');
 const runCommand = require('./run-command');
 const yarnLockfile = require('@yarnpkg/lockfile');
 const defaultPackageManager = 'npm';
-let currentPackageManager = '';
+let currentPackageManager;
 
 const packageManagerConfig = {
     npm: {
