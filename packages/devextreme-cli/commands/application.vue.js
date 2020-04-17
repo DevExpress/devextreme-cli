@@ -1,9 +1,9 @@
-const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
 const createVueApp = require('@vue/cli/lib/create');
-const runPrompts = require('../utility/prompts');
+const getLayoutInfo = require('./layout').getLayoutInfo;
 const templateCreator = require('../utility/template-creator');
+const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
@@ -12,10 +12,6 @@ const latestVersions = require('../utility/latest-versions');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
-];
-const layouts = [
-    { value: 'side-nav-outer-toolbar', title: 'Side navigation (outer toolbar)' },
-    { value: 'side-nav-inner-toolbar', title: 'Side navigation (inner toolbar)' }
 ];
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
@@ -35,31 +31,14 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     packageJsonUtils.updateName(appPath, appName);
 };
 
-const getLayout = (options) => {
-    const currentLayout = layouts.filter((layout) => {
-        return layout.value === options.layout;
-    });
-
-    return currentLayout.length ? [currentLayout[0].value] : undefined;
-};
-
 const create = (appName, options) => {
-    const prompts = [
-        {
-            type: 'select',
-            name: 'layout',
-            message: 'What layout do you want to add?',
-            choices: layouts
-        }
-    ];
-
-    runPrompts(options, prompts, getLayout).then((promptsResult) => {
+    getLayoutInfo(options.layout).then((layoutInfo) => {
         createVueApp(appName, { default: true }).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {
                 project: humanizedName,
-                layout: promptsResult.layout
+                layout: layoutInfo.layout
             });
             modifyIndexHtml(appPath, humanizedName);
             addTemplate(appPath, appName, templateOptions);
@@ -98,7 +77,7 @@ const install = (options, appPath, styles) => {
     addStylesToApp(mainModulePath, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'vue');
 
-    runCommand('npm', ['install'], { cwd: appPath });
+    packageManager.runInstall({ cwd: appPath });
 };
 
 const addStylesToApp = (filePath, styles) => {

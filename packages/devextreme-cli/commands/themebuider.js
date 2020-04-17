@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const packageManager = require('../utility/package-manager');
 const semver = require('semver');
-const runCommand = require('../utility/run-command');
 const lock = require('../utility/file-lock');
 
 const commands = {
@@ -111,13 +111,11 @@ const installThemeBuilder = async version => {
         fs.copyFileSync(npmrc, installationNpmrc);
     }
 
-    await runCommand('npm', [
-        'install',
-        '--no-save',
-        `devextreme-themebuilder@${version}`
-    ], {
+    await packageManager.installPackage(`devextreme-themebuilder@${version}`, {
         cwd,
         stdio: 'ignore'
+    }, {
+        npm: ['--no-save']
     });
 
     if(removeNpmrc) {
@@ -125,14 +123,21 @@ const installThemeBuilder = async version => {
     }
 };
 
-const getDevExtremeVersion = () => {
-    const lockFileName = path.join(process.cwd(), 'package-lock.json');
-    const installedDevExtremePackageJson = path.join(process.cwd(), 'node_modules', 'devextreme', 'package.json');
+const getDevExtremeInfo = (dependencies) => {
+    const keyValue = Object.keys(dependencies).find((key) => /devextreme@/.test(key));
 
-    if(fs.existsSync(lockFileName)) {
-        const dependencies = require(lockFileName).dependencies;
-        if(dependencies && dependencies.devextreme) {
-            return dependencies.devextreme.version;
+    return dependencies[keyValue];
+};
+
+const getDevExtremeVersion = () => {
+    const cwd = process.cwd();
+    const dependencies = packageManager.getDependencies({ cwd });
+    const installedDevExtremePackageJson = path.join(cwd, 'node_modules', 'devextreme', 'package.json');
+
+    if(dependencies) {
+        const devextremeInfo = dependencies.devextreme || getDevExtremeInfo(dependencies);
+        if(devextremeInfo) {
+            return devextremeInfo.version;
         }
     } else if(fs.existsSync(installedDevExtremePackageJson)) {
         return require(installedDevExtremePackageJson).version;

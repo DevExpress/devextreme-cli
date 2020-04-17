@@ -1,3 +1,5 @@
+const getLayoutInfo = require('./layout').getLayoutInfo;
+const packageManager = require('../utility/package-manager');
 const path = require('path');
 const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
@@ -29,7 +31,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 
     optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
         if(!localPackageExists(collectionPath)) {
-            runCommand('npm', ['install', collectionPath], evaluatingOptions).then(() => {
+            packageManager.installPackage(collectionPath, evaluatingOptions).then(() => {
                 runCommand('npx', optimizedArguments, evaluatingOptions);
             });
         } else {
@@ -73,13 +75,16 @@ const install = (options) => {
 };
 
 const create = (appName, options) => {
-    let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-install=true', '--skip-tests=true'];
+    let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-tests=true'];
     optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
-        runCommand('npx', optimizedArguments).then(() => {
-            options.resolveConflicts = 'override';
-            options.updateBudgets = true;
-            addTemplate(appName, options, {
-                cwd: path.join(process.cwd(), appName)
+        getLayoutInfo(options.layout).then(layoutInfo => {
+            runCommand('npx', optimizedArguments).then(() => {
+                options.resolveConflicts = 'override';
+                options.updateBudgets = true;
+                options.layout = layoutInfo.layout;
+                addTemplate(appName, options, {
+                    cwd: path.join(process.cwd(), appName)
+                });
             });
         });
     });

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
+const packageManager = require('../utility/package-manager');
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../utility/run-command');
 const packageJsonUtils = require('../utility/package-json-utils');
@@ -13,12 +14,12 @@ const routingFilePath = path.join(sandboxPath, appName, 'src/app/app-routing.mod
 const appComponentPath = path.join(sandboxPath, appName, 'src/app/app.component.html');
 
 async function prepareSchematics() {
-    await runCommand('npm', [ 'i' ], {
+    await packageManager.runInstall({
         cwd: schematicsPath,
         silent: true
     });
 
-    await runCommand('npm', [ 'run', 'build' ], {
+    await packageManager.run([ 'run', 'build' ], {
         cwd: schematicsPath,
         silent: true
     });

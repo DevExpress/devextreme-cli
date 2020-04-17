@@ -1,8 +1,9 @@
 const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
-const runPrompts = require('../utility/prompts');
+const getLayoutInfo = require('./layout').getLayoutInfo;
 const templateCreator = require('../utility/template-creator');
+const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
 const modifyJson = require('../utility/modify-json-file');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
@@ -13,10 +14,6 @@ const latestVersions = require('../utility/latest-versions');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
-];
-const layouts = [
-    { fullName: 'side-nav-outer-toolbar', title: 'Side navigation (outer toolbar)', value: 'SideNavOuterToolbar' },
-    { fullName: 'side-nav-inner-toolbar', title: 'Side navigation (inner toolbar)', value: 'SideNavInnerToolbar' }
 ];
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
@@ -43,32 +40,16 @@ const updateJsonPropName = (path, name) => {
     });
 };
 
-const getLayout = (options) => {
-    const currentLayout = layouts.filter((layout) => {
-        return layout.fullName === options.layout;
-    });
-
-    return currentLayout.length ? [currentLayout[0].value] : undefined;
-};
-
 const create = (appName, options) => {
     const commandArguments = ['create-react-app', appName];
-    const prompts = [
-        {
-            type: 'select',
-            name: 'layout',
-            message: 'What layout do you want to add?',
-            choices: layouts
-        }
-    ];
 
-    runPrompts(options, prompts, getLayout).then((promptsResult) => {
+    getLayoutInfo(options.layout).then((layoutInfo) => {
         runCommand('npx', commandArguments).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {
                 project: humanizedName,
-                layout: promptsResult.layout
+                layout: stringUtils.classify(layoutInfo.layout)
             });
             modifyIndexHtml(appPath, humanizedName);
             addTemplate(appPath, appName, templateOptions);
@@ -111,7 +92,7 @@ const install = (options, appPath, styles) => {
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
-    runCommand('npm', ['install'], { cwd: appPath });
+    packageManager.runInstall({ cwd: appPath });
 };
 
 const addPolyfills = (packagePath, indexPath) => {
