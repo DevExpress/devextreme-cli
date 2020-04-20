@@ -18,16 +18,16 @@ module.exports = {
             glob: 'src/app-routes.js',
             definitions: [
                 {
-                    before: 'import',
-                    after: '<%=^empty%>import'
+                    before: /import {([\s\w,]*)} from '.\/pages'/,
+                    after: '<%=^empty%>import {$1} from \'./pages\''
+                },
+                {
+                    before: 'const routes = [',
+                    after: '<%=/empty%>const routes = [<%=^empty%>'
                 },
                 {
                     before: '];',
                     after: '<%=/empty%>];'
-                },
-                {
-                    before: 'export default [',
-                    after: '<%=/empty%>export default [<%=^empty%>'
                 }
             ],
         },
@@ -53,7 +53,7 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/App.js',
+            glob: 'src/Content.js',
             definitions: [
                 {
                     before: /SideNav(Outer|Inner)Toolbar/,
@@ -82,7 +82,7 @@ module.exports = {
             glob: 'src/themes/metadata.base.json',
             definitions: [
                 {
-                    before: /baseTheme": "[^"]*?"/,
+                    before: /"baseTheme": "[^"]*?"/,
                     after: '"baseTheme": "material.orange.light"'
                 }
             ]
