@@ -18,16 +18,12 @@ module.exports = {
             glob: 'src/app-routes.js',
             definitions: [
                 {
-                    before: /import {([^}]*)} from '.\/pages'/,
-                    after: '<%=^empty%>import {$1} from \'./pages\''
+                    before: /(\nimport {([^}]*)} from '.\/pages';)/,
+                    after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
-                    before: /(const routes = \[)/,
-                    after: '<%=/empty%>$1<%=^empty%>'
-                },
-                {
-                    before: '];',
-                    after: '<%=/empty%>];'
+                    before:/(const routes = \[)([^\]]*)(\])/,
+                    after: '$1<%=^empty%>$2<%=/empty%>$3'
                 }
             ],
         },
