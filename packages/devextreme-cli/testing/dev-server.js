@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const kill = require('tree-kill');
 
-const runCommand = require('../utility/run-command');
+const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
 
 module.exports = class DevServer {

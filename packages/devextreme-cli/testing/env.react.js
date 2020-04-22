@@ -3,8 +3,8 @@ const { EOL } = require('os');
 const path = require('path');
 
 const rimraf = require('./utils/rimraf-async');
-const runCommand = require('../utility/run-command');
-const classify = require('../utility/string').classify;
+const runCommand = require('../src/utility/run-command');
+const classify = require('../src/utility/string').classify;
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/react');

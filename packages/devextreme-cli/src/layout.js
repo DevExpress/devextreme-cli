@@ -1,4 +1,4 @@
-const runPrompts = require('../utility/prompts');
+const runPrompts = require('./utility/prompts');
 const layouts = [
     { value: 'side-nav-outer-toolbar', title: 'Side navigation (outer toolbar)' },
     { value: 'side-nav-inner-toolbar', title: 'Side navigation (inner toolbar)' }
