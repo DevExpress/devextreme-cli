@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const packageManager = require('../utility/package-manager');
+const packageManager = require('../src/utility/package-manager');
 const rimraf = require('./utils/rimraf-async');
-const runCommand = require('../utility/run-command');
-const packageJsonUtils = require('../utility/package-json-utils');
+const runCommand = require('../src/utility/run-command');
+const packageJsonUtils = require('../src/utility/package-json-utils');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
