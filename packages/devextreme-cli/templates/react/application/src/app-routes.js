@@ -1,7 +1,7 @@
-import { withNavigationWatcher } from './contexts/navigation';
-<%=^empty%>import { HomePage, DisplayDataPage, ProfilePage } from './pages';
+import { withNavigationWatcher } from './contexts/navigation';<%=^empty%>
+import { HomePage, DisplayDataPage, ProfilePage } from './pages';<%=/empty%>
 
-<%=/empty%>const routes = [<%=^empty%>
+const routes = [<%=^empty%>
   {
     path: '/display-data',
     component: DisplayDataPage
