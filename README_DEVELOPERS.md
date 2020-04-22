@@ -46,7 +46,7 @@ To replace etalon image just remove it from `packages/devextreme-cli/testing/__t
 
 # Updating Templates
 
-When updating the template, you must check functionality of generated application. Therefore, any change is easier to make first in files in the `testing/sandbox` folder, where you can run the application. Then move changes automatically to relevant files in the `templates` folder.
+Changes maked in application located in the `testing/sandbox` folder need moved to temlates located in the `templates` according to changing framework. 
 
 ## Run Updating Templates for Existing Applications
 
