@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const packageManager = require('../utility/package-manager');
+const packageManager = require('./utility/package-manager');
 const semver = require('semver');
-const lock = require('../utility/file-lock');
+const lock = require('./utility/file-lock');
 
 const commands = {
     BUILD_THEME: 'build-theme',
