@@ -14,9 +14,7 @@
     "devextreme": "index.js"
   },
   "files": [
-    "commands/**/*",
-    "templates/**/*",
-    "utility/**/*",
+    "src/**/*",
     "index.js"
   ],
   "scripts": {

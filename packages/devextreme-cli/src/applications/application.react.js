@@ -1,13 +1,15 @@
+const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
-const createVueApp = require('@vue/cli/lib/create');
-const getLayoutInfo = require('./layout').getLayoutInfo;
+const getLayoutInfo = require('../layout').getLayoutInfo;
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
+const modifyJson = require('../utility/modify-json-file');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
+const pathToPagesIndex = path.join(process.cwd(), 'src', 'pages', 'index.js');
 const latestVersions = require('../utility/latest-versions');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
@@ -17,9 +19,8 @@ const defaultStyles = [
 const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
         { name: 'node-sass', version: '^4.11.0' },
-        { name: 'vue-router', version: '^3.0.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
-        { name: 'sass-loader', version: '^7.1.0', dev: true }
+        { name: 'react-router-dom', version: '^5.0.0' }
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
@@ -31,14 +32,24 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     packageJsonUtils.updateName(appPath, appName);
 };
 
+const updateJsonPropName = (path, name) => {
+    modifyJson(path, content => {
+        content.name = name;
+
+        return content;
+    });
+};
+
 const create = (appName, options) => {
+    const commandArguments = ['create-react-app', appName];
+
     getLayoutInfo(options.layout).then((layoutInfo) => {
-        createVueApp(appName, { default: true }).then(() => {
+        runCommand('npx', commandArguments).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {
                 project: humanizedName,
-                layout: layoutInfo.layout
+                layout: stringUtils.classify(layoutInfo.layout)
             });
             modifyIndexHtml(appPath, humanizedName);
             addTemplate(appPath, appName, templateOptions);
@@ -56,7 +67,9 @@ const modifyIndexHtml = (appPath, appName) => {
 };
 
 const addTemplate = (appPath, appName, templateOptions) => {
-    const templateSourcePath = path.join(__dirname, '..', 'templates', 'vue', 'application');
+    const templateSourcePath = path.join(__dirname, '..', 'templates', 'react', 'application');
+    const manifestPath = path.join(appPath, 'public', 'manifest.json');
+    const indexPath = path.join(appPath, 'src', 'index.js');
     const styles = [
         './themes/generated/theme.additional.css',
         './themes/generated/theme.base.css',
@@ -68,16 +81,27 @@ const addTemplate = (appPath, appName, templateOptions) => {
         addSamplePages(appPath);
     }
     preparePackageJsonForTemplate(appPath, appName);
+    updateJsonPropName(manifestPath, appName);
+    addPolyfills(packageJsonUtils.getPackageJsonPath(), indexPath);
     install({}, appPath, styles);
 };
 
 const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
-    const mainModulePath = path.join(appPath, 'src', 'main.js');
-    addStylesToApp(mainModulePath, styles || defaultStyles);
-    packageJsonUtils.addDevextreme(appPath, options.dxversion, 'vue');
+    const pathToMainComponent = path.join(appPath, 'src', 'App.js');
+    addStylesToApp(pathToMainComponent, styles || defaultStyles);
+    packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
     packageManager.runInstall({ cwd: appPath });
+};
+
+const addPolyfills = (packagePath, indexPath) => {
+    const packages = [
+        { name: 'react-app-polyfill', version: '^1.0.0' }
+    ];
+
+    packageJsonUtils.addDependencies(packagePath, packages);
+    moduleUtils.insertImport(indexPath, './polyfills');
 };
 
 const addStylesToApp = (filePath, styles) => {
@@ -86,49 +110,56 @@ const addStylesToApp = (filePath, styles) => {
     });
 };
 
-const addSamplePages = (appPath) => {
-    const templateSourcePath = path.join(__dirname, '..', 'templates', 'vue', 'sample-pages');
-    const pagesPath = createPathToPage(appPath);
-    templateCreator.moveTemplateFilesToProject(templateSourcePath, pagesPath, {});
-};
-
 const getComponentPageName = (viewName) => {
-    return `${stringUtils.classify(viewName)}`;
-};
-
-const getVueRoute = (viewName, componentName, pagePath) => {
-    const components = `{\n        layout: defaultLayout,\n        content: ${componentName}\n      }\n    `;
-    return `{\n      path: "/${pagePath}",\n      name: "${stringUtils.dasherize(viewName)}",\n      meta: { requiresAuth: true },\n      components: ${components}}`;
+    return `${stringUtils.classify(viewName)}Page`;
 };
 
 const getNavigationData = (viewName, componentName, icon) => {
     const pagePath = stringUtils.dasherize(viewName);
     return {
-        route: getVueRoute(viewName, componentName, pagePath),
+        route: `\n{\n    path: \'/${pagePath}\',\n    component: ${componentName}\n  }`,
         navigation: `{\n    text: \'${stringUtils.humanize(viewName)}\',\n    path: \'/${pagePath}\',\n    icon: \'${icon}\'\n  }`
     };
 };
 
-const createPathToPage = (appPath) => {
-    const pagesPath = path.join(appPath, 'src', 'views');
+const createPathToPage = (pageName) => {
+    const pagesPath = path.join(process.cwd(), 'src', 'pages');
+    const newPagePath = path.join(pagesPath, pageName);
 
     if(!fs.existsSync(pagesPath)) {
         fs.mkdirSync(pagesPath);
+        createPagesIndex();
     }
 
-    return pagesPath;
+    if(!fs.existsSync(newPagePath)) {
+        fs.mkdirSync(newPagePath);
+    }
+
+    return newPagePath;
+};
+
+const createPagesIndex = () => {
+    fs.writeFileSync(pathToPagesIndex, '');
+};
+
+const addSamplePages = (appPath) => {
+    const templateSourcePath = path.join(__dirname, '..', 'templates', 'react', 'sample-pages');
+    const pagesPath = path.join(appPath, 'src', 'pages');
+    fs.mkdirSync(pagesPath);
+    templateCreator.moveTemplateFilesToProject(templateSourcePath, pagesPath, {});
 };
 
 const addView = (pageName, options) => {
     const componentName = getComponentPageName(pageName);
-    const pathToPage = createPathToPage(process.cwd());
-    const pageTemplatePath = path.join(__dirname, '..', 'templates', 'vue', 'page');
-    const routingModulePath = path.join(process.cwd(), 'src', 'router.js');
+    const pathToPage = createPathToPage(pageName);
+    const pageTemplatePath = path.join(__dirname, '..', 'templates', 'react', 'page');
+    const routingModulePath = path.join(process.cwd(), 'src', 'app-routes.js');
     const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js');
     const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'home');
 
     templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath);
-    moduleUtils.insertImport(routingModulePath, `./views/${pageName}`, componentName, true);
+    moduleUtils.insertExport(pathToPagesIndex, componentName, `./${pageName}/${pageName}`);
+    moduleUtils.insertImport(routingModulePath, './pages', componentName);
     insertItemToArray(routingModulePath, navigationData.route);
     insertItemToArray(navigationModulePath, navigationData.navigation);
 };

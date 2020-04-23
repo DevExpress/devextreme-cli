@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const packageManager = require('../utility/package-manager');
+const packageManager = require('../src/utility/package-manager');
 const rimraf = require('./utils/rimraf-async');
-const runCommand = require('../utility/run-command');
-const packageJsonUtils = require('../utility/package-json-utils');
+const runCommand = require('../src/utility/run-command');
+const packageJsonUtils = require('../src/utility/package-json-utils');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
@@ -48,7 +48,7 @@ exports.createApp = async() => {
     });
 
     const scripts = [
-        { name: 'prestart', value: 'ngcc --properties es2015 browser module main --async false' }
+        { name: 'prestart', value: 'ngcc --properties es2015 --async false' }
     ];
     // https://github.com/angular/angular/issues/36278
     packageJsonUtils.updateScripts(path.join(sandboxPath, appName), scripts);
