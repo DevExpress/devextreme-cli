@@ -24,8 +24,7 @@
       "jasmine",
       "node"
     ],
-    "experimentalDecorators": true,
-    "allowJs": true
+    "experimentalDecorators": true
   },
   "include": [
     "src/**/*"
