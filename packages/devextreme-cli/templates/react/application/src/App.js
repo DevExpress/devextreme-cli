@@ -5,7 +5,7 @@ import './dx-styles.scss';
 import LoadPanel from 'devextreme-react/load-panel';
 import { NavigationProvider } from './contexts/navigation';
 import { AuthProvider, useAuth } from './contexts/auth';
-import { useScreenSize } from './utils/media-query';
+import { useScreenSizeClass } from './utils/media-query';
 import Content from './Content';
 import NotAuthenticatedContent from './NotAuthenticatedContent';
 
@@ -24,13 +24,13 @@ function App() {
 }
 
 export default function () {
-  const screenSize = useScreenSize();
+  const screenSizeClass = useScreenSizeClass();
 
   return (
     <Router>
       <AuthProvider>
         <NavigationProvider>
-          <div className={`app ${screenSize}`}>
+          <div className={`app ${screenSizeClass}`}>
             <App />
           </div>
         </NavigationProvider>

@@ -6,38 +6,44 @@ import React, { useState, useCallback, useRef } from 'react';
 import { useHistory } from 'react-router';
 import { Header, SideNavigationMenu, Footer } from '../../components';
 import './side-nav-inner-toolbar.scss';
-import { useScreenSize, ScreenSize } from '../../utils/media-query';
+import { useScreenSize } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
 import { useMenuPatch } from '../../utils/patches';
 
 export default function (props) {
   const scrollViewRef = useRef();
   const history = useHistory();
-  const screenSize = useScreenSize();
-  const [menuStatus, setMenuStatus] = useState(
-    screenSize === ScreenSize.Large ? MenuStatus.Opened : MenuStatus.Closed
-  );
+  const { isXSmall, isLarge } = useScreenSize();
   const [patchCssClass, onMenuReady] = useMenuPatch();
+  const [menuStatus, setMenuStatus] = useState(
+    isLarge ? MenuStatus.Opened : MenuStatus.Closed
+  );
+
   const toggleMenu = useCallback(({ event }) => {
-    if (menuStatus === MenuStatus.Closed) {
-      setMenuStatus(MenuStatus.Opened);
-    } else {
-      setMenuStatus(MenuStatus.Closed);
-    }
+    setMenuStatus(
+      prevMenuStatus => prevMenuStatus === MenuStatus.Closed
+        ? MenuStatus.Opened
+        : MenuStatus.Closed
+    );
     event.stopPropagation();
-  }, [menuStatus]);
-  const onMenuClick = useCallback(() => {
-    if (menuStatus === MenuStatus.Closed) {
-      setMenuStatus(MenuStatus.TemporaryOpened);
-    }
-  }, [menuStatus]);
+  }, []);
+
+  const temporaryOpenMenu = useCallback(() => {
+    setMenuStatus(
+      prevMenuStatus => prevMenuStatus === MenuStatus.Closed
+        ? MenuStatus.TemporaryOpened
+        : prevMenuStatus
+    );
+  }, []);
+
   const onOutsideClick = useCallback(() => {
-    if (menuStatus === MenuStatus.Closed || screenSize === ScreenSize.Large) {
-      return false;
-    }
-    setMenuStatus(MenuStatus.Closed);
-    return true;
-  }, [menuStatus, screenSize]);
+    console.log('onOutsideClick')
+    setMenuStatus(
+      prevMenuStatus => prevMenuStatus !== MenuStatus.Closed && !isLarge
+        ? MenuStatus.Closed
+        : prevMenuStatus
+    );
+  }, [isLarge]);
 
   const onNavigationChanged = useCallback(({ itemData: { path }, event, node }) => {
     if (menuStatus === MenuStatus.Closed || !path || node.selected) {
@@ -48,11 +54,11 @@ export default function (props) {
     history.push(path);
     scrollViewRef.current.instance.scrollTo(0);
 
-    if (screenSize !== screenSize.Large || menuStatus === MenuStatus.TemporaryOpened) {
+    if (!isLarge || menuStatus === MenuStatus.TemporaryOpened) {
       setMenuStatus(MenuStatus.Closed);
       event.stopPropagation();
     }
-  }, [history, menuStatus, screenSize]);
+  }, [history, menuStatus, isLarge]);
 
   return (
     <div className={'side-nav-inner-toolbar'}>
@@ -60,17 +66,17 @@ export default function (props) {
         className={'drawer' + patchCssClass}
         position={'before'}
         closeOnOutsideClick={onOutsideClick}
-        openedStateMode={screenSize === ScreenSize.Large ? 'shrink' : 'overlap'}
-        revealMode={screenSize === ScreenSize.XSmall ? 'slide' : 'expand'}
-        minSize={screenSize === ScreenSize.XSmall ? 0 : 60}
+        openedStateMode={isLarge ? 'shrink' : 'overlap'}
+        revealMode={isXSmall ? 'slide' : 'expand'}
+        minSize={isXSmall ? 0 : 60}
         maxSize={250}
-        shading={screenSize === ScreenSize.Large ? false : true}
+        shading={isLarge ? false : true}
         opened={menuStatus === MenuStatus.Closed ? false : true}
         template={'menu'}
       >
         <div className={'container'}>
           <Header
-            menuToggleEnabled={screenSize === ScreenSize.XSmall}
+            menuToggleEnabled={isXSmall}
             toggleMenu={toggleMenu}
           />
           <ScrollView ref={scrollViewRef} className={'layout-body with-footer'}>
@@ -90,12 +96,12 @@ export default function (props) {
           <SideNavigationMenu
             compactMode={menuStatus === MenuStatus.Closed}
             selectedItemChanged={onNavigationChanged}
-            openMenu={onMenuClick}
+            openMenu={temporaryOpenMenu}
             onMenuReady={onMenuReady}
           >
             <Toolbar id={'navigation-header'}>
               {
-                screenSize !== ScreenSize.XSmall &&
+                !isXSmall &&
                 <Item
                   location={'before'}
                   cssClass={'menu-button'}
