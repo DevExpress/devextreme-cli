@@ -37,7 +37,6 @@ export default function (props) {
   }, []);
 
   const onOutsideClick = useCallback(() => {
-    console.log('onOutsideClick')
     setMenuStatus(
       prevMenuStatus => prevMenuStatus !== MenuStatus.Closed && !isLarge
         ? MenuStatus.Closed
