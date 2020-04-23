@@ -32,7 +32,7 @@ You can find test results in the following folders:
 npm run test-dev
 ```
 
-## Run Tests for an Individual Framework
+## Run Tests for Individual Framework
 
 ```sh
 npm run test -- -- -t angular
