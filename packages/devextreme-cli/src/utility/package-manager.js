@@ -43,10 +43,10 @@ const getDependencies = (evaluatingOptions = {}) => {
 const installPackage = (packageName, evaluatingOptions = {}, options = {}) => {
     const packageManager = getPackageManager(evaluatingOptions.cwd);
     const instalationOptions = options[packageManager];
-    const commandArguments = [packageManagers[packageManager].installCommand];
+    let commandArguments = [packageManagers[packageManager].installCommand];
 
     if(instalationOptions) {
-        commandArguments.concat(instalationOptions);
+        commandArguments = [...commandArguments, ...instalationOptions];
     }
 
     commandArguments.push(packageName);
