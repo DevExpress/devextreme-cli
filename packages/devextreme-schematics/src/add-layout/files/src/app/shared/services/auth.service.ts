@@ -4,12 +4,12 @@ import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 @Injectable()
 export class AuthService {
     loggedIn = true;
-    prevPath: string;
+    path = '/';
     constructor(private router: Router) { }
 
     logIn(login: string, password: string) {
         this.loggedIn = true;
-        this.router.navigate([this.prevPath]);
+        this.router.navigate([this.path]);
     }
 
     logOut() {
@@ -31,7 +31,7 @@ export class AuthGuardService implements CanActivate {
         const isLoginForm = route.routeConfig.path === 'login-form';
 
         if (isLoggedIn && isLoginForm) {
-            this.authService.prevPath = '/'
+            this.authService.path = '/'
             this.router.navigate(['/']);
             return false;
         }
@@ -41,7 +41,7 @@ export class AuthGuardService implements CanActivate {
         }
 
         if (isLoggedIn) {
-            this.authService.prevPath = route.routeConfig.path;
+            this.authService.path = route.routeConfig.path;
         }
 
         return isLoggedIn || isLoginForm;
