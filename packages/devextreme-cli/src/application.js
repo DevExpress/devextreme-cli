@@ -1,6 +1,6 @@
-const angularApplication = require('./application.angular');
-const reactApplication = require('./application.react');
-const vueApplication = require('./application.vue');
+const angularApplication = require('./applications/application.angular');
+const reactApplication = require('./applications/application.react');
+const vueApplication = require('./applications/application.vue');
 const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
