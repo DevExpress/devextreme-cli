@@ -10,7 +10,7 @@ import { useScreenSize } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
 import { useMenuPatch } from '../../utils/patches';
 
-export default function (props) {
+export default function ({ title, children }) {
   const scrollViewRef = useRef();
   const history = useHistory();
   const { isXSmall, isLarge } = useScreenSize();
@@ -80,12 +80,12 @@ export default function (props) {
           />
           <ScrollView ref={scrollViewRef} className={'layout-body with-footer'}>
             <div className={'content'}>
-              {React.Children.map(props.children, item => {
+              {React.Children.map(children, item => {
                 return item.type !== Footer && item;
               })}
             </div>
             <div className={'content-block'}>
-              {React.Children.map(props.children, item => {
+              {React.Children.map(children, item => {
                 return item.type === Footer && item;
               })}
             </div>
@@ -108,7 +108,7 @@ export default function (props) {
                   <Button icon="menu" stylingMode="text" onClick={toggleMenu} />
                 </Item>
               }
-              <Item location={'before'} cssClass={'header-title'} text={props.title} />
+              <Item location={'before'} cssClass={'header-title'} text={title} />
             </Toolbar>
           </SideNavigationMenu>
         </Template>
