@@ -52,13 +52,13 @@ In order to make a change to the template you need:
 3.run the update command.
 It moves the changes from the generated application in `testing/sandbox` to the template in `templates` according to the framework.
 
-## Run Auto-Updating Templates for Existing Applications
+## Run Auto-Updating Templates for All the Frameworks
 
 ```sh
 npm run update-template
 ```
 
-## Auto-Updating All the Frameworks
+## Run Auto-Updating Templates for an Individual Framework
 
 ```sh
 npm run update-template -- -p angular
