@@ -46,7 +46,7 @@ const installPackage = (packageName, evaluatingOptions = {}, options = {}) => {
     let commandArguments = [packageManagers[packageManager].installCommand];
 
     if(instalationOptions) {
-        commandArguments = [...commandArguments, ...instalationOptions];
+        commandArguments.push(...instalationOptions);
     }
 
     commandArguments.push(packageName);
