@@ -71,7 +71,7 @@ To modify an application template, follow these instructions:
 npm run update-template
 ```
 
-## Auto-Updating Templates for an Specific Framework
+## Auto-Updating Templates for Specific Framework
 
 ```sh
 npm run update-template -- -p angular
