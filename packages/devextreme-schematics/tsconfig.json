@@ -23,12 +23,15 @@
     "types": [
       "jasmine",
       "node"
-    ]
+    ],
+    "experimentalDecorators": true,
+    "allowJs": true
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
-    "src/*/files/**/*"
+    "src/*/files/**/*",
+    "wwwroot/lib"
   ]
 }
