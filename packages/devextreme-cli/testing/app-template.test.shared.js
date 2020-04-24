@@ -54,12 +54,12 @@ module.exports = (env) => {
                         Object.keys(viewports).forEach((viewportName) => {
                             const viewport = viewports[viewportName];
 
-                            async function openPage(url) {
+                            async function openPage(url, options) {
                                 await page.goto('about:blank');
                                 await page.setViewport(viewport);
                                 await page.goto(url, {
                                     timeout: 0,
-                                    waitUntil: 'networkidle0'
+                                    ...options
                                 });
                                 await page.waitFor('.full-height-scrollable, .with-footer', {
                                     timeout: 0
@@ -106,7 +106,9 @@ module.exports = (env) => {
                                 });
 
                                 it('Display data view', async() => {
-                                    const page = await openPage(`${appUrl}#/display-data`);
+                                    const page = await openPage(`${appUrl}#/display-data`, {
+                                        waitUntil: 'networkidle0'
+                                    });
                                     // NOTE: Wait for the DataGrid is loaded
                                     await page.waitFor('.dx-row-focused');
                                     const image = await page.screenshot();
@@ -116,7 +118,9 @@ module.exports = (env) => {
 
                                 it('Menu toggle', async() => {
                                     const menuButtonSelector = '.menu-button .dx-button';
-                                    const page = await openPage(`${appUrl}#/profile`);
+                                    const page = await openPage(`${appUrl}#/profile`, {
+                                        waitUntil: 'networkidle0'
+                                    });
                                     await page.waitForSelector(menuButtonSelector);
                                     await page.click(menuButtonSelector);
 
