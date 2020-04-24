@@ -10,7 +10,7 @@
         :items="items"
         key-expr="path"
         selection-mode="single"
-        :focus-state-enabled="true"
+        :focus-state-enabled="false"
         expand-event="click"
         @item-click="handleItemClick"
         width="100%"
