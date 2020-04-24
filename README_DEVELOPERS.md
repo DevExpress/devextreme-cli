@@ -54,16 +54,16 @@ To modify an application template, follow these instructions:
 2. Modify the application as required.
 3. Run a script that updates templates for all frameworks:
 
-    ```sh
-    npm run update-template
-    ```
+```sh
+npm run update-template
+```
 ... or a script that updates the template for an individual framework:
 
-    ```sh
-    npm run update-template -- -p angular
-    npm run update-template -- -p vue
-    npm run update-template -- -p react
-    ```
+```sh
+npm run update-template -- -p angular
+npm run update-template -- -p vue
+npm run update-template -- -p react
+```
 
 ## Auto-Updating Templates for All the Frameworks
 
