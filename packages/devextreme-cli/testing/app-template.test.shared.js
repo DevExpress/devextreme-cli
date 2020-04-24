@@ -54,12 +54,12 @@ module.exports = (env) => {
                         Object.keys(viewports).forEach((viewportName) => {
                             const viewport = viewports[viewportName];
 
-                            async function openPage(url) {
+                            async function openPage(url, options) {
                                 await page.goto('about:blank');
                                 await page.setViewport(viewport);
                                 await page.goto(url, {
                                     timeout: 0,
-                                    waitUntil: 'networkidle0'
+                                    ...options
                                 });
                                 await page.waitFor('.full-height-scrollable, .with-footer', {
                                     timeout: 0
@@ -116,7 +116,9 @@ module.exports = (env) => {
 
                                 it('Menu toggle', async() => {
                                     const menuButtonSelector = '.menu-button .dx-button';
-                                    const page = await openPage(`${appUrl}#/profile`);
+                                    const page = await openPage(`${appUrl}#/profile`, {
+                                        waitUntil: 'networkidle0'
+                                    });
                                     await page.waitForSelector(menuButtonSelector);
                                     await page.click(menuButtonSelector);
 
