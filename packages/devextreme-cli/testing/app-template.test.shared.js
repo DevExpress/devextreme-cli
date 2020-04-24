@@ -106,7 +106,9 @@ module.exports = (env) => {
                                 });
 
                                 it('Display data view', async() => {
-                                    const page = await openPage(`${appUrl}#/display-data`);
+                                    const page = await openPage(`${appUrl}#/display-data`, {
+                                        waitUntil: 'networkidle0'
+                                    });
                                     // NOTE: Wait for the DataGrid is loaded
                                     await page.waitFor('.dx-row-focused');
                                     const image = await page.screenshot();
