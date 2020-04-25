@@ -1,24 +1,36 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
+const defaultPath = '/';
+
 @Injectable()
 export class AuthService {
-    loggedIn = true;
-    path = '/';
+    private _loggedIn: boolean = true;
+    get loggedIn(): boolean {
+        return this._loggedIn;
+    }
+    set loggedIn(value: boolean) {
+        this._loggedIn = value;
+    }
+
+    private _lastAuthenticatedPath: string = defaultPath;
+    public get lastAuthenticatedPath(): string {
+        return this._lastAuthenticatedPath;
+    }
+    public set lastAuthenticatedPath(value: string) {
+        this._lastAuthenticatedPath = value;
+    }
+
     constructor(private router: Router) { }
 
     logIn(login: string, password: string) {
         this.loggedIn = true;
-        this.router.navigate([this.path]);
+        this.router.navigate([this.lastAuthenticatedPath]);
     }
 
     logOut() {
         this.loggedIn = false;
         this.router.navigate(['/login-form']);
-    }
-
-    get isLoggedIn() {
-        return this.loggedIn;
     }
 }
 
@@ -27,12 +39,12 @@ export class AuthGuardService implements CanActivate {
     constructor(private router: Router, private authService: AuthService) { }
 
     canActivate(route: ActivatedRouteSnapshot): boolean {
-        const isLoggedIn = this.authService.isLoggedIn;
+        const isLoggedIn = this.authService.loggedIn;
         const isLoginForm = route.routeConfig.path === 'login-form';
 
         if (isLoggedIn && isLoginForm) {
-            this.authService.path = '/'
-            this.router.navigate(['/']);
+            this.authService.lastAuthenticatedPath = defaultPath;
+            this.router.navigate([defaultPath]);
             return false;
         }
 
@@ -41,7 +53,7 @@ export class AuthGuardService implements CanActivate {
         }
 
         if (isLoggedIn) {
-            this.authService.path = route.routeConfig.path;
+            this.authService.lastAuthenticatedPath = route.routeConfig.path;
         }
 
         return isLoggedIn || isLoginForm;
