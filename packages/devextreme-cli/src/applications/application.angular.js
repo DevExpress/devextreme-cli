@@ -24,9 +24,7 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     };
 
 
-    let commandArguments = [
-        'g', `${collectionName}:${schematicCommand}`
-    ].concat(additionalOptions);
+    const commandArguments = ['g', `${collectionName}:${schematicCommand}`, ...additionalOptions];
 
     if(!localPackageExists(collectionPath)) {
         runNgCommand(['add', collectionPath], evaluatingOptions).then(() => {
@@ -38,7 +36,9 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
 }
 
 async function runNgCommand(commandArguments, evaluatingOptions) {
-    const ngCommandArguments = await hasSutableNgCli() ? ['ng', ...commandArguments] : ['-p', '@angular/cli', 'ng', ...commandArguments];
+    const ngCommandArguments = await hasSutableNgCli() ? [] : ['-p', '@angular/cli'];
+    
+    ngCommandArguments.push('ng', ...commandArguments);
     return runCommand('npx', ngCommandArguments, evaluatingOptions);
 }
 
@@ -71,7 +71,7 @@ const install = (options) => {
 };
 
 const create = (appName, options) => {
-    let commandArguments = ['new', appName, '--style=scss', '--routing=false', '--skip-tests=true', '--skip-install=true'];
+    const commandArguments = ['new', appName, '--style=scss', '--routing=false', '--skip-tests=true', '--skip-install=true'];
 
     getLayoutInfo(options.layout).then(layoutInfo => {
         runNgCommand(commandArguments).then(() => {
