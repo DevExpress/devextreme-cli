@@ -96,26 +96,26 @@
         <p>The application is built with:</p>
         <ul>
           <li>
-            <a href="https://cli.vuejs.org/" target="_blank">Vue CLI</a>
+            <a href="https://cli.vuejs.org/" target="_blank" rel="noopener noreferrer">Vue CLI</a>
           </li>
           <li>
-            <a href="https://js.devexpress.com/Documentation/Guide/Getting_Started/DevExtreme_CLI/" target="_blank">DevExtreme CLI</a>
+            <a href="https://js.devexpress.com/Documentation/Guide/Getting_Started/DevExtreme_CLI/" target="_blank" rel="noopener noreferrer">DevExtreme CLI</a>
           </li>
           <li>
-            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/" target="_blank">DevExtreme-Vue</a>
+            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/" target="_blank" rel="noopener noreferrer">DevExtreme-Vue</a>
             components
           </li>
         </ul>
 
         <p>
           The application layouts are implemented using the
-          <a href="https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDrawer/" target="_blank">Drawer</a>
+          <a href="https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDrawer/" target="_blank" rel="noopener noreferrer">Drawer</a>
           component. Several component examples are also available in the
           <b>Examples</b> section. For complete information on DevExtreme, check
           our
-          <a href="https://js.devexpress.com/Documentation/" target="_blank">documentation</a>
+          <a href="https://js.devexpress.com/Documentation/" target="_blank" rel="noopener noreferrer">documentation</a>
           and
-          <a href="https://js.devexpress.com/Demos/WidgetsGallery/" target="_blank">demos</a>.
+          <a href="https://js.devexpress.com/Demos/WidgetsGallery/" target="_blank" rel="noopener noreferrer">demos</a>.
         </p>
         <p>
           You can do the following to create a custom application using this
@@ -145,7 +145,7 @@
 
         <p>
           Please, read README in
-          <a href="https://github.com/DevExpress/devextreme-vue-template/blob/master/README.md" target="_blank">devextreme-vue-template</a>
+          <a href="https://github.com/DevExpress/devextreme-vue-template/blob/master/README.md" target="_blank" rel="noopener noreferrer">devextreme-vue-template</a>
           GitHub repository for more information.
         </p>
       </div>
