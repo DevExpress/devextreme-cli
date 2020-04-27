@@ -28,18 +28,18 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
         'ng', 'g', `${collectionName}:${schematicCommand}`
     ].concat(additionalOptions);
 
-    getNgPackage().then((ngPackage) => {
-        commandArguments = [...ngPackage, ...commandArguments];
+    if(!localPackageExists(collectionPath)) {
+        runNgCommand(['ng', 'add', collectionPath], evaluatingOptions).then(() => {
+            runNgCommand(commandArguments, evaluatingOptions);
+        });
+    } else {
+        runNgCommand(commandArguments, evaluatingOptions);
+    };
+}
 
-        if(!localPackageExists(collectionPath)) {
-            const addCollectionArguments = [...ngPackage, 'ng', 'add', collectionPath];
-            runCommand('npx', addCollectionArguments, evaluatingOptions).then(() => {
-                runCommand('npx', commandArguments, evaluatingOptions);
-            });
-        } else {
-            runCommand('npx', commandArguments, evaluatingOptions);
-        }
-    });
+async function runNgCommand(commandArguments, evaluatingOptions) {
+    const ngCommandArguments = await hasSutableNgCli() ? commandArguments : ['-p', '@angular/cli', ...commandArguments];
+    return runCommand('npx', ngCommandArguments, evaluatingOptions);
 }
 
 function localPackageExists(packageName) {
@@ -52,18 +52,12 @@ function localPackageExists(packageName) {
     return fs.existsSync(packageJsonPath);
 }
 
-function getNgPackage() {
-    return new Promise((resolve, reject) => {
-        hasSutableNgCli().then(() => resolve([]), () => resolve(['-p', '@angular/cli']));
-    });
-}
-
 function hasSutableNgCli() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
             stderr || parseNgCliVersion(stdout).compare(minNgCliVersion) < 0
-                ? reject()
-                : resolve();
+                ? resolve(false)
+                : resolve(true);
         });
     });
 }
@@ -78,17 +72,14 @@ const install = (options) => {
 
 const create = (appName, options) => {
     let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-tests=true', '--skip-install=true'];
-    getNgPackage().then((ngPackage) => {
-        commandArguments = [...ngPackage, ...commandArguments];
 
-        getLayoutInfo(options.layout).then(layoutInfo => {
-            runCommand('npx', commandArguments).then(() => {
-                options.resolveConflicts = 'override';
-                options.updateBudgets = true;
-                options.layout = layoutInfo.layout;
-                addTemplate(appName, options, {
-                    cwd: path.join(process.cwd(), appName)
-                });
+    getLayoutInfo(options.layout).then(layoutInfo => {
+        runNgCommand(commandArguments).then(() => {
+            options.resolveConflicts = 'override';
+            options.updateBudgets = true;
+            options.layout = layoutInfo.layout;
+            addTemplate(appName, options, {
+                cwd: path.join(process.cwd(), appName)
             });
         });
     });
