@@ -1,6 +1,5 @@
 import React from 'react';
 import { HashRouter as Router } from 'react-router-dom';
-import './App.scss';
 import './dx-styles.scss';
 import LoadPanel from 'devextreme-react/load-panel';
 import { NavigationProvider } from './contexts/navigation';
