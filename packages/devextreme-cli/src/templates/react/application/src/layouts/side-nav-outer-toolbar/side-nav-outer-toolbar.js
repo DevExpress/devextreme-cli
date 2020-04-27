@@ -66,7 +66,7 @@ export default function ({ title, children }) {
         title={title}
       />
       <Drawer
-        className={'drawer' + patchCssClass}
+        className={['drawer', patchCssClass].join(' ')}
         position={'before'}
         closeOnOutsideClick={onOutsideClick}
         openedStateMode={isLarge ? 'shrink' : 'overlap'}

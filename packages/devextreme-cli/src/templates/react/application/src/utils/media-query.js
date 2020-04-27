@@ -20,7 +20,7 @@ export const useScreenSize = () => {
 export const useScreenSizeClass = () => {
   const screenSize = useScreenSize();
 
-  if(screenSize.isLarge) {
+  if (screenSize.isLarge) {
     return 'screen-large';
   }
 
@@ -35,18 +35,11 @@ export const useScreenSizeClass = () => {
   return 'screen-x-small';
 }
 
-const Breakpoints = {
-  XSmall: '(max-width: 599.99px)',
-  Small: '(min-width: 600px) and (max-width: 959.99px)',
-  Medium: '(min-width: 960px) and (max-width: 1279.99px)',
-  Large: '(min-width: 1280px)'
-};
-
 let handlers = [];
-const xSmallMedia = window.matchMedia(Breakpoints.XSmall);
-const smallMedia = window.matchMedia(Breakpoints.Small);
-const mediumMedia = window.matchMedia(Breakpoints.Medium);
-const largeMedia = window.matchMedia(Breakpoints.Large);
+const xSmallMedia = window.matchMedia('(max-width: 599.99px)');
+const smallMedia = window.matchMedia('(min-width: 600px) and (max-width: 959.99px)');
+const mediumMedia = window.matchMedia('(min-width: 960px) and (max-width: 1279.99px)');
+const largeMedia = window.matchMedia('(min-width: 1280px)');
 
 [xSmallMedia, smallMedia, mediumMedia, largeMedia].forEach(media => {
   media.addListener((e) => {
@@ -60,9 +53,11 @@ const unsubscribe = handler => {
   handlers = handlers.filter(item => item !== handler);
 };
 
-const getScreenSize = () => ({
-  isXSmall: xSmallMedia.matches,
-  isSmall: smallMedia.matches,
-  isMedium: mediumMedia.matches,
-  isLarge: largeMedia.matches
-});
+function getScreenSize() {
+  return {
+    isXSmall: xSmallMedia.matches,
+    isSmall: smallMedia.matches,
+    isMedium: mediumMedia.matches,
+    isLarge: largeMedia.matches
+  };
+};
