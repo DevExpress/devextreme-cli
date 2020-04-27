@@ -29,13 +29,16 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
         'ng', 'g', `${collectionName}:${schematicCommand}`
     ].concat(additionalOptions);
 
-    optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
+    getNgPackage().then((ngPackage) => {
+        commandArguments = [...ngPackage, ...commandArguments];
+
         if(!localPackageExists(collectionPath)) {
-            packageManager.installPackage(collectionPath, evaluatingOptions).then(() => {
-                runCommand('npx', optimizedArguments, evaluatingOptions);
+            const addCollectionArguments = [...ngPackage, 'ng', 'add', collectionPath];
+            runCommand('npx', addCollectionArguments, evaluatingOptions).then(() => {
+                runCommand('npx', commandArguments, evaluatingOptions);
             });
         } else {
-            runCommand('npx', optimizedArguments, evaluatingOptions);
+            runCommand('npx', commandArguments, evaluatingOptions);
         }
     });
 }
@@ -50,9 +53,9 @@ function localPackageExists(packageName) {
     return fs.existsSync(packageJsonPath);
 }
 
-function optimizeNgCommandArguments(args) {
+function getNgPackage() {
     return new Promise((resolve, reject) => {
-        hasSutableNgCli().then(() => resolve(args), () => resolve(['-p', '@angular/cli', ...args]));
+        hasSutableNgCli().then(() => resolve([]), () => resolve(['-p', '@angular/cli']));
     });
 }
 
@@ -75,10 +78,12 @@ const install = (options) => {
 };
 
 const create = (appName, options) => {
-    let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-tests=true'];
-    optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
+    let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-tests=true', '--skip-install=true'];
+    getNgPackage().then((ngPackage) => {
+        commandArguments = [...ngPackage, ...commandArguments];
+
         getLayoutInfo(options.layout).then(layoutInfo => {
-            runCommand('npx', optimizedArguments).then(() => {
+            runCommand('npx', commandArguments).then(() => {
                 options.resolveConflicts = 'override';
                 options.updateBudgets = true;
                 options.layout = layoutInfo.layout;
