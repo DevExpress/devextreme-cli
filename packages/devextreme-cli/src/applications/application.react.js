@@ -9,6 +9,7 @@ const modifyJson = require('../utility/modify-json-file');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
+const removeFile = require('../utility/file-operations').remove;
 const pathToPagesIndex = path.join(process.cwd(), 'src', 'pages', 'index.js');
 const latestVersions = require('../utility/latest-versions');
 const defaultStyles = [
@@ -77,6 +78,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
     ];
 
     templateCreator.moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);
+    removeFile(path.join(appPath, 'src', 'App.css'));
     if(!templateOptions.empty) {
         addSamplePages(appPath);
     }
