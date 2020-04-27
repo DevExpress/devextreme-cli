@@ -21,12 +21,12 @@ export default () => (
 
         <p>Welcome to <b>{appInfo.title}</b>!</p><p>The application is built with:</p>
         <ul>
-          <li><a href={'https://github.com/facebook/create-react-app'}>Create React App</a></li>
-          <li><a href={'https://github.com/devexpress/devextreme-cli'}>DevExtreme CLI</a></li>
-          <li><a href={'https://github.com/devexpress/devextreme-react'}>DevExtreme-React</a> components</li>
+          <li><a href={'https://create-react-app.dev/'} target={'_blank'} rel={'noopener noreferrer'}>Create React App</a></li>
+          <li><a href={'https://js.devexpress.com/Documentation/Guide/Getting_Started/DevExtreme_CLI/'} target={'_blank'} rel={'noopener noreferrer'}>DevExtreme CLI</a></li>
+          <li><a href={'https://js.devexpress.com/Documentation/Guide/React_Components/DevExtreme_React_Components/'} target={'_blank'} rel={'noopener noreferrer'}>DevExtreme-React</a> components</li>
         </ul>
 
-        <p>The application layouts are implemented using the <a href={'https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDrawer/'}>Drawer</a> component. Several component examples are also available in the <b>Examples</b> section. For complete information on DevExtreme, check our <a href={'https://js.devexpress.com/Documentation/'}>documentation</a> and <a href={'https://js.devexpress.com/Demos/WidgetsGallery/'}>demos</a>.</p>
+        <p>The application layouts are implemented using the <a href={'https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDrawer/'} target={'_blank'} rel={'noopener noreferrer'}>Drawer</a> component. Several component examples are also available in the <b>Examples</b> section. For complete information on DevExtreme, check our <a href={'https://js.devexpress.com/Documentation/'} target={'_blank'} rel={'noopener noreferrer'}>documentation</a> and <a href={'https://js.devexpress.com/Demos/WidgetsGallery/'} target={'_blank'} rel={'noopener noreferrer'}>demos</a>.</p>
         <p>You can do the following to create a custom application using this template as a base point:</p>
 
         <ul>
@@ -38,7 +38,7 @@ export default () => (
           <li><b>Switch the layout</b></li>
         </ul>
 
-        <p>Please, read README in <a href={'https://github.com/DevExpress/devextreme-react-template/blob/master/README.md'}>devextreme-react-template</a> GitHub repository for more information.</p>
+        <p>Please, read README in <a href={'https://github.com/DevExpress/devextreme-react-template/blob/master/README.md'} target={'_blank'} rel={'noopener noreferrer'}>devextreme-react-template</a> GitHub repository for more information.</p>
       </div>
     </div>
   </React.Fragment>
