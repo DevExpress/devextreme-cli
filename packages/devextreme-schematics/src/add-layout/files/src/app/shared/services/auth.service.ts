@@ -9,14 +9,8 @@ export class AuthService {
     get loggedIn(): boolean {
         return this._loggedIn;
     }
-    set loggedIn(value: boolean) {
-        this._loggedIn = value;
-    }
 
     private _lastAuthenticatedPath: string = defaultPath;
-    public get lastAuthenticatedPath(): string {
-        return this._lastAuthenticatedPath;
-    }
     public set lastAuthenticatedPath(value: string) {
         this._lastAuthenticatedPath = value;
     }
@@ -24,12 +18,12 @@ export class AuthService {
     constructor(private router: Router) { }
 
     logIn(login: string, password: string) {
-        this.loggedIn = true;
-        this.router.navigate([this.lastAuthenticatedPath]);
+        this._loggedIn = true;
+        this.router.navigate([this._lastAuthenticatedPath]);
     }
 
     logOut() {
-        this.loggedIn = false;
+        this._loggedIn = false;
         this.router.navigate(['/login-form']);
     }
 }
