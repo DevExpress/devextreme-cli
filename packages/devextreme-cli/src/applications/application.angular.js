@@ -64,18 +64,16 @@ const install = (options) => {
     runSchematicCommand('install', options);
 };
 
-const create = (appName, options) => {
+const create = async (appName, options) => {
     const commandArguments = ['new', appName, '--style=scss', '--routing=false', '--skip-tests=true', '--skip-install=true'];
+    const layoutInfo = await getLayoutInfo(options.layout);
+    options.resolveConflicts = 'override';
+    options.updateBudgets = true;
+    options.layout = layoutInfo.layout;
 
-    getLayoutInfo(options.layout).then(layoutInfo => {
-        runNgCommand(commandArguments).then(() => {
-            options.resolveConflicts = 'override';
-            options.updateBudgets = true;
-            options.layout = layoutInfo.layout;
-            addTemplate(appName, options, {
-                cwd: path.join(process.cwd(), appName)
-            });
-        });
+    await runNgCommand(commandArguments);
+    addTemplate(appName, options, {
+        cwd: path.join(process.cwd(), appName)
     });
 };
 
