@@ -1,5 +1,4 @@
 const getLayoutInfo = require('../layout').getLayoutInfo;
-const packageManager = require('../utility/package-manager');
 const path = require('path');
 const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
@@ -9,7 +8,7 @@ const minNgCliVersion = new semver('8.0.0');
 const latestVersions = require('../utility/latest-versions');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
-function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
+async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
     let collectionPath = `${collectionName}@${schematicsVersion}`;
 
@@ -18,26 +17,23 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
         delete options['c'];
     }
 
-    const additionalOptions = [];
+    if(!localPackageExists(collectionPath)) {
+        await runNgCommand(['add', collectionPath], evaluatingOptions);
+    }
+
+    const commandArguments = ['g', `${collectionName}:${schematicCommand}`];
     for(let option in options) {
-        const schematicOption = `--${option}=${options[option]}`;
-        additionalOptions.push(schematicOption);
+        commandArguments.push(`--${option}=${options[option]}`);
     };
 
+    runNgCommand(commandArguments, evaluatingOptions);
+}
 
-    let commandArguments = [
-        'ng', 'g', `${collectionName}:${schematicCommand}`
-    ].concat(additionalOptions);
+async function runNgCommand(commandArguments, evaluatingOptions) {
+    const ngCommandArguments = await hasSutableNgCli() ? [] : ['-p', '@angular/cli'];
 
-    optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
-        if(!localPackageExists(collectionPath)) {
-            packageManager.installPackage(collectionPath, evaluatingOptions).then(() => {
-                runCommand('npx', optimizedArguments, evaluatingOptions);
-            });
-        } else {
-            runCommand('npx', optimizedArguments, evaluatingOptions);
-        }
-    });
+    ngCommandArguments.push('ng', ...commandArguments);
+    return runCommand('npx', ngCommandArguments, evaluatingOptions);
 }
 
 function localPackageExists(packageName) {
@@ -50,18 +46,12 @@ function localPackageExists(packageName) {
     return fs.existsSync(packageJsonPath);
 }
 
-function optimizeNgCommandArguments(args) {
-    return new Promise((resolve, reject) => {
-        hasSutableNgCli().then(() => resolve(args), () => resolve(['-p', '@angular/cli', ...args]));
-    });
-}
-
 function hasSutableNgCli() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
             stderr || parseNgCliVersion(stdout).compare(minNgCliVersion) < 0
-                ? reject()
-                : resolve();
+                ? resolve(false)
+                : resolve(true);
         });
     });
 }
@@ -75,16 +65,15 @@ const install = (options) => {
 };
 
 const create = (appName, options) => {
-    let commandArguments = ['ng', 'new', appName, '--style=scss', '--routing=false', '--skip-tests=true'];
-    optimizeNgCommandArguments(commandArguments).then((optimizedArguments) => {
-        getLayoutInfo(options.layout).then(layoutInfo => {
-            runCommand('npx', optimizedArguments).then(() => {
-                options.resolveConflicts = 'override';
-                options.updateBudgets = true;
-                options.layout = layoutInfo.layout;
-                addTemplate(appName, options, {
-                    cwd: path.join(process.cwd(), appName)
-                });
+    const commandArguments = ['new', appName, '--style=scss', '--routing=false', '--skip-tests=true', '--skip-install=true'];
+
+    getLayoutInfo(options.layout).then(layoutInfo => {
+        runNgCommand(commandArguments).then(() => {
+            options.resolveConflicts = 'override';
+            options.updateBudgets = true;
+            options.layout = layoutInfo.layout;
+            addTemplate(appName, options, {
+                cwd: path.join(process.cwd(), appName)
             });
         });
     });
