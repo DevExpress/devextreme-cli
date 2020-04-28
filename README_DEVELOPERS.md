@@ -46,9 +46,7 @@ To replace etalon image just remove it from `packages/devextreme-cli/testing/__t
 
 # Modify an Application Template
 
-If you need to modify an application template, we recommend that you generate a real application based on this template and modify this application instead. This is easier because a real application can be run, and you can see how your modifications affect it, which would not be possible if you were to modify the template directly.
-
-To modify an application template, follow these instructions:
+Modifying an application template directly is not recommended. Instead, generate a real application based on this template and modify this application. This is easier because a real application can be run, and you can see how your modifications affect it. Follow these instructions:
 
 1. Generate an application based on the template in the `testing/sandbox` folder.
 2. Modify the application as required.
