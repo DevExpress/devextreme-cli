@@ -23,12 +23,10 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
         additionalOptions.push(schematicOption);
     };
 
-
-    const commandArguments = ['g', `${collectionName}:${schematicCommand}`, ...additionalOptions];
-
     if(!localPackageExists(collectionPath)) {
         await runNgCommand(['add', collectionPath], evaluatingOptions);
     }
+    const commandArguments = ['g', `${collectionName}:${schematicCommand}`, ...additionalOptions];
 
     runNgCommand(commandArguments, evaluatingOptions);
 }
