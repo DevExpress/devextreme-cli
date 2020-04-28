@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import { navigation } from '../../app-navigation';
 import { useNavigation } from '../../contexts/navigation';
-import { sizes } from '../../utils/media-query';
+import { useScreenSize } from '../../utils/media-query';
 import './side-navigation-menu.scss';
 
 import * as events from 'devextreme/events';
@@ -15,6 +15,13 @@ export default function (props) {
     compactMode,
     onMenuReady
   } = props;
+
+  const { isLarge } = useScreenSize();
+  const items = useMemo(
+    () => navigation.map((item) => ({ ...item, expanded: isLarge })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   const { navigationData: { currentPath } } = useNavigation();
 
@@ -70,6 +77,3 @@ export default function (props) {
     </div>
   );
 }
-
-const isLargeScreen = sizes()['screen-large'];
-const items = navigation.map((item) => ({ ...item, expanded: isLargeScreen }));

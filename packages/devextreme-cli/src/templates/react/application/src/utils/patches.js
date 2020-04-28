@@ -1,23 +1,16 @@
-export function menuPreInitPatch(component) {
-    const { menuOpened, minMenuSize } = component.state;
-    component.state.preInitCssFix = true;
-    return {
-        get cssClass() {
-            if (menuOpened || minMenuSize === 0) {
-                return "";
-            }
+import { useState, useCallback } from 'react';
+import { useScreenSize } from './media-query';
 
-            return (component.state.preInitCssFix ? " pre-init-blink-fix" : "");
-        },
+export function useMenuPatch() {
+  const { isSmall, isMedium } = useScreenSize();
+  const [enabled, setEnabled] = useState(isSmall || isMedium);
+  const onMenuReady = useCallback(() => {
+    if (!enabled) {
+      return;
+    }
 
-        onReady() {
-            if (menuOpened) {
-                return;
-            }
+    setTimeout(() => setEnabled(false));
+  }, [enabled]);
 
-            setTimeout(() => {
-                component.setState({ preInitCssFix: false });
-            });
-        }
-    };
+  return [enabled ? 'pre-init-blink-fix' : '', onMenuReady];
 }
