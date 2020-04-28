@@ -11,7 +11,7 @@ export class AuthService {
     }
 
     private _lastAuthenticatedPath: string = defaultPath;
-    public set lastAuthenticatedPath(value: string) {
+    set lastAuthenticatedPath(value: string) {
         this._lastAuthenticatedPath = value;
     }
 
