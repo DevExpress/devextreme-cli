@@ -8,7 +8,7 @@ const minNgCliVersion = new semver('8.0.0');
 const latestVersions = require('../utility/latest-versions');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
-function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
+async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
     let collectionPath = `${collectionName}@${schematicsVersion}`;
 
@@ -27,12 +27,10 @@ function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const commandArguments = ['g', `${collectionName}:${schematicCommand}`, ...additionalOptions];
 
     if(!localPackageExists(collectionPath)) {
-        runNgCommand(['add', collectionPath], evaluatingOptions).then(() => {
-            runNgCommand(commandArguments, evaluatingOptions);
-        });
-    } else {
-        runNgCommand(commandArguments, evaluatingOptions);
-    };
+        await runNgCommand(['add', collectionPath], evaluatingOptions);
+    }
+
+    runNgCommand(commandArguments, evaluatingOptions);
 }
 
 async function runNgCommand(commandArguments, evaluatingOptions) {
