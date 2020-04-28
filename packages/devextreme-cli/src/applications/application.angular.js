@@ -17,17 +17,14 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
         delete options['c'];
     }
 
-    if(!localPackageExists(collectionPath)) {
+        if(!localPackageExists(collectionPath)) {
         await runNgCommand(['add', collectionPath], evaluatingOptions);
     }
 
-    const additionalOptions = [];
+    const commandArguments = ['g', `${collectionName}:${schematicCommand}`];
     for(let option in options) {
-        const schematicOption = `--${option}=${options[option]}`;
-        additionalOptions.push(schematicOption);
+        commandArguments.push(`--${option}=${options[option]}`);
     };
-
-    const commandArguments = ['g', `${collectionName}:${schematicCommand}`, ...additionalOptions];
 
     runNgCommand(commandArguments, evaluatingOptions);
 }
