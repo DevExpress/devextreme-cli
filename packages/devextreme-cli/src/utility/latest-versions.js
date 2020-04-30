@@ -1,4 +1,3 @@
-const packageJson = require('../../package.json');
 module.exports = {
     'devextreme': '20.1-stable',
     'devextreme-react': '20.1-stable',
