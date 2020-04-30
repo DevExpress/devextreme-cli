@@ -4,12 +4,12 @@ const args = require('minimist')(process.argv.slice(2), {
 });
 const commands = args['_'];
 delete args['_'];
-const themeBuilder = require('./commands/themebuider');
-const application = require('./commands/application');
-const devextremeConfig = require('./utility/devextreme-config');
-const printHelp = require('./commands/help').printHelp;
+const themeBuilder = require('./src/themebuider');
+const application = require('./src/application');
+const devextremeConfig = require('./src/utility/devextreme-config');
+const printHelp = require('./src/help').printHelp;
 const packageJson = require('./package.json');
-const lock = require('./utility/file-lock');
+const lock = require('./src/utility/file-lock');
 
 lock.release();
 

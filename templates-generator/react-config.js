@@ -2,21 +2,28 @@ module.exports = {
     sourcePath: 'packages/devextreme-cli/testing/sandbox/react/my-app/',
     targetPath: 'packages/devextreme-cli/templates/react/application/',
     sourceGlob: '**/*.{js,scss,json}',
-    updateRules: [
+    ignoreList: [
+        'src/themes/generated/*.*',
+        'node_modules/**/*.*',
+        'public/*.*',
+        'src/App.test.js',
+        'src/setupTests.js',
+        'src/serviceWorker.js',
+        'src/index.js',
+        'package.json',
+        'package-lock.json'
+    ],
+    replaceRules: [
         {
             glob: 'src/app-routes.js',
             definitions: [
                 {
-                    before: 'import',
-                    after: '<%=^empty%>import'
+                    before: /(\nimport {([^}]*)} from '.\/pages';)/,
+                    after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
-                    before: '];',
-                    after: '<%=/empty%>];'
-                },
-                {
-                    before: 'export default [',
-                    after: '<%=/empty%>export default [<%=^empty%>'
+                    before:/(const routes = \[)([^\]]*)(\])/,
+                    after: '$1<%=^empty%>$2<%=/empty%>$3'
                 }
             ],
         },
@@ -42,27 +49,11 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/App.js',
+            glob: 'src/Content.js',
             definitions: [
                 {
-                    before: 'SideNavOuterToolbar',
+                    before: /SideNav(Outer|Inner)Toolbar/,
                     after: '<%=layout%>'
-                },
-                {
-                    before: 'SideNavInnerToolbar',
-                    after: '<%=layout%>'
-                },
-                {
-                    before: 'import \'devextreme/dist/css/dx.common.css\';\n',
-                    after: ''
-                },
-                {
-                    before: 'import \'./themes/generated/theme.base.css\';\n',
-                    after: ''
-                },
-                {
-                    before: 'import \'./themes/generated/theme.additional.css\';\n',
-                    after: ''
                 },
                 {
                     before: '))}',
@@ -78,7 +69,7 @@ module.exports = {
             glob: 'src/themes/metadata.additional.json',
             definitions: [
                 {
-                    before: /"baseTheme": ".*?"/,
+                    before: /"baseTheme": "[^"]*?"/,
                     after: '"baseTheme": "material.orange.dark"'
                 }
             ]
@@ -87,20 +78,30 @@ module.exports = {
             glob: 'src/themes/metadata.base.json',
             definitions: [
                 {
-                    before: /"baseTheme": ".*?"/,
+                    before: /"baseTheme": "[^"]*?"/,
                     after: '"baseTheme": "material.orange.light"'
                 }
             ]
         },
         {
-            glob: 'src/themes/metadata.**.json',
+            glob: 'src/themes/metadata.*.json',
             definitions: [
                 {
-                    before: /"items":\s+\[[^]*?\]/,
+                    before: /"items":\s+\[[^\]]*?\]/,
                     after: '"items": []'
                 }
             ]
         }
+    ],
+    removeRules: [
+        {
+            glob: 'src/App.js',
+            definitions: [
+                'import \'devextreme/dist/css/dx.common.css\';\n',
+                'import \'./themes/generated/theme.base.css\';\n',
+                'import \'./themes/generated/theme.additional.css\';\n',
+            ]
+        },
     ],
     moveRules: [
         {
@@ -117,16 +118,5 @@ module.exports = {
                 targetPath: 'packages/devextreme-cli/templates/react/application/'
             }
         }
-    ],
-    ignoreList: [
-        'src/themes/generated/*.*',
-        'node_modules/**/*.*',
-        'public/*.*',
-        'src/App.test.js',
-        'src/setupTests.js',
-        'src/serviceWorker.js',
-        'src/index.js',
-        'package.json',
-        'package-lock.json'
     ]
 };

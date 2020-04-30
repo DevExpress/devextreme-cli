@@ -1,6 +1,6 @@
 {
   "name": "devextreme-cli",
-  "version": "1.1.13",
+  "version": "1.2.0",
   "description": "DevExtreme CLI",
   "keywords": [
     "devexpress",
@@ -14,9 +14,7 @@
     "devextreme": "index.js"
   },
   "files": [
-    "commands/**/*",
-    "templates/**/*",
-    "utility/**/*",
+    "src/**/*",
     "index.js"
   ],
   "scripts": {
@@ -31,6 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "@vue/cli": "^3.5.5",
+    "@yarnpkg/lockfile": "^1.1.0",
     "dart-sass": "^1.25.0",
     "ip": "^1.1.5",
     "less": "3.9.0",
