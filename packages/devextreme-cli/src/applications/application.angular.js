@@ -17,7 +17,7 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
         delete options['c'];
     }
 
-    if(!localPackageExists(collectionPath)) {
+    if(!localPackageExists(collectionName)) {
         await runNgCommand(['add', collectionPath], evaluatingOptions);
     }
 
