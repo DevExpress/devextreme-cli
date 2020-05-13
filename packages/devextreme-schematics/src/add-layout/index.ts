@@ -300,7 +300,7 @@ function updateDevextremeConfig(sourcePath: string) {
 
     [].push.apply(oldConfig.build.commands, newConfig.build.commands);
 
-    return JSON.stringify(oldConfig, null, '   ');
+    return JSON.stringify(oldConfig, null, '  ');
   };
 
   return modifyContentByTemplate('./', workspaceFilesSource, devextremeConfigPath, templateOptions, modifyConfig);
