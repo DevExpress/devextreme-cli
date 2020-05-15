@@ -1,6 +1,6 @@
 module.exports = {
     sourcePath: 'packages/devextreme-cli/testing/sandbox/vue/my-app/',
-    targetPath: 'packages/devextreme-cli/templates/vue/',
+    targetPath: 'packages/devextreme-cli/src/templates/vue/',
     sourceGlob: '**/*.{js,scss,json,vue}',
     ignoreList: [
         '{node_modules,public,src/themes/generated}/**/*.*',
@@ -78,13 +78,13 @@ module.exports = {
     `
                 },
                 {
-                    before: /({\s+path: "\/home".*content: DisplayData(\s+})+,)\s+/s,
+                    before: /(\n\s+{\s+path: "\/home".*content: DisplayData(\s+})+,)/s,
                     after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
-                    before: /({[^}]*redirect: "\/home"[^\]]*})\s+]/,
-                    after: `<%=^empty%>$1<%=/empty%>
-    <%=#empty%>{
+                    before: /(\n\s+{[^}]*redirect: "\/home"[^\]]*})\s+]/,
+                    after: `<%=^empty%>$1<%=/empty%><%=#empty%>
+    {
       path: "*",
       redirect: "/"
     }<%=/empty%>
@@ -109,7 +109,7 @@ module.exports = {
             definition:
             {
                 sourcePath: '',
-                targetPath: 'packages/devextreme-cli/templates/vue/application/'
+                targetPath: 'packages/devextreme-cli/src/templates/vue/application/'
             }
         },
         {
@@ -117,7 +117,7 @@ module.exports = {
             definition:
             {
                 sourcePath: '',
-                targetPath: 'packages/devextreme-cli/templates/vue/application/'
+                targetPath: 'packages/devextreme-cli/src/templates/vue/application/'
             }
         },
         {
@@ -125,7 +125,7 @@ module.exports = {
             definition:
             {
                 sourcePath: 'src/views/',
-                targetPath: 'packages/devextreme-cli/templates/vue/sample-pages/'
+                targetPath: 'packages/devextreme-cli/src/templates/vue/sample-pages/'
             }
         }
     ]
