@@ -1,6 +1,6 @@
 module.exports = {
     sourcePath: 'packages/devextreme-cli/testing/sandbox/react/my-app/',
-    targetPath: 'packages/devextreme-cli/templates/react/application/',
+    targetPath: 'packages/devextreme-cli/src/templates/react/application/',
     sourceGlob: '**/*.{js,scss,json}',
     ignoreList: [
         'src/themes/generated/*.*',
@@ -108,14 +108,14 @@ module.exports = {
             glob: 'src/pages/**/*.*',
             definition: {
                 sourcePath: 'src/pages',
-                targetPath: 'packages/devextreme-cli/templates/react/sample-pages'
+                targetPath: 'packages/devextreme-cli/src/templates/react/sample-pages'
             }
         },
         {
             glob: 'devextreme.json',
             definition: {
                 sourcePath: '',
-                targetPath: 'packages/devextreme-cli/templates/react/application/'
+                targetPath: 'packages/devextreme-cli/src/templates/react/application/'
             }
         }
     ]

@@ -18,8 +18,8 @@ const router = new Router({
       components: {
         layout: defaultLayout
       }
-    },<%=/empty%>
-    <%=^empty%>{
+    },<%=/empty%><%=^empty%>
+    {
       path: "/home",
       name: "home",
       meta: { requiresAuth: true },
@@ -45,7 +45,8 @@ const router = new Router({
         layout: defaultLayout,
         content: DisplayData
       }
-    },<%=/empty%>{
+    },<%=/empty%>
+    {
       path: "/login-form",
       name: "login-form",
       meta: { requiresAuth: false },
@@ -57,8 +58,8 @@ const router = new Router({
         content: () =>
           import(/* webpackChunkName: "login" */ "./views/login-form")
       }
-    },
-    <%=^empty%>{
+    },<%=^empty%>
+    {
       path: "/",
       redirect: "/home"
     },
@@ -69,8 +70,8 @@ const router = new Router({
     {
       path: "*",
       redirect: "/home"
-    }<%=/empty%>
-    <%=#empty%>{
+    }<%=/empty%><%=#empty%>
+    {
       path: "*",
       redirect: "/"
     }<%=/empty%>
