@@ -4,7 +4,6 @@ const path = require('path');
 const packageManager = require('../src/utility/package-manager');
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
-const packageJsonUtils = require('../src/utility/package-json-utils');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
@@ -46,12 +45,6 @@ exports.createApp = async() => {
         forceNoCmd: true,
         silent: true
     });
-
-    const scripts = [
-        { name: 'prestart', value: 'ngcc --properties es2015 --async false' }
-    ];
-    // https://github.com/angular/angular/issues/36278
-    packageJsonUtils.updateScripts(path.join(sandboxPath, appName), scripts);
 
     const data = fs.readFileSync(routingFilePath, 'utf8');
     const result = data.replace('RouterModule.forRoot(routes)', 'RouterModule.forRoot(routes, {useHash: true})');
