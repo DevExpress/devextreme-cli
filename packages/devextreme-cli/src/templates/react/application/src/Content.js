@@ -20,7 +20,7 @@ export default function() {
         <Redirect to={'/home'} /><%=/empty%>
       </Switch>
       <Footer>
-        Copyright © 2011-{new Date().getFullYear()} Developer Express Inc.
+        Copyright © 2011-{new Date().getFullYear()} {appInfo.title} Inc.
         <br />
         All trademarks or registered trademarks are property of their
         respective owners.
