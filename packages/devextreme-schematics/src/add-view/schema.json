@@ -20,7 +20,7 @@
     "icon": {
       "type": "string",
       "description": "The view's icon name",
-      "default": "folder"
+      "default": "home"
     },
     "module": {
       "type": "string",

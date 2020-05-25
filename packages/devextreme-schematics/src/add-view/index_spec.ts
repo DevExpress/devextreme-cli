@@ -126,13 +126,13 @@ describe('view', () => {
     expect(moduleContent).toMatch(/text: 'Some test'/);
     expect(moduleContent).toMatch(/icon: 'home'/);
     expect(moduleContent).toMatch(/text: 'Test'/);
-    expect(moduleContent).toMatch(/icon: 'folder'/);
+    expect(moduleContent).toMatch(/icon: 'home'/);
 
     expect(moduleContent).toContain(`navigation = [
   {
     text: 'Test',
     path: 'pages/test',
-    icon: 'folder'
+    icon: 'home'
   },
   {
     text: 'Some test',
