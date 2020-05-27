@@ -157,7 +157,7 @@ const addView = (pageName, options) => {
     const pageTemplatePath = path.join(__dirname, '..', 'templates', 'react', 'page');
     const routingModulePath = path.join(process.cwd(), 'src', 'app-routes.js');
     const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js');
-    const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'home');
+    const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'folder');
 
     templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath);
     moduleUtils.insertExport(pathToPagesIndex, componentName, `./${pageName}/${pageName}`);
