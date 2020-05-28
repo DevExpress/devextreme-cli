@@ -26,6 +26,7 @@ export default function (props) {
     setLoading(true);
 
     const result = await resetPassword(email);
+    setLoading(false);
 
     if (result.isOk) {
       history.push('/login');
@@ -33,8 +34,6 @@ export default function (props) {
     } else {
       notify(result.message, 'error', 2000);
     }
-
-    setLoading(false);
   }, [history]);
 
   return (

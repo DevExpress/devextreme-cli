@@ -25,14 +25,13 @@ export default function (props) {
     setLoading(true);
 
     const result = await createAccount(email, password);
+    setLoading(false);
 
     if (result.isOk) {
       history.push('/login');
     } else {
       notify(result.message, 'error', 2000);
     }
-
-    setLoading(false);
   }, [history]);
 
   const confirmPassword = useCallback(

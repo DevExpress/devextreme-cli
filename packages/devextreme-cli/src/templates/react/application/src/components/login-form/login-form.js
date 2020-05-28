@@ -27,12 +27,13 @@ export default function () {
     setLoading(true);
 
     const result = await signIn(email, password);
+    setLoading(false);
+
     if (result.isOk) {
       setUser(result.data);
     } else {
       notify(result.message, 'error', 2000);
     }
-    setLoading(false);
   }, [setUser]);
 
   const onCreateAccountClick = useCallback(() => {

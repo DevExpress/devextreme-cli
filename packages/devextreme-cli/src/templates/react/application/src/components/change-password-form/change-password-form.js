@@ -24,14 +24,13 @@ export default function (props) {
     setLoading(true);
 
     const result = await changePassword(password, recoveryCode);
+    setLoading(false);
 
     if (result.isOk) {
       history.push('/login');
     } else {
       notify(result.message, 'error', 2000);
     }
-
-    setLoading(false);
   }, [history, recoveryCode]);
 
   const confirmPassword = useCallback(
