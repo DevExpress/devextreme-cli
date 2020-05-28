@@ -1,6 +1,6 @@
 import defaultUser from '../utils/default-user';
 
-export default function() {
+export default async function() {
   try {
     // Send request
 

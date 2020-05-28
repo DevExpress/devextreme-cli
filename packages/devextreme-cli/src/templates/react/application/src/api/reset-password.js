@@ -1,4 +1,4 @@
-export default function(email) {
+export default async function(email) {
   try {
     // Send request
     console.log(email);

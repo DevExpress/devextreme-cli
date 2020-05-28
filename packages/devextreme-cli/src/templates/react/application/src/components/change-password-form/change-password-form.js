@@ -23,7 +23,7 @@ export default function (props) {
     const { password } = formData.current;
     setLoading(true);
 
-    const result = changePassword(password, recoveryCode);
+    const result = await changePassword(password, recoveryCode);
 
     if (result.isOk) {
       history.push('/login');

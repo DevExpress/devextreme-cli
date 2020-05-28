@@ -25,7 +25,7 @@ export default function (props) {
     const { email } = formData.current;
     setLoading(true);
 
-    const result = resetPassword(email);
+    const result = await resetPassword(email);
 
     if (result.isOk) {
       history.push('/login');

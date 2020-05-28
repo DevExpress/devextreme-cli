@@ -15,7 +15,7 @@ import signIn from '../../api/sign-in';
 
 import './login-form.scss';
 
-export default function (props) {
+export default function () {
   const history = useHistory();
   const { setUser } = useAuth();
   const [loading, setLoading] = useState(false);

@@ -24,7 +24,7 @@ export default function (props) {
     const { email, password } = formData.current;
     setLoading(true);
 
-    const result = createAccount(email, password);
+    const result = await createAccount(email, password);
 
     if (result.isOk) {
       history.push('/login');

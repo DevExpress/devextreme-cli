@@ -1,6 +1,6 @@
 import defaultUser from '../utils/default-user';
 
-export default function(email, password) {
+export default async function(email, password) {
   try {
     // Send request
     console.log(email, password);
