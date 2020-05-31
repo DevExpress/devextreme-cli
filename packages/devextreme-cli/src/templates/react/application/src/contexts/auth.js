@@ -6,16 +6,14 @@ function AuthProvider(props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function setCurrentUser() {
+    (async function () {
       const result = await getUser();
       if (result.isOk) {
         setUser(result.data);
       }
 
       setLoading(false);
-    }
-
-    setCurrentUser();
+    })();
   }, []);
 
   return (
