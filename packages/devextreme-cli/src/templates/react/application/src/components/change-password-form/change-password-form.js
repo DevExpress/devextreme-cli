@@ -9,6 +9,8 @@ import Form, {
   CustomRule,
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
+import notify from 'devextreme/ui/notify';
+import changePassword from '../../api/change-password';
 
 export default function (props) {
   const history = useHistory();
@@ -21,10 +23,14 @@ export default function (props) {
     const { password } = formData.current;
     setLoading(true);
 
-    // Send reset password request
-    console.log(password, recoveryCode);
+    const result = await changePassword(password, recoveryCode);
+    setLoading(false);
 
-    history.push('/login');
+    if (result.isOk) {
+      history.push('/login');
+    } else {
+      notify(result.message, 'error', 2000);
+    }
   }, [history, recoveryCode]);
 
   const confirmPassword = useCallback(

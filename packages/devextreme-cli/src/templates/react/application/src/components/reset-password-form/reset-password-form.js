@@ -10,6 +10,7 @@ import Form, {
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
+import resetPassword from '../../api/reset-password';
 import './reset-password-form.scss'
 
 const notificationText = 'We\'ve sent a link to reset your password. Check your inbox.';
@@ -24,11 +25,15 @@ export default function (props) {
     const { email } = formData.current;
     setLoading(true);
 
-    // Send reset password request
-    console.log(email);
+    const result = await resetPassword(email);
+    setLoading(false);
 
-    history.push('/login');
-    notify(notificationText, 'success', 2500);
+    if (result.isOk) {
+      history.push('/login');
+      notify(notificationText, 'success', 2500);
+    } else {
+      notify(result.message, 'error', 2000);
+    }
   }, [history]);
 
   return (
