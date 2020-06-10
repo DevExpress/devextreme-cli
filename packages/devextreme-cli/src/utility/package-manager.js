@@ -35,8 +35,11 @@ const getPackageManager = (cwd) => {
 const getDependencies = (evaluatingOptions = {}) => {
     const cwd = evaluatingOptions.cwd;
     const packageManager = packageManagers[getPackageManager(cwd)];
-    const lockFile = packageManager.getLockFile(cwd);
+    if(!fs.existsSync(path.join(cwd, packageManager.lockFileName))) {
+        return;
+    }
 
+    const lockFile = packageManager.getLockFile(cwd);
     return packageManager.getDependencies(lockFile);
 };
 
