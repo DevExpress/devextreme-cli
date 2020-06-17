@@ -52,7 +52,7 @@ function addViewToNavigation(options: any) {
     const pagePath = strings.dasherize(options.name);
     const navigationItem = `  {
     text: '${strings.capitalize(basename(normalize(options.name)))}',
-    path: '${pagePath}',
+    path: '/${pagePath}',
     icon: '${options.icon}'
   }`;
 

@@ -131,12 +131,12 @@ describe('view', () => {
     expect(moduleContent).toContain(`navigation = [
   {
     text: 'Test',
-    path: 'pages/test',
+    path: '/pages/test',
     icon: 'folder'
   },
   {
     text: 'Some test',
-    path: 'pages/some-test',
+    path: '/pages/some-test',
     icon: 'home'
   }
 ];`);
