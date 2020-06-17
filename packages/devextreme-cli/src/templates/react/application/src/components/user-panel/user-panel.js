@@ -1,15 +1,11 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import ContextMenu, { Position } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
 import { useAuth } from '../../contexts/auth';
 import './user-panel.scss';
 
 export default function ({ menuMode }) {
-  const { user, setUser } = useAuth();
-  const signOut = useCallback(() => {
-    // Clear user data
-    setUser();
-  }, [setUser]);
+  const { user, signOut } = useAuth();
 
   const menuItems = useMemo(() => ([
     {

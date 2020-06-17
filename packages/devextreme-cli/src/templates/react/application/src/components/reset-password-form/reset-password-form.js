@@ -10,7 +10,7 @@ import Form, {
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
-import resetPassword from '../../api/reset-password';
+import { resetPassword } from '../../api/auth';
 import './reset-password-form.scss'
 
 const notificationText = 'We\'ve sent a link to reset your password. Check your inbox.';
