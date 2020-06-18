@@ -11,13 +11,12 @@ import Form, {
 import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
 import { useAuth } from '../../contexts/auth';
-import signIn from '../../api/sign-in';
 
 import './login-form.scss';
 
 export default function () {
   const history = useHistory();
-  const { setUser } = useAuth();
+  const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const formData = useRef({});
 
@@ -27,14 +26,11 @@ export default function () {
     setLoading(true);
 
     const result = await signIn(email, password);
-    setLoading(false);
-
-    if (result.isOk) {
-      setUser(result.data);
-    } else {
+    if (!result.isOk) {
+      setLoading(false);
       notify(result.message, 'error', 2000);
     }
-  }, [setUser]);
+  }, [signIn]);
 
   const onCreateAccountClick = useCallback(() => {
     history.push('/create-account');
