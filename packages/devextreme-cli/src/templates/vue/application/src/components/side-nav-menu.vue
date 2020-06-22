@@ -26,7 +26,12 @@ import navigation from '../app-navigation';
 
 const treeViewRef = "treeViewRef";
 const isLargeScreen = sizes()['screen-large'];
-const items = navigation.map((item) => ({ ...item, expanded: isLargeScreen }));
+const items = navigation.map((item) => {
+      if(item.path && !(/^\//.test(item.path))){ 
+        item.path = `/${item.path}`;
+      }
+      return {...item, expanded: isLargeScreen} 
+    });
 
 export default {
   props: {

@@ -126,8 +126,10 @@ function addContentToView(options: any) {
     if (host.exists(componentPath)) {
       host.overwrite(
         componentPath,
-        `<h2 class="content-block">${name}</h2>
-<div class="dx-card content-block responsive-paddings">Put your content here</div>
+        `<h2 class="content-block">${strings.capitalize(name)}</h2>
+<div class="content-block">
+    <div class="dx-card responsive-paddings">Put your content here</div>
+</div>
 `);
     }
     return host;

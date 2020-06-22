@@ -17,8 +17,17 @@ export default function (props) {
   } = props;
 
   const { isLarge } = useScreenSize();
+  function getNavigationItems () {    
+    return navigation.map((item) => {
+      if(item.path && !(/^\//.test(item.path))){ 
+        item.path = `/${item.path}`;
+      }
+      return {...item, expanded: isLarge} 
+    })
+  }
+
   const items = useMemo(
-    () => navigation.map((item) => ({ ...item, expanded: isLarge })),
+    getNavigationItems,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
