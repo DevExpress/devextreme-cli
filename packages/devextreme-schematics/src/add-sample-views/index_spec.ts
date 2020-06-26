@@ -64,16 +64,11 @@ describe('sample views', () => {
         path: '/profile'
       },
       {
-        text: 'Display Data',
-        path: '/display-data'
+        text: 'Tasks',
+        path: '/tasks'
       }
     ]
   }
 ];`);
-
-    expect(tree.files).toContain('/src/app/pages/home/home.component.ts');
-
-    const homeContent = tree.readContent('/src/app/pages/home/home.component.html');
-    expect(homeContent).toMatch(/Welcome to <b>TestApp<\/b>/);
   });
 });

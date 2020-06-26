@@ -90,63 +90,44 @@
         </div>
 
         <p>
-          Welcome to
-          <b>{{this.$appInfo.title}}</b>!
+          Thanks for using the DevExtreme Vue App Template.
         </p>
-        <p>The application is built with:</p>
+        <p>This application was built using Create Vue App and DevExtreme CLI and includes the following DevExtreme components:</p>
         <ul>
           <li>
-            <a href="https://cli.vuejs.org/" target="_blank" rel="noopener noreferrer">Vue CLI</a>
+            <a href="https://js.devexpress.com/Documentation/Guide/Widgets/DataGrid/Overview/" target="_blank" rel="noopener noreferrer">DataGrid</a>
           </li>
           <li>
-            <a href="https://js.devexpress.com/Documentation/Guide/Getting_Started/DevExtreme_CLI/" target="_blank" rel="noopener noreferrer">DevExtreme CLI</a>
+            <a href="https://js.devexpress.com/Documentation/Guide/Widgets/Form/Overview/" target="_blank" rel="noopener noreferrer">Form</a>
           </li>
           <li>
-            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/" target="_blank" rel="noopener noreferrer">DevExtreme-Vue</a>
-            components
+            <a href="https://js.devexpress.com/Documentation/Guide/Widgets/Drawer/Getting_Started_with_Navigation_Drawer/" target="_blank" rel="noopener noreferrer">Drawer</a>
           </li>
         </ul>
 
         <p>
-          The application layouts are implemented using the
-          <a href="https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDrawer/" target="_blank" rel="noopener noreferrer">Drawer</a>
-          component. Several component examples are also available in the
-          <b>Examples</b> section. For complete information on DevExtreme, check
-          our
-          <a href="https://js.devexpress.com/Documentation/" target="_blank" rel="noopener noreferrer">documentation</a>
+          To customize your DevExtreme Vue application further, please refer to the following help topics:
+        </p>
+
+        <ul>
+          <li>
+            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Create_a_DevExtreme_Application/#Layouts" target="_blank" rel="noopener noreferrer">Layouts</a>
+          </li>
+          <li>
+            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Create_a_DevExtreme_Application/#Add_a_New_View" target="_blank" rel="noopener noreferrer">Add a New View</a>
+          </li>
+          <li>
+            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Create_a_DevExtreme_Application/#Configure_the_Navigation_Menu" target="_blank" rel="noopener noreferrer">Configure the Navigation Menu</a>
+          </li>
+          <li>
+            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Create_a_DevExtreme_Application/#Configure_Themes" target="_blank" rel="noopener noreferrer">Configure Themes</a>
+          </li>
+        </ul>
+        <p>
+          For technical content related to DevExtreme React components, feel free to explore our 
+          <a href="https://js.devexpress.com/documentation/" target="_blank" rel="noopener noreferrer">online documentation </a>
           and
-          <a href="https://js.devexpress.com/Demos/WidgetsGallery/" target="_blank" rel="noopener noreferrer">demos</a>.
-        </p>
-        <p>
-          You can do the following to create a custom application using this
-          template as a base point:
-        </p>
-
-        <ul>
-          <li>
-            <b>Add new views</b>
-          </li>
-          <li>
-            <b>Switch themes</b>
-          </li>
-          <li>
-            <b>Customize themes</b>
-          </li>
-          <li>
-            <b>Apply the additional theme to custom elements</b>
-          </li>
-          <li>
-            <b>Use theme colors in custom elements</b>
-          </li>
-          <li>
-            <b>Switch the layout</b>
-          </li>
-        </ul>
-
-        <p>
-          Please, read README in
-          <a href="https://github.com/DevExpress/devextreme-vue-template/blob/master/README.md" target="_blank" rel="noopener noreferrer">devextreme-vue-template</a>
-          GitHub repository for more information.
+          <a href="https://js.devexpress.com/Demos/Widgetsgallery/" target="_blank" rel="noopener noreferrer">technical demos</a>
         </p>
       </div>
     </div>

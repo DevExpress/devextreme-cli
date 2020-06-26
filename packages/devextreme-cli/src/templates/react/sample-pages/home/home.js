@@ -1,6 +1,5 @@
 import React from 'react';
 import './home.scss';
-import appInfo from '../../app-info';
 
 export default () => (
   <React.Fragment>
@@ -19,26 +18,25 @@ export default () => (
           </svg>
         </div>
 
-        <p>Welcome to <b>{appInfo.title}</b>!</p><p>The application is built with:</p>
+        <p>Thanks for using the  DevExtreme React App Template.</p>
+        <p>This application was built using Create React App and DevExtreme CLI and includes the following DevExtreme components:</p>
         <ul>
-          <li><a href={'https://create-react-app.dev/'} target={'_blank'} rel={'noopener noreferrer'}>Create React App</a></li>
-          <li><a href={'https://js.devexpress.com/Documentation/Guide/Getting_Started/DevExtreme_CLI/'} target={'_blank'} rel={'noopener noreferrer'}>DevExtreme CLI</a></li>
-          <li><a href={'https://js.devexpress.com/Documentation/Guide/React_Components/DevExtreme_React_Components/'} target={'_blank'} rel={'noopener noreferrer'}>DevExtreme-React</a> components</li>
+          <li><a href={'https://js.devexpress.com/Documentation/Guide/Widgets/DataGrid/Overview/'} target={'_blank'} rel={'noopener noreferrer'}>DataGrid</a></li>
+          <li><a href={'https://js.devexpress.com/Documentation/Guide/Widgets/Form/Overview/'} target={'_blank'} rel={'noopener noreferrer'}>Form</a></li>
+          <li><a href={'https://js.devexpress.com/Documentation/Guide/Widgets/Drawer/Getting_Started_with_Navigation_Drawer/'} target={'_blank'} rel={'noopener noreferrer'}>Drawer</a></li>
         </ul>
 
-        <p>The application layouts are implemented using the <a href={'https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDrawer/'} target={'_blank'} rel={'noopener noreferrer'}>Drawer</a> component. Several component examples are also available in the <b>Examples</b> section. For complete information on DevExtreme, check our <a href={'https://js.devexpress.com/Documentation/'} target={'_blank'} rel={'noopener noreferrer'}>documentation</a> and <a href={'https://js.devexpress.com/Demos/WidgetsGallery/'} target={'_blank'} rel={'noopener noreferrer'}>demos</a>.</p>
-        <p>You can do the following to create a custom application using this template as a base point:</p>
-
+        <p>To customize your DevExtreme React application further, please refer to the following help topics:</p>
+    
         <ul>
-          <li><b>Add new views</b></li>
-          <li><b>Switch themes</b></li>
-          <li><b>Customize themes</b></li>
-          <li><b>Apply the additional theme to custom elements</b></li>
-          <li><b>Use theme colors in custom elements</b></li>
-          <li><b>Switch the layout</b></li>
+          <li><a href={'https://js.devexpress.com/Documentation/Guide/React_Components/Create_a_DevExtreme_Application/#Layouts'} target={'_blank'} rel={'noopener noreferrer'}>Layouts</a></li>
+          <li><a href={'https://js.devexpress.com/Documentation/Guide/React_Components/Create_a_DevExtreme_Application/#Add_a_New_View'} target={'_blank'} rel={'noopener noreferrer'}>Add a New View</a></li>
+          <li><a href={'https://js.devexpress.com/Documentation/Guide/React_Components/Create_a_DevExtreme_Application/#Configure_the_Navigation_Menu'} target={'_blank'} rel={'noopener noreferrer'}>Configure the Navigation Menu</a></li>
+          <li><a href={'https://js.devexpress.com/Documentation/Guide/React_Components/Create_a_DevExtreme_Application/#Configure_Themes'} target={'_blank'} rel={'noopener noreferrer'}>Configure Themes</a></li>        
         </ul>
 
-        <p>Please, read README in <a href={'https://github.com/DevExpress/devextreme-react-template/blob/master/README.md'} target={'_blank'} rel={'noopener noreferrer'}>devextreme-react-template</a> GitHub repository for more information.</p>
+        <p>For technical content related to DevExtreme React components, feel free to explore our <a href={'https://js.devexpress.com/documentation/'} target={'_blank'} rel={'noopener noreferrer'}>online documentation</a>
+        and <a href={'https://js.devexpress.com/Demos/Widgetsgallery/'} target={'_blank'} rel={'noopener noreferrer'}>technical demos</a></p>
       </div>
     </div>
   </React.Fragment>

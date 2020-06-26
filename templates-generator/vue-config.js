@@ -59,7 +59,7 @@ module.exports = {
             glob: 'src/router.js',
             definitions: [
                 {
-                    before: /((import (Home|Profile|DisplayData).*\n)+)/,
+                    before: /((import (Home|Profile|Tasks).*\n)+)/,
                     after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
@@ -78,7 +78,7 @@ module.exports = {
     `
                 },
                 {
-                    before: /(\n\s+{\s+path: "\/home".*content: DisplayData(\s+})+,)/s,
+                    before: /(\n\s+{\s+path: "\/home".*content: Tasks(\s+})+,)/s,
                     after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {

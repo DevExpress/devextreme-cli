@@ -105,15 +105,15 @@ module.exports = (env) => {
                                     compareSnapshot(image, 'profile');
                                 });
 
-                                it('Display data view', async() => {
-                                    const page = await openPage(`${appUrl}#/display-data`, {
+                                it('Tasks view', async() => {
+                                    const page = await openPage(`${appUrl}#/tasks`, {
                                         waitUntil: 'networkidle0'
                                     });
                                     // NOTE: Wait for the DataGrid is loaded
                                     await page.waitFor('.dx-row-focused');
                                     const image = await page.screenshot();
 
-                                    compareSnapshot(image, 'display-data');
+                                    compareSnapshot(image, 'tasks');
                                 });
 
                                 it('Menu toggle', async() => {

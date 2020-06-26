@@ -5,7 +5,7 @@ import auth from "./auth";
 
 <%=^empty%>import Home from "./views/home";
 import Profile from "./views/profile";
-import DisplayData from "./views/display-data";
+import Tasks from "./views/tasks";
 <%=/empty%>import defaultLayout from "./layouts/<%=layout%>";
 import simpleLayout from "./layouts/single-card";
 
@@ -38,12 +38,12 @@ const router = new Router({
       }
     },
     {
-      path: "/display-data",
-      name: "display-data",
+      path: "/tasks",
+      name: "tasks",
       meta: { requiresAuth: true },
       components: {
         layout: defaultLayout,
-        content: DisplayData
+        content: Tasks
       }
     },<%=/empty%>
     {
