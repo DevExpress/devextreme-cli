@@ -92,7 +92,9 @@
         <p>
           Thanks for using the DevExtreme Vue App Template.
         </p>
-        <p>This application was built using Vue CLI and DevExtreme CLI and includes the following DevExtreme components:</p>
+        <p>This application was built using <a href="https://cli.vuejs.org/" target="_blank" rel="noopener noreferrer">Vue CLI</a>
+          and <a href="https://js.devexpress.com/Documentation/Guide/Common/DevExtreme_CLI/" target="_blank" rel="noopener noreferrer">DevExtreme CLI</a>
+          and includes the following DevExtreme components:</p>
         <ul>
           <li>
             <a href="https://js.devexpress.com/Documentation/Guide/Widgets/DataGrid/Overview/" target="_blank" rel="noopener noreferrer">DataGrid</a>
