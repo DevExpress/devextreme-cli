@@ -59,7 +59,7 @@ export default function (props) {
               {
                 loading
                   ? <LoadIndicator width={'24px'} height={'24px'} visible={true} />
-                  : 'RESET MY PASSWORD'
+                  : 'Reset my password'
               }
             </span>
           </ButtonOptions>
