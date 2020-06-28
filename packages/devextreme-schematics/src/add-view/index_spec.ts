@@ -123,7 +123,7 @@ describe('view', () => {
 
     const moduleContent = tree.readContent('/src/app/app-navigation.ts');
 
-    expect(moduleContent).toMatch(/text: 'Some test'/);
+    expect(moduleContent).toMatch(/text: 'Some Test'/);
     expect(moduleContent).toMatch(/icon: 'home'/);
     expect(moduleContent).toMatch(/text: 'Test'/);
     expect(moduleContent).toMatch(/icon: 'folder'/);
@@ -135,13 +135,13 @@ describe('view', () => {
     icon: 'folder'
   },
   {
-    text: 'Some test',
+    text: 'Some Test',
     path: '/pages/some-test',
     icon: 'home'
   }
 ];`);
     const pageContent = tree.readContent('/src/app/pages/some-test/some-test.component.html');
-    expect(pageContent).toMatch(/<h2 class="content-block">Some-test<\/h2>/);
+    expect(pageContent).toMatch(/<h2 class="content-block">Some Test<\/h2>/);
   });
 
   it('should create new view with path', async () => {

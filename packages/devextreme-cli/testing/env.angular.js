@@ -44,14 +44,14 @@ exports.createApp = async() => {
     ], {
         cwd: sandboxPath,
         forceNoCmd: true,
-        silent: true
+        silent: false
     });
 
     await runCommand('node', [
         '../../../../index.js',
         'add',
         'view',
-        'page'
+        'new-page'
     ], {
         cwd: appPath,
         forceNoCmd: true,

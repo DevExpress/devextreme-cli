@@ -116,17 +116,17 @@ module.exports = (env) => {
                                     compareSnapshot(image, 'display-data');
                                 });
 
-                                it('Page view', async() => {
-                                    let pageUrl = 'page';
+                                it('Add view', async() => {
+                                    let pageUrl = 'new-page';
                                     if(env.engine === 'angular') {
-                                        pageUrl = 'pages/page';
+                                        pageUrl = 'pages/' + pageUrl;
                                     }
                                     const page = await openPage(`${appUrl}#${pageUrl}`, {
                                         waitUntil: 'networkidle0'
                                     });
                                     const image = await page.screenshot();
 
-                                    compareSnapshot(image, 'page');
+                                    compareSnapshot(image, 'add-view');
                                 });
 
                                 it('Menu toggle', async() => {

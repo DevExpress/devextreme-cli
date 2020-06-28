@@ -17,7 +17,7 @@ export default function (props) {
   } = props;
 
   const { isLarge } = useScreenSize();
-  function getNavigationItems () {    
+  function normalizePath () {    
     return navigation.map((item) => {
       if(item.path && !(/^\//.test(item.path))){ 
         item.path = `/${item.path}`;
@@ -27,7 +27,7 @@ export default function (props) {
   }
 
   const items = useMemo(
-    getNavigationItems,
+    normalizePath,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );

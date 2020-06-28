@@ -39,6 +39,14 @@ function getPathToFile(host: Tree, projectName: string, moduleName: string) {
   }
 }
 
+function capitalizeFirstLetter(name: string, startDelimiter: string, endDelimiter: string) {
+  const nameParts = name.split(startDelimiter).map(namePart => {
+    return strings.capitalize(namePart);
+  });
+
+  return nameParts.join(endDelimiter);
+}
+
 function addViewToNavigation(options: any) {
   return (host: Tree) => {
     const navigationName = 'app-navigation';
@@ -50,8 +58,10 @@ function addViewToNavigation(options: any) {
 
     const source = getSourceFile(host, navigationFilePath)!;
     const pagePath = strings.dasherize(options.name);
+    const name = strings.dasherize(basename(normalize(options.name)));
+    const title = capitalizeFirstLetter(name, '-', ' ');
     const navigationItem = `  {
-    text: '${strings.capitalize(basename(normalize(options.name)))}',
+    text: '${title}',
     path: '/${pagePath}',
     icon: '${options.icon}'
   }`;
@@ -122,11 +132,12 @@ function addContentToView(options: any) {
   return (host: Tree) => {
     const name = strings.dasherize(basename(normalize(options.name)));
     const path = `${dirname(options.name)}/${name}`;
+    const title = capitalizeFirstLetter(name, '-', ' ');
     const componentPath = `/${getApplicationPath(host, options.project)}${path}/${name}.component.html`;
     if (host.exists(componentPath)) {
       host.overwrite(
         componentPath,
-        `<h2 class="content-block">${strings.capitalize(name)}</h2>
+        `<h2 class="content-block">${title}</h2>
 <div class="content-block">
     <div class="dx-card responsive-paddings">Put your content here</div>
 </div>
