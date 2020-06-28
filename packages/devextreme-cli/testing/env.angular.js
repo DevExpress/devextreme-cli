@@ -44,7 +44,7 @@ exports.createApp = async() => {
     ], {
         cwd: sandboxPath,
         forceNoCmd: true,
-        silent: false
+        silent: true
     });
 
     await runCommand('node', [
