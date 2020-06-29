@@ -92,8 +92,8 @@
         <p>
           Thanks for using the DevExtreme Vue App Template.
         </p>
-        <p>This application was built using <a href="https://cli.vuejs.org/" target="_blank" rel="noopener noreferrer">Vue CLI</a>
-          and <a href="https://js.devexpress.com/Documentation/Guide/Common/DevExtreme_CLI/" target="_blank" rel="noopener noreferrer">DevExtreme CLI</a>
+        <p>This application was built using <a href="https://cli.vuejs.org/" target="_blank" rel="noopener noreferrer"> Vue CLI </a> 
+          and <a href="https://js.devexpress.com/Documentation/Guide/Common/DevExtreme_CLI/" target="_blank" rel="noopener noreferrer"> DevExtreme CLI </a>
           and includes the following DevExtreme components:</p>
         <ul>
           <li>
@@ -126,7 +126,7 @@
           </li>
         </ul>
         <p>
-          For technical content related to DevExtreme React components, feel free to explore our 
+          For technical content related to DevExtreme Vue components, feel free to explore our 
           <a href="https://js.devexpress.com/documentation/" target="_blank" rel="noopener noreferrer">online documentation </a>
           and
           <a href="https://js.devexpress.com/Demos/Widgetsgallery/" target="_blank" rel="noopener noreferrer">technical demos</a>
