@@ -28,6 +28,7 @@ import {
   getProjectName,
   getApplicationPath
 } from '../utility/project';
+import { humanize } from '../utility/string';
 
 function getPathToFile(host: Tree, projectName: string, moduleName: string) {
   const rootPath = getApplicationPath(host, projectName);
@@ -37,14 +38,6 @@ function getPathToFile(host: Tree, projectName: string, moduleName: string) {
   } catch (error) {
     return;
   }
-}
-
-function capitalizeFirstLetter(name: string, startDelimiter: string, endDelimiter: string) {
-  const nameParts = name.split(startDelimiter).map(namePart => {
-    return strings.capitalize(namePart);
-  });
-
-  return nameParts.join(endDelimiter);
 }
 
 function addViewToNavigation(options: any) {
@@ -59,7 +52,7 @@ function addViewToNavigation(options: any) {
     const source = getSourceFile(host, navigationFilePath)!;
     const pagePath = strings.dasherize(options.name);
     const name = strings.dasherize(basename(normalize(options.name)));
-    const title = capitalizeFirstLetter(name, '-', ' ');
+    const title = humanize(name);
     const navigationItem = `  {
     text: '${title}',
     path: '/${pagePath}',
@@ -132,7 +125,7 @@ function addContentToView(options: any) {
   return (host: Tree) => {
     const name = strings.dasherize(basename(normalize(options.name)));
     const path = `${dirname(options.name)}/${name}`;
-    const title = capitalizeFirstLetter(name, '-', ' ');
+    const title = humanize(name);
     const componentPath = `/${getApplicationPath(host, options.project)}${path}/${name}.component.html`;
     if (host.exists(componentPath)) {
       host.overwrite(
