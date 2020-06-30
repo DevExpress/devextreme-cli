@@ -28,6 +28,7 @@ import {
   getProjectName,
   getApplicationPath
 } from '../utility/project';
+import { humanize } from '../utility/string';
 
 function getPathToFile(host: Tree, projectName: string, moduleName: string) {
   const rootPath = getApplicationPath(host, projectName);
@@ -50,9 +51,11 @@ function addViewToNavigation(options: any) {
 
     const source = getSourceFile(host, navigationFilePath)!;
     const pagePath = strings.dasherize(options.name);
+    const name = strings.dasherize(basename(normalize(options.name)));
+    const title = humanize(name);
     const navigationItem = `  {
-    text: '${strings.capitalize(basename(normalize(options.name)))}',
-    path: '${pagePath}',
+    text: '${title}',
+    path: '/${pagePath}',
     icon: '${options.icon}'
   }`;
 
@@ -122,12 +125,15 @@ function addContentToView(options: any) {
   return (host: Tree) => {
     const name = strings.dasherize(basename(normalize(options.name)));
     const path = `${dirname(options.name)}/${name}`;
+    const title = humanize(name);
     const componentPath = `/${getApplicationPath(host, options.project)}${path}/${name}.component.html`;
     if (host.exists(componentPath)) {
       host.overwrite(
         componentPath,
-        `<h2 class="content-block">${name}</h2>
-<div class="dx-card content-block responsive-paddings">Put your content here</div>
+        `<h2 class="content-block">${title}</h2>
+<div class="content-block">
+    <div class="dx-card responsive-paddings">Put your content here</div>
+</div>
 `);
     }
     return host;

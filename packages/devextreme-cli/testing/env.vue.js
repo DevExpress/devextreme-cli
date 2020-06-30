@@ -33,7 +33,7 @@ exports.createApp = async() => {
         '../../../../index.js',
         'add',
         'view',
-        'page'
+        'new-page'
     ], {
         cwd: appPath,
         forceNoCmd: true,
