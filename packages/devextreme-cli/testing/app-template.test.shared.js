@@ -116,6 +116,19 @@ module.exports = (env) => {
                                     compareSnapshot(image, 'tasks');
                                 });
 
+                                it('Add view', async() => {
+                                    let pageUrl = 'new-page';
+                                    if(env.engine === 'angular') {
+                                        pageUrl = 'pages/' + pageUrl;
+                                    }
+                                    const page = await openPage(`${appUrl}#${pageUrl}`, {
+                                        waitUntil: 'networkidle0'
+                                    });
+                                    const image = await page.screenshot();
+
+                                    compareSnapshot(image, 'add-view');
+                                });
+
                                 it('Menu toggle', async() => {
                                     const menuButtonSelector = '.menu-button .dx-button';
                                     const page = await openPage(`${appUrl}#/profile`, {

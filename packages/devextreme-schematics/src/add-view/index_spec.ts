@@ -52,7 +52,7 @@ describe('view', () => {
 
     const content = tree.readContent('/src/app/pages/test/test.component.html');
 
-    expect(content).toMatch(/<h2 class="content-block">test<\/h2>/);
+    expect(content).toMatch(/<h2 class="content-block">Test<\/h2>/);
   });
 
   it('should add view to default routing module', async () => {
@@ -123,7 +123,7 @@ describe('view', () => {
 
     const moduleContent = tree.readContent('/src/app/app-navigation.ts');
 
-    expect(moduleContent).toMatch(/text: 'Some test'/);
+    expect(moduleContent).toMatch(/text: 'Some Test'/);
     expect(moduleContent).toMatch(/icon: 'home'/);
     expect(moduleContent).toMatch(/text: 'Test'/);
     expect(moduleContent).toMatch(/icon: 'folder'/);
@@ -131,17 +131,17 @@ describe('view', () => {
     expect(moduleContent).toContain(`navigation = [
   {
     text: 'Test',
-    path: 'pages/test',
+    path: '/pages/test',
     icon: 'folder'
   },
   {
-    text: 'Some test',
-    path: 'pages/some-test',
+    text: 'Some Test',
+    path: '/pages/some-test',
     icon: 'home'
   }
 ];`);
     const pageContent = tree.readContent('/src/app/pages/some-test/some-test.component.html');
-    expect(pageContent).toMatch(/<h2 class="content-block">some-test<\/h2>/);
+    expect(pageContent).toMatch(/<h2 class="content-block">Some Test<\/h2>/);
   });
 
   it('should create new view with path', async () => {
