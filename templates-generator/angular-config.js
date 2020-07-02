@@ -130,9 +130,9 @@ module.exports = {
             definitions: [
                 /import { HomeComponent } [^\n]*?\n/,
                 /import { ProfileComponent } [^\n]*?\n/,
-                /import { DisplayDataComponent } [^\n]*?\n/,
+                /import { TasksComponent } [^\n]*?\n/,
                 /import { DxDataGridModule, DxFormModule } [^\n]*?\n/,
-                /{[^}]*?path: 'display-data'[^}]*?},\s+/,
+                /{[^}]*?path: 'tasks'[^}]*?},\s+/,
                 /{[^}]*?path: 'profile'[^}]*?},\s+/,
                 /{[^}]*?path: 'home'[^}]*?},\s+/,
                 /},[^}]*?path: '\*\*'[^}]*/,
