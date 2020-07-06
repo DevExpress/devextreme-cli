@@ -77,7 +77,6 @@ import { Change } from '@schematics/angular/utility/change';
 
 const projectFilesSource = './files/src';
 const workspaceFilesSource = './files';
-const ngRequireStaticFlag = /^(\W*[8-9][0-9]*)/;
 
 function addScriptSafe(scripts: any, name: string, value: string) {
   const currentValue = scripts[name];
@@ -333,16 +332,13 @@ export default function(options: any): Rule {
     const override = options.resolveConflicts === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath.replace(/\/?(\w)+\/?/g, '../');
-    const ngVersion = getPackageJsonDependency(host, '@angular/core')!.version;
     const templateOptions = {
       name: componentName,
       layout,
       title,
       strings,
       path: pathToCss,
-      prefix,
-      // https://github.com/angular/angular/blob/master/CHANGELOG.md#800-2019-05-28
-      requireStaticFlag: ngRequireStaticFlag.test(ngVersion)
+      prefix
     };
 
     const modifyContent = (templateContent: string, currentContent: string, filePath: string) => {
