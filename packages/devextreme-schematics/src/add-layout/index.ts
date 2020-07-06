@@ -14,10 +14,6 @@ import {
   template
 } from '@angular-devkit/schematics';
 
-import {
-  getPackageJsonDependency
-} from '@schematics/angular/utility/dependencies';
-
 import { of } from 'rxjs';
 
 import {

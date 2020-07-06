@@ -138,7 +138,7 @@ describe('layout', () => {
     const navigationMenu = tree.readContent(
       '/src/app/shared/components/side-navigation-menu/side-navigation-menu.component.ts');
 
-    expect(navigationMenu).toContain('@ViewChild(DxTreeViewComponent)');
+    expect(navigationMenu).toContain('@ViewChild(DxTreeViewComponent, { static: true })');
   });
 
   it('should add npm scripts safely', async () => {
