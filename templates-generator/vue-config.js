@@ -56,6 +56,19 @@ module.exports = {
             ]
         },
         {
+            glob:'src/views/new-page.vue',
+            definitions: [
+                {
+                    before:'new-page',
+                    after:'<%=pageName%>'
+                },
+                {
+                    before:/(<h2 class="content-block">)New Page(<\/h2>)/,
+                    after:'$1<%=title%>$2'
+                }
+            ]
+        },
+        {
             glob: 'src/router.js',
             definitions: [
                 {
@@ -82,6 +95,18 @@ module.exports = {
                     after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
+                    before:`, {
+      path: "/new-page",
+      name: "new-page",
+      meta: { requiresAuth: true },
+      components: {
+        layout: defaultLayout,
+        content: NewPage
+      }
+    }`,
+                    after:''
+                },
+                {
                     before: /(\n\s+{[^}]*redirect: "\/home"[^\]]*})\s+]/,
                     after: `<%=^empty%>$1<%=/empty%><%=#empty%>
     {
@@ -89,6 +114,10 @@ module.exports = {
       redirect: "/"
     }<%=/empty%>
   ]`
+                },
+                {
+                    before: 'import NewPage from \'./views/new-page\';\n',
+                    after:''
                 }
             ]
         }
@@ -100,6 +129,16 @@ module.exports = {
                 'import \'devextreme/dist/css/dx.common.css\';\n',
                 'import \'./themes/generated/theme.base.css\';\n',
                 'import \'./themes/generated/theme.additional.css\';\n',
+            ]
+        },
+        {
+            glob: 'src/app-navigation.js',
+            definitions: [
+                `, {
+    text: 'New Page',
+    path: '/new-page',
+    icon: 'folder'
+  }`
             ]
         }
     ],
@@ -121,11 +160,18 @@ module.exports = {
             }
         },
         {
-            glob: 'src/views/**/*.*',
+            glob: 'src/views/!(new-page.vue)',
             definition:
             {
                 sourcePath: 'src/views/',
                 targetPath: 'packages/devextreme-cli/src/templates/vue/sample-pages/'
+            }
+        },
+        {
+            glob: 'src/views/new-page.vue',
+            definition: {
+                sourcePath: 'src/views/new-page.vue',
+                targetPath: 'packages/devextreme-cli/src/templates/vue/page/page.vue'
             }
         }
     ]

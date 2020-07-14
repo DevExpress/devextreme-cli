@@ -4,6 +4,7 @@ module.exports = {
     sourceGlob: '**/*.{js,scss,json}',
     ignoreList: [
         'src/themes/generated/*.*',
+        'src/pages/new-page/new-page.scss',
         'node_modules/**/*.*',
         'public/*.*',
         'src/App.test.js',
@@ -22,18 +23,19 @@ module.exports = {
                     after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
-                    before:/(const routes = \[)([^\]]*)(\])/,
+                    before: /(const routes = \[)([^\]]*)(\])/,
                     after: '$1<%=^empty%>$2<%=/empty%>$3'
                 }
             ],
         },
         {
             glob: 'src/app-info.js',
-            definitions: [{
-                before: 'My App',
-                after: '<%=project%>'
-            }
-            ],
+            definitions: [
+                {
+                    before: 'My App',
+                    after: '<%=project%>'
+                }
+            ]
         },
         {
             glob: 'src/app-navigation.js',
@@ -45,6 +47,36 @@ module.exports = {
                 {
                     before: '];',
                     after: '<%=/empty%>];'
+                },
+                {
+                    before: `, {
+    text: 'New Page',
+    path: '/new-page',
+    icon: 'folder'
+  }`,
+                    after: ''
+                }
+            ]
+        },
+        {
+            glob:'src/pages/index.js',
+            definitions: [
+                {
+                    before:'export { default as NewPagePage } from \'./new-page/new-page\';\n',
+                    after:''
+                }
+            ]
+        },
+        {
+            glob:'src/pages/new-page/new-page.js',
+            definitions: [
+                {
+                    before:'new-page',
+                    after:'<%=pageName%>'
+                },
+                {
+                    before:/(<h2 className={'content-block'}>)[^<]*(<\/h2>)/,
+                    after:'$1<%=title%>$2'
                 }
             ]
         },
@@ -102,10 +134,21 @@ module.exports = {
                 'import \'./themes/generated/theme.additional.css\';\n',
             ]
         },
+        {
+            glob: 'src/app-routes.js',
+            definitions: [
+                    `, 
+{
+    path: '/new-page',
+    component: NewPagePage
+  }`,
+                    ', NewPagePage'                   
+            ]
+        }
     ],
     moveRules: [
         {
-            glob: 'src/pages/**/*.*',
+            glob: 'src/pages/!(new-page/new-page.js)',
             definition: {
                 sourcePath: 'src/pages',
                 targetPath: 'packages/devextreme-cli/src/templates/react/sample-pages'
@@ -116,6 +159,13 @@ module.exports = {
             definition: {
                 sourcePath: '',
                 targetPath: 'packages/devextreme-cli/src/templates/react/application/'
+            }
+        },
+        {
+            glob: 'src/pages/new-page/new-page.js',
+            definition: {
+                sourcePath: 'src/pages/new-page/new-page.js',
+                targetPath: 'packages/devextreme-cli/src/templates/react/page/page.js'
             }
         }
     ]

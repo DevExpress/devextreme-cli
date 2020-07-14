@@ -14,7 +14,8 @@ module.exports = {
         'tsconfig.json',
         'angular.json',
         'tslint.json',
-        'karma.conf.js'
+        'karma.conf.js',
+        'src/app/pages/new-page/new-page.component.*'
     ],
     replaceRules: [
         {
@@ -138,7 +139,14 @@ module.exports = {
                 /},[^}]*?path: '\*\*'[^}]*/,
                 /, {\s?useHash: true\s?}/,
                 ', DxDataGridModule, DxFormModule',
-                /,\s+declarations: [^\]]*?]/
+                /,\s+declarations: [^\]]*?]/,
+`  {
+    path: 'pages/new-page',
+    component: NewPageComponent,
+    canActivate: [ AuthGuardService ]
+  },
+`,
+                'import { NewPageComponent } from \'./pages/new-page/new-page.component\';\n'
             ]
         }
     ],
