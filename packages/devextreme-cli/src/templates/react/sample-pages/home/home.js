@@ -36,7 +36,7 @@ export default () => (
           <li><a href={'https://js.devexpress.com/Documentation/Guide/React_Components/Create_a_DevExtreme_Application/#Configure_Themes'} target={'_blank'} rel={'noopener noreferrer'}>Configure Themes</a></li>        
         </ul>
 
-        <p>For technical content related to DevExtreme React components, feel free to explore our <a href={'https://js.devexpress.com/documentation/'} target={'_blank'} rel={'noopener noreferrer'}>online documentation</a>
+        <p>For technical content related to DevExtreme React components, feel free to explore our <a href={'https://js.devexpress.com/documentation/'} target={'_blank'} rel={'noopener noreferrer'}>online documentation </a>
         and <a href={'https://js.devexpress.com/Demos/Widgetsgallery/'} target={'_blank'} rel={'noopener noreferrer'}>technical demos</a></p>
       </div>
     </div>
