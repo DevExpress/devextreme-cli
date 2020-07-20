@@ -19,8 +19,8 @@ export default () => (
         </div>
 
         <p>Thanks for using the  DevExtreme React App Template.</p>
-        <p>This application was built using <a href={'https://create-react-app.dev/'} target={'_blank'} rel={'noopener noreferrer'}> Create React App </a> and 
-        <a href={'https://js.devexpress.com/Documentation/Guide/Common/DevExtreme_CLI/'} target={'_blank'} rel={'noopener noreferrer'}> DevExtreme CLI </a> and includes the following DevExtreme components:</p>
+        <p>This application was built using <a href={'https://create-react-app.dev/'} target={'_blank'} rel={'noopener noreferrer'}>Create React App</a> and <a
+        href={'https://js.devexpress.com/Documentation/Guide/Common/DevExtreme_CLI/'} target={'_blank'} rel={'noopener noreferrer'}>DevExtreme CLI</a> and includes the following DevExtreme components:</p>
         <ul>
           <li><a href={'https://js.devexpress.com/Documentation/Guide/Widgets/DataGrid/Overview/'} target={'_blank'} rel={'noopener noreferrer'}>DataGrid</a></li>
           <li><a href={'https://js.devexpress.com/Documentation/Guide/Widgets/Form/Overview/'} target={'_blank'} rel={'noopener noreferrer'}>Form</a></li>
@@ -36,8 +36,9 @@ export default () => (
           <li><a href={'https://js.devexpress.com/Documentation/Guide/React_Components/Create_a_DevExtreme_Application/#Configure_Themes'} target={'_blank'} rel={'noopener noreferrer'}>Configure Themes</a></li>        
         </ul>
 
-        <p>For technical content related to DevExtreme React components, feel free to explore our <a href={'https://js.devexpress.com/documentation/'} target={'_blank'} rel={'noopener noreferrer'}>online documentation </a>
-        and <a href={'https://js.devexpress.com/Demos/Widgetsgallery/'} target={'_blank'} rel={'noopener noreferrer'}>technical demos</a></p>
+        <p>For technical content related to DevExtreme React components, feel free to explore 
+        our <a href={'https://js.devexpress.com/documentation/'} target={'_blank'} rel={'noopener noreferrer'}>online documentation</a> and <a
+        href={'https://js.devexpress.com/Demos/Widgetsgallery/'} target={'_blank'} rel={'noopener noreferrer'}>technical demos</a></p>
       </div>
     </div>
   </React.Fragment>
