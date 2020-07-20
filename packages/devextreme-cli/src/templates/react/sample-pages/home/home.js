@@ -42,11 +42,10 @@ export default () => (
         </ul>
 
         <p>
-          <span>This application was built using </span>
-          <a href={'https://create-react-app.dev/'} target={'_blank'} rel={'noopener noreferrer'}>Create React App</a>
+          <span>For technical content related to DevExtreme React components, feel free to explore our </span>
+          <a href="https://js.devexpress.com/documentation/" target="_blank" rel="noopener noreferrer">online documentation</a>
           <span> and </span>
-          <a href={'https://js.devexpress.com/Documentation/Guide/Common/DevExtreme_CLI/'} target={'_blank'} rel={'noopener noreferrer'}>DevExtreme CLI</a>
-          <span> and the following DevExtreme components:</span>
+          <a href="https://js.devexpress.com/Demos/Widgetsgallery/" target="_blank" rel="noopener noreferrer">technical demos</a>
         </p>
       </div>
     </div>
