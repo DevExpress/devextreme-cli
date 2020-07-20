@@ -19,9 +19,13 @@ export default () => (
         </div>
 
         <p>Thanks for using the  DevExtreme React App Template.</p>
-        <p>This application was built using <a href={'https://create-react-app.dev/'} target={'_blank'} rel={'noopener noreferrer'}>Create React App</a>
-        <span> and <a href={'https://js.devexpress.com/Documentation/Guide/Common/DevExtreme_CLI/'} target={'_blank'} rel={'noopener noreferrer'}>DevExtreme CLI</a> and</span>
-        includes the following DevExtreme components:</p>
+        <p>
+          <span>This application was built using </span>
+          <a href={'https://create-react-app.dev/'} target={'_blank'} rel={'noopener noreferrer'}>Create React App</a>
+          <span> and </span>
+          <a href={'https://js.devexpress.com/Documentation/Guide/Common/DevExtreme_CLI/'} target={'_blank'} rel={'noopener noreferrer'}>DevExtreme CLI</a>
+          <span> and includes the following DevExtreme components:</span>
+        </p>
         <ul>
           <li><a href={'https://js.devexpress.com/Documentation/Guide/Widgets/DataGrid/Overview/'} target={'_blank'} rel={'noopener noreferrer'}>DataGrid</a></li>
           <li><a href={'https://js.devexpress.com/Documentation/Guide/Widgets/Form/Overview/'} target={'_blank'} rel={'noopener noreferrer'}>Form</a></li>
