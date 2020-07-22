@@ -47,23 +47,6 @@ module.exports = {
                 {
                     before: '];',
                     after: '<%=/empty%>];'
-                },
-                {
-                    before: `, {
-    text: 'New Page',
-    path: '/new-page',
-    icon: 'folder'
-  }`,
-                    after: ''
-                }
-            ]
-        },
-        {
-            glob:'src/pages/index.js',
-            definitions: [
-                {
-                    before:'export { default as NewPagePage } from \'./new-page/new-page\';\n',
-                    after:''
                 }
             ]
         },
@@ -138,13 +121,31 @@ module.exports = {
             glob: 'src/app-routes.js',
             definitions: [
                     `, 
-{
+  {
     path: '/new-page',
     component: NewPagePage
   }`,
                     ', NewPagePage'                   
             ]
-        }
+        },
+        {
+            glob: 'src/app-navigation.js',
+            definitions: [
+                    `, 
+  {
+    text: 'New Page',
+    path: '/new-page',
+    icon: 'folder'
+  }`            
+            ]
+        },
+        ,
+        {
+            glob:'src/pages/index.js',
+            definitions: [
+                'export { default as NewPagePage } from \'./new-page/new-page\';\n'
+            ]
+        },
     ],
     moveRules: [
         {

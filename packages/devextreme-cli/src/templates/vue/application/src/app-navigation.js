@@ -18,4 +18,4 @@ export default [<%=^empty%>
       }
     ]
   }
-  <%=/empty%>];
+<%=/empty%>];

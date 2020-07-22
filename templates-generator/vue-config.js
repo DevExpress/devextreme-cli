@@ -95,11 +95,13 @@ module.exports = {
                     after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
-                    before:`, {
+                    before:`, 
+    {
       path: "/new-page",
       name: "new-page",
       meta: { requiresAuth: true },
-      components: {
+      components: 
+      {
         layout: defaultLayout,
         content: NewPage
       }
@@ -134,7 +136,8 @@ module.exports = {
         {
             glob: 'src/app-navigation.js',
             definitions: [
-                `, {
+                `, 
+  {
     text: 'New Page',
     path: '/new-page',
     icon: 'folder'

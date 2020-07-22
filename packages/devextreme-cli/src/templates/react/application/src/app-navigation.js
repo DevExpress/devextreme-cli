@@ -18,4 +18,4 @@ export const navigation = [<%=^empty%>
       }
     ]
   }
-  <%=/empty%>];
+<%=/empty%>];
