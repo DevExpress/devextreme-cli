@@ -46,7 +46,7 @@ module.exports = {
                 },
                 {
                     before: '];',
-                    after: '  <%=/empty%>];'
+                    after: '<%=/empty%>];'
                 }
             ]
         },

@@ -51,7 +51,7 @@ module.exports = {
             definitions: [
                 {
                     before: /\[(.*?)\];/s,
-                    after: '[<%=^empty%>$1  <%=/empty%>];'
+                    after: '[<%=^empty%>$1<%=/empty%>];'
                 }
             ]
         },
