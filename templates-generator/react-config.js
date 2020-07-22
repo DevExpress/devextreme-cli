@@ -46,7 +46,7 @@ module.exports = {
                 },
                 {
                     before: '];',
-                    after: '<%=/empty%>];'
+                    after: '  <%=/empty%>];'
                 }
             ]
         },
@@ -139,7 +139,6 @@ module.exports = {
   }`            
             ]
         },
-        ,
         {
             glob:'src/pages/index.js',
             definitions: [
@@ -153,13 +152,6 @@ module.exports = {
             definition: {
                 sourcePath: 'src/pages',
                 targetPath: 'packages/devextreme-cli/src/templates/react/sample-pages'
-            }
-        },
-        {
-            glob: 'devextreme.json',
-            definition: {
-                sourcePath: '',
-                targetPath: 'packages/devextreme-cli/src/templates/react/application/'
             }
         },
         {
