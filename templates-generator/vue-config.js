@@ -56,6 +56,19 @@ module.exports = {
             ]
         },
         {
+            glob:'src/views/new-page.vue',
+            definitions: [
+                {
+                    before:'new-page',
+                    after:'<%=pageName%>'
+                },
+                {
+                    before:/(<h2 class="content-block">)New Page(<\/h2>)/,
+                    after:'$1<%=title%>$2'
+                }
+            ]
+        },
+        {
             glob: 'src/router.js',
             definitions: [
                 {
@@ -89,6 +102,10 @@ module.exports = {
       redirect: "/"
     }<%=/empty%>
   ]`
+                },
+                {
+                    before: 'import NewPage from \'./views/new-page\';\n',
+                    after:''
                 }
             ]
         }
@@ -100,6 +117,18 @@ module.exports = {
                 'import \'devextreme/dist/css/dx.common.css\';\n',
                 'import \'./themes/generated/theme.base.css\';\n',
                 'import \'./themes/generated/theme.additional.css\';\n',
+            ]
+        },
+        {
+            glob: 'src/app-navigation.js',
+            definitions: [
+                /,\s+{[^}]*'\/new-page'[^}]*}/
+            ]
+        },
+        {
+            glob: 'src/router.js',
+            definitions: [
+                /,\s+{[^}]*\/new-page[^\]]*}\s+}/
             ]
         }
     ],
@@ -121,11 +150,18 @@ module.exports = {
             }
         },
         {
-            glob: 'src/views/**/*.*',
+            glob: 'src/views/!(new-page.vue)',
             definition:
             {
                 sourcePath: 'src/views/',
                 targetPath: 'packages/devextreme-cli/src/templates/vue/sample-pages/'
+            }
+        },
+        {
+            glob: 'src/views/new-page.vue',
+            definition: {
+                sourcePath: 'src/views/new-page.vue',
+                targetPath: 'packages/devextreme-cli/src/templates/vue/page/page.vue'
             }
         }
     ]
