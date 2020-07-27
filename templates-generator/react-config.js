@@ -120,23 +120,13 @@ module.exports = {
         {
             glob: 'src/app-routes.js',
             definitions: [
-                    `, 
-  {
-    path: '/new-page',
-    component: NewPagePage
-  }`,
                     ', NewPagePage'                   
             ]
         },
         {
-            glob: 'src/app-navigation.js',
+            glob: 'src/app-navigation.js|src/app-routes.js',
             definitions: [
-                    `, 
-  {
-    text: 'New Page',
-    path: '/new-page',
-    icon: 'folder'
-  }`            
+                /,\s+{[^}]*'\/new-page'[^}]*}/            
             ]
         },
         {

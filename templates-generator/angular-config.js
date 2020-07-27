@@ -140,13 +140,8 @@ module.exports = {
                 /, {\s?useHash: true\s?}/,
                 ', DxDataGridModule, DxFormModule',
                 /,\s+declarations: [^\]]*?]/,
-`  {
-    path: 'pages/new-page',
-    component: NewPageComponent,
-    canActivate: [ AuthGuardService ]
-  },
-`,
-                'import { NewPageComponent } from \'./pages/new-page/new-page.component\';\n'
+                /{[^}]*?path: 'pages\/new-page'[^}]*?},\s+/,
+                /import { NewPageComponent } [^\n]*?\n/
             ]
         }
     ],

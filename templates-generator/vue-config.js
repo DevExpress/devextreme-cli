@@ -95,20 +95,6 @@ module.exports = {
                     after: '<%=^empty%>$1<%=/empty%>'
                 },
                 {
-                    before:`, 
-    {
-      path: "/new-page",
-      name: "new-page",
-      meta: { requiresAuth: true },
-      components: 
-      {
-        layout: defaultLayout,
-        content: NewPage
-      }
-    }`,
-                    after:''
-                },
-                {
                     before: /(\n\s+{[^}]*redirect: "\/home"[^\]]*})\s+]/,
                     after: `<%=^empty%>$1<%=/empty%><%=#empty%>
     {
@@ -136,12 +122,13 @@ module.exports = {
         {
             glob: 'src/app-navigation.js',
             definitions: [
-                `, 
-  {
-    text: 'New Page',
-    path: '/new-page',
-    icon: 'folder'
-  }`
+                /,\s+{[^}]*'\/new-page'[^}]*}/
+            ]
+        },
+        {
+            glob: 'src/router.js',
+            definitions: [
+                /,\s+{[^}]*\/new-page[^\]]*}\s+}/
             ]
         }
     ],
