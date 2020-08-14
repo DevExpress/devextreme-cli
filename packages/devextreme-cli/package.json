@@ -1,6 +1,6 @@
 {
   "name": "devextreme-cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "DevExtreme CLI",
   "keywords": [
     "devexpress",
@@ -28,7 +28,6 @@
   "repository": "https://github.com/DevExpress/devextreme-cli",
   "license": "MIT",
   "dependencies": {
-    "@vue/cli": "^3.5.5",
     "@yarnpkg/lockfile": "^1.1.0",
     "dart-sass": "^1.25.0",
     "ip": "^1.1.5",
@@ -40,7 +39,7 @@
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "eslint": "^5.10.0",
+    "eslint": "^6.6.0",
     "eslint-plugin-jest": "^22.5.1",
     "jest": "^24.9.0",
     "jest-image-snapshot": "^2.8.2",
