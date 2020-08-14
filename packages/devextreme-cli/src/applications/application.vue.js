@@ -1,10 +1,10 @@
 const path = require('path');
 const fs = require('fs');
-const createVueApp = require('@vue/cli/lib/create');
 const getLayoutInfo = require('../layout').getLayoutInfo;
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
+const runCommand = require('../utility/run-command');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
@@ -31,9 +31,13 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     packageJsonUtils.updateName(appPath, appName);
 };
 
+async function createVueApp(name) {
+    return runCommand('npx', ['-p', '@vue/cli', 'vue', 'create', name, '--default']);
+}
+
 const create = (appName, options) => {
     getLayoutInfo(options.layout).then((layoutInfo) => {
-        createVueApp(appName, { default: true }).then(() => {
+        createVueApp(appName).then(() => {
             const appPath = path.join(process.cwd(), appName);
             const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {
