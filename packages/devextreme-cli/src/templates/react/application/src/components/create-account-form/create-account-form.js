@@ -9,7 +9,9 @@ import Form, {
   CustomRule,
   EmailRule
 } from 'devextreme-react/form';
+import notify from 'devextreme/ui/notify';
 import LoadIndicator from 'devextreme-react/load-indicator';
+import { createAccount } from '../../api/auth';
 import './create-account-form.scss';
 
 export default function (props) {
@@ -22,10 +24,14 @@ export default function (props) {
     const { email, password } = formData.current;
     setLoading(true);
 
-    // Send create account request
-    console.log(email, password);
+    const result = await createAccount(email, password);
+    setLoading(false);
 
-    history.push('/login');
+    if (result.isOk) {
+      history.push('/login');
+    } else {
+      notify(result.message, 'error', 2000);
+    }
   }, [history]);
 
   const confirmPassword = useCallback(
@@ -67,7 +73,7 @@ export default function (props) {
         </Item>
         <Item>
           <div className='policy-info'>
-            By creating an account, you agree to the <Link>Terms of Service</Link> and <Link>Privacy Policy</Link>
+            By creating an account, you agree to the <Link to="#">Terms of Service</Link> and <Link to="#">Privacy Policy</Link>
           </div>
         </Item>
         <ButtonItem>

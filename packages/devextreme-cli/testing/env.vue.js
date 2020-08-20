@@ -6,6 +6,7 @@ const runCommand = require('../src/utility/run-command');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/vue');
+const appPath = path.join(sandboxPath, appName);
 const routerFilePath = path.join(sandboxPath, appName, 'src/router.js');
 
 exports.engine = 'vue';
@@ -28,7 +29,18 @@ exports.createApp = async() => {
         silent: true
     });
 
-    await rimraf(path.join(sandboxPath, appName, 'vue.config.js'));
+    await runCommand('node', [
+        '../../../../index.js',
+        'add',
+        'view',
+        'new-page'
+    ], {
+        cwd: appPath,
+        forceNoCmd: true,
+        silent: true
+    });
+
+    await rimraf(path.join(appPath, 'vue.config.js'));
 };
 
 exports.setLayout = (layoutName) => {

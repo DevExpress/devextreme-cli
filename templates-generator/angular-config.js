@@ -14,7 +14,8 @@ module.exports = {
         'tsconfig.json',
         'angular.json',
         'tslint.json',
-        'karma.conf.js'
+        'karma.conf.js',
+        'src/app/pages/new-page/new-page.component.*'
     ],
     replaceRules: [
         {
@@ -130,15 +131,17 @@ module.exports = {
             definitions: [
                 /import { HomeComponent } [^\n]*?\n/,
                 /import { ProfileComponent } [^\n]*?\n/,
-                /import { DisplayDataComponent } [^\n]*?\n/,
+                /import { TasksComponent } [^\n]*?\n/,
                 /import { DxDataGridModule, DxFormModule } [^\n]*?\n/,
-                /{[^}]*?path: 'display-data'[^}]*?},\s+/,
+                /{[^}]*?path: 'tasks'[^}]*?},\s+/,
                 /{[^}]*?path: 'profile'[^}]*?},\s+/,
                 /{[^}]*?path: 'home'[^}]*?},\s+/,
                 /},[^}]*?path: '\*\*'[^}]*/,
                 /, {\s?useHash: true\s?}/,
                 ', DxDataGridModule, DxFormModule',
-                /,\s+declarations: [^\]]*?]/
+                /,\s+declarations: [^\]]*?]/,
+                /{[^}]*?path: 'pages\/new-page'[^}]*?},\s+/,
+                /import { NewPageComponent } [^\n]*?\n/
             ]
         }
     ],

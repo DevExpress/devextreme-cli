@@ -5,7 +5,7 @@ import auth from "./auth";
 
 <%=^empty%>import Home from "./views/home";
 import Profile from "./views/profile";
-import DisplayData from "./views/display-data";
+import Tasks from "./views/tasks";
 <%=/empty%>import defaultLayout from "./layouts/<%=layout%>";
 import simpleLayout from "./layouts/single-card";
 
@@ -18,8 +18,8 @@ const router = new Router({
       components: {
         layout: defaultLayout
       }
-    },<%=/empty%>
-    <%=^empty%>{
+    },<%=/empty%><%=^empty%>
+    {
       path: "/home",
       name: "home",
       meta: { requiresAuth: true },
@@ -38,14 +38,15 @@ const router = new Router({
       }
     },
     {
-      path: "/display-data",
-      name: "display-data",
+      path: "/tasks",
+      name: "tasks",
       meta: { requiresAuth: true },
       components: {
         layout: defaultLayout,
-        content: DisplayData
+        content: Tasks
       }
-    },<%=/empty%>{
+    },<%=/empty%>
+    {
       path: "/login-form",
       name: "login-form",
       meta: { requiresAuth: false },
@@ -57,8 +58,8 @@ const router = new Router({
         content: () =>
           import(/* webpackChunkName: "login" */ "./views/login-form")
       }
-    },
-    <%=^empty%>{
+    },<%=^empty%>
+    {
       path: "/",
       redirect: "/home"
     },
@@ -69,8 +70,8 @@ const router = new Router({
     {
       path: "*",
       redirect: "/home"
-    }<%=/empty%>
-    <%=#empty%>{
+    }<%=/empty%><%=#empty%>
+    {
       path: "*",
       redirect: "/"
     }<%=/empty%>

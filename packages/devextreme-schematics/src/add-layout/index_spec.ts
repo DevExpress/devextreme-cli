@@ -76,6 +76,7 @@ describe('layout', () => {
     const devextremeConfigContent = tree.readContent('/devextreme.json');
     expect(devextremeConfigContent).toContain('"applicationEngine": "angular"');
     expect(devextremeConfigContent).toContain('"inputFile": "src/themes/metadata.additional.json"');
+    expect(devextremeConfigContent).toMatch(/\n\s{2}\S/g);
 
     const componentContent = tree.readContent('/src/app/app.component.html');
     expect(componentContent).toContain('app-side-nav-outer-toolbar title="{{appInfo.title}}"');

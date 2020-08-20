@@ -8,11 +8,12 @@ const classify = require('../src/utility/string').classify;
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/react');
+const appPath = path.join(sandboxPath, appName);
 const appLayoutPath = path.join(sandboxPath, appName, 'src/Content.js');
 
 exports.engine = 'react';
 exports.port = 3000;
-exports.appPath = path.join(sandboxPath, appName);
+exports.appPath = appPath;
 exports.npmArgs = ['start'];
 
 exports.createApp = async() => {
@@ -30,7 +31,18 @@ exports.createApp = async() => {
         silent: true
     });
 
-    fs.writeFileSync(path.join(sandboxPath, appName, '.env'), 'SKIP_PREFLIGHT_CHECK=true' + EOL + 'BROWSER=none');
+    await runCommand('node', [
+        '../../../../index.js',
+        'add',
+        'view',
+        'new-page'
+    ], {
+        cwd: appPath,
+        forceNoCmd: true,
+        silent: true
+    });
+
+    fs.writeFileSync(path.join(appPath, '.env'), 'SKIP_PREFLIGHT_CHECK=true' + EOL + 'BROWSER=none');
 };
 
 exports.setLayout = (layoutName) => {

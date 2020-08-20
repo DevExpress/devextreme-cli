@@ -5,7 +5,8 @@ import { useAuth } from '../../contexts/auth';
 import './user-panel.scss';
 
 export default function ({ menuMode }) {
-  const { user, logOut } = useAuth();
+  const { user, signOut } = useAuth();
+
   const menuItems = useMemo(() => ([
     {
       text: 'Profile',
@@ -14,9 +15,9 @@ export default function ({ menuMode }) {
     {
       text: 'Logout',
       icon: 'runner',
-      onClick: logOut
+      onClick: signOut
     }
-  ]), [logOut]);
+  ]), [signOut]);
 
   return (
     <div className={'user-panel'}>
