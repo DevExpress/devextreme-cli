@@ -1,6 +1,6 @@
 {
   "name": "devextreme-cli-monorepo",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "scripts": {
     "test": "lerna run --stream test",
     "test-dev": "lerna run --stream test-dev",
