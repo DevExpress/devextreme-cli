@@ -43,3 +43,23 @@ npm run test -- -- -t react
 ## Replace etalon
 
 To replace etalon image just remove it from `packages/devextreme-cli/testing/__tests__/__image_snapshots__` folder and run tests again
+
+# Modify an Application Template
+
+Modifying an application template directly is not recommended. Instead, generate a real application based on this template and modify this application. This is easier because a real application can be run, and you can see how your modifications affect it. Follow these instructions:
+
+1. Generate an application based on the template in the `testing/sandbox` folder.
+2. Modify the application as required.
+3. Run a script that updates templates for all frameworks:
+
+    ```sh
+    npm run update-template
+    ```
+    
+    ... or a script that updates the template for an individual framework:
+
+    ```sh
+    npm run update-template -- -p angular
+    npm run update-template -- -p vue
+    npm run update-template -- -p react
+    ```

@@ -40,9 +40,9 @@ const sampleViewOptions = [
     componentName: 'ProfileComponent',
     relativePath: './pages/profile/profile.component'
   }, {
-    name: 'display-data',
-    componentName: 'DisplayDataComponent',
-    relativePath: './pages/display-data/display-data.component'
+    name: 'tasks',
+    componentName: 'TasksComponent',
+    relativePath: './pages/tasks/tasks.component'
 }];
 
 const devextremeOptions = [
@@ -69,8 +69,8 @@ const navigations = [
         path: '/profile'
       },
       {
-        text: 'Display Data',
-        path: '/display-data'
+        text: 'Tasks',
+        path: '/tasks'
       }
     ]
   }`

@@ -1,42 +1,41 @@
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
-
-const AuthContext = createContext({});
-const useAuth = () => useContext(AuthContext);
-const defaultUser = {
-  email: 'sandra@example.com',
-  avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
-}
+import { getUser, signIn as sendSignInRequest } from '../api/auth';
 
 function AuthProvider(props) {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  const logIn = useCallback(async (email, password) => {
-    // Send login request
-    console.log(email, password);
+  useEffect(() => {
+    (async function () {
+      const result = await getUser();
+      if (result.isOk) {
+        setUser(result.data);
+      }
 
-    setUser({
-      email,
-      avatarUrl: defaultUser.avatarUrl
-    });
+      setLoading(false);
+    })();
   }, []);
 
-  const logOut = useCallback(() => {
-    // Clear user data
+  const signIn = useCallback(async (email, password) => {
+    const result = await sendSignInRequest(email, password);
+    if (result.isOk) {
+      setUser(result.data);
+    }
 
+    return result;
+  }, []);
+
+  const signOut = useCallback(() => {
     setUser();
   }, []);
 
-  useEffect(() => {
-    // Retrieve and save user data on initial load
-
-    setUser(defaultUser);
-    setLoading(false);
-  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, logIn, logOut, loading }} {...props} />
+    <AuthContext.Provider value={{ user, signIn, signOut, loading }} {...props} />
   );
 }
+
+const AuthContext = createContext({});
+const useAuth = () => useContext(AuthContext);
 
 export { AuthProvider, useAuth }

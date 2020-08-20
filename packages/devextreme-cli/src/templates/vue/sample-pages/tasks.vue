@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="content-block">Display Data</h2>
+    <h2 class="content-block">Tasks</h2>
 
     <dx-data-grid
       class="dx-card wide-card"

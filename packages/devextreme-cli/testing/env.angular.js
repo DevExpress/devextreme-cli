@@ -7,10 +7,11 @@ const runCommand = require('../src/utility/run-command');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
+const appPath = path.join(sandboxPath, appName);
 const schematicsDirectory = '../../../../devextreme-schematics';
 const schematicsPath = path.join(sandboxPath, schematicsDirectory);
-const routingFilePath = path.join(sandboxPath, appName, 'src/app/app-routing.module.ts');
-const appComponentPath = path.join(sandboxPath, appName, 'src/app/app.component.html');
+const routingFilePath = path.join(appPath, 'src/app/app-routing.module.ts');
+const appComponentPath = path.join(appPath, 'src/app/app.component.html');
 
 async function prepareSchematics() {
     await packageManager.runInstall({
@@ -26,7 +27,7 @@ async function prepareSchematics() {
 
 exports.engine = 'angular';
 exports.port = 4200;
-exports.appPath = path.join(sandboxPath, appName);
+exports.appPath = appPath;
 exports.npmArgs = ['start', '--', '--host', '0.0.0.0'];
 
 exports.createApp = async() => {
@@ -42,6 +43,17 @@ exports.createApp = async() => {
         `--c=${schematicsDirectory}`
     ], {
         cwd: sandboxPath,
+        forceNoCmd: true,
+        silent: true
+    });
+
+    await runCommand('node', [
+        '../../../../index.js',
+        'add',
+        'view',
+        'new-page'
+    ], {
+        cwd: appPath,
         forceNoCmd: true,
         silent: true
     });

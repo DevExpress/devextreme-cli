@@ -10,7 +10,7 @@ import DataGrid, {
 
 export default () => (
   <React.Fragment>
-    <h2 className={'content-block'}>Display Data</h2>
+    <h2 className={'content-block'}>Tasks</h2>
 
     <DataGrid
       className={'dx-card wide-card'}

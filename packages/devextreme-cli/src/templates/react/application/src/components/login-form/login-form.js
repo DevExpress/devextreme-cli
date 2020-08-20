@@ -9,12 +9,14 @@ import Form, {
   EmailRule
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
+import notify from 'devextreme/ui/notify';
 import { useAuth } from '../../contexts/auth';
+
 import './login-form.scss';
 
-export default function (props) {
+export default function () {
   const history = useHistory();
-  const { logIn } = useAuth();
+  const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const formData = useRef({});
 
@@ -23,8 +25,12 @@ export default function (props) {
     const { email, password } = formData.current;
     setLoading(true);
 
-    await logIn(email, password);
-  }, [logIn]);
+    const result = await signIn(email, password);
+    if (!result.isOk) {
+      setLoading(false);
+      notify(result.message, 'error', 2000);
+    }
+  }, [signIn]);
 
   const onCreateAccountClick = useCallback(() => {
     history.push('/create-account');
