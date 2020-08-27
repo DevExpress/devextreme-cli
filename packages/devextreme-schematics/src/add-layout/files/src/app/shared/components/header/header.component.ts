@@ -22,6 +22,8 @@ export class HeaderComponent {
   @Input()
   title: string;
 
+  user = { email: '' };
+
   userMenuItems = [{
     text: 'Profile',
     icon: 'user'
@@ -34,6 +36,10 @@ export class HeaderComponent {
   }];
 
   constructor(private authService: AuthService) { }
+
+  ngOnInit() {
+    this.authService.getUser().then((e) => this.user = e.data);
+  }
 
   toggleMenu = () => {
     this.menuToggle.emit();
