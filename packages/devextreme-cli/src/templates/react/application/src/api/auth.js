@@ -7,7 +7,7 @@ export async function signIn(email, password) {
 
     return {
       isOk: true,
-      data: defaultUser
+      data: { ...defaultUser, email }
     };
   }
   catch {
