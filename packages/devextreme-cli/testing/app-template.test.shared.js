@@ -168,7 +168,7 @@ module.exports = (env) => {
                                         return;
                                     }
 
-                                    const name = env.engine === 'vue' ? 'login' : 'login-react';
+                                    const name = env.engine === 'vue' ? 'login-old' : 'login';
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     const image = await page.screenshot();
