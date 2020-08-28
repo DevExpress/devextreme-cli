@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route<%=^empty%>, Redirect<%=/empty%> } from 'react-router-dom';
 import appInfo from './app-info';
 import routes from './app-routes';
 import { <%=layout%> as SideNavBarLayout } from './layouts';
