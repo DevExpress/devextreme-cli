@@ -38,8 +38,8 @@ export class CreateAccountFormComponent {
     }
   }
 
-  confirmPassword(value: string) {
-    return value === this.formData.password;
+  confirmPassword = (e: { value: string }) => {
+    return e.value === this.formData.password;
   }
 }
 @NgModule({
