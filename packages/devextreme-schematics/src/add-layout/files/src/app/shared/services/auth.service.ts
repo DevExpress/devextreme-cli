@@ -122,15 +122,20 @@ export class AuthGuardService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.loggedIn;
-    const isLoginForm = route.routeConfig.path === 'login-form';
+    const isAuthForm = [
+      'login-form',
+      'reset-password',
+      'create-account',
+      'change-password/:recoveryCode'
+    ].includes(route.routeConfig.path);
 
-    if (isLoggedIn && isLoginForm) {
+    if (isLoggedIn && isAuthForm) {
       this.authService.lastAuthenticatedPath = defaultPath;
       this.router.navigate([defaultPath]);
       return false;
     }
 
-    if (!isLoggedIn && !isLoginForm) {
+    if (!isLoggedIn && !isAuthForm) {
       this.router.navigate(['/login-form']);
     }
 
@@ -138,6 +143,6 @@ export class AuthGuardService implements CanActivate {
       this.authService.lastAuthenticatedPath = route.routeConfig.path;
     }
 
-    return isLoggedIn || isLoginForm;
+    return isLoggedIn || isAuthForm;
   }
 }

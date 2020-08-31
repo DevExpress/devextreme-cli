@@ -11,15 +11,18 @@ const routes: Routes = [
   },
   {
     path: 'reset-password',
-    component: ResetPasswordFormComponent
+    component: ResetPasswordFormComponent,
+    canActivate: [ AuthGuardService ]
   },
   {
     path: 'create-account',
-    component: CreateAccountFormComponent
+    component: CreateAccountFormComponent,
+    canActivate: [ AuthGuardService ]
   },
   {
     path: 'change-password/:recoveryCode',
-    component: ChangePasswordFormComponent
+    component: ChangePasswordFormComponent,
+    canActivate: [ AuthGuardService ]
   }
 ];
 
