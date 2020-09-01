@@ -29,7 +29,7 @@ You can find test results in the following folders:
 ## Generate Applications
 
 ```sh
-npm run generate-template
+npm run create-template
 ```
 
 ## Generate Applications for an Individual Framework
@@ -43,7 +43,7 @@ npm run create-template -- -- -t react
 ## Lint Applications
 
 ```sh
-npm run generate-template
+npm run lint-template
 ```
 
 ## Lint Applications for an Individual Framework
@@ -52,6 +52,20 @@ npm run generate-template
 npm run lint-template -- -- -t angular
 npm run lint-template -- -- -t vue
 npm run lint-template -- -- -t react
+```
+
+## Test Applications
+
+```sh
+npm run test-template
+```
+
+## Test Applications for an Individual Framework
+
+```sh
+npm run test-template -- -- -t angular
+npm run test-template -- -- -t vue
+npm run test-template -- -- -t react
 ```
 
 ## Run Tests for Existing Test Applications
