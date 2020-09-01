@@ -35,9 +35,9 @@ npm run generate-template
 ## Generate Applications for an Individual Framework
 
 ```sh
-npm run generate-template -- -- -t angular
-npm run generate-template -- -- -t vue
-npm run generate-template -- -- -t react
+npm run create-template -- -- -t angular
+npm run create-template -- -- -t vue
+npm run create-template -- -- -t react
 ```
 
 ## Lint Applications
