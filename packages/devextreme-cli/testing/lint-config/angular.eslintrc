@@ -1,0 +1,14 @@
+{
+    "extends": ["angular", "plugin:angular/johnpapa"],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "env": {
+        "node": true
+    },
+    "rules": {
+        "angular/log": 0
+    }
+}

@@ -4,10 +4,14 @@
   "scripts": {
     "test": "lerna run --stream test",
     "test-dev": "lerna run --stream test-dev",
+    "create-template": "npm run --prefix ./packages/devextreme-cli create-template",
+    "lint-template": "npm run --prefix ./packages/devextreme-cli lint-template",
+    "test-template": "npm run --prefix ./packages/devextreme-cli test-template",
     "postinstall": "lerna bootstrap",
     "update-template": "node ./templates-generator/index.js"
   },
   "devDependencies": {
+    "@angular-eslint/schematics": "^0.2.0-beta.1",
     "lerna": "^3.20.2"
   }
 }

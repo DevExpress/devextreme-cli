@@ -26,6 +26,34 @@ You can find test results in the following folders:
 - `packages/devextreme-cli/testing/__tests__/__diff_snapshots__` - diff snapshots for failed tests
 - `packages/devextreme-cli/testing/sandbox/logs` - server logs for each framework
 
+## Generate Applications
+
+```sh
+npm run generate-template
+```
+
+## Generate Applications for an Individual Framework
+
+```sh
+npm run generate-template -- -- -t angular
+npm run generate-template -- -- -t vue
+npm run generate-template -- -- -t react
+```
+
+## Lint Applications
+
+```sh
+npm run generate-template
+```
+
+## Lint Applications for an Individual Framework
+
+```sh
+npm run lint-template -- -- -t angular
+npm run lint-template -- -- -t vue
+npm run lint-template -- -- -t react
+```
+
 ## Run Tests for Existing Test Applications
 
 ```sh

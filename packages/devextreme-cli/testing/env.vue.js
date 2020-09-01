@@ -15,11 +15,12 @@ exports.appPath = path.join(sandboxPath, appName);
 exports.npmArgs = ['run', 'serve'];
 
 exports.createApp = async() => {
+    console.log('START CREATE VUE APP');
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 
     await runCommand('node', [
-        '../../../index.js',
+        path.join(process.cwd(), './index.js'),
         'new',
         'vue-app',
         '--layout=side-nav-outer-toolbar'
@@ -30,7 +31,7 @@ exports.createApp = async() => {
     });
 
     await runCommand('node', [
-        '../../../../index.js',
+        path.join(process.cwd(), './index.js'),
         'add',
         'view',
         'new-page'

@@ -17,11 +17,12 @@ exports.appPath = appPath;
 exports.npmArgs = ['start'];
 
 exports.createApp = async() => {
+    console.log('START CREATE REACT APP');
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 
     await runCommand('node', [
-        '../../../index.js',
+        path.join(process.cwd(), './index.js'),
         'new',
         'react-app',
         '--layout=side-nav-outer-toolbar'
@@ -32,7 +33,7 @@ exports.createApp = async() => {
     });
 
     await runCommand('node', [
-        '../../../../index.js',
+        path.join(process.cwd(), './index.js'),
         'add',
         'view',
         'new-page'
