@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxCheckBoxModule } from 'devextreme-angular/ui/check-box';
@@ -16,7 +16,7 @@ import { AuthService } from '../../services';
   selector: 'app-change-passsword-form',
   templateUrl: './change-password-form.component.html'
 })
-export class ChangePasswordFormComponent {
+export class ChangePasswordFormComponent implements OnInit {
   loading = false;
   formData: any = {};
   recoveryCode: string;
