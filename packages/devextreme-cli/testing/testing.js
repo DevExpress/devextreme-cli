@@ -5,30 +5,29 @@ const angularEnv = require('./env.angular');
 const minimist = require('minimist');
 const path = require('path');
 const fs = require('fs');
-const Emmiter = require('events');
 
 const args = minimist(process.argv.slice(), {
     default: {
-        template: 'all'
+        envirorment: 'all'
     },
     alias: {
-        t: 'template'
+        env: 'envirorment'
     }
 });
 
-const envs = {
-    'react': reactEnv,
-    'angular': angularEnv,
-    'vue': vueEnv
-};
+const envs = [
+    reactEnv,
+    angularEnv,
+    vueEnv
+];
 
-let killerEvent = new Emmiter();
-let done = Object.keys(envs).length;
-killerEvent.on('kill', function() {
+let done = 1;
+
+function decrementDone() {
     if(--done === 0) {
         process.exit(0);
     }
-});
+}
 
 async function runTest(env) {
     const options = {
@@ -54,33 +53,23 @@ async function runTest(env) {
         runInBand: true
     };
 
-    await jest
-        .runCLI(options, options.projects).then(
-            resolve => {},
-            reject => {}
-        );
+    await jest.runCLI(options, options.projects);
 }
 
 (async function testProccess() {
-    if(!(args.t in envs)) {
-        Object.keys(envs).forEach(async(env) => {
-            if(fs.existsSync(envs[env].appPath)) {
-                await runTest(envs[env]);
-                killerEvent.emit('kill');
-            } else {
-                console.log(`!!!!!!! ${envs[env].appPath} IS NOT EXIST!!!!!!!`);
-                killerEvent.emit('kill');
-            }
-        });
-    } else {
-        if(fs.existsSync(envs[args.t].appPath)) {
-            await runTest(envs[args.t]);
-            console.log(`END TESTING: ${envs[args.t].engine}`);
-            process.exit(0);
-        } else {
-            console.log(`!!!!!!! ${envs[args.t].appPath} IS NOT EXIST!!!!!!!`);
-        }
+    let filteredEnvs = envs.filter(e => {
+        return e.engine === args.env;
+    });
+    if(!filteredEnvs.length) {
+        filteredEnvs = envs;
+        done = envs.length;
     }
-})().then();
+    filteredEnvs.forEach(async env => {
+        if(fs.existsSync(env.appPath)) {
+            await runTest(env);
+            decrementDone();
+        }
+    });
+})().catch(reject => console.error('\x1b[31m%s\x1b[0m', reject));
 
 exports.runTest = runTest;

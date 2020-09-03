@@ -15,9 +15,9 @@ exports.engine = 'react';
 exports.port = 3000;
 exports.appPath = appPath;
 exports.npmArgs = ['start'];
+exports.fileExtention = '.js';
 
 exports.createApp = async() => {
-    console.log('START CREATE REACT APP');
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 

@@ -13,9 +13,9 @@ exports.engine = 'vue';
 exports.port = 8080;
 exports.appPath = path.join(sandboxPath, appName);
 exports.npmArgs = ['run', 'serve'];
+exports.fileExtention = '.js';
 
 exports.createApp = async() => {
-    console.log('START CREATE VUE APP');
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 

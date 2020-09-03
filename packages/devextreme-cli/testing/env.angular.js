@@ -29,9 +29,9 @@ exports.engine = 'angular';
 exports.port = 4200;
 exports.appPath = appPath;
 exports.npmArgs = ['start', '--', '--host', '0.0.0.0'];
+exports.fileExtention = '.ts';
 
 exports.createApp = async() => {
-    console.log('START CREATE ANGULAR APP');
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 

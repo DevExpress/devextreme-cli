@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "lint": "eslint ./",
-    "test": "node ./testing/testing.js",
+    "test": "npm run create-template && npm run lint-template && npm run test-template",
     "create-template": "node ./testing/creating.js",
     "lint-template": "node ./testing/linting.js",
     "test-template": "node ./testing/testing.js",
@@ -58,7 +58,6 @@
     "puppeteer": "^2.1.1",
     "rimraf": "^2.6.3",
     "tree-kill": "^1.2.1",
-    "tree-kill-promise": "^1.0.3",
     "typescript": "^4.0.2"
   }
 }

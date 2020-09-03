@@ -5,27 +5,23 @@ const minimist = require('minimist');
 
 const args = minimist(process.argv.slice(), {
     default: {
-        template: 'all'
+        env: 'all'
     },
     alias: {
-        t: 'template'
+        env: 'envirorment'
     }
 });
 
-const envs = {
-    'react': reactEnv,
-    'angular': angularEnv,
-    'vue': vueEnv
-};
+const envs = [reactEnv, angularEnv, vueEnv];
 
 (async function createApp() {
-    if(!(args.t in envs)) {
-        console.log(args.t);
-        Object.keys(envs).forEach(async env => {
-            await envs[env].createApp();
-        });
-    } else {
-        console.log(args.t);
-        envs[args.t].createApp();
+    let filteredEnvs = envs.filter(e => {
+        return e.engine === args.env;
+    });
+    if(!filteredEnvs.length) {
+        filteredEnvs = envs;
     }
-})();
+    filteredEnvs.forEach(async env => {
+        await env.createApp();
+    });
+})().catch(reject => console.error('\x1b[31m%s\x1b[0m', reject));

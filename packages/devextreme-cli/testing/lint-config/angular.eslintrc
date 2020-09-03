@@ -8,7 +8,7 @@
     "env": {
         "node": true
     },
-    "rules": {
+    "rules":{
         "angular/log": 0
     }
 }

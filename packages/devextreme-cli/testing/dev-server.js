@@ -2,8 +2,6 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const kill = require('tree-kill');
-// import kill from 'tree-kill-promise';
-// const kill = require('tree-kill-promise').kill;
 
 const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');

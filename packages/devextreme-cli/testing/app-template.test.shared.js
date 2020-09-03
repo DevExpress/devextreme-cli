@@ -8,7 +8,6 @@ const DevServer = require('./dev-server');
 const defaultLayout = 'side-nav-outer-toolbar';
 
 module.exports = (env) => {
-    console.log('snapshot TESTING: ' + env.engine);
     const appUrl = `http://${ip.address()}:${env.port}/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
 

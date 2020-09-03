@@ -7,18 +7,14 @@ const ESLint = require('eslint').ESLint;
 
 const args = minimist(process.argv.slice(), {
     default: {
-        template: 'all'
+        envirorment: 'all'
     },
     alias: {
-        t: 'template'
+        env: 'envirorment'
     }
 });
 
-const envs = {
-    'react': reactEnv,
-    'angular': angularEnv,
-    'vue': vueEnv
-};
+const envs = [reactEnv, angularEnv, vueEnv];
 
 async function lint(env) {
     console.log('START LINT: ' + env.engine);
@@ -28,7 +24,7 @@ async function lint(env) {
         ignore: false
     });
     let report = await eslint.lintFiles([
-        `./testing/sandbox/${env.engine}/my-app/src/**/*.${env.engine === 'angular' ? 'ts' : 'js'}`
+        `./testing/sandbox/${env.engine}/my-app/src/**/*${env.fileExtention}`
     ]);
     report.forEach(el=>{
         if(el.messages.length) {
@@ -41,21 +37,17 @@ async function lint(env) {
 
 
 (async function lintProcess() {
-    if(!(args.t in envs)) {
-        Object.keys(envs).forEach(async env => {
-            if(fs.existsSync(envs[env].appPath)) {
-                await lint(envs[env]);
-            } else {
-                console.log(`!!!!!!! ${envs[env].appPath} IS NOT EXIST!!!!!!!`);
-            }
-        });
-    } else {
-        if(fs.existsSync(envs[args.t].appPath)) {
-            await lint(envs[args.t]);
-        } else {
-            console.log(`!!!!!!! ${envs[args.t].appPath} IS NOT EXIST!!!!!!!`);
-        }
+    let filteredEnvs = envs.filter(e => {
+        return e.engine === args.env;
+    });
+    if(!filteredEnvs.length) {
+        filteredEnvs = envs;
     }
-})();
+    filteredEnvs.forEach(async env => {
+        if(fs.existsSync(env.appPath)) {
+            await lint(env);
+        }
+    });
+})().catch(reject => console.error('\x1b[31m%s\x1b[0m', reject));
 
 exports.lint = lint;
