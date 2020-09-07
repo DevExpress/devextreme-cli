@@ -1,7 +1,6 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-// const kill = require('tree-kill');
 const kill = require('tree-kill-promise').kill;
 
 const runCommand = require('../src/utility/run-command');
