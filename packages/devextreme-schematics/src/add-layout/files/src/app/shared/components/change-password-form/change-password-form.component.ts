@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, NgModule, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxCheckBoxModule } from 'devextreme-angular/ui/check-box';
 import { DxFormModule } from 'devextreme-angular/ui/form';
@@ -13,30 +13,39 @@ import { AuthService } from '../../services';
 
 
 @Component({
-  selector: 'app-login-form',
-  templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss']
+  selector: 'app-change-passsword-form',
+  templateUrl: './change-password-form.component.html'
 })
-export class LoginFormComponent {
+export class ChangePasswordFormComponent implements OnInit {
   loading = false;
   formData: any = {};
+  recoveryCode: string;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.recoveryCode = params.get('recoveryCode');
+    });
+  }
 
   async onSubmit(e) {
     e.preventDefault();
-    const { email, password } = this.formData;
+    const { password } = this.formData;
     this.loading = true;
 
-    const result = await this.authService.logIn(email, password);
-    if (!result.isOk) {
-      this.loading = false;
+    const result = await this.authService.changePassword(password, this.recoveryCode);
+    this.loading = false;
+
+    if (result.isOk) {
+      this.router.navigate(['/login-form']);
+    } else {
       notify(result.message, 'error', 2000);
     }
   }
 
-  onCreateAccountClick = () => {
-    this.router.navigate(['/create-account']);
+  confirmPassword = (e: { value: string }) => {
+    return e.value === this.formData.password;
   }
 }
 @NgModule({
@@ -51,7 +60,7 @@ export class LoginFormComponent {
     DxLoadIndicatorModule,
     DxValidationGroupModule
   ],
-  declarations: [ LoginFormComponent ],
-  exports: [ LoginFormComponent ]
+  declarations: [ ChangePasswordFormComponent ],
+  exports: [ ChangePasswordFormComponent ]
 })
-export class LoginFormModule { }
+export class ChangePasswordFormModule { }
