@@ -15,7 +15,7 @@ exports.engine = 'react';
 exports.port = 3000;
 exports.appPath = appPath;
 exports.npmArgs = ['start'];
-exports.fileExtention = '.js';
+exports.fileExtention = 'js';
 
 exports.createApp = async() => {
     await rimraf(sandboxPath);

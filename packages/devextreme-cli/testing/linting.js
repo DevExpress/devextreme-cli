@@ -1,10 +1,11 @@
-const reactEnv = require('./env.react');
-const vueEnv = require('./env.vue');
-const angularEnv = require('./env.angular');
 const minimist = require('minimist');
 const fs = require('fs');
 const ESLint = require('eslint').ESLint;
-
+const envs = [
+    require('./env.react'),
+    require('./env.vue'),
+    require('./env.angular')
+];
 const args = minimist(process.argv.slice(), {
     default: {
         envirorment: 'all'
@@ -14,17 +15,15 @@ const args = minimist(process.argv.slice(), {
     }
 });
 
-const envs = [reactEnv, angularEnv, vueEnv];
-
 async function lint(env) {
-    console.log('START LINT: ' + env.engine);
+    console.log(`START LINT: ${env.engine}`);
     let eslint = new ESLint({
         useEslintrc: false,
         overrideConfigFile: `./testing/lint-config/${env.engine}.eslintrc`,
         ignore: false
     });
     let report = await eslint.lintFiles([
-        `./testing/sandbox/${env.engine}/my-app/src/**/*${env.fileExtention}`
+        `./testing/sandbox/${env.engine}/my-app/src/**/*.${env.fileExtention}`
     ]);
     report.forEach(el=>{
         if(el.messages.length) {
@@ -35,11 +34,8 @@ async function lint(env) {
     console.log(`END LINT: ${env.engine}`);
 };
 
-
 (async function lintProcess() {
-    let filteredEnvs = envs.filter(e => {
-        return e.engine === args.env;
-    });
+    let filteredEnvs = envs.filter(e => e.engine === args.env);
     if(!filteredEnvs.length) {
         filteredEnvs = envs;
     }

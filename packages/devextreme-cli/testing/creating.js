@@ -1,7 +1,9 @@
-const reactEnv = require('./env.react');
-const vueEnv = require('./env.vue');
-const angularEnv = require('./env.angular');
 const minimist = require('minimist');
+const envs = [
+    require('./env.react'),
+    require('./env.vue'),
+    require('./env.angular')
+];
 
 const args = minimist(process.argv.slice(), {
     default: {
@@ -12,12 +14,8 @@ const args = minimist(process.argv.slice(), {
     }
 });
 
-const envs = [reactEnv, angularEnv, vueEnv];
-
 (async function createApp() {
-    let filteredEnvs = envs.filter(e => {
-        return e.engine === args.env;
-    });
+    let filteredEnvs = envs.filter(e => e.engine === args.env);
     if(!filteredEnvs.length) {
         filteredEnvs = envs;
     }

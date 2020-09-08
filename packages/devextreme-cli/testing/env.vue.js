@@ -13,7 +13,7 @@ exports.engine = 'vue';
 exports.port = 8080;
 exports.appPath = path.join(sandboxPath, appName);
 exports.npmArgs = ['run', 'serve'];
-exports.fileExtention = '.js';
+exports.fileExtention = 'js';
 
 exports.createApp = async() => {
     await rimraf(sandboxPath);
