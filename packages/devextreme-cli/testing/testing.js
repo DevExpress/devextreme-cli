@@ -1,6 +1,5 @@
 const jest = require('jest');
 const path = require('path');
-const fs = require('fs');
 const minimist = require('minimist');
 const envs = [
     require('./env.react'),
@@ -17,7 +16,7 @@ const args = minimist(process.argv.slice(), {
     }
 });
 
-async function runTest(env) {
+async function runTest(envirorments) {
     const options = {
         testPathIgnorePatterns: [
             './testing/sandbox/'
@@ -25,9 +24,7 @@ async function runTest(env) {
         projects: [
             './testing/__tests__'
         ],
-        testPathPattern: [
-            `./testing/__tests__/${env.engine}.test.js`
-        ],
+        testPathPattern: envirorments.map(env => `./testing/__tests__/${env.engine}.test.js`),
         setupFiles: [
             path.join(process.cwd(), 'jest.config.js')
         ],
@@ -47,15 +44,9 @@ async function runTest(env) {
     if(!filteredEnvs.length) {
         filteredEnvs = envs;
     }
-    filteredEnvs.reduce(async(promise, env, index) => {
-        if(fs.existsSync(env.appPath)) {
-            await promise;
-            await runTest(env);
-            if(index === filteredEnvs.length - 1) {
-                process.exit(0);
-            }
-        }
-    }, Promise.resolve());
+    runTest(filteredEnvs).then(()=>{
+        process.exit(0);
+    });
 })().catch(reject => console.error('\x1b[31m%s\x1b[0m', reject));
 
 exports.runTest = runTest;
