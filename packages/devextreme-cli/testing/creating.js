@@ -1,4 +1,5 @@
 const minimist = require('minimist');
+
 const envs = [
     require('./env.react'),
     require('./env.vue'),

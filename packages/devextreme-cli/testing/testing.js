@@ -1,12 +1,12 @@
 const jest = require('jest');
 const path = require('path');
 const fs = require('fs');
+const minimist = require('minimist');
 const envs = [
     require('./env.react'),
     require('./env.vue'),
     require('./env.angular')
 ];
-const minimist = require('minimist');
 
 const args = minimist(process.argv.slice(), {
     default: {
@@ -16,13 +16,6 @@ const args = minimist(process.argv.slice(), {
         env: 'envirorment'
     }
 });
-
-let done = 1;
-function decrementDone() {
-    if(--done === 0) {
-        process.exit(0);
-    }
-}
 
 async function runTest(env) {
     const options = {
@@ -47,23 +40,23 @@ async function runTest(env) {
         detectOpenHandles: true,
         runInBand: true
     };
-
-    jest.runCLI(options, options.projects).then(() => {
-        decrementDone();
-    });
+    return jest.runCLI(options, options.projects);
 }
 
 (async function testProccess() {
     let filteredEnvs = envs.filter(e => e.engine === args.env);
     if(!filteredEnvs.length) {
         filteredEnvs = envs;
-        done = envs.length;
     }
-    filteredEnvs.forEach(async env => {
+    filteredEnvs.reduce(async(promise, env, index) => {
         if(fs.existsSync(env.appPath)) {
+            await promise;
             await runTest(env);
+            if(index === filteredEnvs.length - 1) {
+                process.exit(0);
+            }
         }
-    });
+    }, Promise.resolve());
 })().catch(reject => console.error('\x1b[31m%s\x1b[0m', reject));
 
 exports.runTest = runTest;

@@ -1,11 +1,13 @@
 const minimist = require('minimist');
 const fs = require('fs');
 const ESLint = require('eslint').ESLint;
+
 const envs = [
     require('./env.react'),
     require('./env.vue'),
     require('./env.angular')
 ];
+
 const args = minimist(process.argv.slice(), {
     default: {
         envirorment: 'all'
