@@ -37,7 +37,6 @@ async function runTest(env) {
         silent: false,
         forceExit: true,
         showConfig: false,
-        detectOpenHandles: true,
         runInBand: true
     };
     return jest.runCLI(options, options.projects);
