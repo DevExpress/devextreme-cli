@@ -20,26 +20,31 @@ const args = minimist(process.argv.slice(), {
 
 async function lint(env) {
     console.log(`START LINT: ${env.engine}`);
-    let eslint = new ESLint({
+    const eslint = new ESLint({
         useEslintrc: false,
         overrideConfigFile: `./testing/lint-config/${env.engine}.eslintrc`,
         ignore: false
     });
-    let report = await eslint.lintFiles([
+    const report = await eslint.lintFiles([
         `./testing/sandbox/${env.engine}/my-app/src/**/*.${env.fileExtention}`
     ]);
-    report.forEach(el=>{
+    let fail = false;
+    report.forEach(el => {
         if(el.messages.length) {
-            console.log(`ERROR IN: ${el.filePath}`);
             console.log(el.messages);
+            console.log(`ERROR IN: ${el.filePath}`);
+            fail = true;
         }
     });
+    if(fail) {
+        process.exit(1);
+    }
     console.log(`END LINT: ${env.engine}`);
 };
 
 (async function lintProcess() {
     let filteredEnvs = envs.filter(e => e.engine === args.env);
-    if(!filteredEnvs.length) {
+    if(filteredEnvs.length !== 1 && filteredEnvs.length !== envs.length) {
         filteredEnvs = envs;
     }
     filteredEnvs.forEach(async env => {

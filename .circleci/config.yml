@@ -20,8 +20,16 @@ jobs:
           name: Install npm packages
           command: npm i
       - run:
+          name: Create applications
+          command: npm run create-template
+          no_output_timeout: 15m
+      - run:
+          name: Lint applications
+          command: npm run lint-template
+          no_output_timeout: 15m
+      - run:
           name: Run test
-          command: npm run test
+          command: npm run test-template
           no_output_timeout: 15m
       - store_artifacts:
           path: test-results.xml

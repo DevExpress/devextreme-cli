@@ -42,7 +42,7 @@ async function runTest(envirorments) {
 
 (async function testProccess() {
     let filteredEnvs = envs.filter(e => e.engine === args.env);
-    if(!filteredEnvs.length) {
+    if(filteredEnvs.length !== 1 && filteredEnvs.length !== envs.length) {
         filteredEnvs = envs;
     }
     runTest(filteredEnvs).then(()=>{
