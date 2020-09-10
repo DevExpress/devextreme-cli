@@ -6,17 +6,19 @@ const envs = [
     require('./env.angular')
 ];
 
-const args = minimist(process.argv.slice(), {
+const args = minimist(process.argv.slice(2), {
     default: {
-        env: 'all'
+        envirorment: 'all'
     },
+    string: ['envirorment'],
     alias: {
-        env: 'envirorment'
+        e: 'envirorment'
     }
 });
 
 (async function createApp() {
-    let filteredEnvs = envs.filter(e => e.engine === args.env);
+    console.log(args);
+    let filteredEnvs = envs.filter(e => e.engine === args.e);
     if(!filteredEnvs.length) {
         filteredEnvs = envs;
     }

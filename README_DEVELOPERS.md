@@ -35,9 +35,9 @@ npm run create-template
 ## Generate Applications for an Individual Framework
 
 ```sh
-npm run create-template -- -- --env angular
-npm run create-template -- -- --env vue
-npm run create-template -- -- --env react
+npm run create-template -- -- -e angular
+npm run create-template -- -- -e vue
+npm run create-template -- -- -e react
 ```
 
 ## Lint Applications
@@ -49,9 +49,9 @@ npm run lint-template
 ## Lint Applications for an Individual Framework
 
 ```sh
-npm run lint-template -- -- --env angular
-npm run lint-template -- -- --env vue
-npm run lint-template -- -- --env react
+npm run lint-template -- -- -e angular
+npm run lint-template -- -- -e vue
+npm run lint-template -- -- -e react
 ```
 
 ## Test Applications
@@ -63,9 +63,9 @@ npm run test-template
 ## Test Applications for an Individual Framework
 
 ```sh
-npm run test-template -- -- --env angular
-npm run test-template -- -- --env vue
-npm run test-template -- -- --env react
+npm run test-template -- -- -e angular
+npm run test-template -- -- -e vue
+npm run test-template -- -- -e react
 ```
 
 ## Run Tests for Existing Test Applications

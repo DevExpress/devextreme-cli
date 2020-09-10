@@ -12,8 +12,9 @@ const args = minimist(process.argv.slice(), {
     default: {
         envirorment: 'all'
     },
+    string: ['envirorment'],
     alias: {
-        env: 'envirorment'
+        e: 'envirorment'
     }
 });
 

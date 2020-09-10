@@ -11,8 +11,9 @@ const args = minimist(process.argv.slice(), {
     default: {
         envirorment: 'all'
     },
+    string: ['envirorment'],
     alias: {
-        env: 'envirorment'
+        e: 'envirorment'
     }
 });
 
@@ -36,9 +37,7 @@ async function runTest(envirorments) {
         showConfig: false,
         runInBand: true
     };
-    await jest.runCLI(options, options.projects).then(()=>{
-        process.exit(0);
-    });
+    return jest.runCLI(options, options.projects);
 }
 
 (async function testProccess() {
@@ -46,7 +45,9 @@ async function runTest(envirorments) {
     if(!filteredEnvs.length) {
         filteredEnvs = envs;
     }
-    runTest(filteredEnvs);
+    runTest(filteredEnvs).then(()=>{
+        process.exit(0);
+    });
 })().catch(reject => console.error('\x1b[31m%s\x1b[0m', reject));
 
 exports.runTest = runTest;

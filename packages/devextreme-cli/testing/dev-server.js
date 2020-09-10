@@ -28,7 +28,11 @@ module.exports = class DevServer {
     }
 
     async stop() {
+        this.devServerProcess.stdin.end();
+        this.devServerProcess.stdout.end();
+        this.devServerProcess.stderr.end();
         kill(this.devServerProcess.pid, 'SIGKILL');
+        this.devServerProcess.kill('SIGKILL');
 
         return new Promise((resolve, reject) => {
             this.devServerProcess.on('exit', () => resolve());
