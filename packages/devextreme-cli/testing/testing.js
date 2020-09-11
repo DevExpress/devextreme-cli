@@ -34,9 +34,11 @@ async function runTest(envirorments) {
         ],
         forceExit: true,
         showConfig: false,
-        runInBand: false
+        runInBand: true
     };
-    return jest.runCLI(options, options.projects);
+    jest.runCLI(options, options.projects).then(()=>{
+        process.exit(0);
+    });
 }
 
 (async function testProccess() {
@@ -44,9 +46,7 @@ async function runTest(envirorments) {
     if(filteredEnvs.length !== 1 && filteredEnvs.length !== envs.length) {
         filteredEnvs = envs;
     }
-    runTest(filteredEnvs).then(()=>{
-        process.exit(0);
-    });
+    runTest(filteredEnvs);
 })().catch(reject => console.error('\x1b[31m%s\x1b[0m', reject));
 
 exports.runTest = runTest;
