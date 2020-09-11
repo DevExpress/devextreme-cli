@@ -23,14 +23,15 @@ jobs:
           name: Create applications
           command: npm run create-template
           no_output_timeout: 15m
-      - run:
-          name: Lint applications
-          command: npm run lint-template
-          no_output_timeout: 15m
-      - run:
-          name: Run test
-          command: npm run test-template
-          no_output_timeout: 15m
+      - test-steps:
+        - run:
+            name: Lint applications
+            command: npm run lint-template
+            no_output_timeout: 15m
+        - run:
+            name: Run test
+            command: npm run test-template
+            no_output_timeout: 15m
       - store_artifacts:
           path: test-results.xml
           prefix: tests
