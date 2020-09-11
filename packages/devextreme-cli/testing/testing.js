@@ -32,10 +32,9 @@ async function runTest(envirorments) {
         setupFilesAfterEnv: [
             path.join(process.cwd(), 'testing/jest-setup.js')
         ],
-        silent: false,
         forceExit: true,
         showConfig: false,
-        runInBand: true
+        runInBand: false
     };
     return jest.runCLI(options, options.projects);
 }
