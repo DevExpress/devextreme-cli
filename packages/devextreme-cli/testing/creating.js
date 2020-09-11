@@ -18,7 +18,7 @@ const args = minimist(process.argv.slice(2), {
 
 (async function createApp() {
     let filteredEnvs = envs.filter(e => e.engine === args.e);
-    if(filteredEnvs.length !== 1 && filteredEnvs.length !== envs.length) {
+    if(!filteredEnvs.length && args.e === 'all') {
         filteredEnvs = envs;
     }
     filteredEnvs.forEach(async env => {

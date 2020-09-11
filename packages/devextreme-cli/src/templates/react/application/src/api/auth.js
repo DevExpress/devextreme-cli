@@ -65,7 +65,7 @@ export async function changePassword(email, recoveryCode) {
       isOk: false,
       message: "Failed to change password"
     }
-  };
+  }
 }
 
 export async function resetPassword(email) {

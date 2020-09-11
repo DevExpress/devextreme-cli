@@ -43,8 +43,8 @@ async function lint(env) {
 };
 
 (async function lintProcess() {
-    let filteredEnvs = envs.filter(e => e.engine === args.env);
-    if(filteredEnvs.length !== 1 && filteredEnvs.length !== envs.length) {
+    let filteredEnvs = envs.filter(e => e.engine === args.e);
+    if(!filteredEnvs.length && args.e === 'all') {
         filteredEnvs = envs;
     }
     filteredEnvs.forEach(async env => {
