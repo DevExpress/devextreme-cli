@@ -168,7 +168,7 @@ module.exports = (env) => {
                                         return;
                                     }
 
-                                    const name = env.engine === 'vue' ? 'login-old' : 'login';
+                                    const name = 'login';
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     const image = await page.screenshot();
@@ -178,7 +178,7 @@ module.exports = (env) => {
 
                                 it('Create account page', async() => {
                                     // NOTE: Test only once
-                                    if(!isDefaultLayout || env.engine === 'vue') {
+                                    if(!isDefaultLayout) {
                                         return;
                                     }
 
@@ -194,7 +194,7 @@ module.exports = (env) => {
 
                                 it('Reset password page', async() => {
                                     // NOTE: Test only once
-                                    if(!isDefaultLayout || env.engine === 'vue') {
+                                    if(!isDefaultLayout) {
                                         return;
                                     }
 
@@ -210,7 +210,7 @@ module.exports = (env) => {
 
                                 it('Change password page', async() => {
                                     // NOTE: Test only once
-                                    if(!isDefaultLayout || env.engine === 'vue') {
+                                    if(!isDefaultLayout) {
                                         return;
                                     }
 
