@@ -43,15 +43,14 @@ async function lint(env) {
 };
 
 (async function lintProcess() {
-    let filteredEnvs = envs.filter(e => e.engine === args.e);
-    if(!filteredEnvs.length && args.e === 'all') {
-        filteredEnvs = envs;
-    }
+    const filteredEnvs = args.e === 'all'
+        ? envs
+        : envs.filter(e => e.engine === args.e);
     filteredEnvs.forEach(async env => {
         if(fs.existsSync(env.appPath)) {
             await lint(env);
         }
     });
-})().catch(reject => console.error('\x1b[31m%s\x1b[0m', reject));
+})().catch(reject => console.error(`\x1b[31m${reject}\x1b[0m`));
 
 exports.lint = lint;

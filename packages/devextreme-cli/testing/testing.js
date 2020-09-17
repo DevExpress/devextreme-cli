@@ -42,11 +42,10 @@ async function runTest(envirorments) {
 }
 
 (async function testProccess() {
-    let filteredEnvs = envs.filter(e => e.engine === args.e);
-    if(!filteredEnvs.length && args.e === 'all') {
-        filteredEnvs = envs;
-    }
+    const filteredEnvs = args.e === 'all'
+        ? envs
+        : envs.filter(e => e.engine === args.e);
     runTest(filteredEnvs);
-})().catch(reject => console.error('\x1b[31m%s\x1b[0m', reject));
+})().catch(reject => console.error(`\x1b[31m${reject}\x1b[0m`));
 
 exports.runTest = runTest;
