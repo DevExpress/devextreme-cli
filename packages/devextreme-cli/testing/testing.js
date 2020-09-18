@@ -36,16 +36,17 @@ async function runTest(envirorments) {
         showConfig: false,
         runInBand: true
     };
-    jest.runCLI(options, options.projects).then(()=>{
-        process.exit(0);
-    });
+    jest
+        .runCLI(options, options.projects)
+        .then(() => process.exit(0))
+        .catch(() => process.exit(1));
 }
 
 (async function testProccess() {
-    const filteredEnvs = args.e === 'all'
-        ? envs
-        : envs.filter(e => e.engine === args.e);
+    let filteredEnvs = args.e === 'all' ?
+        envs :
+        envs.filter(e => e.engine === args.e);
     runTest(filteredEnvs);
-})().catch(reject => console.error(`\x1b[31m${reject}\x1b[0m`));
+})().catch(reject => console.error(reject));
 
 exports.runTest = runTest;

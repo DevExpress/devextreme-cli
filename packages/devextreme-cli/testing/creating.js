@@ -23,4 +23,4 @@ const args = minimist(process.argv.slice(2), {
     filteredEnvs.forEach(async env => {
         await env.createApp();
     });
-})().catch(reject => console.error(`\x1b[31m${reject}\x1b[0m`));
+})().catch(reject => console.error(reject));
