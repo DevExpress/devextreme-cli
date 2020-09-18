@@ -43,9 +43,9 @@ async function runTest(envirorments) {
 }
 
 (async function testProccess() {
-    let filteredEnvs = args.e === 'all' ?
-        envs :
-        envs.filter(e => e.engine === args.e);
+    const filteredEnvs = args.e === 'all'
+        ? envs
+        : envs.filter(e => e.engine === args.e);
     runTest(filteredEnvs);
 })().catch(reject => console.error(reject));
 
