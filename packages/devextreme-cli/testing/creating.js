@@ -21,6 +21,10 @@ const args = minimist(process.argv.slice(2), {
         ? envs
         : envs.filter(e => e.engine === args.e);
     filteredEnvs.forEach(async env => {
-        await env.createApp();
+        try {
+            await env.createApp();
+        } catch(e) {
+            process.exit(1);
+        }
     });
 })().catch(reject => console.error(reject));

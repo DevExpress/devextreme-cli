@@ -38,8 +38,14 @@ async function runTest(envirorments) {
     };
     jest
         .runCLI(options, options.projects)
-        .then(() => process.exit(0))
-        .catch(() => process.exit(1));
+        .then(success => {
+            success.results.numFailedTestSuites || success.results.numFailedTests
+                ? process.exit(1)
+                : process.exit(0);
+        })
+        .catch(() => {
+            process.exit(1);
+        });
 }
 
 (async function testProccess() {
