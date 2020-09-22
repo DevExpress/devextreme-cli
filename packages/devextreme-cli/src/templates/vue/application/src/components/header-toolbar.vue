@@ -6,14 +6,13 @@
         location="before"
         css-class="menu-button"
       >
-        <!-- eslint-disable vue/no-unused-vars -->
-        <dx-button
-          icon="menu"
-          styling-mode="text"
-          @click="toggleMenuFunc"
-          slot-scope="_"
-        />
-        <!-- eslint-enable -->
+        <template #default>
+          <dx-button
+            icon="menu"
+            styling-mode="text"
+            @click="toggleMenuFunc"
+          />
+        </template>
       </dx-item>
 
       <dx-item
@@ -21,9 +20,9 @@
         location="before"
         css-class="header-title dx-toolbar-label"
       >
-        <!-- eslint-disable vue/no-unused-vars -->
-        <div slot-scope="_">{{ title }}</div>
-        <!-- eslint-enable -->
+        <template>
+          <div>{{ title }}</div>
+        </template>
       </dx-item>
 
       <dx-item
@@ -31,27 +30,26 @@
         locate-in-menu="auto"
         menu-item-template="menuUserItem"
       >
-        <!-- eslint-disable vue/no-unused-vars -->
-        <div slot-scope="_">
-        <!-- eslint-enable -->
-          <dx-button
-            class="user-button authorization"
-            :width="210"
-            height="100%"
-            styling-mode="text"
-          >
-            <user-panel :menu-items="userMenuItems" menu-mode="context" />
-          </dx-button>
-        </div>
+        <template #default>
+          <div>
+            <dx-button
+              class="user-button authorization"
+              :width="210"
+              height="100%"
+              styling-mode="text"
+            >
+              <user-panel :user="user" :menu-items="userMenuItems" menu-mode="context" />
+            </dx-button>
+          </div>
+        </template>
       </dx-item>
-      <!-- eslint-disable vue/no-unused-vars -->
-      <user-panel
-        :menu-items="userMenuItems"
-        menu-mode="list"
-        slot-scope="_"
-        slot="menuUserItem"
-      />
-      <!-- eslint-enable -->
+      <template #menuUserItem>
+        <user-panel
+          :user="user"
+          :menu-items="userMenuItems"
+          menu-mode="list"
+        />
+      </template>
     </dx-toolbar>
   </header>
 </template>
@@ -70,8 +68,12 @@ export default {
     toggleMenuFunc: Function,
     logOutFunc: Function
   },
+  created() {
+    auth.getUser().then((e) => this.user = e.data);
+  },
   data() {
     return {
+      user: { },
       userMenuItems: [
         {
           text: "Profile",
