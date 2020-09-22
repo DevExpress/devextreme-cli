@@ -9,10 +9,6 @@ export default {
   loggedIn() {
     return !!this._user;
   },
-  _lastAuthenticatedPath: defaultPath,
-  lastAuthenticatedPath(value) {
-    this._lastAuthenticatedPath = value;
-  },
 
   async logIn(email, password) {
     try {
