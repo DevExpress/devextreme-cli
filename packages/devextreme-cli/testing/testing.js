@@ -46,7 +46,7 @@ async function runTest(envirorments) {
     const filteredEnvs = args.e === 'all'
         ? envs
         : envs.filter(e => e.engine === args.e);
-    runTest(filteredEnvs);
+    filteredEnvs.length && runTest(filteredEnvs);
 })().catch(reject => console.error(reject));
 
 exports.runTest = runTest;
