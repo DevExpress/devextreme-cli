@@ -6,7 +6,7 @@
     },
     "parser": "babel-eslint",
     "extends": [
-      "eslint:recommended", 
+      "eslint:recommended",
       "plugin:react/recommended"
     ],
     "parserOptions": {
@@ -25,11 +25,11 @@
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": [
         "error",
-        { 
-          "vars": "all", 
-          "varsIgnorePattern": "^props", 
-          "args": "after-used", 
-          "argsIgnorePattern": "^props" 
+        {
+          "vars": "all",
+          "varsIgnorePattern": "^props",
+          "args": "after-used",
+          "argsIgnorePattern": "^props"
         }
       ],
       "react/display-name": "off",
@@ -40,5 +40,4 @@
         "version": "latest"
       }
     }
-  }
-  
+}
