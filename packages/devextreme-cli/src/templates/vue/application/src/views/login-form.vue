@@ -1,91 +1,113 @@
 <template>
-  <dx-validation-group>
-    <div class="login-header">
-      <div class="title">{{ title }}</div>
-      <div>Sign In to your account</div>
-    </div>
-
-    <div class="dx-field">
-      <dx-text-box placeholder="Login" width="100%" :value.sync="login">
-        <dx-validator>
-          <dx-required-rule message="Login is required" />
-        </dx-validator>
-      </dx-text-box>
-    </div>
-
-    <div class="dx-field">
-      <dx-text-box
-        placeholder="Password"
-        width="100%"
-        mode="password"
-        :value.sync="password"
+  <form class="login-form" @submit="onSubmit">
+    <dx-form :form-data="formData" :disabled="loading">
+      <dx-item
+        data-field="email"
+        editor-type="dxTextBox"
+        :editor-options="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }"
       >
-        <dx-validator>
-          <dx-required-rule message="Password is required" />
-        </dx-validator>
-      </dx-text-box>
-    </div>
-
-    <div class="dx-field">
-      <dx-check-box :value.sync="rememberUser" text="Remember me" />
-    </div>
-
-    <div class="dx-field">
-      <dx-button
-        type="default"
-        text="Login"
-        width="100%"
-        @click="onLoginClick"
-      />
-    </div>
-
-    <div class="dx-field">
-      <router-link to="/recovery"><a>Forgot password ?</a></router-link>
-    </div>
-
-    <div class="dx-field">
-      <dx-button type="normal" text="Create an account" width="100%" />
-    </div>
-  </dx-validation-group>
+        <dx-required-rule message="Email is required" />
+        <dx-email-rule message="Email is invalid" />
+        <dx-label :visible="false" />
+      </dx-item>
+      <dx-item
+        data-field='password'
+        editor-type='dxTextBox'
+        :editor-options="{ stylingMode: 'filled', placeholder: 'Password', mode: 'password' }"
+      >
+        <dx-required-rule message="Password is required" />
+        <dx-label :visible="false" />
+      </dx-item>
+      <dx-item
+        data-field="rememberMe"
+        editor-type="dxCheckBox"
+        :editor-options="{ text: 'Remember me', elementAttr: { class: 'form-text' } }"
+      >
+        <dx-label :visible="false" />
+      </dx-item>
+      <dx-button-item>
+        <dx-button-options
+          width="100%"
+          type="default"
+          template="signInTemplate"
+          :use-submit-behavior="true"
+        >
+        </dx-button-options>
+      </dx-button-item>
+      <dx-item>
+        <template #default>
+          <div class="link">
+            <router-link to="/reset-password">Forgot password?</router-link>
+          </div>
+        </template>
+      </dx-item>
+      <dx-button-item>
+        <dx-button-options
+          text="Create an account"
+          width="100%"
+          :on-click="onCreateAccountClick"
+        />
+      </dx-button-item>
+      <template #signInTemplate>
+        <div>
+          <span class="dx-button-text">
+            <dx-load-indicator v-if="loading" width="24px" height="24px" :visible="true" />
+            <span v-if="!loading">Sign In</span>
+          </span>
+        </div>
+      </template>
+    </dx-form>
+  </form>
 </template>
 
 <script>
-import DxButton from "devextreme-vue/button";
-import DxCheckBox from "devextreme-vue/check-box";
-import DxTextBox from "devextreme-vue/text-box";
-import DxValidationGroup from "devextreme-vue/validation-group";
-import DxValidator, { DxRequiredRule } from "devextreme-vue/validator";
+import DxLoadIndicator from "devextreme-vue/load-indicator";
+import DxForm, {
+  DxItem,
+  DxEmailRule,
+  DxRequiredRule,
+  DxLabel,
+  DxButtonItem,
+  DxButtonOptions
+} from "devextreme-vue/form";
+import notify from 'devextreme/ui/notify';
 
 import auth from "../auth";
 
 export default {
   data() {
     return {
-      title: this.$appInfo.title,
-      login: "",
-      password: "",
-      rememberUser: false
+      formData: {},
+      loading: false
     };
   },
   methods: {
-    onLoginClick(e) {
-      if (!e.validationGroup.validate().isValid) {
-        return;
+    onCreateAccountClick() {
+      this.$router.push("/create-account");
+    },
+    onSubmit: async function(e) {
+      e.preventDefault();
+      const { email, password } = this.formData;
+      this.loading = true;
+
+      const result = await auth.logIn(email, password);
+      if (!result.isOk) {
+        this.loading = false;
+        notify(result.message, "error", 2000);
+      } else {
+        this.$router.push(this.$route.query.redirect || "/home");
       }
-
-      auth.logIn();
-      this.$router.push(this.$route.query.redirect || "/home");
-
-      e.validationGroup.reset();
     }
   },
   components: {
-    DxButton,
-    DxCheckBox,
-    DxTextBox,
-    DxValidator,
+    DxLoadIndicator,
+    DxForm,
+    DxEmailRule,
     DxRequiredRule,
-    DxValidationGroup
+    DxItem,
+    DxLabel,
+    DxButtonItem,
+    DxButtonOptions
   }
 };
 </script>
@@ -93,15 +115,20 @@ export default {
 <style lang="scss">
 @import "../themes/generated/variables.base.scss";
 
-.login-header {
-  text-align: center;
-  margin-bottom: 40px;
+.login-form {
+  .link {
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
 
-  .title {
-    color: $base-accent;
-    font-weight: bold;
-    font-size: 30px;
-    margin: 0;
+    a {
+      text-decoration: none;
+    }
+  }
+
+  .form-text {
+    margin: 10px 0;
+    color: rgba($base-text-color, alpha($base-text-color) * 0.7);
   }
 }
 </style>

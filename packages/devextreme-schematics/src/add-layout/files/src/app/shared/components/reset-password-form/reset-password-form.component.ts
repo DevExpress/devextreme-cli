@@ -11,13 +11,14 @@ import { DxValidatorModule } from 'devextreme-angular/ui/validator';
 import notify from 'devextreme/ui/notify';
 import { AuthService } from '../../services';
 
+const notificationText = 'We\'ve sent a link to reset your password. Check your inbox.';
 
 @Component({
-  selector: 'app-login-form',
-  templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss']
+  selector: 'app-reset-password-form',
+  templateUrl: './reset-password-form.component.html',
+  styleUrls: ['./reset-password-form.component.scss']
 })
-export class LoginFormComponent {
+export class ResetPasswordFormComponent {
   loading = false;
   formData: any = {};
 
@@ -25,18 +26,18 @@ export class LoginFormComponent {
 
   async onSubmit(e) {
     e.preventDefault();
-    const { email, password } = this.formData;
+    const { email } = this.formData;
     this.loading = true;
 
-    const result = await this.authService.logIn(email, password);
-    if (!result.isOk) {
-      this.loading = false;
+    const result = await this.authService.resetPassword(email);
+    this.loading = false;
+
+    if (result.isOk) {
+      this.router.navigate(['/login-form']);
+      notify(notificationText, 'success', 2500);
+    } else {
       notify(result.message, 'error', 2000);
     }
-  }
-
-  onCreateAccountClick = () => {
-    this.router.navigate(['/create-account']);
   }
 }
 @NgModule({
@@ -51,7 +52,7 @@ export class LoginFormComponent {
     DxLoadIndicatorModule,
     DxValidationGroupModule
   ],
-  declarations: [ LoginFormComponent ],
-  exports: [ LoginFormComponent ]
+  declarations: [ResetPasswordFormComponent],
+  exports: [ResetPasswordFormComponent]
 })
-export class LoginFormModule { }
+export class ResetPasswordFormModule { }

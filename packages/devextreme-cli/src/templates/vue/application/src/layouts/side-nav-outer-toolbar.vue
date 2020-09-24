@@ -21,14 +21,12 @@
         <slot />
         <slot name="footer" />
       </dx-scroll-view>
-      <!-- eslint-disable vue/no-unused-vars -->
-      <side-nav-menu
-        slot="menu"
-        slot-scope="_"
-        :compact-mode="!menuOpened"
-        @click="handleSideBarClick"
-      />
-      <!-- eslint-enable -->
+      <template #menu>
+        <side-nav-menu
+          :compact-mode="!menuOpened"
+          @click="handleSideBarClick"
+        />
+      </template>
     </dx-drawer>
   </div>
 </template>

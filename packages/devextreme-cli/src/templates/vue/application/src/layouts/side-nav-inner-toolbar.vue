@@ -21,34 +21,31 @@
           <slot name="footer" />
         </dx-scroll-view>
       </div>
-      <!-- eslint-disable vue/no-unused-vars -->
-      <side-nav-menu
-        slot="menu"
-        slot-scope="_"
-        :compact-mode="!menuOpened"
-        @click="handleSideBarClick"
-      >
-      <!-- eslint-enable-->
-        <dx-toolbar id="navigation-header">
-          <dx-item v-if="!isXSmall" location="before" css-class="menu-button">
-            <!-- eslint-disable vue/no-unused-vars -->
-            <dx-button
-              icon="menu"
-              styling-mode="text"
-              @click="toggleMenu"
-              slot-scope="_"
-            />
-            <!-- eslint-enable -->
-          </dx-item>
-          <dx-item location="before" css-class="header-title dx-toolbar-label">
-            <!-- eslint-disable vue/no-unused-vars -->
-            <div slot-scope="_">
-              <div>{{ title }}</div>
-            </div>
-            <!-- eslint-enable -->
-          </dx-item>
-        </dx-toolbar>
-      </side-nav-menu>
+      <template #menu>
+        <side-nav-menu
+          :compact-mode="!menuOpened"
+          @click="handleSideBarClick"
+        >
+          <dx-toolbar id="navigation-header">
+            <dx-item v-if="!isXSmall" location="before" css-class="menu-button">
+              <template #default>
+                <dx-button
+                  icon="menu"
+                  styling-mode="text"
+                  @click="toggleMenu"
+                />
+              </template>
+            </dx-item>
+            <dx-item location="before" css-class="header-title dx-toolbar-label">
+              <template #default>
+                <div>
+                  <div>{{ title }}</div>
+                </div>
+              </template>
+            </dx-item>
+          </dx-toolbar>
+        </side-nav-menu>
+      </template>
     </dx-drawer>
   </div>
 </template>

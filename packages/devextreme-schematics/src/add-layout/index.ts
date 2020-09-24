@@ -193,7 +193,8 @@ function updateAppModule(host: Tree, sourcePath: string) {
     modifyFileRule(appModulePath, importSetter('LoginFormModule', './shared/components')),
     modifyFileRule(appModulePath, providerSetter('AuthService', './shared/services')),
     modifyFileRule(appModulePath, providerSetter('ScreenService', './shared/services')),
-    modifyFileRule(appModulePath, providerSetter('AppInfoService', './shared/services'))
+    modifyFileRule(appModulePath, providerSetter('AppInfoService', './shared/services')),
+    modifyFileRule(appModulePath, importSetter('NotAuthorizedContainerModule', './not-authorized-container')),
   ];
 
   if (!hasRoutingModule(host, sourcePath)) {
