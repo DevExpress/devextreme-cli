@@ -1,4 +1,4 @@
-import { Component, NgModule, Input, Output, EventEmitter } from '@angular/core';
+import { Component, NgModule, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services';
@@ -12,7 +12,7 @@ import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
   styleUrls: ['./header.component.scss']
 })
 
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   @Output()
   menuToggle = new EventEmitter<boolean>();
 
@@ -21,6 +21,8 @@ export class HeaderComponent {
 
   @Input()
   title: string;
+
+  user = { email: '' };
 
   userMenuItems = [{
     text: 'Profile',
@@ -34,6 +36,10 @@ export class HeaderComponent {
   }];
 
   constructor(private authService: AuthService) { }
+
+  ngOnInit() {
+    this.authService.getUser().then((e) => this.user = e.data);
+  }
 
   toggleMenu = () => {
     this.menuToggle.emit();
