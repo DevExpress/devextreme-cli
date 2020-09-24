@@ -1,7 +1,7 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const kill = require('tree-kill');
+const kill = require('tree-kill-promise').kill;
 
 const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
@@ -28,7 +28,7 @@ module.exports = class DevServer {
     }
 
     async stop() {
-        kill(this.devServerProcess.pid, 'SIGKILL');
+        await kill(this.devServerProcess.pid, 'SIGKILL');
 
         return new Promise((resolve, reject) => {
             this.devServerProcess.on('exit', () => resolve());

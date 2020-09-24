@@ -29,6 +29,7 @@ exports.engine = 'angular';
 exports.port = 4200;
 exports.appPath = appPath;
 exports.npmArgs = ['start', '--', '--host', '0.0.0.0'];
+exports.fileExtention = 'ts';
 
 exports.createApp = async() => {
     await rimraf(sandboxPath);
@@ -36,7 +37,7 @@ exports.createApp = async() => {
 
     await prepareSchematics();
     await runCommand('node', [
-        '../../../index.js',
+        path.join(process.cwd(), './index.js'),
         'new',
         'angular-app',
         '--layout=side-nav-outer-toolbar',
@@ -48,7 +49,7 @@ exports.createApp = async() => {
     });
 
     await runCommand('node', [
-        '../../../../index.js',
+        path.join(process.cwd(), './index.js'),
         'add',
         'view',
         'new-page'

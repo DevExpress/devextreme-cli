@@ -1,0 +1,43 @@
+{
+    "env": {
+        "node": true,
+        "browser": true,
+        "jest": true
+    },
+    "parser": "babel-eslint",
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "sourceType": "module",
+      "ecmaVersion": 2018
+    },
+    "plugins": ["react", "react-hooks", "unused-imports"],
+    "ignorePatterns": ["node_modules/"],
+    "rules": {
+      "react/jsx-uses-react": "error",
+      "react/jsx-uses-vars": "error",
+      "no-unused-vars": [2, {"args": "after-used", "argsIgnorePattern": "^props"}],
+      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-vars": [
+        "error",
+        {
+          "vars": "all",
+          "varsIgnorePattern": "^props",
+          "args": "after-used",
+          "argsIgnorePattern": "^props"
+        }
+      ],
+      "react/display-name": "off",
+      "react/prop-types": "off"
+    },
+    "settings": {
+      "react": {
+        "version": "latest"
+      }
+    }
+}
