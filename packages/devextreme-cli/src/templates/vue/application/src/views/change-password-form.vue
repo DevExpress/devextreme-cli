@@ -1,5 +1,5 @@
 <template>
-  <form @submit="onSubmit">
+  <form @submit.prevent="onSubmit">
     <dx-form :form-data="formData" :disabled="loading">
       <dx-item
         data-field="password"
@@ -81,7 +81,6 @@ components: {
   /* eslint-disable  no-debugger */
   methods: {
     onSubmit: async function(e) {
-    e.preventDefault();
     const { password } = this.formData;
     this.loading = true;
 
