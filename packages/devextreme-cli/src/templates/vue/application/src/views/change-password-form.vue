@@ -80,7 +80,7 @@ components: {
   },
   /* eslint-disable  no-debugger */
   methods: {
-    onSubmit: async function(e) {
+    onSubmit: async function() {
     const { password } = this.formData;
     this.loading = true;
 
