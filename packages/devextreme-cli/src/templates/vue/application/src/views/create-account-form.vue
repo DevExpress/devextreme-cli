@@ -99,7 +99,7 @@ export default {
     }
   },
   methods: {
-    onSubmit: async function(e) {
+    onSubmit: async function() {
       const { email, password } = this.formData;
       this.loading = true;
 

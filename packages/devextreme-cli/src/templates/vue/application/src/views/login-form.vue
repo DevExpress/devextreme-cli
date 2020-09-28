@@ -85,7 +85,7 @@ export default {
     onCreateAccountClick() {
       this.$router.push("/create-account");
     },
-    onSubmit: async function(e) {
+    onSubmit: async function() {
       const { email, password } = this.formData;
       this.loading = true;
 
