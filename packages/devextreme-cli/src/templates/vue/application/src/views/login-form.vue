@@ -1,5 +1,5 @@
 <template>
-  <form class="login-form" @submit="onSubmit">
+  <form class="login-form" @submit.prevent="onSubmit">
     <dx-form :form-data="formData" :disabled="loading">
       <dx-item
         data-field="email"
@@ -85,8 +85,7 @@ export default {
     onCreateAccountClick() {
       this.$router.push("/create-account");
     },
-    onSubmit: async function(e) {
-      e.preventDefault();
+    onSubmit: async function() {
       const { email, password } = this.formData;
       this.loading = true;
 

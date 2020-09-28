@@ -1,5 +1,5 @@
 <template>
-  <form class="create-account-form" @submit="onSubmit">
+  <form class="create-account-form" @submit.prevent="onSubmit">
     <dx-form :form-data="formData" :disabled="loading">
       <dx-item
         data-field="email"
@@ -99,8 +99,7 @@ export default {
     }
   },
   methods: {
-    onSubmit: async function(e) {
-      e.preventDefault();
+    onSubmit: async function() {
       const { email, password } = this.formData;
       this.loading = true;
 
