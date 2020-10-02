@@ -5,6 +5,7 @@ jobs:
       - image: circleci/node:12-browsers
     environment:
         LAUNCH_BROWSER: true
+        NODE_OPTIONS: --max_old_space_size=4096
     steps:
       - run:
           name: Install Headless Chrome dependencies
