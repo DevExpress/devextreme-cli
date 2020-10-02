@@ -39,3 +39,5 @@ jobs:
           path: ./packages/devextreme-cli/testing/__tests__/__diff_snapshots__
       - store_artifacts:
           path: ./packages/devextreme-cli/testing/sandbox/logs
+      - store_artifacts:
+          path: /home/circleci/.npm/_logs
