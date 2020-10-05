@@ -5,7 +5,7 @@ import { SingleCardModule } from 'src/app/layouts';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-not-authorized-container',
+  selector: 'app-unauthenticated-content',
   template: `
     <app-single-card [title]="title" [description]="description">
       <router-outlet></router-outlet>
@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
     }
   `]
 })
-export class NotAuthorizedContainerComponent {
+export class UnauthenticatedContentComponent {
 
   constructor(private router: Router) { }
 
@@ -45,7 +45,7 @@ export class NotAuthorizedContainerComponent {
     RouterModule,
     SingleCardModule,
   ],
-  declarations: [NotAuthorizedContainerComponent],
-  exports: [NotAuthorizedContainerComponent]
+  declarations: [UnauthenticatedContentComponent],
+  exports: [UnauthenticatedContentComponent]
 })
-export class NotAuthorizedContainerModule { }
+export class UnauthenticatedContentModule { }

@@ -13,7 +13,7 @@ export class <%= strings.classify(name) %>Component  {
 
   constructor(private authService: AuthService, private screen: ScreenService, public appInfo: AppInfoService) { }
 
-  isAutorized() {
+  isAuthenticated() {
     return this.authService.loggedIn;
   }
 }

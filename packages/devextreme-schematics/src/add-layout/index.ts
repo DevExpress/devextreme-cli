@@ -199,7 +199,7 @@ function updateAppModule(host: Tree, sourcePath: string) {
     modifyFileRule(appModulePath, providerSetter('AuthService', './shared/services')),
     modifyFileRule(appModulePath, providerSetter('ScreenService', './shared/services')),
     modifyFileRule(appModulePath, providerSetter('AppInfoService', './shared/services')),
-    modifyFileRule(appModulePath, importSetter('NotAuthorizedContainerModule', './not-authorized-container')),
+    modifyFileRule(appModulePath, importSetter('UnauthenticatedContentModule', './unauthenticated-content')),
   ];
 
   if (!hasRoutingModule(host, sourcePath)) {
