@@ -1,5 +1,5 @@
 <template>
-  <form class="reset-password-form" @submit="onSubmit">
+  <form class="reset-password-form" @submit.prevent="onSubmit">
     <dx-form :form-data="formData" :disabled="loading">
       <dx-item
         data-field="email"
@@ -73,8 +73,7 @@ export default {
     }
   },
   methods: {
-    onSubmit: async function(e) {
-      e.preventDefault();
+    onSubmit: async function() {
       const { email } = this.formData;
       this.loading = true;
 

@@ -1,13 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { DxButtonModule } from 'devextreme-angular/ui/button';
-import { DxCheckBoxModule } from 'devextreme-angular/ui/check-box';
 import { DxFormModule } from 'devextreme-angular/ui/form';
 import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
-import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
-import { DxValidationGroupModule } from 'devextreme-angular/ui/validation-group';
-import { DxValidatorModule } from 'devextreme-angular/ui/validator';
 import notify from 'devextreme/ui/notify';
 import { AuthService } from '../../services';
 
@@ -46,13 +41,8 @@ export class CreateAccountFormComponent {
   imports: [
     CommonModule,
     RouterModule,
-    DxButtonModule,
-    DxCheckBoxModule,
-    DxTextBoxModule,
     DxFormModule,
-    DxValidatorModule,
-    DxLoadIndicatorModule,
-    DxValidationGroupModule
+    DxLoadIndicatorModule
   ],
   declarations: [ CreateAccountFormComponent ],
   exports: [ CreateAccountFormComponent ]
