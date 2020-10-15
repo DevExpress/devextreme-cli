@@ -38,7 +38,7 @@ async function createVueApp(name) {
 }
 
 const create = async (appName, options) => {
-    const versionInfo = await getVersionInfo();
+    const versionInfo = await getVersionInfo(options.version);
     const layoutInfo = await getLayoutInfo(options.layout);
 
     await createVueApp(appName);

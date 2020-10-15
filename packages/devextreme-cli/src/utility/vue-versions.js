@@ -10,7 +10,14 @@ const layouts = [
     }
 ];
 
-const getVersionInfo = () => {
+const getValidVersion = (version) => {
+  if(!version || !layouts.some((layout) => `v${version}` === layout.value)) {
+      return;
+  }
+  return `v${version}`;
+};
+
+const getVersionInfo = (version) => {
     const prompts = [
         {
             type: 'select',
@@ -20,7 +27,7 @@ const getVersionInfo = () => {
         }
     ];
 
-    return runPrompts(prompts);
+    return runPrompts(prompts, getValidVersion(version));
 };
 
 module.exports = {
