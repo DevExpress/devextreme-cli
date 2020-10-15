@@ -127,12 +127,17 @@ const createPathToPage = (appPath) => {
 };
 
 const getVueVersionInfo = () => {
-    const regex = /vue@.?(\d)/;
     const dependencies = packageManager.getDependencies({ cwd: process.cwd() });
-    const matchVueVersion = Object.keys(dependencies).find((key) => key.startsWith("vue@")).match(regex);
-    const vueVersion = matchVueVersion !== null ? matchVueVersion[1] : defaultVueVersion;
 
-    return `v${vueVersion}`;
+    if(dependencies) {
+        const keyValue = Object.keys(dependencies).find((key) => key.startsWith("vue@"))
+        const vueVersion = dependencies[keyValue].version;
+        const majorVueVersion = vueVersion.split('.')[0];
+
+        return `v${majorVueVersion}`;
+    }
+
+    return `v${defaultVueVersion}`;
 }
 
 const addView = async (pageName, options) => {
