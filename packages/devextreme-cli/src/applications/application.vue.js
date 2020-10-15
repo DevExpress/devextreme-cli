@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const getLayoutInfo = require('../layout').getLayoutInfo;
+const getVersionInfo = require('../utility/vue-versions').getVersionInfo;
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
@@ -13,6 +14,7 @@ const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
 ];
+const defaultVueVersion = '2';
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
@@ -35,19 +37,20 @@ async function createVueApp(name) {
     return runCommand('npx', ['-p', '@vue/cli', 'vue', 'create', name, '--default']);
 }
 
-const create = (appName, options) => {
-    getLayoutInfo(options.layout).then((layoutInfo) => {
-        createVueApp(appName).then(() => {
-            const appPath = path.join(process.cwd(), appName);
-            const humanizedName = stringUtils.humanize(appName);
-            const templateOptions = Object.assign({}, options, {
-                project: humanizedName,
-                layout: layoutInfo.layout
-            });
-            modifyIndexHtml(appPath, humanizedName);
-            addTemplate(appPath, appName, templateOptions);
-        });
+const create = async (appName, options) => {
+    const versionInfo = await getVersionInfo();
+    const layoutInfo = await getLayoutInfo(options.layout);
+
+    await createVueApp(appName);
+
+    const appPath = path.join(process.cwd(), appName);
+    const humanizedName = stringUtils.humanize(appName);
+    const templateOptions = Object.assign({}, options, {
+        project: humanizedName,
+        layout: layoutInfo.layout
     });
+    modifyIndexHtml(appPath, humanizedName);
+    addTemplate(appPath, appName, templateOptions, versionInfo.layout);
 };
 
 const modifyIndexHtml = (appPath, appName) => {
@@ -59,8 +62,8 @@ const modifyIndexHtml = (appPath, appName) => {
     fs.writeFileSync(indexHtmlPath, htmlContent);
 };
 
-const addTemplate = (appPath, appName, templateOptions) => {
-    const templateSourcePath = path.join(__dirname, '..', 'templates', 'vue', 'application');
+const addTemplate = (appPath, appName, templateOptions, versionInfo) => {
+    const templateSourcePath = path.join(__dirname, '..', 'templates', `vue-${versionInfo}`, 'application');
     const styles = [
         './themes/generated/theme.additional.css',
         './themes/generated/theme.base.css',
@@ -69,7 +72,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
 
     templateCreator.moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);
     if(!templateOptions.empty) {
-        addSamplePages(appPath);
+        addSamplePages(appPath, versionInfo);
     }
     preparePackageJsonForTemplate(appPath, appName);
     install({}, appPath, styles);
@@ -90,8 +93,8 @@ const addStylesToApp = (filePath, styles) => {
     });
 };
 
-const addSamplePages = (appPath) => {
-    const templateSourcePath = path.join(__dirname, '..', 'templates', 'vue', 'sample-pages');
+const addSamplePages = (appPath, versionInfo) => {
+    const templateSourcePath = path.join(__dirname, '..', 'templates', `vue-${versionInfo}`, 'sample-pages');
     const pagesPath = createPathToPage(appPath);
     templateCreator.moveTemplateFilesToProject(templateSourcePath, pagesPath, {});
 };
@@ -123,10 +126,20 @@ const createPathToPage = (appPath) => {
     return pagesPath;
 };
 
-const addView = (pageName, options) => {
+const getVueVersionInfo = () => {
+    const regex = /vue@.?(\d)/;
+    const dependencies = packageManager.getDependencies({ cwd: process.cwd() });
+    const matchVueVersion = Object.keys(dependencies).find((key) => key.startsWith("vue@")).match(regex);
+    const vueVersion = matchVueVersion !== null ? matchVueVersion[1] : defaultVueVersion;
+
+    return `v${vueVersion}`;
+}
+
+const addView = async (pageName, options) => {
+    const versionInfo = getVueVersionInfo();
     const componentName = getComponentPageName(pageName);
     const pathToPage = createPathToPage(process.cwd());
-    const pageTemplatePath = path.join(__dirname, '..', 'templates', 'vue', 'page');
+    const pageTemplatePath = path.join(__dirname, '..', 'templates', `vue-${versionInfo}`, 'page');
     const routingModulePath = path.join(process.cwd(), 'src', 'router.js');
     const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js');
     const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'folder');
