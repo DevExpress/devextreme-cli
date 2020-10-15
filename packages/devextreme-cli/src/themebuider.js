@@ -87,9 +87,10 @@ const getMeta = (fullMeta, base, filter, baseParametersList) => {
     let result = {};
 
     for(const key in fullMeta) {
-        if(base && baseParametersList.indexOf(key) === -1) continue;
-        if(filter && filter.length > 0 && filter.indexOf(key) === -1) continue;
-        result[key] = fullMeta[key];
+        let universalKey = key.replace('$', '@');
+        if(base && baseParametersList.indexOf(universalKey) === -1) continue;
+        if(filter && filter.length > 0 && filter.indexOf(universalKey) === -1) continue;
+        result[universalKey] = fullMeta[key];
     }
 
     return result;
