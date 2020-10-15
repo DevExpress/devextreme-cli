@@ -1,11 +1,11 @@
 const prompts = require('prompts');
 
 const runPrompts = async(promptsValue, options) => {
-    if(options) {
-        prompts.inject([options]);
-    }
+    const validatedValue = options;
 
-    return await prompts(promptsValue);
+    return validatedValue !== undefined
+        ? validatedValue
+        : await prompts(promptsValue);
 };
 
 module.exports = runPrompts;
