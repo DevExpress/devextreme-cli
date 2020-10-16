@@ -37,7 +37,7 @@ async function createVueApp(name) {
     return runCommand('npx', ['-p', '@vue/cli', 'vue', 'create', name, '--default']);
 }
 
-const create = async (appName, options) => {
+const create = async(appName, options) => {
     const versionInfo = await getVersionInfo(options.version);
     const layoutInfo = await getLayoutInfo(options.layout);
 
@@ -130,7 +130,7 @@ const getVueVersionInfo = () => {
     const dependencies = packageManager.getDependencies({ cwd: process.cwd() });
 
     if(dependencies) {
-        const keyValue = Object.keys(dependencies).find((key) => key.startsWith("vue@"))
+        const keyValue = Object.keys(dependencies).find((key) => key.startsWith('vue@'));
         const vueVersion = dependencies[keyValue].version;
         const majorVueVersion = vueVersion.split('.')[0];
 
@@ -138,9 +138,9 @@ const getVueVersionInfo = () => {
     }
 
     return `v${defaultVueVersion}`;
-}
+};
 
-const addView = async (pageName, options) => {
+const addView = async(pageName, options) => {
     const versionInfo = getVueVersionInfo();
     const componentName = getComponentPageName(pageName);
     const pathToPage = createPathToPage(process.cwd());
