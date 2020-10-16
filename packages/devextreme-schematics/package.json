@@ -11,8 +11,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/DevExpress/devextreme-schematics.git"
+    "url": "https://github.com/DevExpress/devextreme-cli/tree/master/packages/devextreme-schematics"
   },
+  "homepage": "https://www.npmjs.com/package/devextreme-schematics",
   "files": [
     "src/**/*",
     "!*.ts",
