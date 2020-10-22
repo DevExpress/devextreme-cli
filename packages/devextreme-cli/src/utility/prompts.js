@@ -1,11 +1,15 @@
 const prompts = require('prompts');
 
 const runPrompts = async(promptsValue, options) => {
-    const validatedValue = options;
+    if(options) {
+        return await new Promise((resolve, reject) => {
+            resolve({
+                layout: options
+            });
+        });
+    }
 
-    return validatedValue !== undefined
-        ? validatedValue
-        : await prompts(promptsValue);
+    return await prompts(promptsValue);
 };
 
 module.exports = runPrompts;
