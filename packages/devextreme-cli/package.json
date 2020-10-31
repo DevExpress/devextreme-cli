@@ -30,6 +30,7 @@
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
     "dart-sass": "^1.25.0",
+    "devextreme-themebuilder": "20.1.7",
     "ip": "^1.1.5",
     "less": "3.9.0",
     "minimist": "^1.2.0",
