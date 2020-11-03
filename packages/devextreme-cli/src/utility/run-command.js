@@ -1,8 +1,6 @@
 const spawn = require('child_process').spawn;
 
 module.exports = function(commandName, args = [], customConfig = {}) {
-    customConfig.silent = false;
-
     const forceNoCmd = customConfig.forceNoCmd;
     const command = /^win/.test(process.platform) && !forceNoCmd ? `${commandName}.cmd` : commandName;
     const config = {
