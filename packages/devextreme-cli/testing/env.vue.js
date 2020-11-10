@@ -23,7 +23,8 @@ exports.createApp = async() => {
         path.join(process.cwd(), './index.js'),
         'new',
         'vue-app',
-        '--layout=side-nav-outer-toolbar'
+        '--layout=side-nav-outer-toolbar',
+        '--version=2'
     ], {
         cwd: sandboxPath,
         forceNoCmd: true,
