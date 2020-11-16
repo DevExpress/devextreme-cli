@@ -101,6 +101,7 @@ export default {
         path: "/profile",
         query: { redirect: this.$route.path }
       });
+    }
   },
   components: {
     DxButton,
