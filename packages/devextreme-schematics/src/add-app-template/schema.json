@@ -39,7 +39,7 @@
     "dxversion": {
       "type": "string",
       "description": "The DevExtreme version",
-      "default": "20.1-stable"
+      "default": "^20.2.3"
     },
     "empty": {
       "type": "boolean",
