@@ -1,9 +1,9 @@
 const minimist = require('minimist');
 
 const envs = [
+    require('./env.angular'),
     require('./env.react'),
-    require('./env.vue'),
-    require('./env.angular')
+    require('./env.vue-v2'),
 ];
 
 const args = minimist(process.argv.slice(2), {
