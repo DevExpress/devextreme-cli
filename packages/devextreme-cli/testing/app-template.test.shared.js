@@ -19,7 +19,7 @@ module.exports = (env) => {
         beforeAll(async() => {
             browser = await getBrowser();
             page = await browser.newPage();
-            devServer = new DevServer(env);
+            devServer = new DevServer(env, appUrl);
             await devServer.start();
         });
 

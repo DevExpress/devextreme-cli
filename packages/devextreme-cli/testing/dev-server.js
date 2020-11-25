@@ -1,5 +1,6 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
+const http = require('http');
 const path = require('path');
 const kill = require('tree-kill-promise').kill;
 
@@ -7,8 +8,9 @@ const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
 
 module.exports = class DevServer {
-    constructor(env) {
+    constructor(env, appUrl) {
         this.env = env;
+        this.appUrl = appUrl;
     }
 
     async start() {
@@ -24,7 +26,29 @@ module.exports = class DevServer {
         this.devServerProcess.stdout.pipe(logStream);
         this.devServerProcess.stderr.pipe(logStream);
 
+        function onError() {
+          throw new Error('Compilation failed');
+        }
+
+        this.devServerProcess.on('exit', onError);
+        this.devServerProcess.on('error', onError);
+
         await this.waitForCompilation();
+    }
+
+    async waitForCompilation() {
+      let statusCode = 0;
+      while (statusCode === 0) {
+        await new Promise((ok) => setTimeout(ok, 1000));
+        await new Promise((ok) => {
+            const r = http.get(this.appUrl, function(res) {
+              statusCode = res.statusCode;
+              ok();
+            });
+
+            r.on('error', ok);
+        })
+      }
     }
 
     async stop() {
@@ -75,35 +99,5 @@ module.exports = class DevServer {
 
         await this.waitForCompilation();
         this.currentTheme = theme;
-    }
-
-    async waitForCompilation() {
-        return new Promise((resolve, reject) => {
-            function onData(data) {
-                
-                if(data.toString().toLowerCase().includes('compiled successfully')
-                 || data.toString().toLowerCase().includes('compiled with warnings.')) {
-                    this.devServerProcess.off('data', onData);
-                    this.devServerProcess.off('exit', onError);
-                    this.devServerProcess.off('error', onError);
-
-                    resolve();
-                }
-            }
-            onData = onData.bind(this);
-
-            function onError(code) {
-                this.devServerProcess.off('data', onData);
-                this.devServerProcess.off('exit', onError);
-                this.devServerProcess.off('error', onError);
-
-                reject();
-            }
-            onError = onError.bind(this);
-
-            this.devServerProcess.stdout.on('data', onData);
-            this.devServerProcess.on('exit', onError);
-            this.devServerProcess.on('error', onError);
-        });
     }
 };
