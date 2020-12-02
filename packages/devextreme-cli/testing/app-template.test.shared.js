@@ -66,8 +66,10 @@ module.exports = (env) => {
                                 await page.waitFor('.login-header, .login-form', { timeout: 0 });
                             }
 
+                            const customConfig = { threshold: 0.012 };
                             function compareSnapshot(image, name) {
                                 expect(image).toMatchImageSnapshot({
+                                    customDiffConfig: customConfig,
                                     customSnapshotIdentifier: `${layout}-${theme}-${viewportName}-${name}`,
                                     customDiffDir: diffSnapshotsDir
                                 });
