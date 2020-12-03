@@ -11,7 +11,7 @@
           <router-view name="content" />
         </div>
         <template #footer>
-          <the-footer />
+          <app-footer />
         </template>
       </router-view>
     </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import TheFooter from "./components/the-footer";
+import AppFooter from "./components/app-footer";
 import { sizes, subscribe, unsubscribe } from "./utils/media-query";
 
 function getScreenSizeInfo() {
@@ -60,7 +60,7 @@ export default {
   },
 
   components: {
-    TheFooter
+    AppFooter
   }
 };
 </script>
