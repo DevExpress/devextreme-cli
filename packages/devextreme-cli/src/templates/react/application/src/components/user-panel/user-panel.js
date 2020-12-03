@@ -9,14 +9,14 @@ export default function ({ menuMode }) {
   const { user, signOut } = useAuth();
   const history = useHistory();
 
-  function redirectPath() {
+  function navigateToProfile() {
     history.push("/profile");
   }
   const menuItems = useMemo(() => ([
     {
       text: 'Profile',
       icon: 'user',
-      onClick: redirectPath
+      onClick: navigateToProfile
     },
     {
       text: 'Logout',
