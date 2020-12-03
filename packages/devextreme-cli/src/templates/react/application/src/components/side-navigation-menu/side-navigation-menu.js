@@ -22,8 +22,8 @@ export default function (props) {
       if(item.path && !(/^\//.test(item.path))){ 
         item.path = `/${item.path}`;
       }
-      return {...item, expanded: isLarge} 
-    })
+      return {...item, expanded: isLarge}; 
+    });
   }
 
   const items = useMemo(

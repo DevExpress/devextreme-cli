@@ -8,7 +8,6 @@ const DevServer = require('./dev-server');
 const defaultLayout = 'side-nav-outer-toolbar';
 
 module.exports = (env) => {
-    const skipAppCreation = process.env.TEST_MODE && process.env.TEST_MODE === 'dev';
     const appUrl = `http://${ip.address()}:${env.port}/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
 
@@ -20,15 +19,6 @@ module.exports = (env) => {
         beforeAll(async() => {
             browser = await getBrowser();
             page = await browser.newPage();
-
-            try {
-                if(!skipAppCreation) {
-                    await env.createApp();
-                }
-            } catch(e) {
-                console.log(e);
-            }
-
             devServer = new DevServer(env);
             await devServer.start();
         });
@@ -76,8 +66,10 @@ module.exports = (env) => {
                                 await page.waitFor('.login-header, .login-form', { timeout: 0 });
                             }
 
+                            const customConfig = { threshold: 0.012 };
                             function compareSnapshot(image, name) {
                                 expect(image).toMatchImageSnapshot({
+                                    customDiffConfig: customConfig,
                                     customSnapshotIdentifier: `${layout}-${theme}-${viewportName}-${name}`,
                                     customDiffDir: diffSnapshotsDir
                                 });

@@ -1,5 +1,6 @@
+@import "./themes/generated/variables.base.scss";
+
 .app {
-  @import "./themes/generated/variables.base.scss";
   background-color: darken($base-bg, 5.00);
   display: flex;
   height: 100%;

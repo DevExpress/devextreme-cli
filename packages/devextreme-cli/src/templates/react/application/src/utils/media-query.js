@@ -60,4 +60,4 @@ function getScreenSize() {
     isMedium: mediumMedia.matches,
     isLarge: largeMedia.matches
   };
-};
+}

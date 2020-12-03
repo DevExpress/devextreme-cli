@@ -6,7 +6,7 @@ import { NavigationProvider } from './contexts/navigation';
 import { AuthProvider, useAuth } from './contexts/auth';
 import { useScreenSizeClass } from './utils/media-query';
 import Content from './Content';
-import NotAuthenticatedContent from './NotAuthenticatedContent';
+import UnauthenticatedContent from './UnauthenticatedContent';
 
 function App() {
   const { user, loading } = useAuth();
@@ -19,7 +19,7 @@ function App() {
     return <Content />;
   }
 
-  return <NotAuthenticatedContent />;
+  return <UnauthenticatedContent />;
 }
 
 export default function () {

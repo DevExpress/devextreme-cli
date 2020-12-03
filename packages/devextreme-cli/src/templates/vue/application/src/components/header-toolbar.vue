@@ -77,7 +77,8 @@ export default {
       userMenuItems: [
         {
           text: "Profile",
-          icon: "user"
+          icon: "user",
+          onClick: this.onProfileClick
         },
         {
           text: "Logout",
@@ -92,6 +93,12 @@ export default {
       auth.logOut();
       this.$router.push({
         path: "/login-form",
+        query: { redirect: this.$route.path }
+      });
+    },
+    onProfileClick() {
+      this.$router.push({
+        path: "/profile",
         query: { redirect: this.$route.path }
       });
     }

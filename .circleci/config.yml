@@ -5,6 +5,7 @@ jobs:
       - image: circleci/node:12-browsers
     environment:
         LAUNCH_BROWSER: true
+    resource_class: large
     steps:
       - run:
           name: Install Headless Chrome dependencies
@@ -20,9 +21,18 @@ jobs:
           name: Install npm packages
           command: npm i
       - run:
-          name: Run test
-          command: npm run test
+          name: Create applications
+          command: npm run create-template
           no_output_timeout: 15m
+      - run:
+          name: Lint applications
+          command: npm run lint-template
+          no_output_timeout: 15m
+      - run:
+          name: Run test
+          command: npm run test-template
+          no_output_timeout: 15m
+          when: always
       - store_artifacts:
           path: test-results.xml
           prefix: tests
@@ -30,3 +40,5 @@ jobs:
           path: ./packages/devextreme-cli/testing/__tests__/__diff_snapshots__
       - store_artifacts:
           path: ./packages/devextreme-cli/testing/sandbox/logs
+      - store_artifacts:
+          path: /home/circleci/.npm/_logs

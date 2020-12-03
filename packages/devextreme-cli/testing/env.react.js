@@ -15,13 +15,14 @@ exports.engine = 'react';
 exports.port = 3000;
 exports.appPath = appPath;
 exports.npmArgs = ['start'];
+exports.fileExtention = 'js';
 
 exports.createApp = async() => {
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 
     await runCommand('node', [
-        '../../../index.js',
+        path.join(process.cwd(), './index.js'),
         'new',
         'react-app',
         '--layout=side-nav-outer-toolbar'
@@ -32,7 +33,7 @@ exports.createApp = async() => {
     });
 
     await runCommand('node', [
-        '../../../../index.js',
+        path.join(process.cwd(), './index.js'),
         'add',
         'view',
         'new-page'
