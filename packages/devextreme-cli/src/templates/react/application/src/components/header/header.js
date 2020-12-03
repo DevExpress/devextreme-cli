@@ -5,7 +5,7 @@ import UserPanel from '../user-panel/user-panel';
 import './header.scss';
 import { Template } from 'devextreme-react/core/template';
 
-export default ({ menuToggleEnabled, title, toggleMenu, userMenuItems }) => (
+export default ({ menuToggleEnabled, title, toggleMenu }) => (
   <header className={'header-component'}>
     <Toolbar className={'header-toolbar'}>
       <Item

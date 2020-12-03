@@ -1,7 +1,7 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const kill = require('tree-kill');
+const kill = require('tree-kill-promise').kill;
 
 const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
@@ -28,7 +28,7 @@ module.exports = class DevServer {
     }
 
     async stop() {
-        kill(this.devServerProcess.pid, 'SIGKILL');
+        await kill(this.devServerProcess.pid, 'SIGKILL');
 
         return new Promise((resolve, reject) => {
             this.devServerProcess.on('exit', () => resolve());
@@ -80,7 +80,9 @@ module.exports = class DevServer {
     async waitForCompilation() {
         return new Promise((resolve, reject) => {
             function onData(data) {
-                if(data.toString().toLowerCase().includes('compiled successfully')) {
+                
+                if(data.toString().toLowerCase().includes('compiled successfully')
+                 || data.toString().toLowerCase().includes('compiled with warnings.')) {
                     this.devServerProcess.off('data', onData);
                     this.devServerProcess.off('exit', onError);
                     this.devServerProcess.off('error', onError);

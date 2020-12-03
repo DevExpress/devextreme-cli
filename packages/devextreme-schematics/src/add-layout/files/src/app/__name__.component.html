@@ -1,4 +1,4 @@
-<ng-container *ngIf="isAutorized(); else notAuthorized">
+<ng-container *ngIf="isAuthenticated(); else unauthenticated">
   <app-<%= layout %> title="{{appInfo.title}}">
     <router-outlet></router-outlet>
     <app-footer>
@@ -9,6 +9,6 @@
   </app-<%= layout %>>
 </ng-container>
 
-<ng-template #notAuthorized>
-  <app-not-authorized-container></app-not-authorized-container>
+<ng-template #unauthenticated>
+  <app-unauthenticated-content></app-unauthenticated-content>
 </ng-template>
