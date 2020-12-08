@@ -29,13 +29,28 @@ const getVueVersion = () => {
     return `v${defaultVueVersion}`;
 };
 
-const preparePackageJsonForTemplate = (appPath, appName) => {
+const preparePackageJsonForTemplate = (appPath, appName, version) => {
+    if(!version) {
+        version = getVueVersion();
+    }
+
     const dependencies = [
         { name: 'node-sass', version: '^4.11.0' },
         { name: 'vue-router', version: '^3.0.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
         { name: 'sass-loader', version: '^7.1.0', dev: true }
     ];
+
+    if(version === 'v3') {
+        const nameDepends = dependencies.map(d => d.name);
+
+        const indexVueRouter = nameDepends.indexOf('vue-router');
+
+        dependencies.push({ name: 'vue', version: '^3.0.0' });
+        dependencies.push({ name: '@vue/cli', version: '^4.5.7' });
+        dependencies[indexVueRouter].version = '^4.0.0-beta.13';
+    }
+
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
         { name: 'postinstall', value: 'npm run build-themes' }
@@ -91,7 +106,7 @@ const addTemplate = (appPath, appName, templateOptions, version) => {
     if(!templateOptions.empty) {
         addSamplePages(appPath, version);
     }
-    preparePackageJsonForTemplate(appPath, appName);
+    preparePackageJsonForTemplate(appPath, appName, version);
     install({}, appPath, styles);
 };
 
@@ -124,15 +139,27 @@ const getComponentPageName = (viewName) => {
     return `${stringUtils.classify(viewName)}`;
 };
 
-const getVueRoute = (viewName, componentName, pagePath) => {
-    const components = `\n      {\n        layout: defaultLayout,\n        content: ${componentName}\n      }\n    `;
-    return `\n    {\n      path: "/${pagePath}",\n      name: "${stringUtils.dasherize(viewName)}",\n      meta: { requiresAuth: true },\n      components: ${components}}`;
+const getVueRoute = (viewName, componentName, pagePath, version) => {
+    if(!version) {
+        version = getVueVersion();
+    }
+
+    const vueRoute = {
+        v2: `\n    {\n      path: "/${pagePath}",\n      name: "${stringUtils.dasherize(viewName)}",\n      meta: { requiresAuth: true },\n      components: $\n      {\n        layout: defaultLayout,\n        content: ${componentName}\n      }\n    }`,
+        v3: `\n    {\n      path: "/${pagePath}",\n      name: "${stringUtils.dasherize(viewName)}",\n      meta: {\n        requiresAuth: true,\n        layout: defaultLayout\n    },\n    component: ${componentName}\n    }`
+    };
+
+    return vueRoute[version];
 };
 
-const getNavigationData = (viewName, componentName, icon) => {
+const getNavigationData = (viewName, componentName, icon, version) => {
+    if(!version) {
+        version = getVueVersion();
+    }
+
     const pagePath = stringUtils.dasherize(viewName);
     return {
-        route: getVueRoute(viewName, componentName, pagePath),
+        route: getVueRoute(viewName, componentName, pagePath, version),
         navigation: `\n  {\n    text: \'${stringUtils.humanize(viewName)}\',\n    path: \'/${pagePath}\',\n    icon: \'${icon}\'\n  }`
     };
 };
@@ -154,7 +181,7 @@ const addView = (pageName, options) => {
     const pageTemplatePath = path.join(__dirname, '..', 'templates', `vue-${version}`, 'page');
     const routingModulePath = path.join(process.cwd(), 'src', 'router.js');
     const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js');
-    const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'folder');
+    const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'folder', version);
 
     templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath);
     moduleUtils.insertImport(routingModulePath, `./views/${pageName}`, componentName, true);
