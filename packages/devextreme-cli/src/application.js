@@ -68,7 +68,7 @@ const run = (commands, options, devextremeConfig) => {
                     console.error('Invalid command');
                     printHelp(commands[0]);
                 }
-            } else if(devextremeConfig.applicationEngine.startsWith('vue')) {
+            } else if(devextremeConfig.applicationEngine === 'vue') {
                 if(commands[1] === 'view') {
                     vueApplication.addView(commands[2], options);
                 } else {

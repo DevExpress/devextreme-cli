@@ -1,5 +1,5 @@
 {
-  "applicationEngine": "vue-v2",
+  "applicationEngine": "vue",
   "build": {
       "commands": [
           {

@@ -20,7 +20,7 @@ const getVueVersion = () => {
     const dependencies = packageManager.getDependencies({ cwd: process.cwd() });
 
     if(dependencies) {
-        const keyValue = Object.keys(dependencies).find((key) => key.startsWith('vue@'));
+        const keyValue = Object.keys(dependencies).filter(k => k.startsWith('vue@')).pop();
         const vueVersion = dependencies[keyValue].version;
         const majorVueVersion = vueVersion.split('.')[0];
         return `v${majorVueVersion}`;
@@ -144,12 +144,20 @@ const getVueRoute = (viewName, componentName, pagePath, version) => {
         version = getVueVersion();
     }
 
-    const vueRoute = {
-        v2: `\n    {\n      path: "/${pagePath}",\n      name: "${stringUtils.dasherize(viewName)}",\n      meta: { requiresAuth: true },\n      components: $\n      {\n        layout: defaultLayout,\n        content: ${componentName}\n      }\n    }`,
-        v3: `\n    {\n      path: "/${pagePath}",\n      name: "${stringUtils.dasherize(viewName)}",\n      meta: {\n        requiresAuth: true,\n        layout: defaultLayout\n    },\n    component: ${componentName}\n    }`
-    };
+    const path = `path: "/${pagePath}"`;
+    const name = `name: "${stringUtils.dasherize(viewName)}"`;
 
-    return vueRoute[version];
+    const mataPart = version === 'v2'
+        ? `meta: { requiresAuth: true }`
+        : `meta: {\n        requiresAuth: true,\n        layout: defaultLayout\n      }`;
+
+    const componentPart = version === 'v2'
+        ? `components:\n      {\n        layout: defaultLayout,\n        content: ${componentName}\n      }`
+        : `component: ${componentName}`;
+
+    const commonPart = `\n    {\n      ${path},\n      ${name},\n      ${mataPart},\n      ${componentPart}\n    }`;
+
+    return commonPart;
 };
 
 const getNavigationData = (viewName, componentName, icon, version) => {
