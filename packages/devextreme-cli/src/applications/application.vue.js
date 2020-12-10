@@ -48,7 +48,7 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
 
         dependencies.push({ name: 'vue', version: '^3.0.0' });
         dependencies.push({ name: '@vue/cli', version: '^4.5.7' });
-        dependencies[indexVueRouter].version = '^4.0.0-beta.13';
+        dependencies[indexVueRouter].version = '^4.0.1';
     }
 
     const scripts = [
@@ -147,15 +147,15 @@ const getVueRoute = (viewName, componentName, pagePath, version) => {
     const path = `path: "/${pagePath}"`;
     const name = `name: "${stringUtils.dasherize(viewName)}"`;
 
-    const mataPart = version === 'v2'
-        ? `meta: { requiresAuth: true }`
-        : `meta: {\n        requiresAuth: true,\n        layout: defaultLayout\n      }`;
+    const metaPart = version === 'v2'
+        ? 'meta: { requiresAuth: true }'
+        : 'meta: {\n        requiresAuth: true,\n        layout: defaultLayout\n      }';
 
     const componentPart = version === 'v2'
         ? `components:\n      {\n        layout: defaultLayout,\n        content: ${componentName}\n      }`
         : `component: ${componentName}`;
 
-    const commonPart = `\n    {\n      ${path},\n      ${name},\n      ${mataPart},\n      ${componentPart}\n    }`;
+    const commonPart = `\n    {\n      ${path},\n      ${name},\n      ${metaPart},\n      ${componentPart}\n    }`;
 
     return commonPart;
 };
