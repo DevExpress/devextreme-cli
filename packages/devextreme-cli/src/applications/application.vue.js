@@ -61,15 +61,17 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
     packageJsonUtils.updateName(appPath, appName);
 };
 
-async function createVueApp(name) {
-    return runCommand('npx', ['-p', '@vue/cli', 'vue', 'create', name, '--default']);
+async function createVueApp(name, version) {
+    return version === 'v2'
+        ? runCommand('npx', ['-p', '@vue/cli', 'vue', 'create', name, '--default'])
+        : runCommand('npx', ['-p', 'vue', 'create', name, '-p', '__default_vue_3__']);
 }
 
 const create = async(appName, options) => {
     const versionInfo = await getVersionInfo(options.version);
     const layoutInfo = await getLayoutInfo(options.layout);
 
-    await createVueApp(appName);
+    await createVueApp(appName, versionInfo.layout);
 
     const appPath = path.join(process.cwd(), appName);
     const humanizedName = stringUtils.humanize(appName);
