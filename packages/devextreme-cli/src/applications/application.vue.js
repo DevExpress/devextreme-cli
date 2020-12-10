@@ -26,7 +26,7 @@ const getVueVersion = () => {
         return `v${majorVueVersion}`;
     }
 
-    return `v${defaultVueVersion}`;
+    return defaultVueVersion;
 };
 
 const preparePackageJsonForTemplate = (appPath, appName, version) => {
@@ -62,9 +62,16 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
 };
 
 async function createVueApp(name, version) {
-    return version === 'v2'
-        ? runCommand('npx', ['-p', '@vue/cli', 'vue', 'create', name, '--default'])
-        : runCommand('npx', ['-p', 'vue', 'create', name, '-p', '__default_vue_3__']);
+    const argList = ['-p', '@vue/cli', 'vue', 'create', name];
+
+    if(version === defaultVueVersion) {
+        argList.push('--default');
+    } else {
+        argList.push('-p');
+        argList.push('__default_vue_3__');
+    }
+
+    return runCommand('npx', argList)
 }
 
 const create = async(appName, options) => {
@@ -149,11 +156,11 @@ const getVueRoute = (viewName, componentName, pagePath, version) => {
     const path = `path: "/${pagePath}"`;
     const name = `name: "${stringUtils.dasherize(viewName)}"`;
 
-    const metaPart = version === 'v2'
+    const metaPart = version === defaultVueVersion
         ? 'meta: { requiresAuth: true }'
         : 'meta: {\n        requiresAuth: true,\n        layout: defaultLayout\n      }';
 
-    const componentPart = version === 'v2'
+    const componentPart = version === defaultVueVersion
         ? `components:\n      {\n        layout: defaultLayout,\n        content: ${componentName}\n      }`
         : `component: ${componentName}`;
 
