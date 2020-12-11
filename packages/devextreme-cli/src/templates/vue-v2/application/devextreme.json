@@ -1,6 +1,8 @@
 {
   "applicationEngine": "vue",
-  "version": "2",
+  "vue": {
+      "version": 2
+  },
   "build": {
       "commands": [
           {
