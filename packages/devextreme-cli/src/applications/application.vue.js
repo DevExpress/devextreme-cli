@@ -43,11 +43,8 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
 
     if(version === 'v3') {
         const nameDepends = dependencies.map(d => d.name);
-
         const indexVueRouter = nameDepends.indexOf('vue-router');
 
-        dependencies.push({ name: 'vue', version: '^3.0.0' });
-        dependencies.push({ name: '@vue/cli', version: '^4.5.7' });
         dependencies[indexVueRouter].version = '^4.0.1';
     }
 
