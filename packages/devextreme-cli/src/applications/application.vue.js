@@ -17,16 +17,8 @@ const defaultStyles = [
 const defaultVueVersion = 'v2';
 
 const getVueVersion = () => {
-    const dependencies = packageManager.getDependencies({ cwd: process.cwd() });
-
-    if(dependencies) {
-        const keyValue = Object.keys(dependencies).filter(k => k.startsWith('vue@')).pop();
-        const vueVersion = dependencies[keyValue].version;
-        const majorVueVersion = vueVersion.split('.')[0];
-        return `v${majorVueVersion}`;
-    }
-
-    return defaultVueVersion;
+    const devextremeConfig = require('../utility/devextreme-config').read();
+    return `v${devextremeConfig.version}`;
 };
 
 const preparePackageJsonForTemplate = (appPath, appName, version) => {
