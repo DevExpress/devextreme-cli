@@ -18,9 +18,10 @@ const defaultVueVersion = 'v2';
 
 const getVueVersion = () => {
     const devextremeConfig = require('../utility/devextreme-config').read();
-    
-    return devextremeConfig.version
-        ? `v${devextremeConfig.version}`
+    const version = devextremeConfig["applicationEngine"].version;
+
+    return version
+        ? `v${version}`
         : defaultVueVersion;
 };
 
