@@ -1,4 +1,4 @@
-const getLayoutInfo = require('../layout').getLayoutInfo;
+const getLayoutInfo = require('../utility/prompts/layout').getLayoutInfo;
 const path = require('path');
 const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;

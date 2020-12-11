@@ -80,7 +80,7 @@ module.exports = class DevServer {
     async waitForCompilation() {
         return new Promise((resolve, reject) => {
             function onData(data) {
-                
+
                 if(data.toString().toLowerCase().includes('compiled successfully')
                  || data.toString().toLowerCase().includes('compiled with warnings.')) {
                     this.devServerProcess.off('data', onData);

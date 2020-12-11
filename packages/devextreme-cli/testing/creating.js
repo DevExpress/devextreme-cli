@@ -1,10 +1,5 @@
 const minimist = require('minimist');
-
-const envs = [
-    require('./env.react'),
-    require('./env.vue'),
-    require('./env.angular')
-];
+const envs = require('./constants').envs;
 
 const args = minimist(process.argv.slice(2), {
     default: {
