@@ -18,11 +18,9 @@ const defaultVueVersion = 'v2';
 
 const getVueVersion = () => {
     const devextremeConfig = require('../utility/devextreme-config').read();
-    const engine = devextremeConfig["applicationEngine"];
-    const version = devextremeConfig[engine].version;
 
-    return version
-        ? `v${version}`
+    return devextremeConfig.vue
+        ? `v${devextremeConfig.vue.version}`
         : defaultVueVersion;
 };
 
