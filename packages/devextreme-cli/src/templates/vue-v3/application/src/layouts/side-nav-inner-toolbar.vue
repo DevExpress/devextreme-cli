@@ -71,24 +71,6 @@ export default {
     const menuOpened = ref(props.isLarge);
     const menuTemporaryOpened = ref(false);
 
-    const drawerOptions = computed(() => {
-      const shaderEnabled = !props.isLarge;
-      menuOpened.value = props.isLarge 
-       
-        return {
-          menuOpened,
-          menuMode: props.isLarge ? "shrink" : "overlap",
-          menuRevealMode: props.isXSmall ? "slide" : "expand",
-          minMenuSize: props.isXSmall ? 0 : 60,
-          closeOnOutsideClick: shaderEnabled,
-          shaderEnabled
-        };
-    });
-
-    const headerMenuTogglerEnabled = computed(() => {
-      return props.isXSmall;
-    });
-
     function toggleMenu (e) {
       const pointerEvent = e.event;
       pointerEvent.stopPropagation();
@@ -103,10 +85,30 @@ export default {
       if (menuOpened.value === false) {
         menuTemporaryOpened.value = true;
       }
-      
+
       menuOpened.value = true;
       
     }
+
+    const drawerOptions = computed(
+      function drawerOptions() {
+        const shaderEnabled = !props.isLarge;
+         
+          return {
+            menuMode: props.isLarge ? "shrink" : "overlap",
+            menuRevealMode: props.isXSmall ? "slide" : "expand",
+            minMenuSize: props.isXSmall ? 0 : 60,
+            menuOpened: props.isLarge,
+            closeOnOutsideClick: shaderEnabled,
+            shaderEnabled
+          };
+    });
+
+    const headerMenuTogglerEnabled = computed(
+      function headerMenuTogglerEnabled() {
+        return props.isXSmall;
+      }
+    );
 
     watch(
       props.isLarge,

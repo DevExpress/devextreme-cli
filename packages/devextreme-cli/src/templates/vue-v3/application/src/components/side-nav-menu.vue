@@ -83,7 +83,7 @@ export default {
     );
     
     watch(
-      props.compactMode,
+      () => props.compactMode,
       () => {
         if (props.compactMode) {
           treeViewRef.value.instance.collapseAll();
