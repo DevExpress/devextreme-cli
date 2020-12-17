@@ -75,12 +75,12 @@ export default {
 
     const drawerOptions = computed(() => {
       const shaderEnabled = !props.isLarge;
-      menuOpened.value = props.isLarge;
+
       return {
-        menuOpened,
         menuMode: props.isLarge ? "shrink" : "overlap",
         menuRevealMode: props.isXSmall ? "slide" : "expand",
         minMenuSize: props.isXSmall ? 0 : 60,
+        menuOpened:props.isLarge,
         closeOnOutsideClick: shaderEnabled,
         shaderEnabled
       };
@@ -91,7 +91,7 @@ export default {
     });
 
     watch(
-      props.isLarge,
+      () => props.isLarge,
       () => {
         if (!menuTemporaryOpened.value) {
           menuOpened.value = props.isLarge;

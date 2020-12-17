@@ -90,8 +90,7 @@ export default {
       
     }
 
-    const drawerOptions = computed(
-      function drawerOptions() {
+    const drawerOptions = computed(() => {
         const shaderEnabled = !props.isLarge;
          
           return {
@@ -104,14 +103,13 @@ export default {
           };
     });
 
-    const headerMenuTogglerEnabled = computed(
-      function headerMenuTogglerEnabled() {
+    const headerMenuTogglerEnabled = computed(() => {
         return props.isXSmall;
       }
     );
 
     watch(
-      props.isLarge,
+      () => props.isLarge,
       () => {
         if (!menuTemporaryOpened.value) {
           menuOpened.value = props.isLarge;
