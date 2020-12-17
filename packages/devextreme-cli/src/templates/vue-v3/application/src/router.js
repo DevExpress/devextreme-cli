@@ -51,57 +51,41 @@ const router = new createRouter({
       name: "login-form",
       meta: {
         requiresAuth: false,
-        layout: simpleLayout
+        layout: simpleLayout,
+        title: "Sign In"
       },
-      component: loadView("login-form"),
-      props: {
-        layout: {
-          title: "Sign In"
-        }
-      }
+      component: loadView("login-form")
     },
     {
       path: "/reset-password",
       name: "reset-password",
       meta: {
         requiresAuth: false,
-        layout: simpleLayout
+        layout: simpleLayout,
+        title: "Reset Password",
+        description: "Please enter the email address that you used to register, and we will send you a link to reset your password via Email."
       },
-      component:  loadView("reset-password-form"),
-      props: {
-        layout: {
-          title: "Reset Password",
-          description: "Please enter the email address that you used to register, and we will send you a link to reset your password via Email."
-        }
-      }
+      component: loadView("reset-password-form")
     },
     {
       path: "/create-account",
       name: "create-account",
       meta: {
         requiresAuth: false,
-        layout: simpleLayout
+        layout: simpleLayout,
+        title: "Sign Up"
       },
       component: loadView("create-account-form"),
-      props: {
-        layout: {
-          title: "Sign Up"
-        }
-      }
     },
     {
       path: "/change-password/:recoveryCode",
       name: "change-password",
       meta: {
         requiresAuth: false,
-        layout: simpleLayout
+        layout: simpleLayout,
+        title: "Change Password"
       },
-      component: loadView("change-password-form"),
-      props: {
-        layout: {
-          title: "Change Password"
-        }
-      }
+      component: loadView("change-password-form")
     },<%=^empty%>
     {
       path: "/",

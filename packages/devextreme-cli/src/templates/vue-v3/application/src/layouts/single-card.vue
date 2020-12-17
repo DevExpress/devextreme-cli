@@ -13,13 +13,25 @@
 <script>
 import DxScrollView from "devextreme-vue/scroll-view";
 
+import { useRoute } from 'vue-router';
+import { watch, ref } from 'vue';
+
 export default {
   components: {
     DxScrollView
   },
-  props: {
-    title: String,
-    description: String
+  setup() {
+    const route = useRoute();
+    const title = ref(route.meta.title);
+    const description = ref("");
+    watch(route, () =>{
+      title.value = route.meta.title;
+      description.value = route.meta.description;
+    })
+    return {
+      title,
+      description
+    }
   }
 };
 </script>
