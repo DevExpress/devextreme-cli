@@ -65,7 +65,7 @@ function addDevExtremeCSS(host: Tree, options: any) {
 }
 
 function reqisterJSZip(host: Tree) {
-  modifyJSONFile(host, './tsconfig.json', config => {
+  modifyJSONFile(host, './tsconfig.app.json', config => {
     const compilerOptions = config['compilerOptions'];
     let paths = compilerOptions['paths'];
 

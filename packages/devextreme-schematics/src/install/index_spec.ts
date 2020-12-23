@@ -73,7 +73,7 @@ describe('install', () => {
   it('should register jszip', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner.runSchematicAsync('install', {}, appTree).toPromise();
-    const tsconfig = JSON.parse(tree.readContent('tsconfig.json'));
+    const tsconfig = JSON.parse(tree.readContent('tsconfig.app.json'));
     const jszip = tsconfig['compilerOptions']['paths']['jszip'];
 
     expect(jszip[0]).toBe('node_modules/jszip/dist/jszip.min.js');
