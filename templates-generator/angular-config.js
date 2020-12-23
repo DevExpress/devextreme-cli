@@ -94,7 +94,7 @@ module.exports = {
             definitions: [
                 {
                     before: /\(DxTreeViewComponent[^\)]*?\)/,
-                    after: '(DxTreeViewComponent<% if(requireStaticFlag) { %>, { static: true }<% } %>)'
+                    after: '(DxTreeViewComponent, { static: true })'
                 }
             ]
         },
