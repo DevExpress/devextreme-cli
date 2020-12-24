@@ -10,7 +10,7 @@ const appPath = path.join(sandboxPath, appName);
 const routerFilePath = path.join(sandboxPath, appName, 'src/router.js');
 
 exports.engine = 'vue-v3';
-exports.port = 8081;
+exports.port = 8080;
 exports.appPath = path.join(sandboxPath, appName);
 exports.npmArgs = ['run', 'serve'];
 exports.fileExtention = 'js';
