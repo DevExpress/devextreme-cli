@@ -28,7 +28,7 @@ exports.createApp = async() => {
     ], {
         cwd: sandboxPath,
         forceNoCmd: true,
-        silent: true
+        silent: false
     });
 
     await runCommand('node', [
@@ -39,7 +39,7 @@ exports.createApp = async() => {
     ], {
         cwd: appPath,
         forceNoCmd: true,
-        silent: true
+        silent: false
     });
 
     await rimraf(path.join(appPath, 'vue.config.js'));
