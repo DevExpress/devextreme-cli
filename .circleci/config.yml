@@ -1,6 +1,9 @@
-version: 2
+version: 2.1
 jobs:
   build:
+    parameters:
+      app:
+        type: string
     docker:
       - image: circleci/node:12-browsers
     environment:
@@ -22,15 +25,15 @@ jobs:
           command: npm i
       - run:
           name: Create applications
-          command: npm run create-template
+          command: npm run create-template -- -- -e << parameters.app >>
           no_output_timeout: 15m
       - run:
           name: Lint applications
-          command: npm run lint-template
+          command: npm run lint-template -- -- -e << parameters.app >>
           no_output_timeout: 15m
       - run:
           name: Run test
-          command: npm run test-template
+          command: npm run test-template -- -- -e << parameters.app >>
           no_output_timeout: 15m
           when: always
       - store_artifacts:
@@ -42,3 +45,11 @@ jobs:
           path: ./packages/devextreme-cli/testing/sandbox/logs
       - store_artifacts:
           path: /home/circleci/.npm/_logs
+
+workflows:
+  all-builds:
+    jobs:
+      - build:
+          matrix:
+            parameters:
+              app: [react, angular, vue-v2]
