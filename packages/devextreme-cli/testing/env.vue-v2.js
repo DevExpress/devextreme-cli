@@ -23,6 +23,7 @@ exports.createApp = async() => {
         path.join(process.cwd(), './index.js'),
         'new',
         'vue-app',
+        appName,
         '--layout=side-nav-outer-toolbar',
         '--version=2'
     ], {
