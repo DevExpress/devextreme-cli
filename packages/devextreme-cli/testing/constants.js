@@ -2,7 +2,7 @@
 
 exports.envs = [
     require('./env.angular'),
-    require('./env.react'),
+    // require('./env.react'),
     require('./env.vue-v2'),
     require('./env.vue-v3')
 ];
