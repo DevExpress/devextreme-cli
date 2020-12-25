@@ -66,6 +66,7 @@
       <dx-column
         data-field="Task_Priority"
         caption="Priority"
+        name="Priority"
         :hiding-priority="1"
       />
 
