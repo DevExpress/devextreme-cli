@@ -52,4 +52,4 @@ workflows:
       - build:
           matrix:
             parameters:
-              app: [react, angular, vue-v2]
+              app: [react, angular, vue-v2, vue-v3]
