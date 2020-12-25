@@ -26,8 +26,32 @@ jobs:
           command: npm i
       - run:
           name: Create applications
-          command: npm run create-template  -- -- -e << parameters.app >>
+          command: npm run create-template -- -- -e << parameters.app >>
           no_output_timeout: 15m
+          
+      - run:
+          name: Lint applications
+          command: npm run lint-template -- -- -e << parameters.app >>
+          no_output_timeout: 15m
+          
+      - run:
+          name: Run test
+          command: npm run test-template -- -- -e << parameters.app >>
+          no_output_timeout: 15m
+          when: always
+          
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+          
+      - store_artifacts:
+          path: ./packages/devextreme-cli/testing/__tests__/__diff_snapshots__
+          
+      - store_artifacts:
+          path: ./packages/devextreme-cli/testing/sandbox/logs
+          
+      - store_artifacts:
+          path: /home/circleci/.npm/_logs
           
 workflows: 
   all-builds: 
@@ -35,4 +59,4 @@ workflows:
       - build:
           matrix:
             parameters:
-              app: [vue, react]
+              app: [react, angular, vue-v2, vue-v3]
