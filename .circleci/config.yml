@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -6,6 +6,7 @@ jobs:
     environment:
         LAUNCH_BROWSER: true
     resource_class: large
+    
     steps:
       - run:
           name: Install Headless Chrome dependencies
@@ -15,30 +16,20 @@ jobs:
             libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 \
             libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 \
             libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates \
-            fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget yarn
+            fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
       - checkout
       - run:
           name: Install npm packages
           command: npm i
       - run:
           name: Create applications
-          command: npm run create-template
+          command: npm run create-template  -- -- -e << parameters.app >>
           no_output_timeout: 15m
-      - run:
-          name: Lint applications
-          command: npm run lint-template
-          no_output_timeout: 15m
-      - run:
-          name: Run test
-          command: npm run test-template
-          no_output_timeout: 15m
-          when: always
-      - store_artifacts:
-          path: test-results.xml
-          prefix: tests
-      - store_artifacts:
-          path: ./packages/devextreme-cli/testing/__tests__/__diff_snapshots__
-      - store_artifacts:
-          path: ./packages/devextreme-cli/testing/sandbox/logs
-      - store_artifacts:
-          path: /home/circleci/.npm/_logs
+          
+workflows: 
+  all-builds: 
+    jobs:
+      - build:
+          matrix:
+            parameters:
+              app: [vue, react]
