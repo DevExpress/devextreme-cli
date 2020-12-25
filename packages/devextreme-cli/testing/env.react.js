@@ -6,7 +6,7 @@ const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
 const classify = require('../src/utility/string').classify;
 
-const appName = 'my-app';
+const appName = 'my-app2';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/react');
 const appPath = path.join(sandboxPath, appName);
 const appLayoutPath = path.join(sandboxPath, appName, 'src/Content.js');

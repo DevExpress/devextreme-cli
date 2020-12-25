@@ -4,7 +4,7 @@ const path = require('path');
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
 
-const appName = 'my-app';
+const appName = 'my-app1';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/vue-v3');
 const appPath = path.join(sandboxPath, appName);
 const routerFilePath = path.join(sandboxPath, appName, 'src/router.js');
