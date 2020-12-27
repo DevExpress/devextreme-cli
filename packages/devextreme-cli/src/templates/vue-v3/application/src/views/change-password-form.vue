@@ -76,11 +76,14 @@ components: {
 
     const recoveryCode = ref("");
     const loading = ref(false);
-    const formData = reactive({});
+    const formData = reactive({
+      password:""
+    });
 
     recoveryCode.value = route.params.recoveryCode;
 
-    async function onSubmit() {const { password } = formData;
+    async function onSubmit() {
+      const { password } = formData;
       loading.value = true;
   
       const result = await auth.changePassword(password, recoveryCode.value);

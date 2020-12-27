@@ -22,11 +22,15 @@ export default {
   },
   setup() {
     const route = useRoute();
+
     const title = ref(route.meta.title);
     const description = ref("");
-    watch(route, () =>{
-      title.value = route.meta.title;
-      description.value = route.meta.description;
+
+    watch(
+      route,
+      () =>{
+        title.value = route.meta.title;
+        description.value = route.meta.description;
     })
     return {
       title,

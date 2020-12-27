@@ -87,26 +87,24 @@ export default {
       }
 
       menuOpened.value = true;
-      
     }
 
     const drawerOptions = computed(() => {
-        const shaderEnabled = !props.isLarge;
-         
-          return {
-            menuMode: props.isLarge ? "shrink" : "overlap",
-            menuRevealMode: props.isXSmall ? "slide" : "expand",
-            minMenuSize: props.isXSmall ? 0 : 60,
-            menuOpened: props.isLarge,
-            closeOnOutsideClick: shaderEnabled,
-            shaderEnabled
-          };
+      const shaderEnabled = !props.isLarge;
+       
+      return {
+        menuMode: props.isLarge ? "shrink" : "overlap",
+        menuRevealMode: props.isXSmall ? "slide" : "expand",
+        minMenuSize: props.isXSmall ? 0 : 60,
+        menuOpened: props.isLarge,
+        closeOnOutsideClick: shaderEnabled,
+        shaderEnabled
+      };
     });
 
     const headerMenuTogglerEnabled = computed(() => {
-        return props.isXSmall;
-      }
-    );
+      return props.isXSmall;
+    });
 
     watch(
       () => props.isLarge,

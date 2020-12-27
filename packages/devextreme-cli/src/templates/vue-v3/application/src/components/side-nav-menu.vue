@@ -76,8 +76,8 @@ export default {
     });
 
     watch(
-    route,
-    () => {
+      route,
+      () => {
         updateSelection();
       }
     );

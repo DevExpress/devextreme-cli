@@ -98,24 +98,27 @@ export default {
     const router = useRouter();
     
     const loading = ref(false);
-    const formData = reactive({});
+    const formData = reactive({
+      email:"",
+      password:""
+    });
 
     const onSubmit = async () => {
-    const { email, password } = formData.value;
+    const { email, password } = formData;
     loading.value = true;
 
     const result = await auth.createAccount(email, password);
     loading.value = false;
 
     if (result.isOk) {
-        router.push("/login-form");
+      router.push("/login-form");
     } else {
-        notify(result.message, 'error', 2000);
+      notify(result.message, 'error', 2000);
     }
   };
 
     function confirmPassword(e) {
-      return e.value === formData.value.password;
+      return e.value === formData.password;
     }
     
     return {

@@ -70,14 +70,13 @@ export default {
     logOutFunc: Function
   },
   setup() {
-    const email = ref("");
-    auth.getUser().then((e) => email.value = e.data.email);
-
     const router = useRouter();
     const route = useRoute();
+
+    const email = ref("");
+    auth.getUser().then((e) => email.value = e.data.email);
     
-    const userMenuItems = [        
-      {
+    const userMenuItems = [{
         text: "Profile",
         icon: "user",
         onClick: onProfileClick
@@ -86,14 +85,14 @@ export default {
         text: "Logout",
         icon: "runner",
         onClick: onLogoutClick
-      }];
+    }];
       
-    function onLogoutClick()  {
-        auth.logOut();
-        router.push({
-          path: "/login-form",
-          query: { redirect: route.path }
-        });
+    function onLogoutClick() {
+      auth.logOut();
+      router.push({
+        path: "/login-form",
+        query: { redirect: route.path }
+      });
     }
 
     function onProfileClick() {

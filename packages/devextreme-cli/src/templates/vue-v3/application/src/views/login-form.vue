@@ -82,7 +82,10 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
-    const formData = reactive({});
+    const formData = reactive({
+      email:"",
+      password:""
+    });
     const loading = ref(false);
 
     function onCreateAccountClick() {

@@ -50,7 +50,7 @@ import DxForm, {
 } from 'devextreme-vue/form';
 import DxLoadIndicator from 'devextreme-vue/load-indicator';
 import notify from 'devextreme/ui/notify';
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 
 import auth from "../auth";
@@ -72,10 +72,12 @@ export default {
     const router = useRouter();
 
     const loading = ref(false);
-    const formData = ref("");
+    const formData = reactive({
+      email:""
+    });
 
     async function onSubmit() {
-      const { email } = formData.value;
+      const { email } = formData;
       loading.value = true;
 
       const result = await auth.resetPassword(email);
@@ -90,9 +92,9 @@ export default {
     }
 
     return { 
-        loading,
-        formData,
-        onSubmit
+      loading,
+      formData,
+      onSubmit
     }
   }
 }
