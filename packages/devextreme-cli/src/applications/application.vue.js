@@ -70,7 +70,7 @@ const create = async(appName, options) => {
     const versionInfo = await getVersionInfo(options.version);
     const layoutInfo = await getLayoutInfo(options.layout);
 
-    await createVueApp(appName, versionInfo.layout);
+    await createVueApp(appName, versionInfo.version);
 
     const appPath = path.join(process.cwd(), appName);
     const humanizedName = stringUtils.humanize(appName);
@@ -79,7 +79,7 @@ const create = async(appName, options) => {
         layout: layoutInfo.layout
     });
     modifyIndexHtml(appPath, humanizedName);
-    addTemplate(appPath, appName, templateOptions, versionInfo.layout);
+    addTemplate(appPath, appName, templateOptions, versionInfo.version);
 };
 
 const modifyIndexHtml = (appPath, appName) => {
