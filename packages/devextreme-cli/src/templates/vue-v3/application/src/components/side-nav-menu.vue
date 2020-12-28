@@ -26,22 +26,21 @@ import navigation from '../app-navigation';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router'; 
 
-const isLargeScreen = sizes()['screen-large'];
-const items = navigation.map((item) => {
+export default {
+  props: {
+    compactMode: Boolean
+  },
+  setup(props, context) {
+    const route = useRoute();
+    const router = useRouter();
+
+    const isLargeScreen = sizes()['screen-large'];
+    const items = navigation.map((item) => {
       if(item.path && !(/^\//.test(item.path))){ 
         item.path = `/${item.path}`;
       }
       return {...item, expanded: isLargeScreen} 
     });
-
-export default {
-  props: {
-    compactMode: Boolean
-  },
-  
-  setup(props, context) {
-    const route = useRoute();
-    const router = useRouter();
 
     const treeViewRef = ref(null);
 
@@ -71,7 +70,7 @@ export default {
     onMounted(() => { 
       updateSelection();
       if (props.compactMode) {
-      treeViewRef.value.instance.collapseAll();
+        treeViewRef.value.instance.collapseAll();
       }
     });
 
@@ -95,6 +94,7 @@ export default {
 
     return {
       treeViewRef,
+      isLargeScreen,
       items,
       forwardClick,
       handleItemClick,
