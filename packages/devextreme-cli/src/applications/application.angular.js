@@ -71,7 +71,7 @@ const create = (appName, options) => {
         runNgCommand(commandArguments).then(() => {
             options.resolveConflicts = 'override';
             options.updateBudgets = true;
-            options.layout = layoutInfo.layout;
+            options.layout = layoutInfo.value;
             addTemplate(appName, options, {
                 cwd: path.join(process.cwd(), appName)
             });

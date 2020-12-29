@@ -4,7 +4,7 @@ const runPrompts = async(questions, validateValue) => {
     if(validateValue) {
         return new Promise((resolve, reject) => {
             resolve({
-                layout: validateValue
+                value: validateValue
             });
         });
     }
