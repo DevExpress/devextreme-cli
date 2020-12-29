@@ -9,7 +9,7 @@
     <dx-drawer
       class="layout-body"
       position="before"
-      template="menu"
+      template="menu-template"
       v-model:opened="menuOpened"
       :opened-state-mode="drawerOptions.menuMode"
       :reveal-mode="drawerOptions.menuRevealMode"
@@ -21,7 +21,7 @@
         <slot />
         <slot name="footer" />
       </dx-scroll-view>
-      <template #menu>
+      <template #menu-template>
         <side-nav-menu
           :compact-mode="!menuOpened"
           @click="handleSideBarClick"
@@ -38,7 +38,7 @@ import DxScrollView from "devextreme-vue/scroll-view";
 import menuItems from "../app-navigation";
 import HeaderToolbar from "../components/header-toolbar";
 import SideNavMenu from "../components/side-nav-menu";
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch} from 'vue';
 import { useRoute } from 'vue-router';
 
 export default {

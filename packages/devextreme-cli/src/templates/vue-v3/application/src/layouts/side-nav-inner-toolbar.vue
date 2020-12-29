@@ -1,10 +1,9 @@
 <template>
   <div class="side-nav-inner-toolbar">
-    <!-- eslint-disable vue/valid-v-model -->
     <dx-drawer
       class="drawer"
       position="before"
-      template="menu"
+      template="menu-template"
       v-model:opened="menuOpened"
       :opened-state-mode="drawerOptions.menuMode"
       :reveal-mode="drawerOptions.menuRevealMode"
@@ -12,7 +11,6 @@
       :shading="drawerOptions.shaderEnabled"
       :close-on-outside-click="drawerOptions.closeOnOutsideClick"
     >
-    <!-- eslint-enabled -->
       <div class="container">
         <header-toolbar
           :menu-toggle-enabled="headerMenuTogglerEnabled"
@@ -23,24 +21,24 @@
           <slot name="footer" />
         </dx-scroll-view>
       </div>
-      <template #menu>
-      <side-nav-menu
-        :compact-mode="!menuOpened"
-        @click="handleSideBarClick"
-      >
-        <dx-toolbar id="navigation-header">
-          <dx-item v-if="!isXSmall" location="before" css-class="menu-button">
-            <dx-button
-              icon="menu"
-              styling-mode="text"
-              @click="toggleMenu"
-            />
-          </dx-item>
-          <dx-item location="before" css-class="header-title dx-toolbar-label">
-              <div>{{ title }}</div>
-          </dx-item>
-        </dx-toolbar>
-      </side-nav-menu>
+      <template #menu-template>
+        <side-nav-menu
+          :compact-mode="!menuOpened"
+          @click="handleSideBarClick"
+        >
+          <dx-toolbar id="navigation-header">
+            <dx-item v-if="!isXSmall" location="before" css-class="menu-button">
+              <dx-button
+                icon="menu"
+                styling-mode="text"
+                @click="toggleMenu"
+              />
+            </dx-item>
+            <dx-item location="before" css-class="header-title dx-toolbar-label">
+                <div>{{ title }}</div>
+            </dx-item>
+          </dx-toolbar>
+        </side-nav-menu>
       </template>
     </dx-drawer>
   </div>
