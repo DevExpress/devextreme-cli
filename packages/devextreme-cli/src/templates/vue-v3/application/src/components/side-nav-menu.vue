@@ -94,7 +94,6 @@ export default {
 
     return {
       treeViewRef,
-      isLargeScreen,
       items,
       forwardClick,
       handleItemClick,

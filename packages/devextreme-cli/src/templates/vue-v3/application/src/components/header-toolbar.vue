@@ -104,9 +104,7 @@ export default {
 
     return {
       email,
-      userMenuItems,
-      onLogoutClick,
-      onProfileClick
+      userMenuItems
     };
   },
   components: {

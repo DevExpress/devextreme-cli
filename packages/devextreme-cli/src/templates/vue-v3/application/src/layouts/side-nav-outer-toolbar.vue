@@ -6,7 +6,6 @@
       :toggle-menu-func="toggleMenu"
       :title="title"
     />
-    <!-- eslint-disable vue/valid-v-model -->
     <dx-drawer
       class="layout-body"
       position="before"
@@ -18,18 +17,16 @@
       :shading="drawerOptions.shaderEnabled"
       :close-on-outside-click="drawerOptions.closeOnOutsideClick"
     >
-    <!-- eslint-enabled -->
       <dx-scroll-view ref="scrollViewRef" class="with-footer">
         <slot />
         <slot name="footer" />
       </dx-scroll-view>
       <template #menu>
-      <side-nav-menu
-        :compact-mode="!menuOpened"
-        @click="handleSideBarClick"
-      />
+        <side-nav-menu
+          :compact-mode="!menuOpened"
+          @click="handleSideBarClick"
+        />
       </template>
-      <!-- eslint-enable -->
     </dx-drawer>
   </div>
 </template>
@@ -101,17 +98,16 @@ export default {
     watch(
       route,
       () => {
-      if (menuTemporaryOpened.value || !props.isLarge) {
-        menuOpened.value = false;
-        menuTemporaryOpened.value = false;
-      }
+        if (menuTemporaryOpened.value || !props.isLarge) {
+          menuOpened.value = false;
+          menuTemporaryOpened.value = false;
+        }
       scrollViewRef.value.instance.scrollTo(0);
       }
     );
 
     return {
       menuOpened,
-      menuTemporaryOpened,
       menuItems,
       toggleMenu,
       handleSideBarClick,

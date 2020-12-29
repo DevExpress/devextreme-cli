@@ -101,7 +101,6 @@ components: {
     }
 
     return {
-      recoveryCode,
       loading,
       formData,
       onSubmit,

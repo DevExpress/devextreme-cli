@@ -129,7 +129,6 @@ export default {
     return {
       scrollViewRef,
       menuOpened,
-      menuTemporaryOpened,
       drawerOptions,
       menuItems,
       headerMenuTogglerEnabled,
