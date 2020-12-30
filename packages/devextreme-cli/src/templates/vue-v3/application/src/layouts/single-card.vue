@@ -26,9 +26,7 @@ export default {
     const title = ref(route.meta.title);
     const description = ref("");
 
-    watchEffect(
-      route,
-      () =>{
+    watchEffect(() => {
         title.value = route.meta.title;
         description.value = route.meta.description;
     })

@@ -9,7 +9,7 @@
     <dx-drawer
       class="layout-body"
       position="before"
-      template="menu-template"
+      template="menuOpened"
       v-model:opened="menuOpened"
       :opened-state-mode="drawerOptions.menuMode"
       :reveal-mode="drawerOptions.menuRevealMode"
@@ -21,7 +21,7 @@
         <slot />
         <slot name="footer" />
       </dx-scroll-view>
-      <template #menu-template>
+      <template #menuOpened>
         <side-nav-menu
           :compact-mode="!menuOpened"
           @click="handleSideBarClick"

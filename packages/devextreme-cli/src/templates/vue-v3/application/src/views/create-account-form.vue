@@ -49,7 +49,7 @@
       <dx-item>
         <template #default>
           <div class="login-link">
-            Have an account? <router-link to="/login">Sign In</router-link>
+            Have an account? <router-link to="/login-form">Sign In</router-link>
           </div>
         </template>
       </dx-item>

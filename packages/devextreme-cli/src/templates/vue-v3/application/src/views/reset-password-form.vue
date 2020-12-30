@@ -23,7 +23,7 @@
       <dx-item>
         <template #default>
           <div class="login-link">
-            Return to <router-link to="/login">Sign In</router-link>
+            Return to <router-link to="/login-form">Sign In</router-link>
           </div>
         </template>
       </dx-item>
