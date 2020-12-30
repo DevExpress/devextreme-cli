@@ -50,7 +50,7 @@ const create = (appName, options) => {
             const humanizedName = stringUtils.humanize(appName);
             const templateOptions = Object.assign({}, options, {
                 project: humanizedName,
-                layout: stringUtils.classify(layoutInfo.value)
+                layout: stringUtils.classify(layoutInfo.layout)
             });
             modifyIndexHtml(appPath, humanizedName);
             addTemplate(appPath, appName, templateOptions);
