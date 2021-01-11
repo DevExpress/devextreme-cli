@@ -23,7 +23,7 @@
 import DxTreeView from "devextreme-vue/ui/tree-view";
 import { sizes } from '../utils/media-query';
 import navigation from '../app-navigation';
-import { onMounted, ref, watchEffect } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router'; 
 
 export default {
@@ -73,15 +73,19 @@ export default {
         treeViewRef.value.instance.collapseAll();
       }
     });
-
-
-    watchEffect(() => {
-      updateSelection();
-    });
     
-    watchEffect(
+
+    watch(
+      () => route.path,
       () => {
-        if (treeViewRef.value && treeViewRef.value.instance && props.compactMode) {
+        updateSelection();
+      }
+    );
+    
+    watch(
+      () => props.compactMode,
+      () => {
+        if (props.compactMode) {
           treeViewRef.value.instance.collapseAll();
         } else {
           updateSelection();

@@ -114,7 +114,7 @@ export default {
     );
     
     watch(
-      route,
+      () => route.path,
       () => {
         if (menuTemporaryOpened.value || !props.isLarge) {
           menuOpened.value = false;

@@ -14,7 +14,7 @@
 import DxScrollView from "devextreme-vue/scroll-view";
 
 import { useRoute } from 'vue-router';
-import { watchEffect, ref } from 'vue';
+import { watch, ref } from 'vue';
 
 export default {
   components: {
@@ -26,10 +26,12 @@ export default {
     const title = ref(route.meta.title);
     const description = ref("");
 
-    watchEffect(() => {
+    watch(() => route.path,
+     () => {
         title.value = route.meta.title;
         description.value = route.meta.description;
-    })
+     }
+    )
     return {
       title,
       description
