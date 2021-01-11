@@ -59,7 +59,7 @@ export default {
     }
 
     function updateSelection () {
-      if (!treeViewRef.value) {
+      if (!treeViewRef.value || !treeViewRef.value.instance) {
         return;
       }
 
@@ -79,8 +79,9 @@ export default {
       updateSelection();
     });
     
-    watchEffect(() => {
-        if (treeViewRef.value && props.compactMode) {
+    watchEffect(
+      () => {
+        if (treeViewRef.value && treeViewRef.value.instance && props.compactMode) {
           treeViewRef.value.instance.collapseAll();
         } else {
           updateSelection();
