@@ -29,7 +29,7 @@ exports.createApp = async() => {
     ], {
         cwd: sandboxPath,
         forceNoCmd: true,
-        silent: true
+        silent: false
     });
 
     await runCommand('node', [
@@ -40,7 +40,7 @@ exports.createApp = async() => {
     ], {
         cwd: appPath,
         forceNoCmd: true,
-        silent: true
+        silent: false
     });
 
     fs.writeFileSync(path.join(appPath, '.env'), 'SKIP_PREFLIGHT_CHECK=true' + EOL + 'BROWSER=none');

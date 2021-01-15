@@ -16,12 +16,12 @@ const appComponentPath = path.join(appPath, 'src/app/app.component.html');
 async function prepareSchematics() {
     await packageManager.runInstall({
         cwd: schematicsPath,
-        silent: true
+        silent: false
     });
 
     await packageManager.run([ 'run', 'build' ], {
         cwd: schematicsPath,
-        silent: true
+        silent: false
     });
 }
 
@@ -45,7 +45,7 @@ exports.createApp = async() => {
     ], {
         cwd: sandboxPath,
         forceNoCmd: true,
-        silent: true
+        silent: false
     });
 
     await runCommand('node', [
@@ -56,7 +56,7 @@ exports.createApp = async() => {
     ], {
         cwd: appPath,
         forceNoCmd: true,
-        silent: true
+        silent: false
     });
 
     const data = fs.readFileSync(routingFilePath, 'utf8');

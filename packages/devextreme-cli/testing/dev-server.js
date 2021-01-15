@@ -70,7 +70,7 @@ module.exports = class DevServer {
         ], {
             cwd: this.env.appPath,
             forceNoCmd: true,
-            silent: true
+            silent: false
         });
 
         await this.waitForCompilation();
