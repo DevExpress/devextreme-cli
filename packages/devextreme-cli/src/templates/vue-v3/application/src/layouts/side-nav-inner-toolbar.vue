@@ -28,14 +28,18 @@
         >
           <dx-toolbar id="navigation-header">
             <dx-item v-if="!isXSmall" location="before" css-class="menu-button">
+              <template #default>
               <dx-button
                 icon="menu"
                 styling-mode="text"
                 @click="toggleMenu"
               />
+              </template>
             </dx-item>
             <dx-item location="before" css-class="header-title dx-toolbar-label">
+              <template #default>
                 <div>{{ title }}</div>
+                </template>
             </dx-item>
           </dx-toolbar>
         </side-nav-menu>
@@ -89,12 +93,11 @@ export default {
 
     const drawerOptions = computed(() => {
       const shaderEnabled = !props.isLarge;
-       
+
       return {
         menuMode: props.isLarge ? "shrink" : "overlap",
         menuRevealMode: props.isXSmall ? "slide" : "expand",
         minMenuSize: props.isXSmall ? 0 : 60,
-        menuOpened: props.isLarge,
         closeOnOutsideClick: shaderEnabled,
         shaderEnabled
       };

@@ -77,14 +77,9 @@ export default {
         menuMode: props.isLarge ? "shrink" : "overlap",
         menuRevealMode: props.isXSmall ? "slide" : "expand",
         minMenuSize: props.isXSmall ? 0 : 60,
-        menuOpened:props.isLarge,
         closeOnOutsideClick: shaderEnabled,
         shaderEnabled
       };
-    });
-
-    const headerMenuTogglerEnabled = computed(() => {
-      return props.isXSmall;
     });
 
     watch(
@@ -112,7 +107,6 @@ export default {
       toggleMenu,
       handleSideBarClick,
       drawerOptions,
-      headerMenuTogglerEnabled,
       scrollViewRef
     };
   },
