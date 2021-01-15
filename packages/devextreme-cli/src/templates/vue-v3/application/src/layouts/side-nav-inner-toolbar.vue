@@ -8,6 +8,7 @@
       :opened-state-mode="drawerOptions.menuMode"
       :reveal-mode="drawerOptions.menuRevealMode"
       :min-size="drawerOptions.minMenuSize"
+      :max-size="drawerOptions.maxMenuSize"
       :shading="drawerOptions.shaderEnabled"
       :close-on-outside-click="drawerOptions.closeOnOutsideClick"
     >
@@ -98,6 +99,7 @@ export default {
         menuMode: props.isLarge ? "shrink" : "overlap",
         menuRevealMode: props.isXSmall ? "slide" : "expand",
         minMenuSize: props.isXSmall ? 0 : 60,
+        maxMenuSize: props.isXSmall ? 250 : undefined,
         closeOnOutsideClick: shaderEnabled,
         shaderEnabled
       };
