@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const packageManager = require('./utility/package-manager');
 const semver = require('semver');
+const stripBom = require('strip-bom');
+const packageManager = require('./utility/package-manager');
 const lock = require('./utility/file-lock');
 
 const commands = {
@@ -72,6 +73,7 @@ const readInput = options => new Promise(resolve => {
             console.error(`Unable to read the ${fileName} file.`);
         } else {
             const extension = path.extname(fileName);
+            data = stripBom(data.toString());
             if(extension !== '.json') {
                 options.data = data;
             } else {

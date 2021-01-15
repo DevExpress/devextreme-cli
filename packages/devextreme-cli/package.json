@@ -38,7 +38,8 @@
     "minimist": "^1.2.0",
     "mustache": "^3.0.1",
     "prompts": "^2.0.4",
-    "semver": "^5.6.0"
+    "semver": "^5.6.0",
+    "strip-bom": "^4.0.0"
   },
   "devDependencies": {
     "@typescript-eslint/parser": "^4.0.1",
