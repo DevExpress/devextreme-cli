@@ -5,11 +5,11 @@ const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
 
 const appName = 'my-app';
-const sandboxPath = path.join(process.cwd(), './testing/sandbox/vue');
+const sandboxPath = path.join(process.cwd(), './testing/sandbox/vue-v2');
 const appPath = path.join(sandboxPath, appName);
 const routerFilePath = path.join(sandboxPath, appName, 'src/router.js');
 
-exports.engine = 'vue';
+exports.engine = 'vue-v2';
 exports.port = 8080;
 exports.appPath = path.join(sandboxPath, appName);
 exports.npmArgs = ['run', 'serve'];
@@ -23,11 +23,12 @@ exports.createApp = async() => {
         path.join(process.cwd(), './index.js'),
         'new',
         'vue-app',
-        '--layout=side-nav-outer-toolbar'
+        '--layout=side-nav-outer-toolbar',
+        '--version=2'
     ], {
         cwd: sandboxPath,
         forceNoCmd: true,
-        silent: true
+        silent: false
     });
 
     await runCommand('node', [
@@ -38,7 +39,7 @@ exports.createApp = async() => {
     ], {
         cwd: appPath,
         forceNoCmd: true,
-        silent: true
+        silent: false
     });
 
     await rimraf(path.join(appPath, 'vue.config.js'));

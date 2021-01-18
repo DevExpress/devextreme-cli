@@ -49,7 +49,7 @@
       <dx-item>
         <template #default>
           <div class="login-link">
-            Have an account? <router-link to="/login">Sign In</router-link>
+            Have an account? <router-link to="/login-form">Sign In</router-link>
           </div>
         </template>
       </dx-item>
@@ -77,6 +77,8 @@ import DxForm, {
 } from 'devextreme-vue/form';
 import DxLoadIndicator from 'devextreme-vue/load-indicator';
 import notify from 'devextreme/ui/notify';
+import { useRouter } from 'vue-router';
+import { ref, reactive } from 'vue';
 
 import auth from "../auth";
 
@@ -92,28 +94,38 @@ export default {
     DxEmailRule,
     DxLoadIndicator
   },
-  data() {
-    return {
-        formData: {},
-        loading: false
+  setup() {
+    const router = useRouter();
+    
+    const loading = ref(false);
+    const formData = reactive({
+      email:"",
+      password:""
+    });
+
+    const onSubmit = async () => {
+    const { email, password } = formData;
+    loading.value = true;
+
+    const result = await auth.createAccount(email, password);
+    loading.value = false;
+
+    if (result.isOk) {
+      router.push("/login-form");
+    } else {
+      notify(result.message, 'error', 2000);
     }
-  },
-  methods: {
-    onSubmit: async function() {
-      const { email, password } = this.formData;
-      this.loading = true;
+  };
 
-      const result = await auth.createAccount(email, password);
-      this.loading = false;
-
-      if (result.isOk) {
-        this.$router.push("/login-form");
-      } else {
-        notify(result.message, 'error', 2000);
-      }
-    },
-    confirmPassword(e) {
-      return e.value === this.formData.password;
+    function confirmPassword(e) {
+      return e.value === formData.password;
+    }
+    
+    return {
+        formData,
+        loading,
+        onSubmit,
+        confirmPassword
     }
   }
 }

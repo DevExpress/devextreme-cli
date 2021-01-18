@@ -23,7 +23,7 @@
       <dx-item>
         <template #default>
           <div class="login-link">
-            Return to <router-link to="/login">Sign In</router-link>
+            Return to <router-link to="/login-form">Sign In</router-link>
           </div>
         </template>
       </dx-item>
@@ -50,6 +50,8 @@ import DxForm, {
 } from 'devextreme-vue/form';
 import DxLoadIndicator from 'devextreme-vue/load-indicator';
 import notify from 'devextreme/ui/notify';
+import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
 import auth from "../auth";
 
@@ -66,26 +68,33 @@ export default {
     DxEmailRule,
     DxLoadIndicator
   },
-  data() {
-    return {
-        formData: {},
-        loading: false
-    }
-  },
-  methods: {
-    onSubmit: async function() {
-      const { email } = this.formData;
-      this.loading = true;
+  setup() {
+    const router = useRouter();
+
+    const loading = ref(false);
+    const formData = reactive({
+      email:""
+    });
+
+    async function onSubmit() {
+      const { email } = formData;
+      loading.value = true;
 
       const result = await auth.resetPassword(email);
-      this.loading = false;
+      loading.value = false;
 
       if (result.isOk) {
-        this.$router.push("/login-form");
+        router.push("/login-form");
         notify(notificationText, "success", 2500);
       } else {
         notify(result.message, "error", 2000);
       }
+    }
+
+    return { 
+      loading,
+      formData,
+      onSubmit
     }
   }
 }

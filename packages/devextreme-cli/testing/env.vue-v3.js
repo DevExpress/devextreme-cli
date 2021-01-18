@@ -1,20 +1,18 @@
 const fs = require('fs');
-const { EOL } = require('os');
 const path = require('path');
 
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
-const classify = require('../src/utility/string').classify;
 
 const appName = 'my-app';
-const sandboxPath = path.join(process.cwd(), './testing/sandbox/react');
+const sandboxPath = path.join(process.cwd(), './testing/sandbox/vue-v3');
 const appPath = path.join(sandboxPath, appName);
-const appLayoutPath = path.join(sandboxPath, appName, 'src/Content.js');
+const routerFilePath = path.join(sandboxPath, appName, 'src/router.js');
 
-exports.engine = 'react';
-exports.port = 3000;
-exports.appPath = appPath;
-exports.npmArgs = ['start'];
+exports.engine = 'vue-v3';
+exports.port = 8080;
+exports.appPath = path.join(sandboxPath, appName);
+exports.npmArgs = ['run', 'serve'];
 exports.fileExtention = 'js';
 
 exports.createApp = async() => {
@@ -24,8 +22,9 @@ exports.createApp = async() => {
     await runCommand('node', [
         path.join(process.cwd(), './index.js'),
         'new',
-        'react-app',
-        '--layout=side-nav-outer-toolbar'
+        'vue-app',
+        '--layout=side-nav-outer-toolbar',
+        '--version=3'
     ], {
         cwd: sandboxPath,
         forceNoCmd: true,
@@ -43,13 +42,13 @@ exports.createApp = async() => {
         silent: false
     });
 
-    fs.writeFileSync(path.join(appPath, '.env'), 'SKIP_PREFLIGHT_CHECK=true' + EOL + 'BROWSER=none');
+    await rimraf(path.join(appPath, 'vue.config.js'));
 };
 
 exports.setLayout = (layoutName) => {
-    const regexToFind = /SideNav\w+Toolbar as SideNavBarLayout/g;
-    const newSubStr = `${classify(layoutName)} as SideNavBarLayout`;
-    const data = fs.readFileSync(appLayoutPath, 'utf8');
+    const regexToFind = /import defaultLayout from "\.\/layouts\/side-nav-\w+-toolbar/g;
+    const newSubStr = `import defaultLayout from "./layouts/${layoutName}`;
+    const data = fs.readFileSync(routerFilePath, 'utf8');
     const result = data.replace(regexToFind, newSubStr);
-    fs.writeFileSync(appLayoutPath, result, 'utf8');
+    fs.writeFileSync(routerFilePath, result, 'utf8');
 };
