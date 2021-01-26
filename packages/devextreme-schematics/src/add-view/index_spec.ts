@@ -82,8 +82,7 @@ describe('view', () => {
   },
   {
     path: '**',
-    redirectTo: 'pages/test',
-    canActivate: [ AuthGuardService ]
+    redirectTo: 'pages/test'
   }
 ];`);
   });
