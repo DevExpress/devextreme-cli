@@ -75,8 +75,7 @@ function addRedirectRoute(host: Tree, routingModulePath: string, page: string) {
   const routes = findRoutesInSource(source)!;
   const redirectRoute = `  {
     path: '**',
-    redirectTo: '${strings.dasherize(page)}',
-    canActivate: [ AuthGuardService ]
+    redirectTo: '${strings.dasherize(page)}'
   }`;
 
   insertItemToArray(host, routingModulePath, routes, redirectRoute, { location: 'end' });
