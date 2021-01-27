@@ -27,7 +27,7 @@ export default () => (
           <span> and includes the following DevExtreme components:</span>
         </p>
         <ul>
-          <li><a href={'https://js.devexpress.com/Documentation/Guide/Widgets/DataGrid/Overview/'} target={'_blank'} rel={'noopener noreferrer'}>DataGrid</a></li>
+          <li><a href={'https://js.devexpress.com/Documentation/Guide/UI_Components/DataGrid/Getting_Started_with_DataGrid/'} target={'_blank'} rel={'noopener noreferrer'}>DataGrid</a></li>
           <li><a href={'https://js.devexpress.com/Documentation/Guide/Widgets/Form/Overview/'} target={'_blank'} rel={'noopener noreferrer'}>Form</a></li>
           <li><a href={'https://js.devexpress.com/Documentation/Guide/Widgets/Drawer/Getting_Started_with_Navigation_Drawer/'} target={'_blank'} rel={'noopener noreferrer'}>Drawer</a></li>
         </ul>
