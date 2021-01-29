@@ -100,6 +100,12 @@ describe('layout', () => {
     expect(moduleContent)
       .toContain(`import { AuthService, ScreenService, AppInfoService } from './shared/services';`);
     expect(moduleContent).toContain('import { AppRoutingModule }');
+    expect(moduleContent)
+      .toContain('import { FooterModule, ' +
+      'ResetPasswordFormModule, ' +
+      'CreateAccountFormModule, ' +
+      'ChangePasswordFormModule, ' +
+      'LoginFormModule }');
 
     const testContent = tree.readContent('/e2e/src/app.e2e-spec.ts');
     expect(testContent).toMatch(/'Welcome to TestApp!'/);
