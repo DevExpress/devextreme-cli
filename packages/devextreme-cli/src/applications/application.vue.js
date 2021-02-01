@@ -24,7 +24,7 @@ const getVueVersion = () => {
         : defaultVueVersion;
 };
 
-const preparePackageJsonForTemplate = (appPath, appName, version) => {
+const preparePackageJsonForTemplate = (appPath, appName, version, flags) => {
     if(!version) {
         version = getVueVersion();
     }
@@ -51,6 +51,7 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
     packageJsonUtils.addDependencies(appPath, dependencies);
     packageJsonUtils.updateScripts(appPath, scripts);
     packageJsonUtils.updateName(appPath, appName);
+    packageJsonUtils.addFlags(appPath, flags);
 };
 
 async function createVueApp(name, version) {
@@ -107,7 +108,12 @@ const addTemplate = (appPath, appName, templateOptions, version) => {
     if(!templateOptions.empty) {
         addSamplePages(appPath, version);
     }
-    preparePackageJsonForTemplate(appPath, appName, version);
+
+    const flags = [{
+        "useTaobaoRegistry": false
+    }];
+    
+    preparePackageJsonForTemplate(appPath, appName, version, flags);
     install({}, appPath, styles);
 };
 

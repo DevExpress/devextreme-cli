@@ -52,6 +52,18 @@ const updateName = (appPath, name) => {
     });
 };
 
+const addFlags = (appPath, flags) => {
+    modifyJson(getPackageJsonPath(appPath), content => {
+        if(flags) {
+            for (var name in flags[0]) {
+                content[name] = flags[0][name]
+            }
+        }
+        
+        return content;
+    });
+};
+
 const updateScripts = (appPath, scripts) => {
     modifyJson(getPackageJsonPath(appPath), content => {
         let packageJsonScripts = content.scripts;
@@ -85,5 +97,6 @@ module.exports = {
     getPackageJsonPath,
     updateScripts,
     updateName,
+    addFlags,
     addDevextreme
 };
