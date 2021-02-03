@@ -21,7 +21,12 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
         { name: 'node-sass', version: '^4.11.0' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
-        { name: 'react-router-dom', version: '^5.0.0' }
+        { name: 'react-router-dom', version: '^5.0.0' },
+
+        // TODO: return default react versions (remove next two lines)
+        // when react@17 issue will be resolved (T969191)
+        { name: 'react', version: '^16.2.0' },
+        { name: 'react-dom', version: '^16.2.0' },
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
