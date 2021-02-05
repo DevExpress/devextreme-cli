@@ -1,7 +1,7 @@
 const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
-const getLayoutInfo = require('../layout').getLayoutInfo;
+const getLayoutInfo = require('../utility/prompts/layout').getLayoutInfo;
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
@@ -21,7 +21,12 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
         { name: 'node-sass', version: '^4.11.0' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
-        { name: 'react-router-dom', version: '^5.0.0' }
+        { name: 'react-router-dom', version: '^5.0.0' },
+
+        // TODO: return default react versions (remove next two lines)
+        // when react@17 issue will be resolved (T969191)
+        { name: 'react', version: '^16.2.0' },
+        { name: 'react-dom', version: '^16.2.0' },
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },

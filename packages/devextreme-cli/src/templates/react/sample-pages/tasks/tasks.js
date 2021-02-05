@@ -69,6 +69,7 @@ export default () => (
       <Column
         dataField={'Task_Priority'}
         caption={'Priority'}
+        name={'Priority'}
         hidingPriority={1}
       />
       <Column

@@ -15,6 +15,9 @@
             }, {
                 "name": "--empty",
                 "description": "Specifies whether to skip sample views generation (default: false)"
+            }, {
+                "name": "--version",
+                "description": "Specifies whether to generate a Vue 2 or Vue 3 application. Available values: 2 (default) and 3"
             }]
         }]
     }, {
