@@ -136,12 +136,10 @@ const getDevExtremeVersion = () => {
     const cwd = process.cwd();
     const dependencies = packageManager.getDependencies({ cwd });
     const installedDevExtremePackageJson = path.join(cwd, 'node_modules', 'devextreme', 'package.json');
+    const devextremeInfo = dependencies && dependencies.devextreme || getDevExtremeInfo(dependencies);
 
-    if(dependencies) {
-        const devextremeInfo = dependencies.devextreme || getDevExtremeInfo(dependencies);
-        if(devextremeInfo) {
-            return devextremeInfo.version;
-        }
+    if(devextremeInfo) {
+        return devextremeInfo.version;
     } else if(fs.existsSync(installedDevExtremePackageJson)) {
         return require(installedDevExtremePackageJson).version;
     }
