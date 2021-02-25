@@ -68,4 +68,6 @@ workflows:
           matrix:
             parameters:
               app: [react, angular, vue-v2, vue-v3]
+  themebuilder:
+    jobs:
       - themebuilder-test
