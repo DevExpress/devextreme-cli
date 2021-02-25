@@ -38,7 +38,7 @@ const createNodeModules = async(hasDevExtreme) => {
 };
 
 
-describe('ThemeBuilder Versions Test', () => {
+describe('ThemeBuilder getDevExtremeVersion Test', () => {
 
     beforeEach(async() => {
         jest.resetModules();
