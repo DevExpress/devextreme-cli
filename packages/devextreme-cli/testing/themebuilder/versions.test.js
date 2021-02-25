@@ -1,4 +1,4 @@
-const { mkdir, writeFile, rmdir } = require('fs/promises');
+const { mkdir, writeFile, rmdir } = require('fs').promises;
 const { join } = require('path');
 
 const workDirectory = join(__dirname, 'versions');
