@@ -50,6 +50,7 @@ jobs:
     docker:
       - image: circleci/node:12-browsers
     steps:
+      - checkout
       - run:
           name: Install npm packages
           command: npm i
