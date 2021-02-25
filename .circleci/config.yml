@@ -47,7 +47,7 @@ jobs:
           path: /home/circleci/.npm/_logs
 
   themebuilder-test:
-   parameters:
+    parameters:
       app:
         type: string
     docker:
