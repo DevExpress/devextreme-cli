@@ -132,8 +132,7 @@ const getDevExtremeInfo = (dependencies) => {
     return dependencies[keyValue];
 };
 
-const getDevExtremeVersion = () => {
-    const cwd = process.cwd();
+const getDevExtremeVersion = (cwd) => {
     const dependencies = packageManager.getDependencies({ cwd });
     const installedDevExtremePackageJson = path.join(cwd, 'node_modules', 'devextreme', 'package.json');
     const devextremeInfo = dependencies && (dependencies.devextreme || getDevExtremeInfo(dependencies));
@@ -141,7 +140,7 @@ const getDevExtremeVersion = () => {
     if(devextremeInfo) {
         return devextremeInfo.version;
     } else if(fs.existsSync(installedDevExtremePackageJson)) {
-        return require(installedDevExtremePackageJson).version;
+        return JSON.parse(fs.readFileSync(installedDevExtremePackageJson, 'utf8')).version;
     }
 
     return;
@@ -178,7 +177,7 @@ const runThemeBuilder = async rawOptions => {
         options.lessCompiler.options['rootpath'] = options.assetsBasePath;
     }
 
-    const version = options.version || getDevExtremeVersion() || 'latest';
+    const version = options.version || getDevExtremeVersion(process.cwd()) || 'latest';
 
     await lock.acquire();
 
@@ -259,5 +258,6 @@ const isThemeBuilderCommand = command => {
 
 module.exports = {
     run: runThemeBuilder,
-    isThemeBuilderCommand: isThemeBuilderCommand
+    isThemeBuilderCommand,
+    getDevExtremeVersion
 };

@@ -46,6 +46,21 @@ jobs:
       - store_artifacts:
           path: /home/circleci/.npm/_logs
 
+  themebuilder-test:
+   parameters:
+      app:
+        type: string
+    docker:
+      - image: circleci/node:12-browsers
+    steps:
+      - run:
+          name: Install npm packages
+          command: npm i
+      - run:
+          name: Run tests
+          command: npm run test-themebuilder
+          no_output_timeout: 5m
+
 workflows:
   all-builds:
     jobs:
@@ -53,3 +68,4 @@ workflows:
           matrix:
             parameters:
               app: [react, angular, vue-v2, vue-v3]
+      - themebuilder-test
