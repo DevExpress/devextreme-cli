@@ -7,6 +7,7 @@
     "create-template": "npm run --prefix ./packages/devextreme-cli create-template",
     "lint-template": "npm run --prefix ./packages/devextreme-cli lint-template",
     "test-template": "npm run --prefix ./packages/devextreme-cli test-template",
+    "test-themebuilder": "npm run --prefix ./packages/devextreme-cli test-themebuilder",
     "postinstall": "lerna bootstrap",
     "update-template": "node ./templates-generator/index.js"
   },

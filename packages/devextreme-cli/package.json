@@ -19,11 +19,12 @@
   ],
   "scripts": {
     "lint": "eslint ./",
-    "test": "npm run create-template && npm run lint-template && npm run test-template",
+    "test": "npm run create-template && npm run lint-template && npm run test-template && npm run test-themebuilder",
     "create-template": "node ./testing/creating.js",
     "lint-template": "node ./testing/linting.js",
     "test-template": "node ./testing/testing.js",
     "test-dev": "cross-env TEST_MODE=dev jest",
+    "test-themebuilder": "jest --config=./jest-themebuilder.config.js --runInBand",
     "docker:build": "docker build --rm -f \"testing/docker/Dockerfile\" -t devextreme-cli:latest \"testing/docker\"",
     "docker:run": "docker run --rm -d  -p 9222:9222/tcp devextreme-cli:latest"
   },
