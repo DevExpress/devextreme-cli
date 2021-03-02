@@ -7,6 +7,8 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 
 import { Router } from '@angular/router';
+
+import themes from 'devextreme/ui/themes';
 @Component({
   selector: 'app-header',
   templateUrl: 'header.component.html',
@@ -43,11 +45,15 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.authService.getUser().then((e) => this.user = e.data);
+    themes.initialized(() => {
+      this.authService.getUser().then((e) => this.user = e.data);
+    })
   }
 
   toggleMenu = () => {
-    this.menuToggle.emit();
+    themes.initialized(() => {
+      this.menuToggle.emit();
+    })
   }
 }
 
