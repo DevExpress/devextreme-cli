@@ -1,4 +1,4 @@
-import { Component, NgModule, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, NgModule, Input, Output, EventEmitter, AfterContentInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services';
@@ -15,7 +15,7 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./header.component.scss']
 })
 
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements AfterContentInit {
   @Output()
   menuToggle = new EventEmitter<boolean>();
 
@@ -44,10 +44,8 @@ export class HeaderComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  ngOnInit() {
-    themes.initialized(() => {
-      this.authService.getUser().then((e) => this.user = e.data);
-    })
+  ngAfterContentInit() {
+    this.authService.getUser().then((e) => this.user = e.data);
   }
 
   toggleMenu = () => {

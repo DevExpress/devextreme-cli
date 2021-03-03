@@ -48,22 +48,18 @@ export class SideNavInnerToolbarComponent implements OnInit {
   }
 
   updateDrawer() {
-    themes.initialized(() => {
-      const isXSmall = this.screen.sizes['screen-x-small'];
-      const isLarge = this.screen.sizes['screen-large'];
+    const isXSmall = this.screen.sizes['screen-x-small'];
+    const isLarge = this.screen.sizes['screen-large'];
   
-      this.menuMode = isLarge ? 'shrink' : 'overlap';
-      this.menuRevealMode = isXSmall ? 'slide' : 'expand';
-      this.minMenuSize = isXSmall ? 0 : 60;
-      this.shaderEnabled = !isLarge;
-    })
+    this.menuMode = isLarge ? 'shrink' : 'overlap';
+    this.menuRevealMode = isXSmall ? 'slide' : 'expand';
+    this.minMenuSize = isXSmall ? 0 : 60;
+    this.shaderEnabled = !isLarge;
   }
 
   toggleMenu = (e) => {
-    themes.initialized(() => {
-      this.menuOpened = !this.menuOpened;
-      e.event.stopPropagation();
-    })
+    this.menuOpened = !this.menuOpened;
+    e.event.stopPropagation();
   }
 
   get hideMenuAfterNavigation() {
@@ -75,36 +71,32 @@ export class SideNavInnerToolbarComponent implements OnInit {
   }
 
   navigationChanged(event) {
-    themes.initialized(() => {
-      const path = event.itemData.path;
-      const pointerEvent = event.event;
+    const path = event.itemData.path;
+    const pointerEvent = event.event;
   
-      if (path && this.menuOpened) {
-        if (event.node.selected) {
-          pointerEvent.preventDefault();
-        } else {
-          this.router.navigate([path]);
-          this.scrollView.instance.scrollTo(0);
-        }
-  
-        if (this.hideMenuAfterNavigation) {
-          this.temporaryMenuOpened = false;
-          this.menuOpened = false;
-          pointerEvent.stopPropagation();
-        }
+    if (path && this.menuOpened) {
+      if (event.node.selected) {
+        pointerEvent.preventDefault();
       } else {
-          pointerEvent.preventDefault();
+        this.router.navigate([path]);
+        this.scrollView.instance.scrollTo(0);
       }
-    })
+  
+      if (this.hideMenuAfterNavigation) {
+        this.temporaryMenuOpened = false;
+        this.menuOpened = false;
+        pointerEvent.stopPropagation();
+      }
+    } else {
+        pointerEvent.preventDefault();
+    }
   }
 
   navigationClick() {
-    themes.initialized(() => {
-      if (this.showMenuAfterClick) {
-        this.temporaryMenuOpened = true;
-        this.menuOpened = true;
-      }
-    })
+    if (this.showMenuAfterClick) {
+      this.temporaryMenuOpened = true;
+      this.menuOpened = true;
+    }
   }
 }
 

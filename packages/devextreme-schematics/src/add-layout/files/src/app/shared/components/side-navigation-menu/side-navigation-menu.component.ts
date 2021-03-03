@@ -3,6 +3,7 @@ import { DxTreeViewModule, DxTreeViewComponent } from 'devextreme-angular/ui/tre
 import { navigation } from '../../../app-navigation';
 
 import * as events from 'devextreme/events';
+import themes from 'devextreme/ui/themes';
 
 @Component({
   selector: 'app-side-navigation-menu',
@@ -22,12 +23,14 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
   private _selectedItem: String;
   @Input()
   set selectedItem(value: String) {
-    this._selectedItem = value;
-    if (!this.menu.instance) {
-      return;
-    }
-
-    this.menu.instance.selectItem(value);
+    themes.initialized(() => {
+      this._selectedItem = value;
+      if (!this.menu.instance) {
+        return;
+      }
+  
+      this.menu.instance.selectItem(value);
+    })
   }
 
   private _items;
@@ -55,7 +58,6 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
     if (!this.menu.instance) {
       return;
     }
-
     if (val) {
       this.menu.instance.collapseAll();
     } else {
