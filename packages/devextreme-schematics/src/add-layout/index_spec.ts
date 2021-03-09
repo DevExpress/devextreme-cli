@@ -46,7 +46,6 @@ describe('layout', () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner.runSchematicAsync('add-layout', options, appTree).toPromise();
 
-
     expect(tree.files)
       .toContain('/devextreme.json');
     expect(tree.files)
