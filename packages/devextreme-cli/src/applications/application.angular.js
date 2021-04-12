@@ -1,5 +1,6 @@
 const getLayoutInfo = require('../utility/prompts/layout').getLayoutInfo;
 const path = require('path');
+const moduleWorker = require('../utility/module');
 const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
 const fs = require('fs');
@@ -69,12 +70,16 @@ const create = (appName, options) => {
 
     getLayoutInfo(options.layout).then(layoutInfo => {
         runNgCommand(commandArguments).then(() => {
+            const appPath = path.join(process.cwd(), appName);
+
             options.resolveConflicts = 'override';
             options.updateBudgets = true;
             options.layout = layoutInfo.layout;
             addTemplate(appName, options, {
-                cwd: path.join(process.cwd(), appName)
+                cwd: appPath
             });
+
+            changeMainTs(appPath);
         });
     });
 };
@@ -91,6 +96,23 @@ const addView = (viewName, options) => {
     schematicOptions.name = viewName;
     runSchematicCommand('add-view', schematicOptions);
 };
+
+const changeMainTs = (appPath) => {
+    const filePath = path.join(appPath, 'src', 'main.ts');
+
+    moduleWorker.insertImport(filePath, 'devextreme/ui/themes', 'themes', true);
+
+    const fileContent = fs.readFileSync(filePath).toString();
+    const firstChaptStr = 'platformBrowserDynamic().bootstrapModule(AppModule)';
+    const lastChaptStr = '.catch(err => console.error(err));';
+
+    fs.writeFileSync(
+      filePath,
+      fileContent
+        .replace(firstChaptStr, `themes.initialized(() => {\n  ${firstChaptStr}`)
+        .replace(lastChaptStr, `  ${lastChaptStr}\n});`)
+    );
+}
 
 module.exports = {
     install,

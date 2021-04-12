@@ -113,16 +113,16 @@
 
         <ul>
           <li>
-            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Create_a_DevExtreme_Application/#Layouts" target="_blank" rel="noopener noreferrer">Layouts</a>
+            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Application_Template/#Layouts" target="_blank" rel="noopener noreferrer">Layouts</a>
           </li>
           <li>
-            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Create_a_DevExtreme_Application/#Add_a_New_View" target="_blank" rel="noopener noreferrer">Add a New View</a>
+            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Application_Template/#Add_a_New_View" target="_blank" rel="noopener noreferrer">Add a New View</a>
           </li>
           <li>
-            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Create_a_DevExtreme_Application/#Configure_the_Navigation_Menu" target="_blank" rel="noopener noreferrer">Configure the Navigation Menu</a>
+            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Application_Template/#Configure_the_Navigation_Menu" target="_blank" rel="noopener noreferrer">Configure the Navigation Menu</a>
           </li>
           <li>
-            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Create_a_DevExtreme_Application/#Configure_Themes" target="_blank" rel="noopener noreferrer">Configure Themes</a>
+            <a href="https://js.devexpress.com/Documentation/Guide/Vue_Components/Application_Template/#Configure_Themes" target="_blank" rel="noopener noreferrer">Configure Themes</a>
           </li>
         </ul>
          <p>
