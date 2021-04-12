@@ -234,7 +234,7 @@ function addPackagesToDependency() {
     addPackageJsonDependency(host, {
       type: NodeDependencyType.Default,
       name: '@angular/cdk',
-      version: '^8.0.0'
+      version: '^11.2.2'
     });
 
     return host;

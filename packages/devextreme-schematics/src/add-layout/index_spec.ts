@@ -17,7 +17,7 @@ describe('layout', () => {
     projectRoot: '',
     inlineStyle: false,
     inlineTemplate: false,
-    routing: true,
+    routing: false,
     style: 'scss',
     skipTests: false,
     skipPackageJson: false
@@ -246,7 +246,7 @@ describe('layout', () => {
     expect(tree.files).toContain('/src/app/app-routing.module.ts');
     const moduleContent = tree.readContent('/src/app/app-routing.module.ts');
     expect(moduleContent)
-      .toMatch(/imports:\s\[RouterModule\.forRoot\(routes\)\],/);
+      .toMatch(/imports:\s\[RouterModule\.forRoot\(routes, { useHash: true }\)\],/);
 
     expect(moduleContent)
       .toContain(`{
