@@ -31,7 +31,7 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
 }
 
 async function runNgCommand(commandArguments, evaluatingOptions) {
-    const ngCommandArguments = await hasSutableNgCli() ? [] : ['-p', '@angular/cli@v9-lts'];
+    const ngCommandArguments = await hasSutableNgCli() ? [] : ['-p', '@angular/cli'];
 
     ngCommandArguments.push('ng', ...commandArguments);
     return runCommand('npx', ngCommandArguments, evaluatingOptions);
