@@ -23,7 +23,7 @@ if(!commands.length) {
     if(args.version) {
         console.log(packageJson.version);
     } else {
-        console.error('The DevExtreme command is not specified.');
+        console.error('DevExtreme command was not specified.');
         printHelp();
     }
     process.exit();
