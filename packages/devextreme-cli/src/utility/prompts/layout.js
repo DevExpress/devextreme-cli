@@ -16,7 +16,7 @@ const getLayoutInfo = (layoutName) => {
         {
             type: 'select',
             name: 'layout',
-            message: 'What layout do you want to add?',
+            message: 'Specify desired application layout:',
             choices: layouts
         }
     ];

@@ -5,16 +5,16 @@
         "usage": "devextreme new <application-type> <name> [options]",
         "arguments": [{
             "name": "name",
-            "description": "The application name"
+            "description": "Application name"
         }, {
             "name": "angular-app",
-            "description": "The application type",
+            "description": "Application type",
             "options": [{
                 "name": "--layout",
-                "description": "Specifies the type of a DevExtreme layout to add. Available values: side-nav-outer-toolbar(default)|side-nav-inner-toolbar"
+                "description": "Specifies DevExtreme layout type to add. Available values: side-nav-outer-toolbar(default)|side-nav-inner-toolbar"
             }, {
                 "name": "--empty",
-                "description": "Specifies whether to skip sample views generation (default: false)"
+                "description": "Skips sample view generation (default: false)"
             }, {
                 "name": "--version",
                 "description": "Specifies whether to generate a Vue 2 or Vue 3 application. Available values: 2 (default) and 3"
@@ -22,24 +22,24 @@
         }]
     }, {
         "name": "add",
-        "description": "Add the DevExtreme layout template or view to an Angular application or DevExtreme to an Angular application",
+        "description": "Add DevExtreme layout template or view to an Angular application or DevExtreme to an Angular application",
         "usage": "devextreme add <parameter> [options]",
         "arguments": [{
             "name": "angular-template",
             "description": "Add the DevExtreme layout template to an Angular application",
             "options": [{
                 "name": "--layout",
-                "description": "Specifies the type of a DevExtreme layout to add. Available values: side-nav-outer-toolbar(default)|side-nav-inner-toolbar"
+                "description": "Specifies DevExtreme layout type to add. Available values: side-nav-outer-toolbar(default)|side-nav-inner-toolbar"
             }, {
                 "name": "--empty",
-                "description": "Specifies whether to skip sample views generation (default: false)"
+                "description": "Skips sample view generation (default: false)"
             }, {
                 "name": "--resolve-conflicts",
-                "description": "Specifies whether to override the existing app component or create a component with another name. Available values: createNew(default)|override"
+                "description": "Override an existing app component or create a component with a different name. Available values: createNew(default)|override"
             }]
         }, {
             "name": "view",
-            "description": "Add a view to an Angular application with the DevExtreme layout template",
+            "description": "Add a view to an Angular application using the DevExtreme layout template",
             "options": [{
                 "name": "--icon",
                 "description": "Specifies the view's icon name (default: folder)"
@@ -54,25 +54,25 @@
         "usage": "devextreme build-theme [options]",
         "options": [{
             "name": "--base-theme",
-            "description": "Specifies a base theme’s name (the default value is generic.light)"
+            "description": "Specifies base theme name (default value is generic.light)"
         }, {
             "name": "--input-file",
-            "description": "Specifies the name of the file that contains input data (a .json file with metadata or a .less/.scss file with Bootstrap variables)"
+            "description": "Specifies file name with input data (a .json file with metadata or a .less/.scss file with Bootstrap variables)"
         }, {
             "name": "--make-swatch",
             "description": "If present, adds a CSS scope to each CSS rule (.dx-swatch-xxx), where xxx is the value from the --output-color-scheme parameter"
         }, {
             "name": "--output-file",
-            "description": "Specifies the output file name"
+            "description": "Specifies output file name"
         }, {
             "name": "--output-color-scheme",
-            "description": "Specifies the custom color scheme name (the default value is custom-scheme)"
+            "description": "Specifies custom color scheme name (default value is custom-scheme)"
         }, {
             "name": "--version",
-            "description": "Specifies the target DevExtreme version or a tag that points to it (the default value is 'latest')"
+            "description": "Specifies target DevExtreme build or a tag that points to it (default value is 'latest')"
         }, {
             "name": "--widgets",
-            "description": "Specifies a comma-separated list of widgets whose styles should be included in the resulting CSS file (available from DevExtreme 19.2.3). If this argument is not specified, styles of all widgets are included."
+            "description": " Specifies a comma-separated list of widgets whose styles should be included in the resulting CSS file (available from DevExtreme v19.2.3). If this argument is not specified, styles used for all widgets are included"
         }]
     }, {
         "name": "export-theme-vars",
@@ -80,22 +80,22 @@
         "usage": "devextreme export-theme-vars [options]",
         "options": [{
             "name": "--base-theme",
-            "description": "Specifies a base theme’s name (the default value is generic.light)"
+            "description": "Specifies base theme name (default value is generic.light)"
         }, {
             "name": "--input-file",
-            "description": "Specifies the name of the file that contains input data (a .json file with metadata or a .less/.scss file with Bootstrap variables)"
+            "description": "Specifies file name with input data (a .json file with metadata or a .less/.scss file with Bootstrap variables)"
         }, {
             "name": "--output-format",
-            "description": "Specifies the format of the output variables (less or scss) (the default value is less or the extension extracted from the --output-file value (if it contains any))"
+            "description": "Specifies the format of output variables (less or scss) (default value is less or the extension extracted from the --output-file value (if it contains any))"
         }, {
             "name": "--output-file",
             "description": "Specifies the output file name"
         }, {
             "name": "--base",
-            "description": "Exports only base variables which are used to produce the derived variables"
+            "description": "Exports only base variables used to produce derived variables"
         }, {
             "name": "--version",
-            "description": "Specifies the target DevExtreme version or a tag that points to it (the default value is 'latest')"
+            "description": "Specifies target DevExtreme build or a tag that points to it (default value is 'latest')"
         }]
     }, {
         "name": "export-theme-meta",
@@ -103,19 +103,19 @@
         "usage": "devextreme export-theme-meta [options]",
         "options": [{
             "name": "--base-theme",
-            "description": "Specifies a base theme’s name (the default value is generic.light)"
+            "description": "Specifies base theme name (default value is generic.light)"
         }, {
             "name": "--input-file",
-            "description": "Specifies the name of the file that contains input data (a .json file with metadata or a .less/.scss file with Bootstrap variables)"
+            "description": "Specifies file name with input data (a .json file with metadata or a .less/.scss file with Bootstrap variables)"
         }, {
             "name": "--output-file",
-            "description": "Specifies the output file name"
+            "description": "Specifies output file name"
         }, {
             "name": "--base",
-            "description": "Exports only base variables which are used to produce the derived variables"
+            "description": "Only exports base variables used to produce derived variables"
         }, {
             "name": "--version",
-            "description": "Specifies the target DevExtreme version or a tag that points to it (the default value is 'latest')"
+            "description": "Specifies target DevExtreme build or the tag that points to it (default value is 'latest')"
         }]
     }]
 }
