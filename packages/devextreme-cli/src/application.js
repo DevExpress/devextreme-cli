@@ -9,7 +9,7 @@ const isApplicationCommand = (command) => {
 
 const run = (commands, options, devextremeConfig) => {
     if(!commands[1]) {
-        console.error('No parameters found.');
+        console.error('Command is incomplete. Please specify parameters.');
         printHelp(commands[0]);
         return;
     }
