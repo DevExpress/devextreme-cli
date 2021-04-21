@@ -1,6 +1,6 @@
 {
   "name": "devextreme-cli",
-  "version": "1.2.11",
+  "version": "1.2.13",
   "description": "DevExtreme CLI",
   "keywords": [
     "devexpress",
@@ -12,6 +12,11 @@
   ],
   "bin": {
     "devextreme": "index.js"
+  },
+  "engines": {
+    "node": ">12.6.0",
+    "npm": ">6.2.0",
+    "yarn": ">1.21"
   },
   "files": [
     "src/**/*",
