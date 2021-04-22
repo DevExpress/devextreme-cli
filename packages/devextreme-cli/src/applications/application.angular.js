@@ -68,7 +68,7 @@ function parseNgCliVersion(stdout) {
 }
 
 const install = (options) => {
-    runSchematicCommand('install', { ...options, globalNgVersion: globalNgCliVersion });
+    runSchematicCommand('install', { ...options, globalNgCliVersion });
 };
 
 const create = (appName, options) => {

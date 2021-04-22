@@ -30,7 +30,8 @@ describe('layout', () => {
 
   const options: any = {
     layout: 'side-nav-outer-toolbar',
-    resolveConflicts: 'override'
+    resolveConflicts: 'override',
+    globalNgCliVersion: '^8.0.0'
   };
 
   const angularSchematicsCollection = require.resolve('../../node_modules/@schematics/angular/collection.json');
@@ -173,6 +174,14 @@ describe('layout', () => {
     const packageConfig = JSON.parse(tree.readContent('package.json'));
 
     expect(packageConfig.dependencies['@angular/cdk']).toBeDefined();
+  });
+
+  it('should choose angular/cdk version such as angular/cli', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner.runSchematicAsync('add-layout', options, appTree).toPromise();
+    const packageConfig = JSON.parse(tree.readContent('package.json'));
+
+    expect(packageConfig.dependencies['@angular/cdk']).toBe('^8.0.0');
   });
 
   it('should update budgets if updateBudgets option is true', async () => {
