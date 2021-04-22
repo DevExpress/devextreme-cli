@@ -41,6 +41,10 @@
       "description": "The DevExtreme version",
       "default": "^20.2.4"
     },
+    "globalNgVersion": {
+      "type":"string",
+      "default": "^11.2.9"
+    },
     "empty": {
       "type": "boolean",
       "description": "Specifies whether to skip sample views generation",

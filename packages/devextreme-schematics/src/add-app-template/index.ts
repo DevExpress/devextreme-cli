@@ -15,7 +15,8 @@ export default function(options: any): Rule {
       resolveConflicts: options.resolveConflicts,
       project: options.project,
       skipInstall: true,
-      updateBudgets: options.updateBudgets
+      updateBudgets: options.updateBudgets,
+      globalNgVersion: options.globalNgVersion
     })
   ];
 
