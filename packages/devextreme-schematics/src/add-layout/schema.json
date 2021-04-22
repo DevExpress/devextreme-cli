@@ -47,7 +47,7 @@
     "updateBudgets": {
       "type": "boolean"
     },
-    "globalNgVersion": {
+    "globalNgCliVersion": {
       "type":"string",
       "default": "^11.2.9"
     }

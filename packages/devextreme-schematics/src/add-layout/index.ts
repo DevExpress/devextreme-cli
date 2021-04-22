@@ -229,12 +229,12 @@ function hasRoutingModule(host: Tree, sourcePath: string) {
   return host.exists(sourcePath + 'app-routing.module.ts');
 }
 
-function addPackagesToDependency(globalNgVersion: string) {
+function addPackagesToDependency(globalNgCliVersion: string) {
   return (host: Tree) => {
     addPackageJsonDependency(host, {
       type: NodeDependencyType.Default,
       name: '@angular/cdk',
-      version: globalNgVersion
+      version: globalNgCliVersion
     });
 
     return host;
@@ -329,14 +329,12 @@ export default function(options: any): Rule {
     const appPath = getApplicationPath(host, project);
     const sourcePath = getSourceRootPath(host, project);
     const layout = options.layout;
-    const globalNgVersion = options.globalNgVersion;
     const override = options.resolveConflicts === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath.replace(/\/?(\w)+\/?/g, '../');
     const templateOptions = {
       name: componentName,
       layout,
-      globalNgVersion,
       title,
       strings,
       path: pathToCss,
@@ -363,7 +361,7 @@ export default function(options: any): Rule {
       addBuildThemeScript(),
       addCustomThemeStyles(options, sourcePath),
       addViewportToBody(sourcePath),
-      addPackagesToDependency(options.globalNgVersion)
+      addPackagesToDependency(options.globalNgCliVersion)
     ];
 
     if (options.updateBudgets) {

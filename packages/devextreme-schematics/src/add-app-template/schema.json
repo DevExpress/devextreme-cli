@@ -41,7 +41,7 @@
       "description": "The DevExtreme version",
       "default": "^20.2.4"
     },
-    "globalNgVersion": {
+    "globalNgCliVersion": {
       "type":"string",
       "default": "^11.2.9"
     },

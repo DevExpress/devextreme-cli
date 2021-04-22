@@ -8,7 +8,7 @@ const exec = require('child_process').exec;
 const minNgCliVersion = new semver('8.0.0');
 const latestVersions = require('../utility/latest-versions');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
-let globalNgVersion = '';
+let globalNgCliVersion = '';
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -51,11 +51,12 @@ function localPackageExists(packageName) {
 function hasSutableNgCli() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
-            if(globalNgVersion === ''
-            && Object.keys(parseNgCliVersion(stdout)).includes('version')) {
-                globalNgVersion = parseNgCliVersion(stdout).version;
+            const parsingResult = parseNgCliVersion(stdout);
+            if(globalNgCliVersion === ''
+            && Object.keys(parsingResult).includes('version')) {
+                globalNgCliVersion = parseNgCliVersion(stdout).version;
             }
-            stderr || parseNgCliVersion(stdout).compare(minNgCliVersion) < 0
+            stderr || parsingResult.compare(minNgCliVersion) < 0
                 ? resolve(false)
                 : resolve(true);
         });
@@ -67,7 +68,7 @@ function parseNgCliVersion(stdout) {
 }
 
 const install = (options) => {
-    runSchematicCommand('install', { ...options, globalNgVersion: globalNgVersion });
+    runSchematicCommand('install', { ...options, globalNgVersion: globalNgCliVersion });
 };
 
 const create = (appName, options) => {
@@ -79,7 +80,6 @@ const create = (appName, options) => {
             options.resolveConflicts = 'override';
             options.updateBudgets = true;
             options.layout = layoutInfo.layout;
-            options.globalNgVersion = globalNgVersion;
             addTemplate(appName, options, {
                 cwd: appPath
             });
