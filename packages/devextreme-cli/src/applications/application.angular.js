@@ -53,7 +53,7 @@ function hasSutableNgCli() {
         exec('ng v', (err, stdout, stderr) => {
             const parsingResult = parseNgCliVersion(stdout);
             if(globalNgCliVersion === ''
-            && Object.keys(parsingResult).includes('version')) {
+            && parsingResult && Object.keys(parsingResult).includes('version')) {
                 globalNgCliVersion = parseNgCliVersion(stdout).version;
             }
             stderr || parsingResult.compare(minNgCliVersion) < 0
