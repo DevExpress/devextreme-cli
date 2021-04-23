@@ -52,12 +52,12 @@ function hasSutableNgCli() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
             const parsingResult = stdout && parseNgCliVersion(stdout);
-            if(!globalNgCliVersion && !stderr) {
-                globalNgCliVersion = parseNgCliVersion(stdout).version;
+            if(!stderr && parsingResult.compare(minNgCliVersion) < 0) {
+                globalNgCliVersion = parsingResult.version;
+                resolve(true);
+            } else {
+                resolve(false)
             }
-            stderr || parsingResult.compare(minNgCliVersion) < 0
-                ? resolve(false)
-                : resolve(true);
         });
     });
 }
