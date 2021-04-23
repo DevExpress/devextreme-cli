@@ -63,9 +63,6 @@ function hasSutableNgCli() {
 }
 
 function parseNgCliVersion(stdout) {
-    if(!stdout) {
-        return;
-    }
     return new semver(/angular.cli:\s*(\S+)/ig.exec(stdout.toString())[1]);
 }
 
