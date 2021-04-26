@@ -51,12 +51,12 @@ function localPackageExists(packageName) {
 function hasSutableNgCli() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
-            const parsingResult = stdout && parseNgCliVersion(stdout);
-            if(!stderr && parsingResult.compare(minNgCliVersion) < 0) {
+            const parsingResult = !stderr && parseNgCliVersion(stdout);
+            if(parsingResult && parsingResult.compare(minNgCliVersion) < 0) {
                 globalNgCliVersion = parsingResult.version;
                 resolve(true);
             } else {
-                resolve(false)
+                resolve(false);
             }
         });
     });
