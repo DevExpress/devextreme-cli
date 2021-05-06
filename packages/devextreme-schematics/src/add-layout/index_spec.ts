@@ -17,7 +17,7 @@ describe('layout', () => {
     projectRoot: '',
     inlineStyle: false,
     inlineTemplate: false,
-    routing: true,
+    routing: false,
     style: 'scss',
     skipTests: false,
     skipPackageJson: false
@@ -30,7 +30,8 @@ describe('layout', () => {
 
   const options: any = {
     layout: 'side-nav-outer-toolbar',
-    resolveConflicts: 'override'
+    resolveConflicts: 'override',
+    globalNgCliVersion: '^8.0.0'
   };
 
   const angularSchematicsCollection = require.resolve('../../node_modules/@schematics/angular/collection.json');
@@ -175,6 +176,14 @@ describe('layout', () => {
     expect(packageConfig.dependencies['@angular/cdk']).toBeDefined();
   });
 
+  it('should choose angular/cdk version such as angular/cli', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner.runSchematicAsync('add-layout', options, appTree).toPromise();
+    const packageConfig = JSON.parse(tree.readContent('package.json'));
+
+    expect(packageConfig.dependencies['@angular/cdk']).toBe('^8.0.0');
+  });
+
   it('should update budgets if updateBudgets option is true', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner.runSchematicAsync('add-layout', {
@@ -246,7 +255,7 @@ describe('layout', () => {
     expect(tree.files).toContain('/src/app/app-routing.module.ts');
     const moduleContent = tree.readContent('/src/app/app-routing.module.ts');
     expect(moduleContent)
-      .toMatch(/imports:\s\[RouterModule\.forRoot\(routes\)\],/);
+      .toMatch(/imports:\s\[RouterModule\.forRoot\(routes, { useHash: true }\)\],/);
 
     expect(moduleContent)
       .toContain(`{

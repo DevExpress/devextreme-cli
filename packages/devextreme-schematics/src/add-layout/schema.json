@@ -10,7 +10,7 @@
       "description": "The type of a DevExtreme layout to add",
       "default": "side-nav-outer-toolbar",
       "x-prompt": {
-        "message": "What layout do you want to add?",
+        "message": "Specify desired application layout:",
         "type": "list",
         "items": [
           { "value": "side-nav-outer-toolbar", "label": "Side navigation (outer toolbar)" },
@@ -46,6 +46,10 @@
     },
     "updateBudgets": {
       "type": "boolean"
+    },
+    "globalNgCliVersion": {
+      "type":"string",
+      "default": "^11.2.9"
     }
   }
 }
