@@ -172,6 +172,9 @@ module.exports = (env) => {
                                     const name = 'login';
                                     const page = await openPage(appUrl);
                                     await logOut();
+
+                                    await hideScroll();
+
                                     const image = await page.screenshot();
 
                                     compareSnapshot(image, name);
