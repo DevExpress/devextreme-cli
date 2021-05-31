@@ -198,7 +198,7 @@ describe('layout', () => {
     expect(budgets[0]).toEqual({
       type: 'initial',
       maximumWarning: '4mb',
-      maximumError: '6mb'
+      maximumError: '7mb'
     });
   });
 

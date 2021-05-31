@@ -134,7 +134,7 @@ function updateBudgets(options: any) {
       const budget = budgets.find((item) => item.type === 'initial');
       if (budget) {
         budget.maximumWarning = '4mb';
-        budget.maximumError = '6mb';
+        budget.maximumError = '7mb';
       }
 
       return config;
