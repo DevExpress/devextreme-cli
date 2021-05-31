@@ -75,6 +75,15 @@ module.exports = (env) => {
                                 });
                             }
 
+                            async function hideScroll() {
+                                await page.evalute(() => {
+                                    const elements = document.getElementsByClassName('dx-scrollable-scroll');
+                                    elements.forEach((element) => {
+                                        element.className += " dx-state-invisible";
+                                    });
+                                });
+                            }
+
                             describe(`${viewportName}`, () => {
                                 it('Home view', async() => {
                                     const page = await openPage(appUrl);
@@ -179,6 +188,8 @@ module.exports = (env) => {
                                     await page.click('.dx-button-normal');
                                     await page.waitFor('.create-account-form', { timeout: 0 });
 
+                                    await hideScroll();
+
                                     const image = await page.screenshot();
 
                                     compareSnapshot(image, 'create-account');
@@ -194,6 +205,8 @@ module.exports = (env) => {
                                     await logOut();
                                     await page.click('a');
                                     await page.waitFor('form', { timeout: 0 });
+
+                                    await hideScroll();
 
                                     const image = await page.screenshot();
 
@@ -212,6 +225,8 @@ module.exports = (env) => {
                                         'const a = document.createElement("a");a.href="#/change-password/123";a.click()'
                                     );
                                     await page.waitFor('form', { timeout: 0 });
+
+                                    await hideScroll();
 
                                     const image = await page.screenshot();
 
