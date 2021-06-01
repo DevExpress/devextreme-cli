@@ -76,12 +76,10 @@ module.exports = (env) => {
                             }
 
                             async function hideScroll() {
-                                await page.evalute(() => {
-                                    const elements = document.getElementsByClassName('dx-scrollable-scroll');
-                                    elements.forEach((element) => {
-                                        element.className += " dx-state-invisible";
-                                    });
-                                });
+                                await page.evaluate(
+                                  'document.getElementsByClassName("dx-scrollable-scroll")[0].className += " dx-state-invisible";'
+                                );
+                                await page.waitFor(3000);
                             }
 
                             describe(`${viewportName}`, () => {
