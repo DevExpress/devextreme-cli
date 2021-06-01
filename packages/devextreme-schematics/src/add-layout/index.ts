@@ -134,7 +134,7 @@ function updateBudgets(options: any) {
       const budget = budgets.find((item) => item.type === 'initial');
       if (budget) {
         budget.maximumWarning = '4mb';
-        budget.maximumError = '6mb';
+        budget.maximumError = '7mb';
       }
 
       return config;
@@ -229,12 +229,12 @@ function hasRoutingModule(host: Tree, sourcePath: string) {
   return host.exists(sourcePath + 'app-routing.module.ts');
 }
 
-function addPackagesToDependency() {
+function addPackagesToDependency(globalNgCliVersion: string) {
   return (host: Tree) => {
     addPackageJsonDependency(host, {
       type: NodeDependencyType.Default,
       name: '@angular/cdk',
-      version: '^11.2.2'
+      version: globalNgCliVersion
     });
 
     return host;
@@ -361,7 +361,7 @@ export default function(options: any): Rule {
       addBuildThemeScript(),
       addCustomThemeStyles(options, sourcePath),
       addViewportToBody(sourcePath),
-      addPackagesToDependency()
+      addPackagesToDependency(options.globalNgCliVersion)
     ];
 
     if (options.updateBudgets) {

@@ -32,7 +32,10 @@ exports.themes = {
     generic: 'generic'
 };
 
-exports.layouts = ['side-nav-outer-toolbar', 'side-nav-inner-toolbar'];
+exports.layouts = [
+  'side-nav-outer-toolbar',
+  'side-nav-inner-toolbar'
+];
 
 exports.swatchModes = {
     base: 'light',
