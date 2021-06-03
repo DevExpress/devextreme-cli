@@ -8,6 +8,7 @@ const exec = require('child_process').exec;
 const minNgCliVersion = new semver('8.0.0');
 const latestVersions = require('../utility/latest-versions');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
+let globalNgCliVersion = '';
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -19,13 +20,13 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
     }
 
     if(!localPackageExists(collectionName)) {
-        await runNgCommand(['add', collectionPath], evaluatingOptions);
+        await runNgCommand(['add', collectionPath, '--skipConfirmation=true'], evaluatingOptions);
     }
 
     const commandArguments = ['g', `${collectionName}:${schematicCommand}`];
     for(let option in options) {
         commandArguments.push(`--${option}=${options[option]}`);
-    };
+    }
 
     runNgCommand(commandArguments, evaluatingOptions);
 }
@@ -50,9 +51,13 @@ function localPackageExists(packageName) {
 function hasSutableNgCli() {
     return new Promise((resolve, reject) => {
         exec('ng v', (err, stdout, stderr) => {
-            stderr || parseNgCliVersion(stdout).compare(minNgCliVersion) < 0
-                ? resolve(false)
-                : resolve(true);
+            const parsingResult = !stderr && parseNgCliVersion(stdout);
+            if(parsingResult && parsingResult.compare(minNgCliVersion) < 0) {
+                globalNgCliVersion = parsingResult.version;
+                resolve(true);
+            } else {
+                resolve(false);
+            }
         });
     });
 }
@@ -62,7 +67,7 @@ function parseNgCliVersion(stdout) {
 }
 
 const install = (options) => {
-    runSchematicCommand('install', options);
+    runSchematicCommand('install', { ...options, globalNgCliVersion });
 };
 
 const create = (appName, options) => {
@@ -115,12 +120,12 @@ const changeMainTs = (appPath) => {
     const lastChaptStr = '.catch(err => console.error(err));';
 
     fs.writeFileSync(
-      filePath,
-      fileContent
-        .replace(firstChaptStr, `themes.initialized(() => {\n  ${firstChaptStr}`)
-        .replace(lastChaptStr, `  ${lastChaptStr}\n});`)
+        filePath,
+        fileContent
+            .replace(firstChaptStr, `themes.initialized(() => {\n  ${firstChaptStr}`)
+            .replace(lastChaptStr, `  ${lastChaptStr}\n});`)
     );
-}
+};
 
 module.exports = {
     install,
