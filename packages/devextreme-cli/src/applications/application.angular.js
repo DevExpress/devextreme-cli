@@ -20,7 +20,7 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
     }
 
     if(!localPackageExists(collectionName)) {
-        await runNgCommand(['add', collectionPath], evaluatingOptions);
+        await runNgCommand(['add', collectionPath, '--skipConfirmation=true'], evaluatingOptions);
     }
 
     const commandArguments = ['g', `${collectionName}:${schematicCommand}`];
