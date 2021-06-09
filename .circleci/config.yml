@@ -22,7 +22,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-deps-{{ checksum "package-lock.json" }}
+            - v1-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - v1-deps-{{ .Branch }}
+            - v1-deps-
       - run:
           name: Install npm packages
           command: npm i
