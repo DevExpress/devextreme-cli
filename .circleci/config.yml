@@ -28,9 +28,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "packages/devextreme-cli/package-lock.json" }}-{{ checksum "packages/devextreme-schematics/package-lock.json" }}
-            - v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "packages/devextreme-cli/package-lock.json" }}
-            - v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - v2-deps-{{ .Branch }}-{{ .Revision }}
             - v2-deps-{{ .Branch }}
             - v2-deps-
       - run:
@@ -50,7 +48,7 @@ jobs:
           no_output_timeout: 15m
           when: always
       - save_cache:
-          key: v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "packages/devextreme-cli/package-lock.json" }}-{{ checksum "packages/devextreme-schematics/package-lock.json" }}
+          key: v2-deps-{{ .Branch }}-{{ .Revision }}-{{ epoch }}
           paths:
             - npm_cache
             - node_modules
