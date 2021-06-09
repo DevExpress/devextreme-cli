@@ -33,7 +33,7 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
         { name: 'sass', version: '^1.34.1' },
         { name: 'vue-router', version: '^3.0.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
-        { name: 'sass-loader', version: '^12.0.0', dev: true }
+        { name: 'sass-loader', version: '^10', dev: true }
     ];
 
     if(version === 'v3') {
