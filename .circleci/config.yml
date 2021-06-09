@@ -11,8 +11,11 @@ jobs:
     resource_class: large
     steps:
       - run:
-          name: try yarn
-          command: yarn cache dir
+          name: Set yarn cache folder
+          command: yarn config set cache-folder npm_cache
+      - run:
+          name: Set npm cache folder
+          command: npm config set cache npm_cache
       - run:
           name: Install Headless Chrome dependencies
           command: |
@@ -33,12 +36,6 @@ jobs:
       - run:
           name: Install npm packages
           command: npm i
-      - save_cache:
-          key: v1-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "packages/devextreme-cli/package-lock.json" }}-{{ checksum "packages/devextreme-schematics/package-lock.json" }}
-          paths:
-            - node_modules
-            - packages/devextreme-cli/node_modules
-            - packages/devextreme-schemetics/node_modules
       - run:
           name: Create applications
           command: npm run create-template -- -- -e << parameters.app >>
@@ -52,6 +49,13 @@ jobs:
           command: npm run test-template -- -- -e << parameters.app >>
           no_output_timeout: 15m
           when: always
+      - save_cache:
+          key: v1-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "packages/devextreme-cli/package-lock.json" }}-{{ checksum "packages/devextreme-schematics/package-lock.json" }}
+          paths:
+            - npm_cache
+            - node_modules
+            - packages/devextreme-cli/node_modules
+            - packages/devextreme-schemetics/node_modules
       - store_artifacts:
           path: test-results.xml
           prefix: tests
