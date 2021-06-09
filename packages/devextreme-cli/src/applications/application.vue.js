@@ -30,10 +30,10 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
     }
 
     const dependencies = [
-        { name: 'node-sass', version: '^4.11.0' },
+        { name: 'sass', version: '^1.34.1' },
         { name: 'vue-router', version: '^3.0.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
-        { name: 'sass-loader', version: '^7.1.0', dev: true }
+        { name: 'sass-loader', version: '^12.0.0', dev: true }
     ];
 
     if(version === 'v3') {
@@ -63,7 +63,7 @@ async function createVueApp(name, version) {
         argList.push('__default_vue_3__');
     }
 
-    return runCommand('npx', argList)
+    return runCommand('npx', argList);
 }
 
 const create = async(appName, options) => {
