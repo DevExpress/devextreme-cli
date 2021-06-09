@@ -11,6 +11,9 @@ jobs:
     resource_class: large
     steps:
       - run:
+          name: try yarn
+          command: yarn cache dir
+      - run:
           name: Install Headless Chrome dependencies
           command: |
             sudo apt-get install -yq \
