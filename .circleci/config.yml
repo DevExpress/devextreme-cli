@@ -28,11 +28,11 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "packages/devextreme-cli/package-lock.json" }}-{{ checksum "packages/devextreme-schematics/package-lock.json" }}
-            - v1-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "packages/devextreme-cli/package-lock.json" }}
-            - v1-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - v1-deps-{{ .Branch }}
-            - v1-deps-
+            - v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "packages/devextreme-cli/package-lock.json" }}-{{ checksum "packages/devextreme-schematics/package-lock.json" }}
+            - v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "packages/devextreme-cli/package-lock.json" }}
+            - v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - v2-deps-{{ .Branch }}
+            - v2-deps-
       - run:
           name: Install npm packages
           command: npm i
@@ -50,7 +50,7 @@ jobs:
           no_output_timeout: 15m
           when: always
       - save_cache:
-          key: v1-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "packages/devextreme-cli/package-lock.json" }}-{{ checksum "packages/devextreme-schematics/package-lock.json" }}
+          key: v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "packages/devextreme-cli/package-lock.json" }}-{{ checksum "packages/devextreme-schematics/package-lock.json" }}
           paths:
             - npm_cache
             - node_modules
