@@ -41,6 +41,9 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
         const indexVueRouter = nameDepends.indexOf('vue-router');
 
         dependencies[indexVueRouter].version = '^4.0.1';
+
+        // NOTE v3 freezed because of 'class' attribute deleted
+        dependencies.push({ name: 'vue', version: '3.0.11' });
     }
 
     const scripts = [
