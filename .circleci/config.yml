@@ -32,6 +32,9 @@ jobs:
             - v2-deps-{{ .Branch }}
             - v2-deps-
       - run:
+          name: Disable taobao registry
+          command: "echo '{useTaobaoRegistry: false}' > ~/.vuerc"
+      - run:
           name: Install npm packages
           command: npm i
       - run:
