@@ -5,17 +5,23 @@ const yarnLockfile = require('@yarnpkg/lockfile');
 const defaultPackageManager = 'npm';
 let currentPackageManager;
 
+const getLock = (cwd, fileName, parser) => {
+    const fullFileName = path.join(cwd, fileName);
+    const fileNameContent = fs.readFileSync(fullFileName, 'utf8');
+    return parser.parse(fileNameContent);
+};
+
 const packageManagers = {
     npm: {
         installCommand: 'install',
         lockFileName: 'package-lock.json',
-        getLockFile: (cwd) => require(path.join(cwd, 'package-lock.json')),
+        getLockFile: (cwd) => getLock(cwd, 'package-lock.json', JSON),
         getDependencies: (obj) => obj.dependencies
     },
     yarn: {
         installCommand: 'add',
         lockFileName: 'yarn.lock',
-        getLockFile: (cwd) => yarnLockfile.parse(fs.readFileSync(path.join(cwd, 'yarn.lock'), 'utf8')),
+        getLockFile: (cwd) => getLock(cwd, 'yarn.lock', yarnLockfile),
         getDependencies: (obj) => obj.object
     }
 };
