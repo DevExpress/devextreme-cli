@@ -19,7 +19,7 @@ const defaultStyles = [
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
-        { name: 'node-sass', version: '^4.11.0' },
+        { name: 'sass', version: '^1.34.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
         { name: 'react-router-dom', version: '^5.0.0' },
 
