@@ -81,9 +81,11 @@ module.exports = class DevServer {
         return new Promise((resolve, reject) => {
             function onData(data) {
 
+                console.log('DATA', data.toString());
+
                 if(data.toString().toLowerCase().includes('compiled successfully')
                  || data.toString().toLowerCase().includes('compiled with warnings.')) {
-                    this.devServerProcess.off('data', onData);
+                    this.devServerProcess.stdout.off('data', onData);
                     this.devServerProcess.off('exit', onError);
                     this.devServerProcess.off('error', onError);
 
@@ -93,7 +95,7 @@ module.exports = class DevServer {
             onData = onData.bind(this);
 
             function onError(code) {
-                this.devServerProcess.off('data', onData);
+                this.devServerProcess.stdout.off('data', onData);
                 this.devServerProcess.off('exit', onError);
                 this.devServerProcess.off('error', onError);
 
