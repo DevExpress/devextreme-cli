@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
 const defaultPath = '/';
-const defaultUser: {email: string, avatarUrl?:string}|undefined = {
+const defaultUser: {email: string, avatarUrl?:string|undefined}|null| undefined = {
   email: 'sandra@example.com',
   avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
 };
@@ -14,8 +14,8 @@ export class AuthService {
     return !!this._user;
   }
 
-  private _lastAuthenticatedPath: string = defaultPath;
-  set lastAuthenticatedPath(value: string) {
+  private _lastAuthenticatedPath: string|undefined = defaultPath;
+  set lastAuthenticatedPath(value: string|undefined) {
     this._lastAuthenticatedPath = value;
   }
 
@@ -76,7 +76,7 @@ export class AuthService {
     }
   }
 
-  async changePassword(email: string, recoveryCode: string) {
+  async changePassword(email: string, recoveryCode?: string|null) {
     try {
       // Send request
       console.log(email, recoveryCode);
@@ -120,14 +120,15 @@ export class AuthService {
 export class AuthGuardService implements CanActivate {
   constructor(private router: Router, private authService: AuthService) { }
 
-  canActivate(route: ActivatedRouteSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot|undefined): boolean {
     const isLoggedIn = this.authService.loggedIn;
+    const path: string|undefined = route?.routeConfig?.path;
     const isAuthForm = [
       'login-form',
       'reset-password',
       'create-account',
       'change-password/:recoveryCode'
-    ].includes(route.routeConfig.path);
+    ].includes(path ? path: "");
 
     if (isLoggedIn && isAuthForm) {
       this.authService.lastAuthenticatedPath = defaultPath;
@@ -140,7 +141,7 @@ export class AuthGuardService implements CanActivate {
     }
 
     if (isLoggedIn) {
-      this.authService.lastAuthenticatedPath = route.routeConfig.path;
+      this.authService.lastAuthenticatedPath = path;
     }
 
     return isLoggedIn || isAuthForm;

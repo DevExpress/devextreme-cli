@@ -31,7 +31,8 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
     this.menu.instance.selectItem(value);
   }
 
-  private _items;
+ private _items:Record <string, unknown>[];
+
   get items() {
     if (!this._items) {
       this._items = navigation.map((item) => {
@@ -71,7 +72,7 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    events.on(this.elementRef.nativeElement, 'dxclick', (e) => {
+    events.on(this.elementRef.nativeElement, 'dxclick', (e: object) => {
       this.openMenu.next(e);
     });
   }

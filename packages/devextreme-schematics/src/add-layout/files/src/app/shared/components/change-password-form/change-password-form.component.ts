@@ -15,7 +15,7 @@ import { AuthService } from '../../services';
 export class ChangePasswordFormComponent implements OnInit {
   loading = false;
   formData: any = {};
-  recoveryCode: string;
+  recoveryCode: string|null;
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
 
@@ -25,7 +25,7 @@ export class ChangePasswordFormComponent implements OnInit {
     });
   }
 
-  async onSubmit(e) {
+  async onSubmit(e: Event) {
     e.preventDefault();
     const { password } = this.formData;
     this.loading = true;
