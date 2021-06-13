@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
 const defaultPath = '/';
-const defaultUser = {
+const defaultUser: {email: string, avatarUrl?:string}|undefined = {
   email: 'sandra@example.com',
   avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
 };
@@ -58,7 +58,7 @@ export class AuthService {
     }
   }
 
-  async createAccount(email, password) {
+  async createAccount(email: string, password: string) {
     try {
       // Send request
       console.log(email, password);

@@ -67,8 +67,8 @@ export class SideNavOuterToolbarComponent implements OnInit {
     const pointerEvent = event.event;
 
     if (path && this.menuOpened) {
-      if (event.node.selected) {
-        pointerEvent.preventDefault();
+      if (event.node?.selected) {
+        pointerEvent?.preventDefault();
       } else {
         this.router.navigate([path]);
         this.scrollView.instance.scrollTo(0);
@@ -77,10 +77,10 @@ export class SideNavOuterToolbarComponent implements OnInit {
       if (this.hideMenuAfterNavigation) {
         this.temporaryMenuOpened = false;
         this.menuOpened = false;
-        pointerEvent.stopPropagation();
+        pointerEvent?.stopPropagation();
       }
     } else {
-      pointerEvent.preventDefault();
+      pointerEvent?.preventDefault();
     }
   }
 

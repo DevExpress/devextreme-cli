@@ -30,6 +30,7 @@ export class NotAuthorizedContainerComponent {
       case 'create-account': return 'Sign Up';
       case 'change-password': return 'Change Password';
     }
+    return '';
   }
 
   get description() {
@@ -37,6 +38,7 @@ export class NotAuthorizedContainerComponent {
     switch (path) {
       case 'reset-password': return 'Please enter the email address that you used to register, and we will send you a link to reset your password via Email.';
     }
+    return '';
   }
 }
 @NgModule({

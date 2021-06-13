@@ -30,12 +30,14 @@ export class UnauthenticatedContentComponent {
       case 'create-account': return 'Sign Up';
       case 'change-password': return 'Change Password';
     }
+    return '';
   }
 
   get description() {
-    const path = this.router.url.split('/')[1];
-    switch (path) {
-      case 'reset-password': return 'Please enter the email address that you used to register, and we will send you a link to reset your password via Email.';
+    if (this.router.url.split('/')[1] === 'reset-password') {
+      return 'Please enter the email address that you used to register, and we will send you a link to reset your password via Email.';
+    } else {
+      return '';
     }
   }
 }
