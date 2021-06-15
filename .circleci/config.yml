@@ -5,11 +5,17 @@ jobs:
       app:
         type: string
     docker:
-      - image: circleci/node:12-browsers
+      - image: circleci/node:14-browsers
     environment:
         LAUNCH_BROWSER: true
     resource_class: large
     steps:
+      - run:
+          name: Set yarn cache folder
+          command: yarn config set cache-folder npm_cache
+      - run:
+          name: Set npm cache folder
+          command: npm config set cache npm_cache
       - run:
           name: Install Headless Chrome dependencies
           command: |
@@ -20,6 +26,14 @@ jobs:
             libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates \
             fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
       - checkout
+      - restore_cache:
+          keys:
+            - v2-deps-{{ .Branch }}-{{ .Revision }}
+            - v2-deps-{{ .Branch }}
+            - v2-deps-
+      - run:
+          name: Disable taobao registry
+          command: 'echo {\"useTaobaoRegistry\": false} > ~/.vuerc'
       - run:
           name: Install npm packages
           command: npm i
@@ -36,6 +50,13 @@ jobs:
           command: npm run test-template -- -- -e << parameters.app >>
           no_output_timeout: 15m
           when: always
+      - save_cache:
+          key: v2-deps-{{ .Branch }}-{{ .Revision }}-{{ epoch }}
+          paths:
+            - npm_cache
+            - node_modules
+            - packages/devextreme-cli/node_modules
+            - packages/devextreme-schemetics/node_modules
       - store_artifacts:
           path: test-results.xml
           prefix: tests
@@ -48,7 +69,7 @@ jobs:
 
   themebuilder-test:
     docker:
-      - image: circleci/node:12-browsers
+      - image: circleci/node:14-browsers
     steps:
       - checkout
       - run:
