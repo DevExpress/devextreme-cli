@@ -78,34 +78,66 @@ module.exports = class DevServer {
     }
 
     async waitForCompilation() {
-        return new Promise((resolve, reject) => {
-            function onData(data) {
+        let successCount = 0;
+        let timeoutId = null;
+        const proxy = {};
+        const setProxy = (resolve, reject) => {
+            proxy.resolve = resolve;
+            proxy.reject = reject;
+        };
 
-                console.log('DATA', data.toString());
+        const removeSubscriptions = () => {
+            this.devServerProcess.stdout.off('data', onData);
+            this.devServerProcess
+                .off('exit', onError)
+                .off('error', onError);
+        };
 
-                if(data.toString().toLowerCase().includes('compiled successfully')
-                 || data.toString().toLowerCase().includes('compiled with warnings.')) {
-                    this.devServerProcess.stdout.off('data', onData);
-                    this.devServerProcess.off('exit', onError);
-                    this.devServerProcess.off('error', onError);
+        const setSubscriptions = () => {
+            this.devServerProcess.stdout
+                .off('data', onData)
+                .on('data', onData);
 
-                    resolve();
+            this.devServerProcess
+                .off('exit', onError)
+                .on('exit', onError)
+                .off('error', onError)
+                .on('error', onError);
+        };
+
+        const onData = (data) => {
+            const dataString = data.toString().toLowerCase();
+            // dev server can recompile app several times during `devextreme build`
+            const successMessagesCount = 5;
+            const success = () => {
+                successCount = 0;
+                removeSubscriptions();
+                proxy.resolve();
+            };
+
+            if(dataString.includes('compiled successfully')
+                || dataString.includes('compiled with warnings.')) {
+                successCount += 1;
+                if(timeoutId) {
+                    clearTimeout(timeoutId);
+                }
+
+                if(successCount >= successMessagesCount) {
+                    success();
+                } else {
+                    timeoutId = setTimeout(success, 10000);
                 }
             }
-            onData = onData.bind(this);
+        };
 
-            function onError(code) {
-                this.devServerProcess.stdout.off('data', onData);
-                this.devServerProcess.off('exit', onError);
-                this.devServerProcess.off('error', onError);
+        const onError = (code) => {
+            removeSubscriptions();
+            proxy.reject();
+        };
 
-                reject();
-            }
-            onError = onError.bind(this);
-
-            this.devServerProcess.stdout.on('data', onData);
-            this.devServerProcess.on('exit', onError);
-            this.devServerProcess.on('error', onError);
+        return new Promise((resolve, reject) => {
+            setSubscriptions();
+            setProxy(resolve, reject);
         });
     }
 };
