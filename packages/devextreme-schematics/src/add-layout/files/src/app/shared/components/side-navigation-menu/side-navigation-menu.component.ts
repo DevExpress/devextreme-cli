@@ -72,7 +72,7 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    events.on(this.elementRef.nativeElement, 'dxclick', (e: object) => {
+    events.on(this.elementRef.nativeElement, 'dxclick', (e: Event) => {
       this.openMenu.next(e);
     });
   }
