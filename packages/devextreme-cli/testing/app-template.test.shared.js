@@ -85,6 +85,7 @@ module.exports = (env) => {
 
                             describe(`${viewportName}`, () => {
                                 it('Home view', async() => {
+                                    console.log('TEST', new Date().toISOString(), layout, theme);
                                     const page = await openPage(appUrl);
                                     const image = await page.screenshot({
                                         clip: {
