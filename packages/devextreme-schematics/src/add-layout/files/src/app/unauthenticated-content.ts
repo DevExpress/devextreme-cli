@@ -36,10 +36,9 @@ export class UnauthenticatedContentComponent {
   get description() {
     const path = this.router.url.split('/')[1];
     switch (path) {
-      case 'reset-password':
-         return 'Please enter the email address that you used to register, and we will send you a link to reset your password via Email.';
+      case 'reset-password': return 'Please enter the email address that you used to register, and we will send you a link to reset your password via Email.';
       default: return;
-  }
+    }
 }
 @NgModule({
   imports: [

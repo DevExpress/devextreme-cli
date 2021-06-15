@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
+
+interface User {
+  email: string;
+  avatarUrl?: string | undefined
+}
+
 const defaultPath = '/';
-const defaultUser: {email: string, avatarUrl?: string | undefined } | null | undefined = {
+const defaultUser: User | null | undefined = {
   email: 'sandra@example.com',
   avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
 };
@@ -120,9 +126,9 @@ export class AuthService {
 export class AuthGuardService implements CanActivate {
   constructor(private router: Router, private authService: AuthService) { }
 
-  canActivate(route: ActivatedRouteSnapshot|undefined): boolean {
+  canActivate(route: ActivatedRouteSnapshot | undefined): boolean {
     const isLoggedIn = this.authService.loggedIn;
-    const path: string|undefined = route?.routeConfig?.path;
+    const path: string | undefined = route?.routeConfig?.path;
     const isAuthForm = [
       'login-form',
       'reset-password',

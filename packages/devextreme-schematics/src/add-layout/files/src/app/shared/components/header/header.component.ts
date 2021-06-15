@@ -13,6 +13,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 
+interface User {
+  email: string;
+  avatarUrl?: string | undefined
+}
+
+
 export class HeaderComponent implements OnInit {
   @Output()
   menuToggle = new EventEmitter<boolean>();
@@ -23,7 +29,7 @@ export class HeaderComponent implements OnInit {
   @Input()
   title: string;
 
-  user: {email: string, avatarUrl?:string | undefined} | null| undefined = { email: '', avatarUrl: '' };
+  user: User | null | undefined = { email: '', avatarUrl: '' };
 
   userMenuItems = [{
     text: 'Profile',
