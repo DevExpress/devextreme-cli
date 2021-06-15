@@ -14,8 +14,8 @@ export class AuthService {
     return !!this._user;
   }
 
-  private _lastAuthenticatedPath: string|undefined = defaultPath;
-  set lastAuthenticatedPath(value: string|undefined) {
+  private _lastAuthenticatedPath: string | undefined = defaultPath;
+  set lastAuthenticatedPath(value: string | undefined) {
     this._lastAuthenticatedPath = value;
   }
 
