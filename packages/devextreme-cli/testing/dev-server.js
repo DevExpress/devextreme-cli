@@ -106,6 +106,7 @@ module.exports = class DevServer {
         };
 
         const onData = (data) => {
+            console.log('DATA', new Date().toISOString());
             const dataString = data.toString().toLowerCase();
             // dev server can recompile app several times during `devextreme build`
             const successMessagesCount = 5;
@@ -117,6 +118,7 @@ module.exports = class DevServer {
 
             if(dataString.includes('compiled successfully')
                 || dataString.includes('compiled with warnings.')) {
+                    console.log('OKKKK', new Date().toISOString());
                 successCount += 1;
                 if(timeoutId) {
                     clearTimeout(timeoutId);
