@@ -7,17 +7,17 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 
 import { Router } from '@angular/router';
-@Component({
-  selector: 'app-header',
-  templateUrl: 'header.component.html',
-  styleUrls: ['./header.component.scss']
-})
 
 interface User {
   email: string;
   avatarUrl?: string | undefined
 }
 
+@Component({
+  selector: 'app-header',
+  templateUrl: 'header.component.html',
+  styleUrls: ['./header.component.scss']
+})
 
 export class HeaderComponent implements OnInit {
   @Output()

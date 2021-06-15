@@ -39,6 +39,7 @@ export class UnauthenticatedContentComponent {
       case 'reset-password': return 'Please enter the email address that you used to register, and we will send you a link to reset your password via Email.';
       default: return;
     }
+  }
 }
 @NgModule({
   imports: [
