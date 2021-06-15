@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
 const defaultPath = '/';
-const defaultUser: {email: string, avatarUrl?:string|undefined}|null| undefined = {
+const defaultUser: {email: string, avatarUrl?: string | undefined } | null | undefined = {
   email: 'sandra@example.com',
   avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
 };
@@ -76,7 +76,7 @@ export class AuthService {
     }
   }
 
-  async changePassword(email: string, recoveryCode?: string|null) {
+  async changePassword(email: string, recoveryCode?: string | null) {
     try {
       // Send request
       console.log(email, recoveryCode);
