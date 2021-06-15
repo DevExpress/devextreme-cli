@@ -39,7 +39,7 @@ module.exports = (env) => {
                         beforeAll(async() => {
                             await devServer.setLayout(layout);
                             await devServer.setTheme(theme);
-                            console.log('BEF ALL', new Date().toISOString());
+                            console.log('BEF ALL', new Date().toISOString(), layout, theme);
                         });
 
                         Object.keys(viewports).forEach((viewportName) => {
@@ -84,7 +84,6 @@ module.exports = (env) => {
                             }
 
                             describe(`${viewportName}`, () => {
-                                console.log('TEST', new Date().toISOString());
                                 it('Home view', async() => {
                                     const page = await openPage(appUrl);
                                     const image = await page.screenshot({
