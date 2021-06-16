@@ -14,6 +14,8 @@
   },
   "devDependencies": {
     "@angular-eslint/schematics": "^0.2.0-beta.1",
-    "lerna": "^3.20.2"
-  }
+    "lerna": "^3.20.2",
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": "lint"
 }
