@@ -43,9 +43,9 @@ module.exports = class DevServer {
     async build() {
         // TODO - we need to write logs to the './testing/sandbox/logs'
         try {
-            process.env.CI = false;
             await runCommand('npm', this.env.npmArgs, {
                 cwd: this.env.appPath,
+                env: Object.assign(process.env, { CI: false })
                 // forceNoCmd: true,
                 // silent: false
             });
