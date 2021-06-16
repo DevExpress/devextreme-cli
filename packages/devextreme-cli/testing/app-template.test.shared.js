@@ -77,7 +77,7 @@ module.exports = (env) => {
 
                             async function hideScroll() {
                                 await page.evaluate(
-                                  'document.getElementsByClassName("dx-scrollable-scroll")[0].className += " dx-state-invisible";'
+                                    'document.getElementsByClassName("dx-scrollable-scroll")[0].className += " dx-state-invisible";'
                                 );
                                 await page.waitFor(3000);
                             }

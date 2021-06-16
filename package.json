@@ -9,7 +9,8 @@
     "test-template": "npm run --prefix ./packages/devextreme-cli test-template",
     "test-themebuilder": "npm run --prefix ./packages/devextreme-cli test-themebuilder",
     "postinstall": "lerna bootstrap",
-    "update-template": "node ./templates-generator/index.js"
+    "update-template": "node ./templates-generator/index.js",
+    "lint": "lerna run lint"
   },
   "devDependencies": {
     "@angular-eslint/schematics": "^0.2.0-beta.1",

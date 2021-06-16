@@ -80,7 +80,19 @@ jobs:
           command: npm run test-themebuilder
           no_output_timeout: 5m
 
+  lint-test:
+    steps:
+      - run:
+          name: Install npm packages
+          command: npm i
+      - run:
+          name: Run lint
+          command: npm run lint
+
 workflows:
+  lint:
+    jobs:
+      - lint-test
   all-builds:
     jobs:
       - build:
