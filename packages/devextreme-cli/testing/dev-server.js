@@ -11,20 +11,25 @@ module.exports = class DevServer {
         this.env = env;
     }
 
-    async start() {
-        const command = /^win/.test(process.platform) ? 'npm.cmd' : 'npm';
-        this.devServerProcess = spawn(command, this.env.npmArgs, { cwd: this.env.appPath });
+    start() {
+        fs.mkdirSync(this.env.deployPath, { recursive: true });
 
-        const logsDirPath = path.join(process.cwd(), './testing/sandbox/logs');
-        fs.mkdirSync(logsDirPath, { recursive: true });
+        const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
+        this.devServerProcess = spawn(command, ['http-server', this.env.deployPath, '-c-1', '>', 'http-server-e.log']);
 
-        const logFilePath = path.join(logsDirPath, `${this.env.engine}.log`);
-        const logStream = fs.createWriteStream(logFilePath);
+        // const command = /^win/.test(process.platform) ? 'npm.cmd' : 'npm';
+        // this.devServerProcess = spawn(command, this.env.npmArgs, { cwd: this.env.appPath });
 
-        this.devServerProcess.stdout.pipe(logStream);
-        this.devServerProcess.stderr.pipe(logStream);
+        // const logsDirPath = path.join(process.cwd(), './testing/sandbox/logs');
+        // fs.mkdirSync(logsDirPath, { recursive: true });
 
-        await this.waitForCompilation();
+        // const logFilePath = path.join(logsDirPath, `${this.env.engine}.log`);
+        // const logStream = fs.createWriteStream(logFilePath);
+
+        // this.devServerProcess.stdout.pipe(logStream);
+        // this.devServerProcess.stderr.pipe(logStream);
+
+        // await this.waitForCompilation();
     }
 
     async stop() {
@@ -33,6 +38,19 @@ module.exports = class DevServer {
         return new Promise((resolve, reject) => {
             this.devServerProcess.on('exit', () => resolve());
         });
+    }
+
+    async build() {
+        // TODO - we need to write logs to the './testing/sandbox/logs'
+        try {
+            await runCommand('npm', this.env.npmArgs, {
+                cwd: this.env.appPath,
+                // forceNoCmd: true,
+                // silent: false
+            });
+        } catch(e) {
+            throw new Error(e);
+        }
     }
 
     async setLayout(layout) {

@@ -19,16 +19,16 @@ async function prepareSchematics() {
         silent: false
     });
 
-    await packageManager.run([ 'run', 'build' ], {
+    await packageManager.run([ 'run', 'build'], {
         cwd: schematicsPath,
         silent: false
     });
 }
 
 exports.engine = 'angular';
-exports.port = 4200;
 exports.appPath = appPath;
-exports.npmArgs = ['start', '--', '--host', '0.0.0.0', '--live-reload', 'false'];
+exports.deployPath = path.join(appPath, 'dist', 'my-app');
+exports.npmArgs = ['run', 'build', '--', '--optimization', 'false'];
 exports.fileExtention = 'ts';
 
 exports.createApp = async() => {

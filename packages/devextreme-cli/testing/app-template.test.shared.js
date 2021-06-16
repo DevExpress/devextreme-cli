@@ -8,7 +8,7 @@ const DevServer = require('./dev-server');
 const defaultLayout = 'side-nav-outer-toolbar';
 
 module.exports = (env) => {
-    const appUrl = `http://${ip.address()}:${env.port}/`;
+    const appUrl = `http://${ip.address()}:8080/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
 
     describe(`${env.engine} app-template`, () => {
@@ -20,7 +20,8 @@ module.exports = (env) => {
             browser = await getBrowser();
             page = await browser.newPage();
             devServer = new DevServer(env);
-            await devServer.start();
+            console.log('START');
+            devServer.start();
         });
 
         afterAll(async() => {
@@ -37,9 +38,16 @@ module.exports = (env) => {
                     describe(layout, () => {
 
                         beforeAll(async() => {
-                            await devServer.setLayout(layout);
-                            await devServer.setTheme(theme);
-                            await devServer.waitForCompilation();
+                            try {
+                                await devServer.setLayout(layout);
+                                await devServer.setTheme(theme);
+                                await devServer.build();
+                            } catch(e) {
+                                console.log('EEEEEEEEEEEEEEEEEEEEEEEEEE');
+                                throw new Error(e);
+
+                            }
+                            // await devServer.waitForCompilation();
                             console.log('BEF ALL', new Date().toISOString(), layout, theme);
                         });
 
@@ -49,12 +57,13 @@ module.exports = (env) => {
                             async function openPage(url, options) {
                                 await page.goto('about:blank');
                                 await page.setViewport(viewport);
+                                console.log('GOTO', viewport, url);
                                 await page.goto(url, {
-                                    timeout: 0,
+                                    // timeout: 0,
                                     ...options
                                 });
                                 await page.waitFor('.with-footer', {
-                                    timeout: 0
+                                    // timeout: 0
                                 });
 
                                 return page;
@@ -63,9 +72,9 @@ module.exports = (env) => {
                             async function logOut() {
                                 const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                 await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
-                                await page.waitFor('.dx-icon-runner', { timeout: 0 });
+                                await page.waitFor('.dx-icon-runner'/*, { timeout: 0 }*/);
                                 await page.click('.dx-icon-runner');
-                                await page.waitFor('.login-header, .login-form', { timeout: 0 });
+                                await page.waitFor('.login-header, .login-form'/*, { timeout: 0 }*/);
                             }
 
                             const customConfig = { threshold: 0.012 };
@@ -190,7 +199,7 @@ module.exports = (env) => {
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     await page.click('.dx-button-normal');
-                                    await page.waitFor('.create-account-form', { timeout: 0 });
+                                    await page.waitFor('.create-account-form'/*, { timeout: 0 }*/);
 
                                     await hideScroll();
 
@@ -208,7 +217,7 @@ module.exports = (env) => {
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     await page.click('a');
-                                    await page.waitFor('form', { timeout: 0 });
+                                    await page.waitFor('form'/*, { timeout: 0 }*/);
 
                                     await hideScroll();
 
@@ -228,7 +237,7 @@ module.exports = (env) => {
                                     await page.evaluate(
                                         'const a = document.createElement("a");a.href="#/change-password/123";a.click()'
                                     );
-                                    await page.waitFor('form', { timeout: 0 });
+                                    await page.waitFor('form'/*, { timeout: 0 }*/);
 
                                     await hideScroll();
 

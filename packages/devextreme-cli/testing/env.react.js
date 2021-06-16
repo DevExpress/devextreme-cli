@@ -12,7 +12,6 @@ const appPath = path.join(sandboxPath, appName);
 const appLayoutPath = path.join(sandboxPath, appName, 'src/Content.js');
 
 exports.engine = 'react';
-exports.port = 3000;
 exports.appPath = appPath;
 exports.npmArgs = ['start'];
 exports.fileExtention = 'js';
