@@ -81,6 +81,8 @@ jobs:
           no_output_timeout: 5m
 
   lint-test:
+    docker:
+      - image: circleci/node:14-browsers
     steps:
       - run:
           name: Install npm packages
