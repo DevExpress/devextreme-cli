@@ -11,7 +11,8 @@ const routerFilePath = path.join(sandboxPath, appName, 'src/router.js');
 
 exports.engine = 'vue-v2';
 exports.appPath = path.join(sandboxPath, appName);
-exports.npmArgs = ['run', 'serve'];
+exports.deployPath = path.join(appPath, 'dist');
+exports.npmArgs = ['run', 'build'];
 exports.fileExtention = 'js';
 
 exports.createApp = async() => {

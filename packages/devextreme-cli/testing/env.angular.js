@@ -28,6 +28,7 @@ async function prepareSchematics() {
 exports.engine = 'angular';
 exports.appPath = appPath;
 exports.deployPath = path.join(appPath, 'dist', 'my-app');
+// disable optimization due to https://github.com/angular/angular-cli/issues/20760
 exports.npmArgs = ['run', 'build', '--', '--optimization', 'false'];
 exports.fileExtention = 'ts';
 

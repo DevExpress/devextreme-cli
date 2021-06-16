@@ -15,7 +15,7 @@ module.exports = class DevServer {
         fs.mkdirSync(this.env.deployPath, { recursive: true });
 
         const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
-        this.devServerProcess = spawn(command, ['http-server', this.env.deployPath, '-c-1', '>', 'http-server-e.log']);
+        this.devServerProcess = spawn(command, ['http-server', this.env.deployPath, '-c-1']);
 
         // const command = /^win/.test(process.platform) ? 'npm.cmd' : 'npm';
         // this.devServerProcess = spawn(command, this.env.npmArgs, { cwd: this.env.appPath });
