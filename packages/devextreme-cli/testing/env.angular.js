@@ -28,7 +28,7 @@ async function prepareSchematics() {
 exports.engine = 'angular';
 exports.port = 4200;
 exports.appPath = appPath;
-exports.npmArgs = ['start', '--', '--host', '0.0.0.0'];
+exports.npmArgs = ['start', '--', '--host', '0.0.0.0', '--live-reload', 'false'];
 exports.fileExtention = 'ts';
 
 exports.createApp = async() => {

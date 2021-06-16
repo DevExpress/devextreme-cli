@@ -37,8 +37,6 @@ module.exports = class DevServer {
 
     async setLayout(layout) {
         this.env.setLayout(layout);
-
-        await this.waitForCompilation();
     }
 
     async setTheme(theme) {
@@ -73,7 +71,6 @@ module.exports = class DevServer {
             silent: false
         });
 
-        await this.waitForCompilation();
         this.currentTheme = theme;
     }
 

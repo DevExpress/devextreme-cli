@@ -39,6 +39,7 @@ module.exports = (env) => {
                         beforeAll(async() => {
                             await devServer.setLayout(layout);
                             await devServer.setTheme(theme);
+                            await devServer.waitForCompilation();
                             console.log('BEF ALL', new Date().toISOString(), layout, theme);
                         });
 
