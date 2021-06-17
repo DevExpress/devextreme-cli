@@ -12,28 +12,30 @@ module.exports = class DevServer {
         this.env = env;
     }
 
+    collectHttpServerMessage(message) {
+        fs.mkdirSync(logsDirPath, { recursive: true });
+        const fileName = path.join(logsDirPath, 'http-server.log');
+        fs.writeFileSync(fileName, message, { flag: 'a' });
+    }
+
     async start() {
         fs.mkdirSync(this.env.deployPath, { recursive: true });
-        fs.mkdirSync(logsDirPath, { recursive: true });
-        fs.writeFileSync(path.join(logsDirPath, 'http-server.log'), 'This is server log'); // TODO remove me
 
         const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
-        console.log(command, // TODO remove me
-            'http-server',
-            this.env.deployPath,
-            '-c-1',
-            '>>',
-            path.join(logsDirPath, 'http-server.log'));
+
         this.devServerProcess = spawn(command, [
             'http-server',
             this.env.deployPath,
-            '-c-1',
-            '>>',
-            path.join(logsDirPath, 'http-server.log')
-        ]);
+            '-c-1'
+        ], {
+            stdio: 'pipe'
+        });
+
+        this.devServerProcess.stdout.on('data', this.collectHttpServerMessage);
+        this.devServerProcess.stderr.on('data', this.collectHttpServerMessage);
+
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                console.log('server exit code', this.devServerProcess.exitCode);
                 if(this.devServerProcess.exitCode === null) resolve();
                 else reject('http-server fail to start');
             }, 1000);
@@ -42,6 +44,8 @@ module.exports = class DevServer {
 
     async stop() {
         return new Promise(async(resolve, reject) => {
+            this.devServerProcess.stdout.off('data', this.collectHttpServerMessage);
+            this.devServerProcess.stderr.off('data', this.collectHttpServerMessage);
             this.devServerProcess.on('exit', () => resolve());
             await kill(this.devServerProcess.pid, 'SIGKILL');
         });
