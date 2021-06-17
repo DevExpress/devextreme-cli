@@ -16,7 +16,13 @@ module.exports = class DevServer {
         fs.mkdirSync(this.env.deployPath, { recursive: true });
 
         const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
-        this.devServerProcess = spawn(command, ['http-server', this.env.deployPath, '-c-1', '>>', path.join(logsDirPath, 'http-server.log')]);
+        this.devServerProcess = spawn(command, [
+            'http-server',
+            this.env.deployPath,
+            '-c-1',
+            '>>',
+            path.join(logsDirPath, 'http-server.log')
+        ]);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 if(this.devServerProcess.exitCode === null) resolve();
