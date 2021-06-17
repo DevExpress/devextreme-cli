@@ -1,7 +1,7 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const kill = require('tree-kill-promise').kill;
+const kill = require('tree-kill-promise');
 
 const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
@@ -11,18 +11,23 @@ module.exports = class DevServer {
         this.env = env;
     }
 
-    start() {
+    async start() {
         fs.mkdirSync(this.env.deployPath, { recursive: true });
 
         const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
         this.devServerProcess = spawn(command, ['http-server', this.env.deployPath, '-c-1', '>>', 'http-server.log']);
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if(this.devServerProcess.exitCode === null) resolve();
+                else reject('http-server fail to start');
+            }, 1000);
+        });
     }
 
     async stop() {
-        await kill(this.devServerProcess.pid, 'SIGKILL');
-
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             this.devServerProcess.on('exit', () => resolve());
+            await kill(this.devServerProcess.pid, 'SIGKILL');
         });
     }
 

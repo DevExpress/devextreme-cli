@@ -12,14 +12,12 @@ module.exports = (env) => {
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
 
     describe(`${env.engine} app-template`, () => {
-        let devServer;
         let browser;
         let page;
 
         beforeAll(async() => {
             browser = await getBrowser();
             page = await browser.newPage();
-            devServer = new DevServer(env);
         });
 
         afterAll(async() => {
@@ -33,13 +31,14 @@ module.exports = (env) => {
                     const isDefaultLayout = layout === defaultLayout;
 
                     describe(layout, () => {
+                        const devServer = new DevServer(env);
 
                         beforeAll(async() => {
                             try {
                                 await devServer.setLayout(layout);
                                 await devServer.setTheme(theme);
                                 await devServer.build();
-                                devServer.start();
+                                await devServer.start();
                             } catch(e) {
                                 // NOTE jest@27 will fail test, but jest@26 - not
                                 throw new Error(e);
