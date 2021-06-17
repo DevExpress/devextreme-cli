@@ -18,7 +18,7 @@ export class ScreenService {
     return isLarge || isXLarge;
   }
 
-  public get sizes() {
+  public get sizes(): Record<string, boolean> {
     return {
       'screen-x-small': this.breakpointObserver.isMatched(Breakpoints.XSmall),
       'screen-small': this.breakpointObserver.isMatched(Breakpoints.Small),

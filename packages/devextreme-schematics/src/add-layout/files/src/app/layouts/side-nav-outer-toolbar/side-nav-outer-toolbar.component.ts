@@ -14,14 +14,14 @@ import { Router, NavigationEnd } from '@angular/router';
   styleUrls: ['./side-nav-outer-toolbar.component.scss']
 })
 export class SideNavOuterToolbarComponent implements OnInit {
-  @ViewChild(DxScrollViewComponent, { static: true }) scrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: true }) scrollView!: DxScrollViewComponent;
   selectedRoute = '';
 
-  menuOpened: boolean;
+  menuOpened!: boolean;
   temporaryMenuOpened = false;
 
   @Input()
-  title: string;
+  title!: string;
 
   menuMode = 'shrink';
   menuRevealMode = 'expand';
@@ -67,8 +67,8 @@ export class SideNavOuterToolbarComponent implements OnInit {
     const pointerEvent = event.event;
 
     if (path && this.menuOpened) {
-      if (event.node.selected) {
-        pointerEvent.preventDefault();
+      if (event.node?.selected) {
+        pointerEvent?.preventDefault();
       } else {
         this.router.navigate([path]);
         this.scrollView.instance.scrollTo(0);
@@ -77,10 +77,10 @@ export class SideNavOuterToolbarComponent implements OnInit {
       if (this.hideMenuAfterNavigation) {
         this.temporaryMenuOpened = false;
         this.menuOpened = false;
-        pointerEvent.stopPropagation();
+        pointerEvent?.stopPropagation();
       }
     } else {
-      pointerEvent.preventDefault();
+      pointerEvent?.preventDefault();
     }
   }
 
