@@ -29,7 +29,7 @@ export class NotAuthorizedContainerComponent {
       case 'reset-password': return 'Reset Password';
       case 'create-account': return 'Sign Up';
       case 'change-password': return 'Change Password';
-      default: return;
+      default: return '';
     }
   }
 
@@ -37,7 +37,7 @@ export class NotAuthorizedContainerComponent {
     const path = this.router.url.split('/')[1];
     switch (path) {
       case 'reset-password': return 'Please enter the email address that you used to register, and we will send you a link to reset your password via Email.';
-      default: return;
+      default: return '';
     }
   }
 }
