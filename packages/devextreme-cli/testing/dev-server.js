@@ -13,6 +13,7 @@ module.exports = class DevServer {
     }
 
     collectHttpServerMessage(message) {
+        console.log('MESSAGE');
         fs.mkdirSync(logsDirPath, { recursive: true });
         const fileName = path.join(logsDirPath, 'http-server.log');
         fs.writeFileSync(fileName, message, { flag: 'a' });
@@ -21,10 +22,10 @@ module.exports = class DevServer {
     async start() {
         fs.mkdirSync(this.env.deployPath, { recursive: true });
 
-        const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
+        // const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
 
-        this.devServerProcess = spawn(command, [
-            'http-server',
+        this.devServerProcess = spawn('node', [
+            path.join(process.cwd(), 'node_modules', 'http-server', 'bin', 'http-server'),
             this.env.deployPath,
             '-c-1'
         ], {
