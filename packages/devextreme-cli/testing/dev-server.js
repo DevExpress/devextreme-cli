@@ -15,9 +15,10 @@ module.exports = class DevServer {
     async start() {
         fs.mkdirSync(this.env.deployPath, { recursive: true });
         fs.mkdirSync(logsDirPath, { recursive: true });
+        fs.writeFileSync(path.join(logsDirPath, 'http-server.log'), 'This is server log'); // TODO remove me
 
         const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
-        console.log(command,
+        console.log(command, // TODO remove me
             'http-server',
             this.env.deployPath,
             '-c-1',
