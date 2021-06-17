@@ -14,6 +14,7 @@ module.exports = class DevServer {
 
     async start() {
         fs.mkdirSync(this.env.deployPath, { recursive: true });
+        fs.mkdirSync(logsDirPath, { recursive: true });
 
         const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
         console.log(command,
