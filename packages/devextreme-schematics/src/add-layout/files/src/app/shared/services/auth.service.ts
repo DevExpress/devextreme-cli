@@ -1,27 +1,26 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
-
-interface User {
+export interface IUser {
   email: string;
-  avatarUrl?: string | undefined
+  avatarUrl?: string
 }
 
 const defaultPath = '/';
-const defaultUser: User | null | undefined = {
+const defaultUser = {
   email: 'sandra@example.com',
   avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
 };
 
 @Injectable()
 export class AuthService {
-  private _user = defaultUser;
+  private _user: IUser | null = defaultUser;
   get loggedIn(): boolean {
     return !!this._user;
   }
 
-  private _lastAuthenticatedPath: string | undefined = defaultPath;
-  set lastAuthenticatedPath(value: string | undefined) {
+  private _lastAuthenticatedPath: string = defaultPath;
+  set lastAuthenticatedPath(value: string) {
     this._lastAuthenticatedPath = value;
   }
 
@@ -59,7 +58,8 @@ export class AuthService {
     }
     catch {
       return {
-        isOk: false
+        isOk: false,
+        data: null
       };
     }
   }
@@ -82,7 +82,7 @@ export class AuthService {
     }
   }
 
-  async changePassword(email: string, recoveryCode?: string | null) {
+  async changePassword(email: string, recoveryCode: string) {
     try {
       // Send request
       console.log(email, recoveryCode);
@@ -126,15 +126,14 @@ export class AuthService {
 export class AuthGuardService implements CanActivate {
   constructor(private router: Router, private authService: AuthService) { }
 
-  canActivate(route: ActivatedRouteSnapshot | undefined): boolean {
+  canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.loggedIn;
-    const path: string | undefined = route?.routeConfig?.path;
     const isAuthForm = [
       'login-form',
       'reset-password',
       'create-account',
       'change-password/:recoveryCode'
-    ].includes(path ? path: "");
+    ].includes(route.routeConfig?.path || defaultPath);
 
     if (isLoggedIn && isAuthForm) {
       this.authService.lastAuthenticatedPath = defaultPath;
@@ -147,7 +146,7 @@ export class AuthGuardService implements CanActivate {
     }
 
     if (isLoggedIn) {
-      this.authService.lastAuthenticatedPath = path;
+      this.authService.lastAuthenticatedPath = route.routeConfig?.path || defaultPath;
     }
 
     return isLoggedIn || isAuthForm;

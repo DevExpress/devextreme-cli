@@ -15,13 +15,13 @@ import { AuthService } from '../../services';
 export class ChangePasswordFormComponent implements OnInit {
   loading = false;
   formData: any = {};
-  recoveryCode: string | null;
+  recoveryCode: string = '';
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.recoveryCode = params.get('recoveryCode');
+      this.recoveryCode = params.get('recoveryCode') || '';
     });
   }
 

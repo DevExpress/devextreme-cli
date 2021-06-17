@@ -14,14 +14,14 @@ import { Router, NavigationEnd } from '@angular/router';
   styleUrls: ['./side-nav-outer-toolbar.component.scss']
 })
 export class SideNavOuterToolbarComponent implements OnInit {
-  @ViewChild(DxScrollViewComponent, { static: true }) scrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: true }) scrollView!: DxScrollViewComponent;
   selectedRoute = '';
 
-  menuOpened: boolean;
+  menuOpened!: boolean;
   temporaryMenuOpened = false;
 
   @Input()
-  title: string;
+  title!: string;
 
   menuMode = 'shrink';
   menuRevealMode = 'expand';

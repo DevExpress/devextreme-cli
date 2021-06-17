@@ -3,12 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DxListModule } from 'devextreme-angular/ui/list';
 import { DxContextMenuModule } from 'devextreme-angular/ui/context-menu';
-
-interface User {
-  email: string;
-  avatarUrl?: string | undefined
-}
-
+import { IUser } from '../../services/auth.service';
 
 @Component({
   selector: 'app-user-panel',
@@ -21,10 +16,10 @@ export class UserPanelComponent {
   menuItems: any;
 
   @Input()
-  menuMode: string;
+  menuMode!: string;
 
   @Input()
-  user: User | null | undefined;
+  user!: IUser | null;
 
   constructor() {}
 }
