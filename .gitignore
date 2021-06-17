@@ -7,6 +7,7 @@
 **/node_modules/
 **/npm-debug.log*
 **/yarn-error.log*
+http-server.log
 packages/devextreme-cli/testing/sandbox/
 packages/devextreme-cli/testing/__tests__/__diff_snapshots__/
 

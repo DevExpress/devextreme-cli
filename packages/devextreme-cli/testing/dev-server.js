@@ -15,21 +15,7 @@ module.exports = class DevServer {
         fs.mkdirSync(this.env.deployPath, { recursive: true });
 
         const command = /^win/.test(process.platform) ? 'npx.cmd' : 'npx';
-        this.devServerProcess = spawn(command, ['http-server', this.env.deployPath, '-c-1']);
-
-        // const command = /^win/.test(process.platform) ? 'npm.cmd' : 'npm';
-        // this.devServerProcess = spawn(command, this.env.npmArgs, { cwd: this.env.appPath });
-
-        // const logsDirPath = path.join(process.cwd(), './testing/sandbox/logs');
-        // fs.mkdirSync(logsDirPath, { recursive: true });
-
-        // const logFilePath = path.join(logsDirPath, `${this.env.engine}.log`);
-        // const logStream = fs.createWriteStream(logFilePath);
-
-        // this.devServerProcess.stdout.pipe(logStream);
-        // this.devServerProcess.stderr.pipe(logStream);
-
-        // await this.waitForCompilation();
+        this.devServerProcess = spawn(command, ['http-server', this.env.deployPath, '-c-1', '>>', 'http-server.log']);
     }
 
     async stop() {
@@ -41,14 +27,17 @@ module.exports = class DevServer {
     }
 
     async build() {
-        // TODO - we need to write logs to the './testing/sandbox/logs'
         try {
-            await runCommand('npm', this.env.npmArgs, {
+            const output = await runCommand('npm', this.env.npmArgs, {
                 cwd: this.env.appPath,
+                // https://github.com/facebook/create-react-app/issues/3657
                 env: Object.assign(process.env, { CI: false })
-                // forceNoCmd: true,
-                // silent: false
             });
+            const logsDirPath = path.join(process.cwd(), './testing/sandbox/logs');
+            fs.mkdirSync(logsDirPath, { recursive: true });
+
+            const logFilePath = path.join(logsDirPath, `${this.env.engine}.log`);
+            fs.writeFileSync(logFilePath, output, { flag: 'a' });
         } catch(e) {
             throw new Error(e);
         }
@@ -91,71 +80,5 @@ module.exports = class DevServer {
         });
 
         this.currentTheme = theme;
-    }
-
-    async waitForCompilation() {
-        let successCount = 0;
-        let timeoutId = null;
-        const proxy = {};
-        const setProxy = (resolve, reject) => {
-            proxy.resolve = resolve;
-            proxy.reject = reject;
-        };
-
-        const removeSubscriptions = () => {
-            this.devServerProcess.stdout.off('data', onData);
-            this.devServerProcess
-                .off('exit', onError)
-                .off('error', onError);
-        };
-
-        const setSubscriptions = () => {
-            this.devServerProcess.stdout
-                .off('data', onData)
-                .on('data', onData);
-
-            this.devServerProcess
-                .off('exit', onError)
-                .on('exit', onError)
-                .off('error', onError)
-                .on('error', onError);
-        };
-
-        const onData = (data) => {
-            console.log('DATA', new Date().toISOString());
-            const dataString = data.toString().toLowerCase();
-            // dev server can recompile app several times during `devextreme build`
-            const successMessagesCount = 5;
-            const success = () => {
-                successCount = 0;
-                removeSubscriptions();
-                proxy.resolve();
-            };
-
-            if(dataString.includes('compiled successfully')
-                || dataString.includes('compiled with warnings.')) {
-                    console.log('OKKKK', new Date().toISOString());
-                successCount += 1;
-                if(timeoutId) {
-                    clearTimeout(timeoutId);
-                }
-
-                if(successCount >= successMessagesCount) {
-                    success();
-                } else {
-                    timeoutId = setTimeout(success, 10000);
-                }
-            }
-        };
-
-        const onError = (code) => {
-            removeSubscriptions();
-            proxy.reject();
-        };
-
-        return new Promise((resolve, reject) => {
-            setSubscriptions();
-            setProxy(resolve, reject);
-        });
     }
 };

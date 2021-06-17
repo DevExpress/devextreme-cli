@@ -20,12 +20,9 @@ module.exports = (env) => {
             browser = await getBrowser();
             page = await browser.newPage();
             devServer = new DevServer(env);
-            console.log('START');
-            devServer.start();
         });
 
         afterAll(async() => {
-            await devServer.stop();
             await (Boolean(process.env.LAUNCH_BROWSER) ? browser : page).close();
         });
 
@@ -42,13 +39,16 @@ module.exports = (env) => {
                                 await devServer.setLayout(layout);
                                 await devServer.setTheme(theme);
                                 await devServer.build();
+                                devServer.start();
                             } catch(e) {
-                                console.log('EEEEEEEEEEEEEEEEEEEEEEEEEE');
+                                // NOTE jest@27 will fail test, but jest@26 - not
                                 throw new Error(e);
 
                             }
-                            // await devServer.waitForCompilation();
-                            console.log('BEF ALL', new Date().toISOString(), layout, theme);
+                        });
+
+                        afterAll(async() => {
+                            await devServer.stop();
                         });
 
                         Object.keys(viewports).forEach((viewportName) => {
@@ -57,13 +57,12 @@ module.exports = (env) => {
                             async function openPage(url, options) {
                                 await page.goto('about:blank');
                                 await page.setViewport(viewport);
-                                console.log('GOTO', viewport, url);
                                 await page.goto(url, {
-                                    // timeout: 0,
+                                    timeout: 0,
                                     ...options
                                 });
                                 await page.waitFor('.with-footer', {
-                                    // timeout: 0
+                                    timeout: 0
                                 });
 
                                 return page;
@@ -72,9 +71,9 @@ module.exports = (env) => {
                             async function logOut() {
                                 const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                 await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
-                                await page.waitFor('.dx-icon-runner'/*, { timeout: 0 }*/);
+                                await page.waitFor('.dx-icon-runner', { timeout: 0 });
                                 await page.click('.dx-icon-runner');
-                                await page.waitFor('.login-header, .login-form'/*, { timeout: 0 }*/);
+                                await page.waitFor('.login-header, .login-form', { timeout: 0 });
                             }
 
                             const customConfig = { threshold: 0.012 };
@@ -95,7 +94,6 @@ module.exports = (env) => {
 
                             describe(`${viewportName}`, () => {
                                 it('Home view', async() => {
-                                    console.log('TEST', new Date().toISOString(), layout, theme);
                                     const page = await openPage(appUrl);
                                     const image = await page.screenshot({
                                         clip: {
@@ -199,7 +197,7 @@ module.exports = (env) => {
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     await page.click('.dx-button-normal');
-                                    await page.waitFor('.create-account-form'/*, { timeout: 0 }*/);
+                                    await page.waitFor('.create-account-form', { timeout: 0 });
 
                                     await hideScroll();
 
@@ -217,7 +215,7 @@ module.exports = (env) => {
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     await page.click('a');
-                                    await page.waitFor('form'/*, { timeout: 0 }*/);
+                                    await page.waitFor('form', { timeout: 0 });
 
                                     await hideScroll();
 
@@ -237,7 +235,7 @@ module.exports = (env) => {
                                     await page.evaluate(
                                         'const a = document.createElement("a");a.href="#/change-password/123";a.click()'
                                     );
-                                    await page.waitFor('form'/*, { timeout: 0 }*/);
+                                    await page.waitFor('form', { timeout: 0 });
 
                                     await hideScroll();
 
