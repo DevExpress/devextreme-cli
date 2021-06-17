@@ -77,7 +77,8 @@ const create = (appName, options) => {
         '--style=scss',
         '--routing=false',
         '--skip-tests=true',
-        '--skip-install=true'
+        '--skip-install=true',
+        '--strict=false',
     ];
 
     getLayoutInfo(options.layout).then(layoutInfo => {
