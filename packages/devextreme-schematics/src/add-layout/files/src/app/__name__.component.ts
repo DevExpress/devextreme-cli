@@ -7,11 +7,8 @@ import { AuthService, ScreenService, AppInfoService } from './shared/services';
   styleUrls: ['./<%= name %>.component.scss']
 })
 export class <%= strings.classify(name) %>Component  {
-  sizes = this.screen.sizes;
   @HostBinding('class') get getClass() {
-    return Object.keys(this.sizes)
-    .filter(cl => this.sizes)
-    .join(' ');
+    return Object.keys(this.screen.sizes).filter(cl => this.screen.sizes[cl]).join(' ');
   }
 
   constructor(private authService: AuthService, private screen: ScreenService, public appInfo: AppInfoService) { }
