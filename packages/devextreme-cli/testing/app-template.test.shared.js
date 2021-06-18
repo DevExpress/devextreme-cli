@@ -8,23 +8,19 @@ const DevServer = require('./dev-server');
 const defaultLayout = 'side-nav-outer-toolbar';
 
 module.exports = (env) => {
-    const appUrl = `http://${ip.address()}:${env.port}/`;
+    const appUrl = `http://${ip.address()}:8080/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
 
     describe(`${env.engine} app-template`, () => {
-        let devServer;
         let browser;
         let page;
 
         beforeAll(async() => {
             browser = await getBrowser();
             page = await browser.newPage();
-            devServer = new DevServer(env);
-            await devServer.start();
         });
 
         afterAll(async() => {
-            await devServer.stop();
             await (Boolean(process.env.LAUNCH_BROWSER) ? browser : page).close();
         });
 
@@ -35,10 +31,22 @@ module.exports = (env) => {
                     const isDefaultLayout = layout === defaultLayout;
 
                     describe(layout, () => {
+                        const devServer = new DevServer(env);
 
                         beforeAll(async() => {
-                            await devServer.setLayout(layout);
-                            await devServer.setTheme(theme);
+                            try {
+                                await devServer.setLayout(layout);
+                                await devServer.setTheme(theme);
+                                await devServer.build();
+                                await devServer.start();
+                            } catch(e) {
+                                // NOTE jest@27 will fail test, but jest@26 - not
+                                throw new Error(e);
+                            }
+                        });
+
+                        afterAll(async() => {
+                            await devServer.stop();
                         });
 
                         Object.keys(viewports).forEach((viewportName) => {

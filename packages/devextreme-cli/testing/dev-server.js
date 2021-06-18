@@ -1,44 +1,73 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const kill = require('tree-kill-promise').kill;
+const kill = require('tree-kill-promise');
 
 const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
+const logsDirPath = path.join(process.cwd(), 'testing', 'sandbox', 'logs');
 
 module.exports = class DevServer {
     constructor(env) {
         this.env = env;
     }
 
-    async start() {
-        const command = /^win/.test(process.platform) ? 'npm.cmd' : 'npm';
-        this.devServerProcess = spawn(command, this.env.npmArgs, { cwd: this.env.appPath });
-
-        const logsDirPath = path.join(process.cwd(), './testing/sandbox/logs');
+    collectHttpServerMessage(message) {
         fs.mkdirSync(logsDirPath, { recursive: true });
+        const fileName = path.join(logsDirPath, 'http-server.log');
+        fs.writeFileSync(fileName, message, { flag: 'a' });
+    }
 
-        const logFilePath = path.join(logsDirPath, `${this.env.engine}.log`);
-        const logStream = fs.createWriteStream(logFilePath);
+    async start() {
+        fs.mkdirSync(this.env.deployPath, { recursive: true });
 
-        this.devServerProcess.stdout.pipe(logStream);
-        this.devServerProcess.stderr.pipe(logStream);
+        this.devServerProcess = spawn('node', [
+            path.join(process.cwd(), 'node_modules', 'http-server', 'bin', 'http-server'),
+            this.env.deployPath,
+            '-c-1'
+        ], {
+            stdio: 'pipe'
+        });
 
-        await this.waitForCompilation();
+        this.devServerProcess.stdout.on('data', this.collectHttpServerMessage);
+        this.devServerProcess.stderr.on('data', this.collectHttpServerMessage);
+
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if(this.devServerProcess.exitCode === null) resolve();
+                else reject('http-server fail to start');
+            }, 1000);
+        });
     }
 
     async stop() {
-        await kill(this.devServerProcess.pid, 'SIGKILL');
-
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
+            this.devServerProcess.stdout.off('data', this.collectHttpServerMessage);
+            this.devServerProcess.stderr.off('data', this.collectHttpServerMessage);
             this.devServerProcess.on('exit', () => resolve());
+            await kill(this.devServerProcess.pid, 'SIGKILL');
         });
+    }
+
+    async build() {
+        try {
+            const output = await runCommand('npm', this.env.npmArgs, {
+                cwd: this.env.appPath,
+                // https://github.com/facebook/create-react-app/issues/3657
+                env: Object.assign(process.env, { CI: false })
+            });
+
+            fs.mkdirSync(logsDirPath, { recursive: true });
+
+            const logFilePath = path.join(logsDirPath, `${this.env.engine}.log`);
+            fs.writeFileSync(logFilePath, output, { flag: 'a' });
+        } catch(e) {
+            throw new Error(e);
+        }
     }
 
     async setLayout(layout) {
         this.env.setLayout(layout);
-
-        await this.waitForCompilation();
     }
 
     async setTheme(theme) {
@@ -73,37 +102,6 @@ module.exports = class DevServer {
             silent: false
         });
 
-        await this.waitForCompilation();
         this.currentTheme = theme;
-    }
-
-    async waitForCompilation() {
-        return new Promise((resolve, reject) => {
-            function onData(data) {
-
-                if(data.toString().toLowerCase().includes('compiled successfully')
-                 || data.toString().toLowerCase().includes('compiled with warnings.')) {
-                    this.devServerProcess.off('data', onData);
-                    this.devServerProcess.off('exit', onError);
-                    this.devServerProcess.off('error', onError);
-
-                    resolve();
-                }
-            }
-            onData = onData.bind(this);
-
-            function onError(code) {
-                this.devServerProcess.off('data', onData);
-                this.devServerProcess.off('exit', onError);
-                this.devServerProcess.off('error', onError);
-
-                reject();
-            }
-            onError = onError.bind(this);
-
-            this.devServerProcess.stdout.on('data', onData);
-            this.devServerProcess.on('exit', onError);
-            this.devServerProcess.on('error', onError);
-        });
     }
 };
