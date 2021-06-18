@@ -84,9 +84,12 @@ module.exports = (env) => {
                             }
 
                             async function hideScroll() {
-                                await page.evaluate(
-                                    'document.getElementsByClassName("dx-scrollable-scroll")[0].className += " dx-state-invisible";'
-                                );
+                                await page.evaluate(() => {
+                                    // eslint-disable-next-line no-undef
+                                    const scrollElement = document.getElementsByClassName('dx-scrollable-scroll')[0];
+                                    scrollElement.style.transition = 'none';
+                                    scrollElement.className += ' dx-state-invisible';
+                                });
                                 await page.waitFor(3000);
                             }
 
