@@ -33,8 +33,8 @@ exports.themes = {
 };
 
 exports.layouts = [
-  'side-nav-outer-toolbar',
-  'side-nav-inner-toolbar'
+    'side-nav-outer-toolbar',
+    'side-nav-inner-toolbar'
 ];
 
 exports.swatchModes = {
