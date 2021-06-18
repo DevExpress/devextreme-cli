@@ -19,7 +19,7 @@ async function prepareSchematics() {
         silent: false
     });
 
-    await packageManager.run([ 'run', 'build'], {
+    await packageManager.run(['run', 'build'], {
         cwd: schematicsPath,
         silent: false
     });

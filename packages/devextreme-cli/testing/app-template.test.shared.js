@@ -42,7 +42,6 @@ module.exports = (env) => {
                             } catch(e) {
                                 // NOTE jest@27 will fail test, but jest@26 - not
                                 throw new Error(e);
-
                             }
                         });
 
