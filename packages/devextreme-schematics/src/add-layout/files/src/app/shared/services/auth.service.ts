@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
+export interface IUser {
+  email: string;
+  avatarUrl?: string
+}
+
 const defaultPath = '/';
 const defaultUser = {
   email: 'sandra@example.com',
@@ -9,7 +14,7 @@ const defaultUser = {
 
 @Injectable()
 export class AuthService {
-  private _user = defaultUser;
+  private _user: IUser | null = defaultUser;
   get loggedIn(): boolean {
     return !!this._user;
   }
@@ -53,12 +58,13 @@ export class AuthService {
     }
     catch {
       return {
-        isOk: false
+        isOk: false,
+        data: null
       };
     }
   }
 
-  async createAccount(email, password) {
+  async createAccount(email: string, password: string) {
     try {
       // Send request
       console.log(email, password);
@@ -127,7 +133,7 @@ export class AuthGuardService implements CanActivate {
       'reset-password',
       'create-account',
       'change-password/:recoveryCode'
-    ].includes(route.routeConfig.path);
+    ].includes(route.routeConfig?.path || defaultPath);
 
     if (isLoggedIn && isAuthForm) {
       this.authService.lastAuthenticatedPath = defaultPath;
@@ -140,7 +146,7 @@ export class AuthGuardService implements CanActivate {
     }
 
     if (isLoggedIn) {
-      this.authService.lastAuthenticatedPath = route.routeConfig.path;
+      this.authService.lastAuthenticatedPath = route.routeConfig?.path || defaultPath;
     }
 
     return isLoggedIn || isAuthForm;

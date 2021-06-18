@@ -15,17 +15,17 @@ import { AuthService } from '../../services';
 export class ChangePasswordFormComponent implements OnInit {
   loading = false;
   formData: any = {};
-  recoveryCode: string;
+  recoveryCode: string = '';
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.recoveryCode = params.get('recoveryCode');
+      this.recoveryCode = params.get('recoveryCode') || '';
     });
   }
 
-  async onSubmit(e) {
+  async onSubmit(e: Event) {
     e.preventDefault();
     const { password } = this.formData;
     this.loading = true;

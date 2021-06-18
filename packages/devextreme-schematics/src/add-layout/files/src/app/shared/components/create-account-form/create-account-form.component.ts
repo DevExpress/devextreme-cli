@@ -19,7 +19,7 @@ export class CreateAccountFormComponent {
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  async onSubmit(e) {
+  async onSubmit(e: Event) {
     e.preventDefault();
     const { email, password } = this.formData;
     this.loading = true;
