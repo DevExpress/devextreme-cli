@@ -88,6 +88,7 @@ module.exports = (env) => {
                                     // eslint-disable-next-line no-undef
                                     const scrollElement = document.getElementsByClassName('dx-scrollable-scroll')[0];
                                     scrollElement.style.transition = 'none';
+                                    scrollElement.style.display = 'none';
                                     scrollElement.className += ' dx-state-invisible';
                                 });
                                 await page.waitFor(3000);
