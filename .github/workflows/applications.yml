@@ -37,6 +37,10 @@ jobs:
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund
 
+    - name: Run docker image
+      run: npm run docker:build && npm run docker:run
+      working-directory: ./packages/devextreme-cli
+
     - name: Create applications
       run: npm run create-template -- -- -e ${{ matrix.APPROACH }}
 
