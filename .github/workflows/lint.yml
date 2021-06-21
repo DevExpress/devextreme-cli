@@ -1,4 +1,4 @@
-name: ThemeBuilder tests
+name: Lint tests
 
 on: [push, pull_request]
 
