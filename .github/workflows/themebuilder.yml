@@ -21,5 +21,8 @@ jobs:
       with:
         node-version: '14'
 
+    - name: Run npm install
+      run: npm install --no-package-lock --no-audit --no-fund
+
     - name: Run tests
       run: npm run test-themebuilder

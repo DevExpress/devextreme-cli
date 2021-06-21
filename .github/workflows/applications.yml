@@ -48,11 +48,11 @@ jobs:
       run: npm run test-template -- -- -e ${{ matrix.APPROACH }}
 
     - name: Archive artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifacts
-          path: |
-            test-results.xml
-            packages/devextreme-cli/testing/__tests__/__diff_snapshots__
-            packages/devextreme-cli/testing/sandbox/logs
-            home/circleci/.npm/_logs
+      uses: actions/upload-artifact@v2
+      with:
+        name: artifacts
+        path: |
+          test-results.xml
+          packages/devextreme-cli/testing/__tests__/__diff_snapshots__
+          packages/devextreme-cli/testing/sandbox/logs
+          home/circleci/.npm/_logs
