@@ -1,0 +1,58 @@
+name: Application tests
+
+on: [push, pull_request]
+
+jobs:
+  application-test:
+    strategy:
+      fail-fast: true
+      matrix:
+        APPROACH: [ angular, vue-v3, vue-v2, react ]
+
+    runs-on: ubuntu-latest
+    name: ${{ matrix.APPROACH }}
+    timeout-minutes: 20
+
+    steps:
+
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Install Headless Chrome dependencies
+      run: |
+        sudo apt-get install -yq \
+        gconf-service libasound2 libatk1.0-0 libatk-bridge2.0-0 libc6 libcairo2 libcups2 libdbus-1-3 \
+        libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 \
+        libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 \
+        libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates \
+        fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Disable taobao registry
+      run: 'echo {\"useTaobaoRegistry\": false} > ~/.vuerc'
+
+    - name: Run npm install
+      run: npm install --no-package-lock --no-audit --no-fund
+
+    - name: Create applications
+      run: npm run create-template -- -- -e ${{ matrix.APPROACH }}
+
+    - name: Lint applications
+      run: npm run lint-template -- -- -e ${{ matrix.APPROACH }}
+    
+    - name: Run test
+      run: npm run test-template -- -- -e ${{ matrix.APPROACH }}
+
+    - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: |
+            test-results.xml
+            packages/devextreme-cli/testing/__tests__/__diff_snapshots__
+            packages/devextreme-cli/testing/sandbox/logs
+            home/circleci/.npm/_logs
