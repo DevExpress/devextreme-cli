@@ -11,7 +11,7 @@ jobs:
         NODE: [ 14, 16 ]
 
     runs-on: ubuntu-latest
-    name: ${{ matrix.APPROACH (node ${{ matrix.NODE }}) }}
+    name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}
 
     steps:
 
