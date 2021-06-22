@@ -1,0 +1,28 @@
+name: ThemeBuilder tests
+
+on: [push, pull_request]
+
+jobs:
+  themebuilder-test:
+    strategy:
+      fail-fast: true
+
+    runs-on: ubuntu-latest
+    name: ThemeBuilder
+    timeout-minutes: 20
+
+    steps:
+
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Run npm install
+      run: npm install --no-package-lock --no-audit --no-fund
+
+    - name: Run tests
+      run: npm run test-themebuilder
