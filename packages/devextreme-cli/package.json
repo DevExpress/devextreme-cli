@@ -38,7 +38,7 @@
   "license": "MIT",
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
-    "dart-sass": "^1.25.0",
+    "sass": "^1.25.0",
     "ip": "^1.1.5",
     "less": "3.9.0",
     "minimist": "^1.2.0",
