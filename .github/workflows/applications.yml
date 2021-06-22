@@ -8,9 +8,10 @@ jobs:
       fail-fast: true
       matrix:
         APPROACH: [ angular, vue-v3, vue-v2, react ]
+        NODE: [ '14', '16' ]
 
     runs-on: ubuntu-latest
-    name: ${{ matrix.APPROACH }}
+    name: ${{ matrix.APPROACH (node ${{ matrix.NODE }}) }}
 
     steps:
 
@@ -29,7 +30,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: ${{ matrix.NODE }}
 
     - name: Disable taobao registry
       run: 'echo {\"useTaobaoRegistry\": false} > ~/.vuerc'
