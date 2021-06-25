@@ -10,7 +10,7 @@ const devextremeConfig = require('./src/utility/devextreme-config');
 const printHelp = require('./src/help').printHelp;
 const packageJson = require('./package.json');
 const lock = require('./src/utility/file-lock');
-console.log('INDEX');
+
 lock.release();
 
 process.on('unhandledRejection', (error) => {

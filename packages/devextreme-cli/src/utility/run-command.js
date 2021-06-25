@@ -16,10 +16,9 @@ module.exports = function(commandName, args = [], customConfig = {}) {
 
     return new Promise((resolve, reject) => {
         const child = spawn(command, args, config);
-        console.log('RUN C', `> ${command} ${args.join(' ')}`);
         let out = '';
 
-        if(child.stdout !== null && child.stderr !== null) {
+        if(child.stdout && child.stderr) {
             console.log('SET DATA PIPE');
             child.stdout.on('data', (data) => {out += data;console.log('STDOUT', data.toString());});
             child.stderr.on('data', (data) => {out += data;console.log('STDERR', data.toString());});

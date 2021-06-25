@@ -101,7 +101,6 @@ const getMeta = (fullMeta, base, filter, baseParametersList) => {
 const installThemeBuilder = async version => {
     const packageJsonPath = path.join(themeBuilderPackagePath, 'package.json');
     const cwd = path.join(__dirname, '..');
-    console.log('INSTALL TB', cwd);
     const npmrc = './.npmrc';
     const installationNpmrc = path.join(cwd, '.npmrc');
     let removeNpmrc = false;
@@ -111,7 +110,6 @@ const installThemeBuilder = async version => {
     }
 
     if(fs.existsSync(npmrc)) {
-        console.log('INSTALL TB has npmrc');
         removeNpmrc = true;
         fs.copyFileSync(npmrc, installationNpmrc);
     }

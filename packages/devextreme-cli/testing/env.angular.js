@@ -33,14 +33,11 @@ exports.npmArgs = ['run', 'build', '--', '--configuration', 'development'];
 exports.fileExtention = 'ts';
 
 exports.createApp = async() => {
-    console.log('CREATE APP', sandboxPath);
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 
-    console.log('PREPARE SCHE');
     await prepareSchematics();
 
-    console.log('RUN new angular-app');
     await runCommand('node', [
         path.join(process.cwd(), './index.js'),
         'new',
@@ -53,7 +50,6 @@ exports.createApp = async() => {
         silent: false
     });
 
-    console.log('RUN add view');
     await runCommand('node', [
         path.join(process.cwd(), './index.js'),
         'add',
