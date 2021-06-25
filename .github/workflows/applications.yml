@@ -73,9 +73,9 @@ jobs:
     - name: Run test
       run: npm run test-template -- -- -e ${{ matrix.APPROACH }}
       timeout-minutes: 20
-      continue-on-error: true
 
     - name: Archive artifacts
+      if: ${{ failure() }}
       uses: actions/upload-artifact@v2
       with:
         name: artifacts
