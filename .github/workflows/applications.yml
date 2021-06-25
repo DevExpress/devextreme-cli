@@ -65,12 +65,14 @@ jobs:
 
     - name: Create applications
       run: npm run create-template -- -- -e ${{ matrix.APPROACH }}
+      timeout-minutes: 20
 
     - name: Lint applications
       run: npm run lint-template -- -- -e ${{ matrix.APPROACH }}
     
     - name: Run test
       run: npm run test-template -- -- -e ${{ matrix.APPROACH }}
+      timeout-minutes: 20
       continue-on-error: true
 
     - name: Archive artifacts
