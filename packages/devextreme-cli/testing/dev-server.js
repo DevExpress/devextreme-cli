@@ -42,8 +42,13 @@ module.exports = class DevServer {
 
     async stop() {
         return new Promise(async(resolve, reject) => {
-            this.devServerProcess.stdout.off('data', this.collectHttpServerMessage);
-            this.devServerProcess.stderr.off('data', this.collectHttpServerMessage);
+            if(this.devServerProcess.stdout) {
+                this.devServerProcess.stdout.off('data', this.collectHttpServerMessage);
+            }
+            if(this.devServerProcess.stderr) {
+                this.devServerProcess.stderr.off('data', this.collectHttpServerMessage);
+            }
+
             this.devServerProcess.on('exit', () => resolve());
             await kill(this.devServerProcess.pid, 'SIGKILL');
         });
@@ -51,6 +56,8 @@ module.exports = class DevServer {
 
     async build() {
         try {
+            fs.mkdirSync(this.env.deployPath, { recursive: true });
+
             const output = await runCommand('npm', this.env.npmArgs, {
                 cwd: this.env.appPath,
                 // https://github.com/facebook/create-react-app/issues/3657
