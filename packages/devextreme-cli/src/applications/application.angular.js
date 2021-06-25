@@ -71,6 +71,7 @@ const install = (options) => {
 };
 
 const create = (appName, options) => {
+    console.log('CREATE', appName);
     const commandArguments = [
         'new',
         appName,
@@ -82,7 +83,9 @@ const create = (appName, options) => {
     ];
 
     getLayoutInfo(options.layout).then(layoutInfo => {
+        console.log('GETLAYOUTINFO complete', appName);
         runNgCommand(commandArguments).then(() => {
+            console.log('RUN NG complete', appName);
             const appPath = path.join(process.cwd(), appName);
 
             options.resolveConflicts = 'override';
@@ -93,6 +96,8 @@ const create = (appName, options) => {
             });
 
             changeMainTs(appPath);
+        }).catch((e) => {
+            console.log(e);
         });
     });
 };
@@ -103,6 +108,7 @@ const addTemplate = (appName, options, evaluatingOptions) => {
 };
 
 const addView = (viewName, options) => {
+    console.log('ADD VIEW');
     const schematicOptions = Object.assign({
         name: viewName
     }, options);

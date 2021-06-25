@@ -145,13 +145,12 @@ export default function(options: any): Rule {
     const project = getProjectName(host, options);
     const module = getModuleName(addRoute, options.module);
     const name = getPathForView(options.name);
-
+console.log('BEFORE SCHEMA')
     const rules = [externalSchematic('@schematics/angular', 'component', {
         name,
         project,
         module,
-        spec: options.spec,
-        // spec: options.spec,
+        skipTests: options.skipTests,
         inlineStyle: options.inlineStyle,
         prefix: options.prefix
       }),

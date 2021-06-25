@@ -16,6 +16,7 @@ const run = (commands, options, devextremeConfig) => {
 
     if(commands[0] === 'new') {
         if(commands[1] === 'angular-app') {
+            console.log('CHOOSE angular');
             angularApplication.create(commands[2] || 'my-app', options);
             return;
         }

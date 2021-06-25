@@ -101,6 +101,7 @@ const getMeta = (fullMeta, base, filter, baseParametersList) => {
 const installThemeBuilder = async version => {
     const packageJsonPath = path.join(themeBuilderPackagePath, 'package.json');
     const cwd = path.join(__dirname, '..');
+    console.log('INSTALL TB', cwd);
     const npmrc = './.npmrc';
     const installationNpmrc = path.join(cwd, '.npmrc');
     let removeNpmrc = false;
@@ -110,13 +111,14 @@ const installThemeBuilder = async version => {
     }
 
     if(fs.existsSync(npmrc)) {
+        console.log('INSTALL TB has npmrc');
         removeNpmrc = true;
         fs.copyFileSync(npmrc, installationNpmrc);
     }
 
     await packageManager.installPackage(`devextreme-themebuilder@${version}`, {
         cwd,
-        stdio: 'ignore'
+        //stdio: 'ignore'
     }, {
         npm: ['--no-save']
     });
@@ -186,6 +188,7 @@ const runThemeBuilder = async rawOptions => {
         await installThemeBuilder(version);
     } catch(e) {
         console.log(`The devextreme-themebuilder npm package of v${version} was not installed. Please verify you are using v18.2.5 or higher and examine the installation error log to further troubleshoot the issue.`);
+        lock.release();
         return;
     }
 
