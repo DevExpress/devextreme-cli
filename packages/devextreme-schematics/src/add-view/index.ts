@@ -151,6 +151,7 @@ export default function(options: any): Rule {
         project,
         module,
         spec: options.spec,
+        // spec: options.spec,
         inlineStyle: options.inlineStyle,
         prefix: options.prefix
       }),
