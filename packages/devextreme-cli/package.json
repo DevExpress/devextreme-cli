@@ -62,7 +62,7 @@
     "eslint-stylish": "^0.2.0",
     "http-server": "^0.12.3",
     "jest": "^26.0.0",
-    "jest-image-snapshot": "^2.8.2",
+    "jest-image-snapshot": "^4.5.0",
     "puppeteer": "^2.1.1",
     "rimraf": "^2.6.3",
     "tree-kill": "^1.2.1",
