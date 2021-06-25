@@ -71,6 +71,7 @@ jobs:
     
     - name: Run test
       run: npm run test-template -- -- -e ${{ matrix.APPROACH }}
+      continue-on-error: true
 
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
