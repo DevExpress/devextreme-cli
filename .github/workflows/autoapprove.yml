@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: hmarr/auto-approve-action@v2
-      if: github.actor == 'renovate-bot'
+      if: github.actor == 'renovate-bot' || github.actor == 'renovate[bot]'
       with:
         github-token: "${{ secrets.GITHUB_TOKEN }}"
