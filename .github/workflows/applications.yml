@@ -8,9 +8,10 @@ jobs:
       fail-fast: true
       matrix:
         APPROACH: [ angular, vue-v3, vue-v2, react ]
+        NODE: [ 14, 16 ]
 
     runs-on: ubuntu-latest
-    name: ${{ matrix.APPROACH }}
+    name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}
 
     steps:
 
@@ -29,7 +30,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: ${{ matrix.NODE }}
 
     - name: Disable taobao registry
       run: 'echo {\"useTaobaoRegistry\": false} > ~/.vuerc'
@@ -42,15 +43,17 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-node-${{ matrix.NODE }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
+          ${{ runner.os }}-node-${{ matrix.NODE }}
           ${{ runner.os }}-node-
 
     - uses: actions/cache@v2
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        key: ${{ runner.os }}-yarn-${{ matrix.NODE }}-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
+          ${{ runner.os }}-yarn-${{ matrix.NODE }}
           ${{ runner.os }}-yarn-
 
     - name: Run npm install
@@ -62,14 +65,17 @@ jobs:
 
     - name: Create applications
       run: npm run create-template -- -- -e ${{ matrix.APPROACH }}
+      timeout-minutes: 20
 
     - name: Lint applications
       run: npm run lint-template -- -- -e ${{ matrix.APPROACH }}
     
     - name: Run test
       run: npm run test-template -- -- -e ${{ matrix.APPROACH }}
+      timeout-minutes: 20
 
     - name: Archive artifacts
+      if: ${{ failure() }}
       uses: actions/upload-artifact@v2
       with:
         name: artifacts

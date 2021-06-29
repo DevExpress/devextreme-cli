@@ -93,6 +93,8 @@ const create = (appName, options) => {
             });
 
             changeMainTs(appPath);
+        }).catch((e) => {
+            console.log(e);
         });
     });
 };

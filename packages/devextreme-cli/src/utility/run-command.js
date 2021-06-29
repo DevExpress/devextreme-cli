@@ -16,10 +16,9 @@ module.exports = function(commandName, args = [], customConfig = {}) {
 
     return new Promise((resolve, reject) => {
         const child = spawn(command, args, config);
-
         let out = '';
 
-        if(child.stdout !== null && child.stderr !== null) {
+        if(child.stdout && child.stderr) {
             child.stdout.on('data', (data) => out += data);
             child.stderr.on('data', (data) => out += data);
         }

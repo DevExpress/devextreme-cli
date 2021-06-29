@@ -37,12 +37,13 @@ exports.createApp = async() => {
     fs.mkdirSync(sandboxPath, { recursive: true });
 
     await prepareSchematics();
+
     await runCommand('node', [
         path.join(process.cwd(), './index.js'),
         'new',
         'angular-app',
         '--layout=side-nav-outer-toolbar',
-        `--c=${schematicsDirectory}`
+        `--c=${schematicsDirectory}`,
     ], {
         cwd: sandboxPath,
         forceNoCmd: true,

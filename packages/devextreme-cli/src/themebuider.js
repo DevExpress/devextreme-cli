@@ -186,6 +186,7 @@ const runThemeBuilder = async rawOptions => {
         await installThemeBuilder(version);
     } catch(e) {
         console.log(`The devextreme-themebuilder npm package of v${version} was not installed. Please verify you are using v18.2.5 or higher and examine the installation error log to further troubleshoot the issue.`);
+        lock.release();
         return;
     }
 
