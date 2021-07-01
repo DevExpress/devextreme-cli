@@ -57,6 +57,7 @@ module.exports = (env) => {
                                 await page.setViewport(viewport);
                                 await page.goto(url, {
                                     timeout: 0,
+                                    waitUntil: 'networkidle0',
                                     ...options
                                 });
                                 await page.waitFor('.with-footer', {
@@ -117,9 +118,7 @@ module.exports = (env) => {
                                 });
 
                                 it('Tasks view', async() => {
-                                    const page = await openPage(`${appUrl}#/tasks`, {
-                                        waitUntil: 'networkidle0'
-                                    });
+                                    const page = await openPage(`${appUrl}#/tasks`);
                                     // NOTE: Wait for the DataGrid is loaded
                                     await page.waitFor('.dx-row-focused');
                                     const image = await page.screenshot();
@@ -132,9 +131,7 @@ module.exports = (env) => {
                                     if(env.engine === 'angular') {
                                         pageUrl = 'pages/' + pageUrl;
                                     }
-                                    const page = await openPage(`${appUrl}#${pageUrl}`, {
-                                        waitUntil: 'networkidle0'
-                                    });
+                                    const page = await openPage(`${appUrl}#${pageUrl}`);
                                     const image = await page.screenshot();
 
                                     compareSnapshot(image, 'add-view');
@@ -142,9 +139,7 @@ module.exports = (env) => {
 
                                 it('Menu toggle', async() => {
                                     const menuButtonSelector = '.menu-button .dx-button';
-                                    const page = await openPage(`${appUrl}#/profile`, {
-                                        waitUntil: 'networkidle0'
-                                    });
+                                    const page = await openPage(`${appUrl}#/profile`);
                                     await page.waitForSelector(menuButtonSelector);
                                     await page.click(menuButtonSelector);
 
