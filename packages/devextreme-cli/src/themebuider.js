@@ -116,7 +116,7 @@ const installThemeBuilder = async version => {
 
     await packageManager.installPackage(`devextreme-themebuilder@${version}`, {
         cwd,
-        stdio: 'ignore'
+        stdio: 'inherit'
     }, {
         npm: ['--no-save']
     });
