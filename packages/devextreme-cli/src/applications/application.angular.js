@@ -78,7 +78,6 @@ const create = (appName, options) => {
         '--routing=false',
         '--skip-tests=true',
         '--skip-install=true',
-        '--strict=false',
     ];
 
     getLayoutInfo(options.layout).then(layoutInfo => {
