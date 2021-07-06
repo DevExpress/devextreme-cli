@@ -3,7 +3,10 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = class WebServer {
-    httpServer;
+    constructor() {
+        this.httpServer = null;
+    }
+
     getMimeType(filePath) {
         const mimeTypes = {
             '.html': 'text/html',
@@ -37,7 +40,7 @@ module.exports = class WebServer {
                     };
 
                     if(error) {
-                        if(error.code == 'ENOENT') {
+                        if(error.code === 'ENOENT') {
                             setResponse('404', 'text/html', 404);
                         } else {
                             setResponse(`500: ${error.code}`, 'text/html', 500);
@@ -46,9 +49,7 @@ module.exports = class WebServer {
                         setResponse(content, contentType, 200);
                     }
                 });
-            }).listen(8080, () => {
-                resolve();
-            });
+            }).listen(8080, resolve);
         });
     }
 
