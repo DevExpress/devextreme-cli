@@ -1,8 +1,8 @@
-const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const kill = require('tree-kill-promise');
+const WebServer = require('./web-server');
 
+const webServer = new WebServer();
 const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
 const logsDirPath = path.join(process.cwd(), 'testing', 'sandbox', 'logs');
@@ -12,46 +12,12 @@ module.exports = class DevServer {
         this.env = env;
     }
 
-    collectHttpServerMessage(message) {
-        fs.mkdirSync(logsDirPath, { recursive: true });
-        const fileName = path.join(logsDirPath, 'http-server.log');
-        fs.writeFileSync(fileName, message, { flag: 'a' });
-    }
-
     async start() {
-        fs.mkdirSync(this.env.deployPath, { recursive: true });
-
-        this.devServerProcess = spawn('node', [
-            path.join(process.cwd(), 'node_modules', 'http-server', 'bin', 'http-server'),
-            this.env.deployPath,
-            '-c-1'
-        ], {
-            stdio: 'pipe'
-        });
-
-        this.devServerProcess.stdout.on('data', this.collectHttpServerMessage);
-        this.devServerProcess.stderr.on('data', this.collectHttpServerMessage);
-
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if(this.devServerProcess.exitCode === null) resolve();
-                else reject('http-server fail to start');
-            }, 1000);
-        });
+        await webServer.start(this.env.deployPath);
     }
 
     async stop() {
-        return new Promise(async(resolve, reject) => {
-            if(this.devServerProcess.stdout) {
-                this.devServerProcess.stdout.off('data', this.collectHttpServerMessage);
-            }
-            if(this.devServerProcess.stderr) {
-                this.devServerProcess.stderr.off('data', this.collectHttpServerMessage);
-            }
-
-            this.devServerProcess.on('exit', () => resolve());
-            await kill(this.devServerProcess.pid, 'SIGKILL');
-        });
+        await webServer.stop();
     }
 
     async build() {
