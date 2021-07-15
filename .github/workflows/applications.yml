@@ -12,7 +12,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      VUE_CLI_CONFIG_PATH: ${{ env.RUNNER_TEMP }}/.vuerc
+      VUE_CLI_CONFIG_PATH: $RUNNER_TEMP/.vuerc
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}
 
     steps:
@@ -35,7 +35,7 @@ jobs:
         node-version: ${{ matrix.NODE }}
 
     - name: Disable taobao registry
-      run: 'echo {\"useTaobaoRegistry\":, false} > ${{ env.RUNNER_TEMP }}/.vuerc'
+      run: 'echo {\"useTaobaoRegistry\":, false} > $RUNNER_TEMP/.vuerc'
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
