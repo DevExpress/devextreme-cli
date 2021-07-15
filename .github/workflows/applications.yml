@@ -11,6 +11,8 @@ jobs:
         NODE: [ 14, 16 ]
 
     runs-on: ubuntu-latest
+    env:
+      VUE_CLI_CONFIG_PATH: ~/.vuerc
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}
 
     steps:
