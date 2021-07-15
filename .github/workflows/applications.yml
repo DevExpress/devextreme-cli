@@ -35,7 +35,7 @@ jobs:
         node-version: ${{ matrix.NODE }}
 
     - name: Disable taobao registry
-      run: 'echo {\"useTaobaoRegistry\":, false} > ${env.VUE_CLI_CONFIG_PATH}'
+      run: echo {\"useTaobaoRegistry\":, false} > ${{ env.VUE_CLI_CONFIG_PATH }}
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
