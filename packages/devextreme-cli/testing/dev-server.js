@@ -5,7 +5,6 @@ const WebServer = require('./web-server');
 const webServer = new WebServer();
 const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
-const logsDirPath = path.join(process.cwd(), 'testing', 'sandbox', 'logs');
 
 module.exports = class DevServer {
     constructor(env) {
