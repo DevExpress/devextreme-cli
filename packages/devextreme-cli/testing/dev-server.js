@@ -24,16 +24,11 @@ module.exports = class DevServer {
         try {
             fs.mkdirSync(this.env.deployPath, { recursive: true });
 
-            const output = await runCommand('npm', this.env.npmArgs, {
+            await runCommand('npm', this.env.npmArgs, {
                 cwd: this.env.appPath,
                 // https://github.com/facebook/create-react-app/issues/3657
                 env: Object.assign(process.env, { CI: false })
             });
-
-            fs.mkdirSync(logsDirPath, { recursive: true });
-
-            const logFilePath = path.join(logsDirPath, `${this.env.engine}.log`);
-            fs.writeFileSync(logFilePath, output, { flag: 'a' });
         } catch(e) {
             throw new Error(e);
         }
