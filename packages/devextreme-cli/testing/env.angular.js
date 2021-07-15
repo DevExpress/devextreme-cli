@@ -15,13 +15,11 @@ const appComponentPath = path.join(appPath, 'src/app/app.component.html');
 
 async function prepareSchematics() {
     await packageManager.runInstall({
-        cwd: schematicsPath,
-        silent: false
+        cwd: schematicsPath
     });
 
     await packageManager.run(['run', 'build'], {
-        cwd: schematicsPath,
-        silent: false
+        cwd: schematicsPath
     });
 }
 
@@ -46,8 +44,7 @@ exports.createApp = async() => {
         `--c=${schematicsDirectory}`,
     ], {
         cwd: sandboxPath,
-        forceNoCmd: true,
-        silent: false
+        forceNoCmd: true
     });
 
     await runCommand('node', [
@@ -57,8 +54,7 @@ exports.createApp = async() => {
         'new-page'
     ], {
         cwd: appPath,
-        forceNoCmd: true,
-        silent: false
+        forceNoCmd: true
     });
 
     const data = fs.readFileSync(routingFilePath, 'utf8');

@@ -28,8 +28,7 @@ exports.createApp = async() => {
         '--layout=side-nav-outer-toolbar'
     ], {
         cwd: sandboxPath,
-        forceNoCmd: true,
-        silent: false
+        forceNoCmd: true
     });
 
     await runCommand('node', [
@@ -39,8 +38,7 @@ exports.createApp = async() => {
         'new-page'
     ], {
         cwd: appPath,
-        forceNoCmd: true,
-        silent: false
+        forceNoCmd: true
     });
 
     fs.writeFileSync(path.join(appPath, '.env'), 'SKIP_PREFLIGHT_CHECK=true' + EOL + 'BROWSER=none');

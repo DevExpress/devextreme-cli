@@ -71,8 +71,7 @@ module.exports = class DevServer {
             'build'
         ], {
             cwd: this.env.appPath,
-            forceNoCmd: true,
-            silent: false
+            forceNoCmd: true
         });
 
         this.currentTheme = theme;
