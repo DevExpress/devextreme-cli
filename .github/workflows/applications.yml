@@ -11,6 +11,8 @@ jobs:
         NODE: [ 14, 16 ]
 
     runs-on: ubuntu-latest
+    env:
+      VUE_CLI_CONFIG_PATH: /home/runner/work/devextreme-cli/devextreme-cli/.vuerc
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}
 
     steps:
@@ -33,7 +35,8 @@ jobs:
         node-version: ${{ matrix.NODE }}
 
     - name: Disable taobao registry
-      run: 'echo {\"useTaobaoRegistry\": false} > ~/.vuerc'
+      run: |
+        echo {\"useTaobaoRegistry\": false} > ${{ env.VUE_CLI_CONFIG_PATH }}
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
