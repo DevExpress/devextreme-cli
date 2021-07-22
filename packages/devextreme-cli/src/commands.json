@@ -72,10 +72,13 @@
             "description": "Specifies target DevExtreme build or a tag that points to it (default value is 'latest')"
         }, {
             "name": "--widgets",
-            "description": "Specifies a comma-separated list of widgets whose styles should be included in the resulting CSS file (available from DevExtreme v19.2.3). If this argument is not specified, styles used for all widgets are included"
+            "description": "Specifies a comma-separated list of widgets whose styles should be included in the resulting CSS file. If this argument is not specified, styles used for all widgets are included. Available from DevExtreme v19.2.3."
         }, {
             "name": "--remove-external-resources",
-            "description": "When present, removes links to external resources, such as fonts. The theme will use local fallbacks instead."
+            "description": "When present, removes links to external resources, such as fonts. The theme will use local fallbacks instead. Available from DevExtreme v20.2.7."
+        }, {
+            "name": "--bootstrap-version",
+            "description": "Specifies Bootstrap version 4 or 5 if '--input-file' is a '.scss' file. Available from DevExtreme v21.1.5. Default value: 4."
         }]
     }, {
         "name": "export-theme-vars",
