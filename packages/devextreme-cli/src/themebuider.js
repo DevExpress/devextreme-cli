@@ -98,14 +98,21 @@ const getMeta = (fullMeta, base, filter, baseParametersList) => {
     return result;
 };
 
+const getInstalledPackageVersion = (packageName) => {
+    try {
+        return require(`${packageName}/package.json`).version;
+    } catch(e) {
+        return null;
+    }
+};
+
 const installThemeBuilder = async version => {
-    const packageJsonPath = path.join(themeBuilderPackagePath, 'package.json');
     const cwd = path.join(__dirname, '..');
     const npmrc = './.npmrc';
     const installationNpmrc = path.join(cwd, '.npmrc');
     let removeNpmrc = false;
 
-    if(fs.existsSync(packageJsonPath) && require(packageJsonPath).version === version) {
+    if(getInstalledPackageVersion('devextreme-themebuilder') === version) {
         return;
     }
 
@@ -124,26 +131,6 @@ const installThemeBuilder = async version => {
     if(removeNpmrc) {
         fs.unlinkSync(installationNpmrc);
     }
-};
-
-const getDevExtremeInfo = (dependencies) => {
-    const keyValue = Object.keys(dependencies).find((key) => /devextreme@/.test(key));
-
-    return dependencies[keyValue];
-};
-
-const getDevExtremeVersion = (cwd) => {
-    const dependencies = packageManager.getDependencies({ cwd });
-    const installedDevExtremePackageJson = path.join(cwd, 'node_modules', 'devextreme', 'package.json');
-    const devextremeInfo = dependencies && (dependencies.devextreme || getDevExtremeInfo(dependencies));
-
-    if(devextremeInfo) {
-        return devextremeInfo.version;
-    } else if(fs.existsSync(installedDevExtremePackageJson)) {
-        return JSON.parse(fs.readFileSync(installedDevExtremePackageJson, 'utf8')).version;
-    }
-
-    return;
 };
 
 const setWidgetsOption = (options, version) => {
@@ -177,7 +164,7 @@ const runThemeBuilder = async rawOptions => {
         options.lessCompiler.options['rootpath'] = options.assetsBasePath;
     }
 
-    const version = options.version || getDevExtremeVersion(process.cwd()) || 'latest';
+    const version = options.version || getInstalledPackageVersion('devextreme') || 'latest';
 
     await lock.acquire();
 
@@ -260,5 +247,5 @@ const isThemeBuilderCommand = command => {
 module.exports = {
     run: runThemeBuilder,
     isThemeBuilderCommand,
-    getDevExtremeVersion
+    getInstalledPackageVersion
 };
