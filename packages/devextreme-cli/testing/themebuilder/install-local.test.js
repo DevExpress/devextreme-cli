@@ -30,7 +30,7 @@ const parseInstalledVersion = (output) => {
 };
 
 describe('ThemeBuilder local install tests', () => {
-    jest.setTimeout(1800);
+    jest.setTimeout(1800000); // 30min
     beforeAll(async() => {
         await buildPackage();
     });
