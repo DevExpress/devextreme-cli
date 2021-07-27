@@ -24,7 +24,7 @@ const parseDetectedVersion = (output) => {
     return output.replace(/.*Using version (\d\d\.\d.\d\d?|latest).*/s, '$1');
 };
 const parseInstalledVersion = (output) => {
-    const reg = /.*> npm.cmd install --no-save devextreme-themebuilder@(\d\d\.\d.\d\d?).*/s;
+    const reg = /.*> npm(\.cmd)? install --no-save devextreme-themebuilder@(\d\d\.\d.\d\d?).*/s;
     if(!reg.test(output)) return null;
     return output.replace(reg, '$1');
 };
