@@ -12,7 +12,9 @@ const buildPackage = async() => {
 
 const prepareDirectory = async(devextremeVersion, themeBuilderVersion) => {
     await runCommand('npm', ['init', '--yes'], { cwd: workDirectory });
-    await runCommand('npm', ['install', `devextreme@${devextremeVersion}`, '--save-exact'], { cwd: workDirectory });
+    if(devextremeVersion) {
+        await runCommand('npm', ['install', `devextreme@${devextremeVersion}`, '--save-exact'], { cwd: workDirectory });
+    }
     if(themeBuilderVersion) {
         await runCommand('npm', ['install', `devextreme-themebuilder@${themeBuilderVersion}`, '--save-exact'], { cwd: workDirectory });
     }
@@ -24,9 +26,9 @@ const parseDetectedVersion = (output) => {
     return output.replace(/.*Using version (\d\d\.\d.\d\d?|latest).*/s, '$1');
 };
 const parseInstalledVersion = (output) => {
-    const reg = /.*> npm(?!\.cmd)? install --no-save devextreme-themebuilder@(\d\d\.\d.\d\d?).*/s;
+    const reg = /.*> npm(\.cmd)? install --no-save devextreme-themebuilder@(\d\d\.\d.\d\d?|latest).*/s;
     if(!reg.test(output)) return null;
-    return output.replace(reg, '$1');
+    return output.replace(reg, '$2');
 };
 
 describe('ThemeBuilder local install tests', () => {
@@ -48,8 +50,11 @@ describe('ThemeBuilder local install tests', () => {
 
     test.each`
     devextreme   | devextremeThemebuilder | expectInstall
-    ${'21.1.4'}  | ${'21.1.4'}            | ${false}
-    ${'21.1.4'}  | ${null}                | ${true}
+    ${'21.1.4'}  | ${'21.1.4'}            | ${null}
+    ${'21.1.4'}  | ${null}                | ${'21.1.4'}
+    ${'21.1.4'}  | ${'21.1.3'}            | ${'21.1.4'}
+    ${null}      | ${'21.1.3'}            | ${'latest'}
+    ${null}      | ${null}                | ${'latest'}
     `('devextreme: $devextreme, devextreme-themebuilder: $devextremeThemebuilder', async({
         devextreme,
         devextremeThemebuilder,
@@ -64,13 +69,13 @@ describe('ThemeBuilder local install tests', () => {
             'build-theme'
         ]).stdout.toString();
 
-        console.log('RUN RESULT', runResult);
+        console.log('Run resultn\n', runResult);
 
         const detectedVersion = parseDetectedVersion(runResult);
         const installedVersion = parseInstalledVersion(runResult);
 
-        expect(detectedVersion).toBe(devextreme);
-        expect(installedVersion).toBe(expectInstall ? devextreme : null);
+        expect(detectedVersion).toBe(devextreme || 'latest');
+        expect(installedVersion).toBe(expectInstall);
     });
 
 });
