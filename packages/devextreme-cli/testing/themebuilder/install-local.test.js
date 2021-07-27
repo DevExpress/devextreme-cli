@@ -1,9 +1,14 @@
-const { mkdir, writeFile, rm } = require('fs').promises;
+const { mkdir, rm } = require('fs').promises;
 const { join } = require('path');
 const { spawnSync } = require('child_process');
 const runCommand = require('../../src/utility/run-command');
+const cliVersion = require('../../package.json').version;
 
 const workDirectory = join(__dirname, 'install-local');
+
+const buildPackage = async() => {
+    await runCommand('npm', ['pack'], { cwd: join(__dirname, '..', '..') });
+};
 
 const prepareDirectory = async(devextremeVersion, themeBuilderVersion) => {
     await runCommand('npm', ['init', '--yes'], { cwd: workDirectory });
@@ -12,8 +17,6 @@ const prepareDirectory = async(devextremeVersion, themeBuilderVersion) => {
         await runCommand('npm', ['install', `devextreme-themebuilder@${themeBuilderVersion}`, '--save-exact'], { cwd: workDirectory });
     }
     // we need to install cli as tgz (npm i for folder make symlink and require works in wrong way)
-    await runCommand('npm', ['pack'], { cwd: join(__dirname, '..', '..') });
-    const cliVersion = require('../../package.json').version;
     await runCommand('npm', ['install', `../../../devextreme-cli-${cliVersion}.tgz`, '--save-exact'], { cwd: workDirectory });
 };
 
@@ -28,8 +31,11 @@ const parseInstalledVersion = (output) => {
 
 describe('ThemeBuilder local install tests', () => {
     jest.setTimeout(1000000);
+    beforeAll(async() => {
+        await buildPackage();
+    });
+
     beforeEach(async() => {
-        jest.resetModules();
         await mkdir(workDirectory, { recursive: true });
         process.chdir(workDirectory);
     });
@@ -57,6 +63,9 @@ describe('ThemeBuilder local install tests', () => {
             join(workDirectory, 'node_modules', 'devextreme-cli', 'index.js'),
             'build-theme'
         ]).stdout.toString();
+
+        console.log('RUN RESULT', runResult);
+
         const detectedVersion = parseDetectedVersion(runResult);
         const installedVersion = parseInstalledVersion(runResult);
 
