@@ -125,7 +125,7 @@ const installThemeBuilder = async version => {
         cwd,
         stdio: 'inherit'
     }, {
-        npm: ['--no-save']
+        npm: ['--no-save', '--fund=false', '--package-lock=false', '--omit=dev', '--omit=optional']
     });
 
     if(removeNpmrc) {
