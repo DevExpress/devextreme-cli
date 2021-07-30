@@ -1,35 +1,17 @@
 const { mkdir, rm } = require('fs').promises;
 const { join } = require('path');
 const { spawnSync } = require('child_process');
-const runCommand = require('../../src/utility/run-command');
-const cliVersion = require('../../package.json').version;
+const {
+    buildPackage,
+    prepareDirectory,
+    parseDetectedVersion,
+    parseInstalledVersion,
+    getLatestThemeBuilderVersion,
+    getVersionFromTheme
+} = require('./utils');
+
 
 const workDirectory = join(__dirname, 'install-local');
-
-const buildPackage = async() => {
-    await runCommand('npm', ['pack'], { cwd: join(__dirname, '..', '..') });
-};
-
-const prepareDirectory = async(devextremeVersion, themeBuilderVersion) => {
-    await runCommand('npm', ['init', '--yes'], { cwd: workDirectory });
-    if(devextremeVersion) {
-        await runCommand('npm', ['install', `devextreme@${devextremeVersion}`, '--save-exact'], { cwd: workDirectory });
-    }
-    if(themeBuilderVersion) {
-        await runCommand('npm', ['install', `devextreme-themebuilder@${themeBuilderVersion}`, '--save-exact'], { cwd: workDirectory });
-    }
-    // we need to install cli as tgz (npm i for folder make symlink and require works in wrong way)
-    await runCommand('npm', ['install', `../../../devextreme-cli-${cliVersion}.tgz`, '--save-exact'], { cwd: workDirectory });
-};
-
-const parseDetectedVersion = (output) => {
-    return output.replace(/.*Using version (\d\d\.\d.\d\d?|latest).*/s, '$1');
-};
-const parseInstalledVersion = (output) => {
-    const reg = /.*> npm(\.cmd)? install.*?devextreme-themebuilder@(\d\d\.\d.\d\d?|latest).*/s;
-    if(!reg.test(output)) return null;
-    return output.replace(reg, '$2');
-};
 
 describe('ThemeBuilder local install tests', () => {
     jest.setTimeout(1800000); // 30min
@@ -60,7 +42,7 @@ describe('ThemeBuilder local install tests', () => {
         devextremeThemebuilder,
         expectInstall
     }) => {
-        await prepareDirectory(devextreme, devextremeThemebuilder).catch(e => {
+        await prepareDirectory(devextreme, devextremeThemebuilder, workDirectory).catch(e => {
             throw new Error(e);
         });
 
@@ -69,13 +51,23 @@ describe('ThemeBuilder local install tests', () => {
             'build-theme'
         ]).stdout.toString();
 
-        console.log('Run resultn\n', runResult);
+        console.log('Run result\n', runResult);
 
         const detectedVersion = parseDetectedVersion(runResult);
         const installedVersion = parseInstalledVersion(runResult);
+        const buildedVersion = await getVersionFromTheme(workDirectory);
+
+        let realInstalledVersion = expectInstall;
+
+        if(expectInstall === null) {
+            realInstalledVersion = devextremeThemebuilder;
+        } else if(expectInstall === 'latest') {
+            realInstalledVersion = getLatestThemeBuilderVersion();
+        }
 
         expect(detectedVersion).toBe(devextreme || 'latest');
         expect(installedVersion).toBe(expectInstall);
+        expect(realInstalledVersion).toBe(buildedVersion);
     });
 
 });
