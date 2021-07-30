@@ -38,6 +38,7 @@
   "license": "MIT",
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
+    "import-cwd": "^3.0.0",
     "ip": "^1.1.5",
     "less": "3.9.0",
     "minimist": "^1.2.0",

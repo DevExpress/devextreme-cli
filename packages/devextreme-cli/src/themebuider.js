@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const semver = require('semver');
 const stripBom = require('strip-bom');
+const importCwd = require('import-cwd');
 const packageManager = require('./utility/package-manager');
 const lock = require('./utility/file-lock');
 
@@ -100,37 +101,23 @@ const getMeta = (fullMeta, base, filter, baseParametersList) => {
 
 const getInstalledPackageVersion = (packageName) => {
     try {
-        return require(`${packageName}/package.json`).version;
+        return importCwd(`${packageName}/package.json`).version;
     } catch(e) {
         return null;
     }
 };
 
 const installThemeBuilder = async version => {
-    const cwd = path.join(__dirname, '..');
-    const npmrc = './.npmrc';
-    const installationNpmrc = path.join(cwd, '.npmrc');
-    let removeNpmrc = false;
-
     if(getInstalledPackageVersion('devextreme-themebuilder') === version) {
         return;
     }
 
-    if(fs.existsSync(npmrc)) {
-        removeNpmrc = true;
-        fs.copyFileSync(npmrc, installationNpmrc);
-    }
-
     await packageManager.installPackage(`devextreme-themebuilder@${version}`, {
-        cwd,
+        cwd: process.cwd(),
         stdio: 'inherit'
     }, {
         npm: ['--no-save', '--fund=false', '--package-lock=false', '--omit=dev', '--omit=optional']
     });
-
-    if(removeNpmrc) {
-        fs.unlinkSync(installationNpmrc);
-    }
 };
 
 const setWidgetsOption = (options, version) => {
@@ -177,8 +164,8 @@ const runThemeBuilder = async rawOptions => {
         return;
     }
 
-    const themeBuilder = require('devextreme-themebuilder/modules/builder');
-    const baseParameters = require('devextreme-themebuilder/modules/base-parameters');
+    const themeBuilder = importCwd('devextreme-themebuilder/modules/builder');
+    const baseParameters = importCwd('devextreme-themebuilder/modules/base-parameters');
 
     lock.release();
 
