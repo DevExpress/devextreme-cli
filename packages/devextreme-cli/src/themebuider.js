@@ -12,7 +12,7 @@ const commands = {
     BUILD_META: 'export-theme-meta'
 };
 
-const themeBuilderPackagePath = path.join(__dirname, '..', 'node_modules', 'devextreme-themebuilder');
+const themeBuilderPackagePath = path.join(process.cwd(), 'node_modules', 'devextreme-themebuilder');
 
 const scssCompiler = {
     render: (scss) => {
