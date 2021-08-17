@@ -93,7 +93,7 @@ const getMeta = (fullMeta, base, filter, baseParametersList) => {
         let universalKey = key.replace('$', '@');
         if(base && baseParametersList.indexOf(universalKey) === -1) continue;
         if(filter && filter.length > 0 && filter.indexOf(universalKey) === -1) continue;
-        result[universalKey] = fullMeta[key];
+        result[key] = fullMeta[key];
     }
 
     return result;
@@ -139,6 +139,7 @@ const getVarsFilter = (options) => {
 
 const runThemeBuilder = async rawOptions => {
     const options = await readInput(camelize(rawOptions));
+    const initialItems = options.items ? [...options.items] : [];
     options.reader = readFile;
     options.sassCompiler = scssCompiler;
     options.lessCompiler = require('less/lib/less-node');
@@ -191,26 +192,23 @@ const runThemeBuilder = async rawOptions => {
         const metadata = getMeta(result.compiledMetadata, options.base, filter, baseParameters);
 
         for(const metadataKey in metadata) {
-            const formatKey = options.fileFormat === 'scss' ? metadataKey.replace('@', '$') : metadataKey;
+            const formatKey = options.fileFormat === 'scss' ?
+                metadataKey.replace('@', '$') :
+                metadataKey.replace('$', '@'); // lgtm[js/incomplete-sanitization]
             content += formatKey + ': ' + metadata[metadataKey] + ';\n';
         }
     } else if(options.command === commands.BUILD_META) {
         const metadata = getMeta(result.compiledMetadata, options.base, filter, baseParameters);
-        let exportedMeta = [];
-
-        for(const metadataKey in metadata) {
-            exportedMeta.push({ key: metadataKey, value: metadata[metadataKey] });
-        }
 
         const meta = {
             baseTheme: [ options.themeName, options.colorScheme.replace(/-/g, '.') ].join('.'),
-            items: exportedMeta,
-            version: result.version
+            items: initialItems.filter(item => metadata[item.key]),
+            version: result.version,
+            removeExternalResources: !!options.removeExternalResources,
+            outputColorScheme: options.outColorScheme,
+            makeSwatch: !!options.makeSwatch,
+            widgets: options.widgets
         };
-
-        if(result.widgets) {
-            Object.assign(meta, { widgets: result.widgets });
-        }
 
         content = JSON.stringify(meta, ' ', 4);
     }
