@@ -46,7 +46,7 @@ export default function Profile() {
       </div>
     </React.Fragment>
   );
-};
+}
 
 const colCountByScreen = {
   xs: 1,

@@ -80,7 +80,7 @@ export default function Task() {
         />
       </DataGrid>
     </React.Fragment>
-)};
+)}
 
 const dataSource = {
   store: {

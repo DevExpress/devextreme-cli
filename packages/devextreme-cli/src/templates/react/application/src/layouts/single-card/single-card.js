@@ -13,4 +13,4 @@ export default function SingleCard({ title, description, children }) {
         {children}
       </div>
     </ScrollView>
-)};
+)}
