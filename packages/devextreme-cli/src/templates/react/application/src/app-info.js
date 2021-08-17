@@ -1,3 +1,5 @@
-export default {
-  title: '<%=project%>'
+const appInfo = {
+    title: '<%=project%>'
 };
+export default appInfo;
+

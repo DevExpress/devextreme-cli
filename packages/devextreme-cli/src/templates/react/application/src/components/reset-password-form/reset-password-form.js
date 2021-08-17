@@ -15,7 +15,7 @@ import './reset-password-form.scss';
 
 const notificationText = 'We\'ve sent a link to reset your password. Check your inbox.';
 
-export default function (props) {
+export default function ResetPasswordForm(props) {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const formData = useRef({});

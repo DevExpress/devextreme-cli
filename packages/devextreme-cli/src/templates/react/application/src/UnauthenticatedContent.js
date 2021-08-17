@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { SingleCard } from './layouts';
 import { LoginForm, ResetPasswordForm, ChangePasswordForm, CreateAccountForm } from './components';
 
-export default function () {
+export default function UnauthenticatedContent() {
   return (
     <Switch>
       <Route exact path='/login' >

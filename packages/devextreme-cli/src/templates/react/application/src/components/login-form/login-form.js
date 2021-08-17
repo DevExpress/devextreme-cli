@@ -14,7 +14,7 @@ import { useAuth } from '../../contexts/auth';
 
 import './login-form.scss';
 
-export default function () {
+export default function LoginForm() {
   const history = useHistory();
   const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);

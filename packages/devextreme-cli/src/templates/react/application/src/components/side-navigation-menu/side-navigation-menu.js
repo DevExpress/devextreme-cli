@@ -7,7 +7,7 @@ import './side-navigation-menu.scss';
 
 import * as events from 'devextreme/events';
 
-export default function (props) {
+export default function SideNavigationMenu(props) {
   const {
     children,
     selectedItemChanged,
@@ -17,12 +17,12 @@ export default function (props) {
   } = props;
 
   const { isLarge } = useScreenSize();
-  function normalizePath () {    
+  function normalizePath () {
     return navigation.map((item) => {
-      if(item.path && !(/^\//.test(item.path))){ 
+      if(item.path && !(/^\//.test(item.path))){
         item.path = `/${item.path}`;
       }
-      return {...item, expanded: isLarge}; 
+      return {...item, expanded: isLarge};
     });
   }
 
