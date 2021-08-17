@@ -194,7 +194,7 @@ const runThemeBuilder = async rawOptions => {
         for(const metadataKey in metadata) {
             const formatKey = options.fileFormat === 'scss' ?
                 metadataKey.replace('@', '$') :
-                metadataKey.replace('$', '@');
+                metadataKey.replace('$', '@'); // lgtm[incomplete-sanitization]
             content += formatKey + ': ' + metadata[metadataKey] + ';\n';
         }
     } else if(options.command === commands.BUILD_META) {
