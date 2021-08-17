@@ -5,7 +5,7 @@ import routes from './app-routes';
 import { <%=layout%> as SideNavBarLayout } from './layouts';
 import { Footer } from './components';
 
-export default function() {
+export default function Content() {
   return (
     <SideNavBarLayout title={appInfo.title}>
       <Switch>

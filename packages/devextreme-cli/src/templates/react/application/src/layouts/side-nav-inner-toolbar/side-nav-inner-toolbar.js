@@ -10,7 +10,7 @@ import { useScreenSize } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
 import { useMenuPatch } from '../../utils/patches';
 
-export default function ({ title, children }) {
+export default function SideNavInnerToolbar({ title, children }) {
   const scrollViewRef = useRef();
   const history = useHistory();
   const { isXSmall, isLarge } = useScreenSize();

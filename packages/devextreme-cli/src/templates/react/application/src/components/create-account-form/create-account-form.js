@@ -14,7 +14,7 @@ import LoadIndicator from 'devextreme-react/load-indicator';
 import { createAccount } from '../../api/auth';
 import './create-account-form.scss';
 
-export default function (props) {
+export default function CreateAccountForm(props) {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const formData = useRef({});

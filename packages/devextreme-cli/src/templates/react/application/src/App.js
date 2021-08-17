@@ -22,7 +22,7 @@ function App() {
   return <UnauthenticatedContent />;
 }
 
-export default function () {
+export default function Root() {
   const screenSizeClass = useScreenSizeClass();
 
   return (

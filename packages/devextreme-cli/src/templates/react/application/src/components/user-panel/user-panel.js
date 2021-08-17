@@ -5,7 +5,7 @@ import List from 'devextreme-react/list';
 import { useAuth } from '../../contexts/auth';
 import './user-panel.scss';
 
-export default function ({ menuMode }) {
+export default function UserPanel({ menuMode }) {
   const { user, signOut } = useAuth();
   const history = useHistory();
 
