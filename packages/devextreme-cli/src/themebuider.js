@@ -45,7 +45,12 @@ const createPath = filePath => {
 };
 
 const readFile = fileName => new Promise((resolve, reject) => {
-    fs.readFile(require.resolve(fileName), 'utf8', (error, data) => {
+    const fullFileName = path.normalize(path.join(
+        themeBuilderPackagePath,
+        '..',
+        fileName
+    ));
+    fs.readFile(fullFileName, 'utf8', (error, data) => {
         error ? reject(error) : resolve(data);
     });
 });
