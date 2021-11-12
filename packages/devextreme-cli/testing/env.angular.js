@@ -51,7 +51,8 @@ exports.createApp = async() => {
         path.join(process.cwd(), './index.js'),
         'add',
         'view',
-        'new-page'
+        'new-page',
+        `--c=${schematicsDirectory}`,
     ], {
         cwd: appPath,
         forceNoCmd: true
