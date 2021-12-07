@@ -7,6 +7,10 @@
   width: 100%;
 }
 
+.dx-drawer {
+  height: calc(100% - 56px) !important
+}
+
 .app .content {
   line-height: 1.5;
 
