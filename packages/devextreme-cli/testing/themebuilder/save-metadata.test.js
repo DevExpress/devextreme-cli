@@ -65,7 +65,7 @@ describe('ThemeBuilder save metadata and variables tests', () => {
         await rm(join(workDirectory, 'node_modules'), { recursive: true, force: true });
     });
 
-    for(const version of ['20.1.13', '21.1.5', 'latest']) {
+    for(const version of ['20.1.13', '21.1.7', 'latest']) {
         for(const meta of metadataCases) {
             const hasItems = meta.items && meta.items.length;
             for(const format of ['scss', 'less']) {
