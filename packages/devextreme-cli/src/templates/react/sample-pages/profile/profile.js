@@ -13,7 +13,7 @@ export default function Profile() {
     Prefix: 'Mrs.',
     Position: 'Controller',
     Picture: 'images/employees/06.png',
-    BirthDate: new Date('1974/11/15'),
+    BirthDate: new Date('1974/11/5'),
     HireDate: new Date('2005/05/11'),
     Notes: notes,
     Address: '4600 N Virginia Rd.'
