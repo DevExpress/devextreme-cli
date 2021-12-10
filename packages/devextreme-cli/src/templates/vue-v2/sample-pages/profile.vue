@@ -38,7 +38,7 @@ export default {
         Prefix: "Mrs.",
         Position: "Controller",
         Picture: picture,
-        BirthDate: new Date("1974/11/15"),
+        BirthDate: new Date("1974/11/5"),
         HireDate: new Date("2005/05/11"),
         Notes:
 
