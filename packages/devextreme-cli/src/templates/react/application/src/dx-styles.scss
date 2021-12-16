@@ -7,6 +7,10 @@
   width: 100%;
 }
 
+.side-nav-outer-toolbar .dx-drawer {
+  height: calc(100% - 56px)
+}
+
 .app .content {
   line-height: 1.5;
 

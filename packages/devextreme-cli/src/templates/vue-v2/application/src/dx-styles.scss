@@ -8,6 +8,10 @@
   }
 }
 
+.side-nav-outer-toolbar .dx-drawer {
+  height: calc(100% - 56px)
+}
+
 .content-block {
   margin-left: 40px;
   margin-right: 40px;
