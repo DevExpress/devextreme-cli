@@ -207,24 +207,6 @@ function updateAppModule(host: Tree, sourcePath: string) {
   return chain(rules);
 }
 
-function getComponentName(host: Tree, sourcePath: string) {
-  let name = '';
-  const index = 1;
-
-  if (!host.exists(sourcePath + 'app.component.ts')) {
-    name = 'app';
-  }
-
-  while (!name) {
-    const componentName = `app${index}`;
-    if (!host.exists(`${sourcePath}${componentName}.component.ts`)) {
-      name = componentName;
-    }
-  }
-
-  return name;
-}
-
 function hasRoutingModule(host: Tree, sourcePath: string) {
   return host.exists(sourcePath + 'app-routing.module.ts');
 }
@@ -289,7 +271,6 @@ function modifyContentByTemplate(
 function updateDevextremeConfig(sourcePath: string) {
   const devextremeConfigPath = '/devextreme.json';
   const templateOptions = {
-    engine: 'angular',
     sourcePath
   };
 
@@ -330,10 +311,8 @@ export default function(options: any): Rule {
     const sourcePath = getSourceRootPath(host, project);
     const layout = options.layout;
     const override = options.resolveConflicts === 'override';
-    const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath.replace(/\/?(\w)+\/?/g, '../');
     const templateOptions = {
-      name: componentName,
       layout,
       title,
       strings,

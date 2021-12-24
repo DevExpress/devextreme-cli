@@ -3,10 +3,10 @@ import { AuthService, ScreenService, AppInfoService } from './shared/services';
 
 @Component({
   selector: '<%= prefix %>-root',
-  templateUrl: './<%= name %>.component.html',
-  styleUrls: ['./<%= name %>.component.scss']
+  templateUrl: '.app.component.html',
+  styleUrls: ['./app.component.scss']
 })
-export class <%= strings.classify(name) %>Component  {
+export class AppComponent  {
   @HostBinding('class') get getClass() {
     return Object.keys(this.screen.sizes).filter(cl => this.screen.sizes[cl]).join(' ');
   }
