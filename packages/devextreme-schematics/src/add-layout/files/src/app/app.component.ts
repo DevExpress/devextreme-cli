@@ -3,7 +3,7 @@ import { AuthService, ScreenService, AppInfoService } from './shared/services';
 
 @Component({
   selector: '<%= prefix %>-root',
-  templateUrl: '.app.component.html',
+  templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent  {
