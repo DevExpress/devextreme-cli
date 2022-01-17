@@ -206,6 +206,7 @@ function updateAppModule(host: Tree, sourcePath: string) {
 
   return chain(rules);
 }
+
 function getComponentName(host: Tree, sourcePath: string) {
   let name = '';
   const index = 1;
