@@ -206,11 +206,6 @@ function updateAppModule(host: Tree, sourcePath: string) {
 
   return chain(rules);
 }
-
-function hasRoutingModule(host: Tree, sourcePath: string) {
-  return host.exists(sourcePath + 'app-routing.module.ts');
-}
-
 function getComponentName(host: Tree, sourcePath: string) {
   let name = '';
   const index = 1;
@@ -227,6 +222,10 @@ function getComponentName(host: Tree, sourcePath: string) {
   }
 
   return name;
+}
+
+function hasRoutingModule(host: Tree, sourcePath: string) {
+  return host.exists(sourcePath + 'app-routing.module.ts');
 }
 
 function addPackagesToDependency(globalNgCliVersion: string) {
