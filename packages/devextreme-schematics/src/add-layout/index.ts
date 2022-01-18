@@ -289,7 +289,6 @@ function modifyContentByTemplate(
 function updateDevextremeConfig(sourcePath: string) {
   const devextremeConfigPath = '/devextreme.json';
   const templateOptions = {
-    engine: 'angular',
     sourcePath
   };
 

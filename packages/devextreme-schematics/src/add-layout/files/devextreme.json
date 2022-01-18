@@ -1,5 +1,5 @@
 {
-  "applicationEngine": "<%= engine %>",
+  "applicationEngine": "angular",
   "build": {
     "commands": [
       {
