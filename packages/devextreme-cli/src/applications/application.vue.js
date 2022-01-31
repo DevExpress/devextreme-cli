@@ -91,6 +91,12 @@ const modifyIndexHtml = (appPath, appName) => {
     fs.writeFileSync(indexHtmlPath, htmlContent);
 };
 
+const getMainModulePath = (appPath) => {
+    const jsModule = path.join(appPath, 'src', 'main.js');
+
+    return fs.existsSync(jsModule) ? jsModule : path.join(appPath, 'src', 'main.ts');
+};
+
 const addTemplate = (appPath, appName, templateOptions, version) => {
     if(!version) {
         version = getVueVersion();
@@ -113,16 +119,17 @@ const addTemplate = (appPath, appName, templateOptions, version) => {
 
 const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
-    const mainModulePath = path.join(appPath, 'src', 'main.js');
-    addStylesToApp(mainModulePath, styles || defaultStyles);
+    addStylesToApp(appPath, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'vue');
 
     packageManager.runInstall({ cwd: appPath });
 };
 
-const addStylesToApp = (filePath, styles) => {
+const addStylesToApp = (appPath, styles) => {
+    const mainModulePath = getMainModulePath(appPath);
+
     styles.forEach(style => {
-        moduleUtils.insertImport(filePath, style);
+        moduleUtils.insertImport(mainModulePath, style);
     });
 };
 
