@@ -30,8 +30,8 @@ import {
 } from '../utility/project';
 import { humanize } from '../utility/string';
 
-function getPathToFile(host: Tree, projectName: string, moduleName: string) {
-  const rootPath = getApplicationPath(host, projectName);
+async function getPathToFile(host: Tree, projectName: string, moduleName: string) {
+  const rootPath = await getApplicationPath(host, projectName);
 
   try {
     return findModuleFromOptions(host, { name: moduleName, path: rootPath, module: moduleName });
@@ -41,9 +41,9 @@ function getPathToFile(host: Tree, projectName: string, moduleName: string) {
 }
 
 function addViewToNavigation(options: any) {
-  return (host: Tree) => {
+  return async (host: Tree) => {
     const navigationName = 'app-navigation';
-    const navigationFilePath = getPathToFile(host, options.project, navigationName);
+    const navigationFilePath = await getPathToFile(host, options.project, navigationName);
 
     if (!navigationFilePath) {
       return;
@@ -82,8 +82,8 @@ function addRedirectRoute(host: Tree, routingModulePath: string, page: string) {
 }
 
 export function addViewToRouting(options: any) {
-  return (host: Tree) => {
-    const routingModulePath = getPathToFile(host, options.project, options.module);
+  return async (host: Tree) => {
+    const routingModulePath = await getPathToFile(host, options.project, options.module);
 
     if (!routingModulePath) {
       throw new SchematicsException('Specified module does not exist.');
@@ -121,11 +121,11 @@ function getModuleName(addRoute: boolean, moduleName: string) {
 }
 
 function addContentToView(options: any) {
-  return (host: Tree) => {
+  return async (host: Tree) => {
     const name = strings.dasherize(basename(normalize(options.name)));
     const path = `${dirname(options.name)}/${name}`;
     const title = humanize(name);
-    const componentPath = `/${getApplicationPath(host, options.project)}${path}/${name}.component.html`;
+    const componentPath = `/${await getApplicationPath(host, options.project)}${path}/${name}.component.html`;
     if (host.exists(componentPath)) {
       host.overwrite(
         componentPath,
@@ -140,11 +140,12 @@ function addContentToView(options: any) {
 }
 
 export default function(options: any): Rule {
-  return (host: Tree) => {
+  return async (host: Tree) => {
     const addRoute = options.addRoute;
-    const project = getProjectName(host, options);
+    const project = await getProjectName(host, options);
     const module = getModuleName(addRoute, options.module);
     const name = getPathForView(options.name);
+
     const rules = [externalSchematic('@schematics/angular', 'component', {
         name,
         project,
@@ -153,12 +154,12 @@ export default function(options: any): Rule {
         inlineStyle: options.inlineStyle,
         prefix: options.prefix
       }),
-      addContentToView({ name, project })
+      addContentToView({ name, project }) as any
     ];
 
     if (addRoute) {
-      rules.push(addViewToRouting({ name, project, module }));
-      rules.push(addViewToNavigation({ name, icon: options.icon, project }));
+      rules.push(addViewToRouting({ name, project, module }) as any);
+      rules.push(addViewToNavigation({ name, icon: options.icon, project }) as any);
     }
     return chain(rules);
   };

@@ -21,7 +21,7 @@ describe('install', () => {
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
     // TODO: use angular latest-versions module
-    version: '6.0.0'
+    version: '12.0.0'
   };
 
   const angularSchematicsCollection = require.resolve('../../node_modules/@schematics/angular/collection.json');

@@ -1,25 +1,31 @@
 import { Tree } from '@angular-devkit/schematics';
-import { getWorkspace } from '@schematics/angular/utility/config';
+import { getWorkspace } from '@schematics/angular/utility/workspace';
 
-export function getProjectName(host: Tree, project: any) {
+export async function getProjectName(host: Tree, project: any) {
   const projectName = project;
-  const workspace = getWorkspace(host);
-  const projects = Object.keys(workspace.projects);
+  const projects: string[] = [];
+  const workspace = await getWorkspace(host);
+  /* tslint:disable-next-line:variable-name */
+  workspace.projects.forEach((_v, k) => {
+    projects.push(k);
+  });
 
-  return projectName && projects.indexOf(projectName) > -1 ? projectName : workspace.defaultProject;
+  return projectName && projects.includes(projectName) ? projectName : projects[0];
 }
 
-export function getApplicationPath(host: Tree, projectName: string) {
-  const sourcePath = getSourceRootPath(host, projectName);
+export async function getApplicationPath(host: Tree, projectName: string) {
+  const sourcePath = await getSourceRootPath(host, projectName);
   return sourcePath ? `${sourcePath}/app/` : 'src/app/';
 }
 
-export function getSourceRootPath(host: Tree, projectName: string) {
-  const project = getWorkspace(host).projects[projectName];
-  return project.sourceRoot || project.root;
+export async function getSourceRootPath(host: Tree, projectName: string) {
+  const workspace = await getWorkspace(host);
+  const project = workspace.projects.get(projectName);
+  return project && (project.sourceRoot || project.root);
 }
 
-export function getRootPath(host: Tree, projectName: string) {
-  const project = getWorkspace(host).projects[projectName];
-  return project.root;
+export async function getRootPath(host: Tree, projectName: string) {
+  const ws = await getWorkspace(host);
+  const project = ws.projects.get(projectName);
+  return project && project.root;
 }

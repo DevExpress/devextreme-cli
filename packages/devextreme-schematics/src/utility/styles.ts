@@ -1,5 +1,3 @@
-import { Tree } from '@angular-devkit/schematics';
-import { getProjectName } from './project';
 import { makeArrayUnique } from './array';
 
 function cleanStyles(projectStyles: Array<any>, defaultStyles: any) {
@@ -8,8 +6,9 @@ function cleanStyles(projectStyles: Array<any>, defaultStyles: any) {
   });
 }
 
-export function addStylesToApp(host: Tree, project: string, config: any, styles?: Array<any>) {
-  const projectName = getProjectName(host, project);
+export function addStylesToApp(project: string, config: any, styles?: Array<any>) {
+  const projectName = project;
+
   const projectBuildOptopns = config['projects'][projectName]['architect']['build']['options'];
   const defaultStyles = [
     'node_modules/devextreme/dist/css/dx.light.css',

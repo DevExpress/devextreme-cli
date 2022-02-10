@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsDevextremeAddAppTemplate",
+  "$id": "SchematicsDevextremeAddAppTemplate",
   "title": "Add a DevExtreme layout template to an Anular application",
   "type": "object",
   "properties": {
