@@ -19,7 +19,6 @@ import {
 import { latestVersions } from '../utility/latest-versions';
 import { modifyJSONFile } from '../utility/modify-json-file';
 import { getProjectName } from '../utility/project';
-// import { getWorkspace } from '@schematics/angular/utility/workspace';
 
 export default function(options: any): Rule {
   return chain([

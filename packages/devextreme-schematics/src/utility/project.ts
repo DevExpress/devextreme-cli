@@ -1,8 +1,7 @@
 import { Tree } from '@angular-devkit/schematics';
 import { getWorkspace } from '@schematics/angular/utility/workspace';
 
-export async function getProjectName(host: Tree, project: any) {
-  const projectName = project;
+export async function getProjectName(host: Tree, projectName: string) {
   const projects: string[] = [];
   const workspace = await getWorkspace(host);
   /* tslint:disable-next-line:variable-name */
@@ -25,7 +24,7 @@ export async function getSourceRootPath(host: Tree, projectName: string) {
 }
 
 export async function getRootPath(host: Tree, projectName: string) {
-  const ws = await getWorkspace(host);
-  const project = ws.projects.get(projectName);
+  const workspace = await getWorkspace(host);
+  const project = workspace.projects.get(projectName);
   return project && project.root;
 }
