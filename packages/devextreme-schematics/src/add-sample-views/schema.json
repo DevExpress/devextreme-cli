@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsDevextremeAddSamplesViews",
+  "$id": "SchematicsDevextremeAddSamplesViews",
   "title": "Add sample views to a DevExtreme Angular application",
   "type": "object",
   "properties": {

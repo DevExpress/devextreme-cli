@@ -110,9 +110,9 @@ function addDefaultNavigation(rootPath: string) {
 }
 
 export default function(options: any): Rule {
-  return (host: Tree) => {
-    const project = getProjectName(host, options.project);
-    const rootPath = getApplicationPath(host, project);
+  return async (host: Tree) => {
+    const project = await getProjectName(host, options.project);
+    const rootPath = await getApplicationPath(host, project);
     const routingPath = rootPath + 'app-routing.module.ts';
     const rules: any[] = [];
 

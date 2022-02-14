@@ -14,8 +14,6 @@ import {
   template
 } from '@angular-devkit/schematics';
 
-import { of } from 'rxjs';
-
 import {
   SourceFile
 } from 'typescript';
@@ -39,7 +37,8 @@ import {
  } from '../utility/styles';
 
 import {
-  modifyJSONFile
+  modifyJSONFile,
+  parseJson
  } from '../utility/modify-json-file';
 
 import {
@@ -68,7 +67,7 @@ import {
   addImportToModule, addProviderToModule, insertImport
 } from '@schematics/angular/utility/ast-utils';
 
-import { getWorkspace } from '@schematics/angular/utility/config';
+import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { Change } from '@schematics/angular/utility/change';
 
 const projectFilesSource = './files/src';
@@ -108,8 +107,8 @@ function addBuildThemeScript() {
   };
 }
 
-function addCustomThemeStyles(options: any, sourcePath: string) {
-  return (host: Tree) => {
+async function addCustomThemeStyles(host: Tree, options: any, sourcePath: string = '') {
+    const projectName = await getProjectName(host, options.project);
     modifyJSONFile(host, './angular.json', config => {
       const stylesList = [
         `${sourcePath}/dx-styles.scss`,
@@ -118,17 +117,15 @@ function addCustomThemeStyles(options: any, sourcePath: string) {
         'node_modules/devextreme/dist/css/dx.common.css'
       ];
 
-      return addStylesToApp(host, options.project, config, stylesList);
+      return addStylesToApp(projectName, config, stylesList);
     });
 
     return host;
-  };
 }
 
-function updateBudgets(options: any) {
-  return (host: Tree) => {
-    modifyJSONFile(host, './angular.json', config => {
-      const projectName = getProjectName(host, options.project);
+async function updateBudgets(host: Tree, options: any) {
+  const projectName = await getProjectName(host, options.project);
+  modifyJSONFile(host, './angular.json', config => {
       const budgets: any[] = config.projects[projectName].architect.build.configurations.production.budgets;
 
       const budget = budgets.find((item) => item.type === 'initial');
@@ -138,13 +135,12 @@ function updateBudgets(options: any) {
       }
 
       return config;
-    });
+  });
 
-    return host;
-  };
+  return host;
 }
 
-function addViewportToBody(sourcePath: string) {
+function addViewportToBody(sourcePath: string = '') {
   return (host: Tree) => {
     const indexPath =  join(sourcePath, 'index.html');
     let indexContent = host.read(indexPath)!.toString();
@@ -242,7 +238,7 @@ function addPackagesToDependency(globalNgCliVersion: string) {
 }
 
 function modifyContentByTemplate(
-  sourcePath: string,
+  sourcePath: string = '',
   templateSourcePath: string,
   filePath: string | null,
   templateOptions: any = {},
@@ -282,11 +278,11 @@ function modifyContentByTemplate(
     const modifiedSource = apply(url(templateSourcePath), rules);
     const resultRule = mergeWith(modifiedSource);
 
-    return callRule(resultRule, of(host), context);
+    return callRule(resultRule, host, context);
   };
 }
 
-function updateDevextremeConfig(sourcePath: string) {
+function updateDevextremeConfig(sourcePath: string = '') {
   const devextremeConfigPath = '/devextreme.json';
   const templateOptions = {
     sourcePath
@@ -320,17 +316,20 @@ const modifyRoutingModule = (host: Tree, routingModulePath: string) => {
 };
 
 export default function(options: any): Rule {
-  return (host: Tree) => {
-    const project = getProjectName(host, options.project);
-    const workspace = getWorkspace(host);
-    const prefix = workspace.projects[project].prefix;
+  return async (host: Tree) => {
+    const ngConfig = host.read('./angular.json')!.toString();
+    const defaultProjectName = parseJson(ngConfig).defaultProject;
+    const project = await getProjectName(host, options.project);
+    const workspace = await getWorkspace(host);
+    const ngProject = workspace.projects.get(project);
+    const prefix = ngProject?.prefix;
     const title = humanize(project);
-    const appPath = getApplicationPath(host, project);
-    const sourcePath = getSourceRootPath(host, project);
+    const appPath = await getApplicationPath(host, project);
+    const sourcePath = await getSourceRootPath(host, project);
     const layout = options.layout;
     const override = options.resolveConflicts === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
-    const pathToCss = sourcePath.replace(/\/?(\w)+\/?/g, '../');
+    const pathToCss = sourcePath?.replace(/\/?(\w)+\/?/g, '../');
     const templateOptions = {
       name: componentName,
       layout,
@@ -358,13 +357,13 @@ export default function(options: any): Rule {
       updateDevextremeConfig(sourcePath),
       updateAppModule(host, appPath),
       addBuildThemeScript(),
-      addCustomThemeStyles(options, sourcePath),
+      () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),
       addPackagesToDependency(options.globalNgCliVersion)
     ];
 
     if (options.updateBudgets) {
-      rules.push(updateBudgets(options));
+      rules.push(() => updateBudgets(host, options) as any);
     }
 
     if (!options.skipInstall) {
@@ -374,7 +373,7 @@ export default function(options: any): Rule {
     }
 
     if (override) {
-      if (project === workspace.defaultProject) {
+      if (project === defaultProjectName) {
         rules.push(modifyContentByTemplate('./', workspaceFilesSource, 'e2e/src/app.e2e-spec.ts', { title }));
         rules.push(modifyContentByTemplate('./', workspaceFilesSource, 'e2e/src/app.po.ts'));
       }

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsDevextremeAddAppTemplate",
+  "$id": "SchematicsDevextremeAddAppTemplate",
   "title": "Add a DevExtreme layout template to an Anular application",
   "type": "object",
   "properties": {
@@ -43,7 +43,7 @@
     },
     "globalNgCliVersion": {
       "type":"string",
-      "default": "^11.2.9"
+      "default": "^12.0.0"
     },
     "empty": {
       "type": "boolean",

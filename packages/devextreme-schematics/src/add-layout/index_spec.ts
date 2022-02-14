@@ -210,8 +210,8 @@ describe('layout', () => {
     const budgets = angularContent.projects.testApp.architect.build.configurations.production.budgets;
     const defaultBudget = {
       type: 'initial',
-      maximumWarning: '2mb',
-      maximumError: '5mb'
+      maximumWarning: '500kb',
+      maximumError: '1mb'
     };
 
     expect(budgets.length).toBe(2);

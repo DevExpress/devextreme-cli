@@ -18,6 +18,7 @@ import {
 
 import { latestVersions } from '../utility/latest-versions';
 import { modifyJSONFile } from '../utility/modify-json-file';
+import { getProjectName } from '../utility/project';
 
 export default function(options: any): Rule {
   return chain([
@@ -55,10 +56,11 @@ function addDevExtremeDependency(host: Tree, options: any) {
   return host;
 }
 
-function addDevExtremeCSS(host: Tree, options: any) {
+async function addDevExtremeCSS(host: Tree, options: any) {
+  const projectName = await getProjectName(host, options.project);
   modifyJSONFile(host, './angular.json', config => {
 
-    return addStylesToApp(host, options.project, config);
+    return addStylesToApp(projectName, config);
   });
 
   return host;

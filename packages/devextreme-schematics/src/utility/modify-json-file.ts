@@ -1,9 +1,12 @@
 import { Tree } from '@angular-devkit/schematics';
 
+export const parseJson = (str: string) => {
+  return JSON.parse(str.replace(/\/\*[\S\s]+?\*\/\r?\n/g, ''));
+};
+
 export function modifyJSONFile(host: Tree, path: string, callback: (obj: any) => any) {
-  let serializedConfig = host.read(path)!.toString();
-  serializedConfig = serializedConfig.replace(/\/\*[\S\s]+?\*\/\r?\n/g, '');
-  let obj = JSON.parse(serializedConfig);
+  const serializedConfig = host.read(path)!.toString();
+  let obj = parseJson(serializedConfig);
 
   obj = callback(obj);
 
