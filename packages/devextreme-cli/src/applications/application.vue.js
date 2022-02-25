@@ -58,10 +58,10 @@ async function createVueApp(name, version) {
 
     if(version === 'v2') {
         argList.push('-p');
-        argList.push('Default (Vue 2)');
+        argList.push('"Default (Vue 2)"');
     } else {
         argList.push('-p');
-        argList.push('Default (Vue 3)');
+        argList.push('"Default (Vue 3)"');
     }
 
     return runCommand('npx', argList);
