@@ -56,8 +56,6 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
 async function createVueApp(name, version) {
     const argList = ['-p', '@vue/cli', 'vue', 'create', name];
 
-    await runCommand('npx', ['-p', '@vue/cli', 'vue', '-V']);
-
     if(version === 'v2') {
         argList.push('-p');
         argList.push('"Default (Vue 2)"');

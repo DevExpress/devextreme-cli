@@ -5,7 +5,8 @@ module.exports = function(commandName, args = [], customConfig = {}) {
     const command = /^win/.test(process.platform) && !forceNoCmd ? `${commandName}.cmd` : commandName;
     const config = {
         stdio: 'inherit',
-        windowsVerbatimArguments: true
+        windowsVerbatimArguments: true,
+        shell: true
     };
 
     if(customConfig) {
