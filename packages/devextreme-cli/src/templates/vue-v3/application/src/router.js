@@ -1,9 +1,9 @@
 import auth from "./auth";
 import { createRouter, createWebHashHistory } from "vue-router";
 
-<%=^empty%>import Home from "./views/home";
-import Profile from "./views/profile";
-import Tasks from "./views/tasks";
+<%=^empty%>import Home from "./views/home-page";
+import Profile from "./views/profile-page";
+import Tasks from "./views/tasks-page";
 <%=/empty%>import defaultLayout from "./layouts/<%=layout%>";
 import simpleLayout from "./layouts/single-card";
 
@@ -40,7 +40,7 @@ const router = new createRouter({
     {
       path: "/tasks",
       name: "tasks",
-      meta: { 
+      meta: {
         requiresAuth: true,
         layout: defaultLayout
       },
