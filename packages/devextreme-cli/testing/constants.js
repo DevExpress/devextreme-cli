@@ -8,11 +8,9 @@ exports.envs = [
 ];
 
 exports.viewports = {
-    xsmall: {
-        width: 320,
-        height: 568,
-        isMobile: true,
-        hasTouch: true,
+    large: {
+        width: 1280,
+        height: 1024,
     },
     small: {
         width: 667,
@@ -21,9 +19,11 @@ exports.viewports = {
         hasTouch: true,
         isLandscape: true
     },
-    large: {
-        width: 1280,
-        height: 1024,
+    xsmall: {
+        width: 320,
+        height: 568,
+        isMobile: true,
+        hasTouch: true,
     }
 };
 
