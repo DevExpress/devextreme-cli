@@ -97,7 +97,7 @@ module.exports = (env) => {
 
                             describe(`${viewportName}`, () => {
                                 it('Home view', async() => {
-                                    const page = await openPage(appUrl, { timeout: 3000 });
+                                    const page = await openPage(appUrl, { timeout: 5000 });
                                     const image = await page.screenshot({
                                         clip: {
                                             x: 0,
