@@ -57,14 +57,12 @@ async function createVueApp(name, version) {
     const argList = ['-p', '@vue/cli', 'vue', 'create', name];
 
     if(version === 'v2') {
-        argList.push('-p');
-        argList.push('"Default (Vue 2)"');
+        argList.push('-p "Default (Vue 2)"');
     } else {
-        argList.push('-p');
-        argList.push('"Default (Vue 3)"');
+        argList.push('-p "Default (Vue 3)"');
     }
 
-    return runCommand('npx', argList);
+    return runCommand('npx', argList, { windowsVerbatimArguments: false });
 }
 
 const create = async(appName, options) => {
