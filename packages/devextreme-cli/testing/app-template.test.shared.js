@@ -61,7 +61,7 @@ module.exports = (env) => {
                                     ...options
                                 });
                                 await page.waitFor('.with-footer', {
-                                    timeout: 0
+                                    // timeout: 0
                                 });
 
                                 return page;
