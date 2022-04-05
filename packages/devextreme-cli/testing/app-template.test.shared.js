@@ -101,12 +101,11 @@ module.exports = (env) => {
                                     await page.reload([{
                                         waitUntil: {
                                             networkidle0: 5000,
+                                            networkidle2: 5000,
                                             domcontentloaded: true
                                         }
                                     }]);
-                                    await page.waitFor('.with-footer', {
-                                        // timeout: 0
-                                    });
+                                    await page.waitFor(5000);
 
                                     const image = await page.screenshot({
                                         clip: {
