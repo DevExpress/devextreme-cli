@@ -3,9 +3,9 @@ import Router from "vue-router";
 
 import auth from "./auth";
 
-<%=^empty%>import Home from "./views/home";
-import Profile from "./views/profile";
-import Tasks from "./views/tasks";
+<%=^empty%>import Home from "./views/home-page";
+import Profile from "./views/profile-page";
+import Tasks from "./views/tasks-page";
 <%=/empty%>import defaultLayout from "./layouts/<%=layout%>";
 import simpleLayout from "./layouts/single-card";
 

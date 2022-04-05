@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   application-test:
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         APPROACH: [ angular, vue-v3, vue-v2, react ]
         NODE: [ 14, 16 ]

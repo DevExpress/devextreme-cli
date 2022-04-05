@@ -14,7 +14,7 @@ const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
 ];
-const defaultVueVersion = 'v2';
+const defaultVueVersion = 'v3';
 
 const getVueVersion = () => {
     const devextremeConfig = require('../utility/devextreme-config').read();
@@ -56,14 +56,13 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
 async function createVueApp(name, version) {
     const argList = ['-p', '@vue/cli', 'vue', 'create', name];
 
-    if(version === defaultVueVersion) {
-        argList.push('--default');
+    if(version === 'v2') {
+        argList.push('-p "Default (Vue 2)"');
     } else {
-        argList.push('-p');
-        argList.push('__default_vue_3__');
+        argList.push('-p "Default (Vue 3)"');
     }
 
-    return runCommand('npx', argList);
+    return runCommand('npx', argList, { windowsVerbatimArguments: false });
 }
 
 const create = async(appName, options) => {
@@ -155,11 +154,11 @@ const getVueRoute = (viewName, componentName, pagePath, version) => {
     const path = `path: "/${pagePath}"`;
     const name = `name: "${stringUtils.dasherize(viewName)}"`;
 
-    const metaPart = version === defaultVueVersion
+    const metaPart = version === 'v2'
         ? 'meta: { requiresAuth: true }'
         : 'meta: {\n        requiresAuth: true,\n        layout: defaultLayout\n      }';
 
-    const componentPart = version === defaultVueVersion
+    const componentPart = version === 'v2'
         ? `components:\n      {\n        layout: defaultLayout,\n        content: ${componentName}\n      }`
         : `component: ${componentName}`;
 

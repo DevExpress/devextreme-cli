@@ -61,7 +61,7 @@ module.exports = (env) => {
                                     ...options
                                 });
                                 await page.waitFor('.with-footer', {
-                                    timeout: 0
+                                    // timeout: 0
                                 });
 
                                 return page;
@@ -97,7 +97,16 @@ module.exports = (env) => {
 
                             describe(`${viewportName}`, () => {
                                 it('Home view', async() => {
-                                    const page = await openPage(appUrl);
+                                    const page = await openPage(appUrl, { timeout: 5000 });
+                                    await page.reload([{
+                                        waitUntil: {
+                                            networkidle0: 5000,
+                                            networkidle2: 5000,
+                                            domcontentloaded: true
+                                        }
+                                    }]);
+                                    await page.waitFor(5000);
+
                                     const image = await page.screenshot({
                                         clip: {
                                             x: 0,

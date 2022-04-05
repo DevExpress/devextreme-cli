@@ -1,11 +1,14 @@
 const spawn = require('child_process').spawn;
 
+const isWin = /^win/.test(process.platform);
+
 module.exports = function(commandName, args = [], customConfig = {}) {
     const forceNoCmd = customConfig.forceNoCmd;
-    const command = /^win/.test(process.platform) && !forceNoCmd ? `${commandName}.cmd` : commandName;
+    const command = isWin && !forceNoCmd ? `${commandName}.cmd` : commandName;
     const config = {
         stdio: 'inherit',
-        windowsVerbatimArguments: true
+        windowsVerbatimArguments: true,
+        shell: isWin ? false : true
     };
 
     if(customConfig) {
