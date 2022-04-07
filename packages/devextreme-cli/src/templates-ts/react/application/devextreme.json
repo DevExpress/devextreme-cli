@@ -1,7 +1,7 @@
 {
   "applicationEngine": "react",
   "react": {
-    "tempalte": "typescript"
+      "tempalte": "typescript"
   },
   "build": {
       "commands": [

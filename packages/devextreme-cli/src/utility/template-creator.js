@@ -45,7 +45,15 @@ const moveTemplateFilesToProject = (templateFolder, appPath, templateOptions, pa
     });
 };
 
+const getTempaltePath = (app, isTypeScript) => {
+    const templatesFolder = isTypeScript ? 'templates-ts' : 'templates';
+    const templatesPath = path.join(__dirname, '..', templatesFolder, app);
+
+    return templatesPath;
+};
+
 module.exports = {
     moveTemplateFilesToProject,
-    addPageToApp
+    addPageToApp,
+    getTempaltePath
 };

@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
-const getLayoutInfo = require('../utility/prompts/layout').getLayoutInfo;
-const getVersionInfo = require('../utility/prompts/vue-version').getVersionInfo;
+const getLayoutInfo = require('../utility/prompts/layout');
+const getVersionInfo = require('../utility/prompts/vue-version');
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
@@ -66,19 +66,19 @@ async function createVueApp(name, version) {
 }
 
 const create = async(appName, options) => {
-    const versionInfo = await getVersionInfo(options.version);
-    const layoutInfo = await getLayoutInfo(options.layout);
+    const version = await getVersionInfo(options.version);
+    const layout = await getLayoutInfo(options.layout);
 
-    await createVueApp(appName, versionInfo.version);
+    await createVueApp(appName, version);
 
     const appPath = path.join(process.cwd(), appName);
     const humanizedName = stringUtils.humanize(appName);
     const templateOptions = Object.assign({}, options, {
         project: humanizedName,
-        layout: layoutInfo.layout
+        layout: layout
     });
     modifyIndexHtml(appPath, humanizedName);
-    addTemplate(appPath, appName, templateOptions, versionInfo.version);
+    addTemplate(appPath, appName, templateOptions, version);
 };
 
 const modifyIndexHtml = (appPath, appName) => {
