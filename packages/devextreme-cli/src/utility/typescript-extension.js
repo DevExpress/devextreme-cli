@@ -1,8 +1,14 @@
+const path = require('path');
 const devextremeConfigUtils = require('./devextreme-config');
 
 const isTypeScript = (templateType) => templateType === 'typescript';
 
-const getFileExtension = (isTypeScript) => isTypeScript ? 'ts' : 'js';
+const setFileExtension = (filePath, isTypeScript) => {
+    const { dir, name } = path.parse(filePath);
+    const ext = '.' + isTypeScript ? 'ts' : 'js';
+
+    return path.join(dir, name + ext);
+};
 
 const getTemplateType = (engine) => {
     const devextremeConfig = devextremeConfigUtils.read();
@@ -13,6 +19,6 @@ const getTemplateType = (engine) => {
 
 module.exports = {
     isTypeScript,
-    getFileExtension,
+    setFileExtension,
     getTemplateType
 };

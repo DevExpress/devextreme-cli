@@ -19,8 +19,8 @@ const defaultStyles = [
 ];
 
 const pathToPagesIndex = (isTypeScript) => {
-    const fileExtention = typescriptUtils.getFileExtension(isTypeScript);
-    return path.join(process.cwd(), 'src', 'pages', `index.${fileExtention}`);
+    const pageIndexPath = path.join(process.cwd(), 'src', 'pages', 'index.js');
+    return typescriptUtils.setFileExtension(pageIndexPath, isTypeScript);
 };
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
@@ -83,14 +83,16 @@ const modifyIndexHtml = (appPath, appName) => {
 };
 
 const addTemplate = (appPath, appName, templateOptions) => {
-    const fileExtention = typescriptUtils.getFileExtension(templateOptions.isTypeScript);
     const applicationTemplatePath = path.join(
         templateCreator.getTempaltePath('react', templateOptions.isTypeScript),
         'application'
     );
 
     const manifestPath = path.join(appPath, 'public', 'manifest.json');
-    const indexPath = path.join(appPath, 'src', `index.${fileExtention}`);
+    const indexPath = typescriptUtils.setFileExtension(
+        path.join(appPath, 'src', 'index.js'),
+        templateOptions.isTypeScript
+    );
     const styles = [
         './themes/generated/theme.additional.css',
         './themes/generated/theme.base.css',
@@ -110,12 +112,13 @@ const addTemplate = (appPath, appName, templateOptions) => {
 };
 
 const install = (options, appPath, styles) => {
-    const templateType = typescriptUtils.getTemplateType('react');
-    const isTypeScript = typescriptUtils.isTypeScript(templateType);
-    const fileExtention = typescriptUtils.getFileExtension(isTypeScript);
+    const isTypeScript = typescriptUtils.isTypeScript(typescriptUtils.getTemplateType('react'));
 
     appPath = appPath ? appPath : process.cwd();
-    const pathToMainComponent = path.join(appPath, 'src', `App.${fileExtention}`);
+    const pathToMainComponent = typescriptUtils.setFileExtension(
+        path.join(appPath, 'src', 'App.js'),
+        isTypeScript
+    );
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
@@ -181,9 +184,8 @@ const addSamplePages = (appPath, templateOptions) => {
 };
 
 const addView = (pageName, options) => {
-    const templateType = typescriptUtils.getTemplateType('react');
-    const isTypeScript = typescriptUtils.isTypeScript(templateType);
-    const fileExtention = typescriptUtils.getFileExtension(isTypeScript);
+    const isTypeScript = typescriptUtils.isTypeScript(typescriptUtils.getTemplateType('react'));
+
     const pageTemplatePath = path.join(
         templateCreator.getTempaltePath('react', isTypeScript),
         'page'
@@ -191,8 +193,14 @@ const addView = (pageName, options) => {
 
     const componentName = getComponentPageName(pageName);
     const pathToPage = createPathToPage(pageName, isTypeScript);
-    const routingModulePath = path.join(process.cwd(), 'src', `app-routes.${fileExtention}`);
-    const navigationModulePath = path.join(process.cwd(), 'src', `app-navigation.${fileExtention}`);
+    const routingModulePath = typescriptUtils.setFileExtension(
+        path.join(process.cwd(), 'src', 'app-routes.js'),
+        isTypeScript
+    );
+    const navigationModulePath = typescriptUtils.setFileExtension(
+        path.join(process.cwd(), 'src', 'app-navigation.js'),
+        isTypeScript
+    );
     const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'folder');
 
     templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath);
