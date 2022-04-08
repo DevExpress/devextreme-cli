@@ -2,7 +2,7 @@ const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
 const getLayoutInfo = require('../utility/prompts/layout');
-const getTypeTemplateInfo = require('../utility/prompts/typescript');
+const getTemplateTypeInfo = require('../utility/prompts/typescript');
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
@@ -50,7 +50,7 @@ const updateJsonPropName = (path, name) => {
 };
 
 const create = async(appName, options) => {
-    const templateType = await getTypeTemplateInfo(options.template);
+    const templateType = await getTemplateTypeInfo(options.template);
     const layoutType = await getLayoutInfo(options.layout);
 
     const templateOptions = Object.assign({}, options, {

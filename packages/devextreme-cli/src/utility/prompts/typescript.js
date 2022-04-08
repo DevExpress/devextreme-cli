@@ -10,8 +10,8 @@ const question = {
     choices: choices
 };
 
-const getTypeTemplateInfo = async(defaultValue) => {
+const getTemplateTypeInfo = async(defaultValue) => {
     return await prompts(question, choices, defaultValue);
 };
 
-module.exports = getTypeTemplateInfo;
+module.exports = getTemplateTypeInfo;
