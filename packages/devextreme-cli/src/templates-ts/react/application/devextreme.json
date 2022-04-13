@@ -1,7 +1,7 @@
 {
   "applicationEngine": "react",
   "react": {
-    "template": "javascript"
+      "template": "typescript"
   },
   "build": {
       "commands": [

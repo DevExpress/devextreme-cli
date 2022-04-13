@@ -1,7 +1,8 @@
 {
-  "applicationEngine": "react",
-  "react": {
-    "template": "javascript"
+  "applicationEngine": "vue",
+  "vue": {
+      "version": 2,
+      "template": "typescript"
   },
   "build": {
       "commands": [

@@ -1,16 +1,32 @@
 const prompts = require('prompts');
 
-const runPrompts = async(questions, validateValue) => {
-    if(validateValue) {
-        const optionData = {
-            [questions[0].name]: validateValue
-        };
-        return new Promise((resolve, reject) => {
-            resolve(optionData);
-        });
-    }
+const run = async(question, choices, defaultValue) => {
+    question = Object.assign({}, question, {
+        type: 'select',
+        name: 'answer',
+    });
 
-    return await prompts(questions);
+    const { answer } = await askQuestion(question, getDefaultValue(choices, defaultValue));
+
+    return answer;
 };
 
-module.exports = runPrompts;
+const askQuestion = async(question, validateValue) => {
+    if(validateValue) {
+        return {
+            answer: validateValue
+        };
+    }
+
+    return await prompts(question);
+};
+
+const getDefaultValue = (choices, answer) => {
+    if(!answer || !choices.some((choice) => answer === choice.value)) {
+        return;
+    }
+
+    return answer;
+};
+
+module.exports = run;

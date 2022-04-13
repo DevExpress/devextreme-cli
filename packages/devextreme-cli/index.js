@@ -2,6 +2,7 @@
 const args = require('minimist')(process.argv.slice(2), {
     alias: { v: 'version' }
 });
+
 const commands = args['_'];
 delete args['_'];
 const themeBuilder = require('./src/themebuider');
@@ -34,9 +35,10 @@ if(args.help) {
     process.exit();
 }
 
-const run = (commands, options) => {
+
+const run = async(commands, options) => {
     if(application.isApplicationCommand(commands[0])) {
-        application.run(commands, options, devextremeConfig.read());
+        await application.run(commands, options, devextremeConfig.read());
     } else if(themeBuilder.isThemeBuilderCommand(commands[0])) {
         options.command = commands[0];
         themeBuilder.run(options);
