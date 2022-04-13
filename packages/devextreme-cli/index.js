@@ -1,12 +1,6 @@
 #!/usr/bin/env node
 const args = require('minimist')(process.argv.slice(2), {
-    alias: {
-        version: [ 'v' ],
-        help: [ 'h' ],
-
-        template: [ 't' ],
-        layout: [ 'l' ],
-    }
+    alias: { v: 'version' }
 });
 
 const commands = args['_'];
