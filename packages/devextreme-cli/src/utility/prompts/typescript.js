@@ -11,6 +11,7 @@ const question = {
 };
 
 const getTemplateTypeInfo = async(defaultValue) => {
+    if(defaultValue === undefined) return 'javascript';
     return await prompts(question, choices, defaultValue);
 };
 
