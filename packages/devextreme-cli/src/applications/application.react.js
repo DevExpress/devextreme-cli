@@ -23,7 +23,7 @@ const pathToPagesIndex = (isTypeScript) => {
     return typescriptUtils.setFileExtension(pageIndexPath, isTypeScript);
 };
 
-const preparePackageJsonForTemplate = (appPath, appName) => {
+const preparePackageJsonForTemplate = (appPath, appName, isTypeScript) => {
     const dependencies = [
         { name: 'sass', version: '^1.34.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
@@ -33,6 +33,12 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
         { name: 'build-themes', value: 'devextreme build' },
         { name: 'postinstall', value: 'npm run build-themes' }
     ];
+
+    if(isTypeScript) {
+        dependencies.push({ name: '@testing-library/react', version: '^11.1.0' });
+        dependencies.push({ name: '@types/react-router-dom', version: '^5.1.5' });
+        dependencies.push({ name: '@types/react-dom', version: '^17.0.11' });
+    }
 
     packageJsonUtils.addDependencies(appPath, dependencies);
     packageJsonUtils.updateScripts(appPath, scripts);
@@ -103,7 +109,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
         addSamplePages(appPath, templateOptions);
     }
 
-    preparePackageJsonForTemplate(appPath, appName);
+    preparePackageJsonForTemplate(appPath, appName, templateOptions.isTypeScript);
     updateJsonPropName(manifestPath, appName);
     addPolyfills(packageJsonUtils.getPackageJsonPath(), indexPath);
     install({}, appPath, styles);
