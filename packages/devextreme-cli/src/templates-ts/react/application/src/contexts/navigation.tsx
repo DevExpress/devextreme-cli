@@ -27,21 +27,7 @@ function NavigationProvider(props: NavigationProviderType) {
   );
 }
 
-function withNavigationWatcher<T>(Component: React.ComponentType<T>) {
-  return function (props: any) {
-    const { path } = props.match;
-    const { setNavigationData } = useNavigation();
-
-    useEffect(() => {
-      setNavigationData && setNavigationData({ currentPath: path });
-    }, [path, setNavigationData]);
-
-    return React.createElement(Component, props);
-  }
-}
-
 export {
   NavigationProvider,
   useNavigation,
-  withNavigationWatcher
 }

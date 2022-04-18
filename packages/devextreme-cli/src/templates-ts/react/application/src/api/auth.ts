@@ -51,7 +51,7 @@ export async function createAccount(email: string, password: string) {
   }
 }
 
-export async function changePassword(email: string, recoveryCode: string) {
+export async function changePassword(email: string, recoveryCode: string | undefined) {
   try {
     // Send request
     console.log(email, recoveryCode);

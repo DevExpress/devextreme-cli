@@ -1,7 +1,7 @@
 import Drawer from 'devextreme-react/drawer';
 import ScrollView from 'devextreme-react/scroll-view';
 import React, { useState, useCallback, useRef } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Header, SideNavigationMenu, Footer } from '../../components';
 import './side-nav-outer-toolbar.scss';
 import { useScreenSize } from '../../utils/media-query';
@@ -15,7 +15,7 @@ interface ISideNavOuterToolbarProps {
 
 export default function SideNavOuterToolbar({ title, children }: ISideNavOuterToolbarProps) {
   const scrollViewRef = useRef<ScrollView>(null);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isXSmall, isLarge } = useScreenSize();
   const [patchCssClass, onMenuReady] = useMenuPatch();
   const [menuStatus, setMenuStatus] = useState(
@@ -54,14 +54,14 @@ export default function SideNavOuterToolbar({ title, children }: ISideNavOuterTo
       return;
     }
 
-    history.push(path);
+    navigate(path);
     scrollViewRef.current?.instance.scrollTo(0);
 
     if (!isLarge || menuStatus === MenuStatus.TemporaryOpened) {
       setMenuStatus(MenuStatus.Closed);
       event.stopPropagation();
     }
-  }, [history, menuStatus, isLarge]);
+  }, [navigate, menuStatus, isLarge]);
 
   return (
     <div className={'side-nav-outer-toolbar'}>

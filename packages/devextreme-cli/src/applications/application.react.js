@@ -27,7 +27,9 @@ const preparePackageJsonForTemplate = (appPath, appName, isTypeScript) => {
     const dependencies = [
         { name: 'sass', version: '^1.34.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
-        { name: 'react-router-dom', version: '^5.0.0' },
+        { name: 'react', version: '^17.0.0' },
+        { name: 'react-dom', version: '^17.0.0' },
+        { name: 'react-router-dom', version: '^6.3.0' },
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
@@ -36,8 +38,10 @@ const preparePackageJsonForTemplate = (appPath, appName, isTypeScript) => {
 
     if(isTypeScript) {
         dependencies.push({ name: '@testing-library/react', version: '^11.1.0' });
-        dependencies.push({ name: '@types/react-router-dom', version: '^5.1.5' });
+        dependencies.push({ name: '@types/react-router-dom', version: '^5.0.0' });
         dependencies.push({ name: '@types/react-dom', version: '^17.0.11' });
+        dependencies.push({ name: '@types/jest', version: '26.0.10' });
+        packageJsonUtils.removeDependencies(appPath, [{ name: '@types/node' }, { name: '@types/react' }]);
     }
 
     packageJsonUtils.addDependencies(appPath, dependencies);
@@ -151,7 +155,7 @@ const getComponentPageName = (viewName) => {
 const getNavigationData = (viewName, componentName, icon) => {
     const pagePath = stringUtils.dasherize(viewName);
     return {
-        route: `\n  {\n    path: \'/${pagePath}\',\n    component: ${componentName}\n  }`,
+        route: `\n  {\n    path: \'/${pagePath}\',\n    element: <${componentName} />\n  }`,
         navigation: `\n  {\n    text: \'${stringUtils.humanize(viewName)}\',\n    path: \'/${pagePath}\',\n    icon: \'${icon}\'\n  }`
     };
 };

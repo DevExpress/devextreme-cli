@@ -23,6 +23,18 @@ const addDependencies = (appPath, dependencies) => {
     });
 };
 
+const removeDependencies = (appPath, dependencies) => {
+    modifyJson(getPackageJsonPath(appPath), packageConfig => {
+        dependencies.forEach(dependency => {
+            const sectionName = dependency.dev ? 'devDependencies' : 'dependencies';
+            const section = packageConfig[sectionName] = packageConfig[sectionName] || {};
+            delete section[dependency.name];
+        });
+
+        return packageConfig;
+    });
+};
+
 const addDevextreme = (appPath, dxversion, engine) => {
     const dxWrapperPackage = `devextreme-${engine}`;
     const dependencies = [
@@ -85,5 +97,6 @@ module.exports = {
     getPackageJsonPath,
     updateScripts,
     updateName,
-    addDevextreme
+    addDevextreme,
+    removeDependencies
 };
