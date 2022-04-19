@@ -1,24 +1,18 @@
-import { withNavigationWatcher } from './contexts/navigation';<%=^empty%>
-import { HomePage, TasksPage, ProfilePage } from './pages';<%=/empty%>
+import { HomePage, TasksPage, ProfilePage } from './pages';
 
-const routes = [<%=^empty%>
+const routes = [
   {
     path: '/tasks',
-    component: TasksPage
+    element: <TasksPage />
   },
   {
     path: '/profile',
-    component: ProfilePage
+    element: <ProfilePage />
   },
   {
     path: '/home',
-    component: HomePage
+    element: <HomePage />
   }
-<%=/empty%>];
+];
 
-export default routes.map(route => {
-  return {
-    ...route,
-    component: withNavigationWatcher(route.component)
-  };
-});
+export default routes;

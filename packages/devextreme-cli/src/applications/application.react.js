@@ -27,8 +27,6 @@ const preparePackageJsonForTemplate = (appPath, appName, isTypeScript) => {
     const dependencies = [
         { name: 'sass', version: '^1.34.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
-        { name: 'react', version: '^17.0.0' },
-        { name: 'react-dom', version: '^17.0.0' },
         { name: 'react-router-dom', version: '^6.3.0' },
     ];
     const scripts = [
