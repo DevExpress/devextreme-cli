@@ -114,11 +114,11 @@ const addTemplate = (appPath, appName, templateOptions) => {
     preparePackageJsonForTemplate(appPath, appName, templateOptions.isTypeScript);
     updateJsonPropName(manifestPath, appName);
     addPolyfills(packageJsonUtils.getPackageJsonPath(), indexPath);
-    install({}, appPath, styles);
+    install({ isTypeScript: templateOptions.isTypeScript }, appPath, styles);
 };
 
 const install = (options, appPath, styles) => {
-    const isTypeScript = typescriptUtils.isTypeScript(typescriptUtils.getTemplateType('react'));
+    const isTypeScript = options.isTypeScript !== undefined ? options.isTypeScript : typescriptUtils.isTypeScript(typescriptUtils.getTemplateType('react'));
 
     appPath = appPath ? appPath : process.cwd();
     const pathToMainComponent = typescriptUtils.setFileExtension(
