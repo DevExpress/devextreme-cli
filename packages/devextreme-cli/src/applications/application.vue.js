@@ -91,7 +91,7 @@ const create = async(appName, options) => {
 
     const appPath = path.join(process.cwd(), appName);
     modifyIndexHtml(appPath, templateOptions.project);
-    addTemplate(appPath, appName, templateOptions, version);
+    addTemplate(appPath, appName, templateOptions);
 };
 
 const modifyIndexHtml = (appPath, appName) => {
@@ -103,21 +103,26 @@ const modifyIndexHtml = (appPath, appName) => {
     fs.writeFileSync(indexHtmlPath, htmlContent);
 };
 
-const addTemplate = (appPath, appName, templateOptions, version) => {
+const addTemplate = (appPath, appName, templateOptions) => {
+    const { version, isTypeScript } = templateOptions;
+
     if(!version) {
         version = getVueVersion();
     }
 
-    const templateSourcePath = path.join(__dirname, '..', 'templates', `vue-${version}`, 'application');
+    const applicationTemplatePath = path.join(
+        templateCreator.getTempaltePath(`vue-${version}`, isTypeScript),
+        'application'
+    );
     const styles = [
         './themes/generated/theme.additional.css',
         './themes/generated/theme.base.css',
         'devextreme/dist/css/dx.common.css'
     ];
 
-    templateCreator.moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);
+    templateCreator.moveTemplateFilesToProject(applicationTemplatePath, appPath, templateOptions);
     if(!templateOptions.empty) {
-        addSamplePages(appPath, version);
+        addSamplePages(appPath, templateOptions);
     }
     preparePackageJsonForTemplate(appPath, appName, version);
     install({}, appPath, styles);
@@ -144,14 +149,19 @@ const addStylesToApp = (appPath, styles) => {
     });
 };
 
-const addSamplePages = (appPath, version) => {
+const addSamplePages = (appPath, templateOptions) => {
+    const { version, isTypeScript } = templateOptions;
+
     if(!version) {
         version = getVueVersion();
     }
 
-    const templateSourcePath = path.join(__dirname, '..', 'templates', `vue-${version}`, 'sample-pages');
+    const samplePageTemplatePath = path.join(
+        templateCreator.getTempaltePath(`vue-${version}`, isTypeScript),
+        'sample-pages'
+    );
     const pagesPath = createPathToPage(appPath);
-    templateCreator.moveTemplateFilesToProject(templateSourcePath, pagesPath, {});
+    templateCreator.moveTemplateFilesToProject(samplePageTemplatePath, pagesPath, {});
 };
 
 const getComponentPageName = (viewName) => {
@@ -205,9 +215,13 @@ const addView = (pageName, options) => {
     const version = getVueVersion();
     const isTypeScript = typescriptUtils.isTypeScript(typescriptUtils.getTemplateType('vue'));
 
+    const pageTemplatePath = path.join(
+        templateCreator.getTempaltePath(`vue-${version}`, isTypeScript),
+        'page'
+    );
+
     const componentName = getComponentPageName(pageName);
     const pathToPage = createPathToPage(process.cwd());
-    const pageTemplatePath = path.join(__dirname, '..', 'templates', `vue-${version}`, 'page');
     const routingModulePath = typescriptUtils.setFileExtension(
         path.join(process.cwd(), 'src', 'router.js'),
         isTypeScript
