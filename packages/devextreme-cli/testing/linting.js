@@ -1,7 +1,9 @@
 const minimist = require('minimist');
 const fs = require('fs');
+const path = require('path');
 const ESLint = require('eslint').ESLint;
 const envs = require('./constants').envs;
+const run = require('./../src/utility/run-command');
 
 const args = minimist(process.argv.slice(), {
     default: {
@@ -15,21 +17,25 @@ const args = minimist(process.argv.slice(), {
 
 const isTypeScript = (engine) => engine.includes('-ts');
 
-async function lint(env) {
+const projectLint = async(app) => {
+    await run('npm run lint', undefined, {
+        path: path.join(__dirname, 'sandbox', app, 'my-app')
+    });
+};
+
+const customLint = async(env) => {
     const eslint = new ESLint({
         useEslintrc: false,
         overrideConfigFile: `./testing/lint-config/${env.engine}.eslintrc`,
         ignore: false
     });
 
-    const report = isTypeScript(env.engine)
-        ? await eslint.lintFiles([
-            `./testing/sandbox/${env.engine}/my-app/src/**/*.ts`,
-            `./testing/sandbox/${env.engine}/my-app/src/**/*.tsx`
-        ])
-        : await eslint.lintFiles([
-            `./testing/sandbox/${env.engine}/my-app/src/**/*.${env.fileExtention}`
-        ]);
+    const lintFiles = isTypeScript(env.engine)
+        ? [`./testing/sandbox/${env.engine}/my-app/src/**/*.ts`,
+            `./testing/sandbox/${env.engine}/my-app/src/**/*.tsx`]
+        : [`./testing/sandbox/${env.engine}/my-app/src/**/*.${env.fileExtention}`];
+
+    const report = await eslint.lintFiles(lintFiles);
 
     report.forEach(el => {
         if(el.errorCount) {
@@ -38,6 +44,15 @@ async function lint(env) {
     });
     const formatter = await eslint.loadFormatter('stylish');
     console.log(formatter.format(report));
+};
+
+async function lint(env) {
+
+    if(env.engine.startsWith('vue')) {
+        await projectLint(env.engine);
+    } else {
+        await customLint(env);
+    }
 };
 
 (async function lintProcess() {
