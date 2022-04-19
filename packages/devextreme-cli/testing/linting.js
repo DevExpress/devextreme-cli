@@ -13,15 +13,24 @@ const args = minimist(process.argv.slice(), {
     }
 });
 
+const isTypeScript = (engine) => engine.includes('-ts');
+
 async function lint(env) {
     const eslint = new ESLint({
         useEslintrc: false,
         overrideConfigFile: `./testing/lint-config/${env.engine}.eslintrc`,
         ignore: false
     });
-    const report = await eslint.lintFiles([
-        `./testing/sandbox/${env.engine}/my-app/src/**/*.${env.fileExtention}`
-    ]);
+
+    const report = isTypeScript(env.engine)
+        ? await eslint.lintFiles([
+            `./testing/sandbox/${env.engine}/my-app/src/**/*.ts`,
+            `./testing/sandbox/${env.engine}/my-app/src/**/*.tsx`
+        ])
+        : await eslint.lintFiles([
+            `./testing/sandbox/${env.engine}/my-app/src/**/*.${env.fileExtention}`
+        ]);
+
     report.forEach(el => {
         if(el.errorCount) {
             process.exitCode = 1;

@@ -1,44 +1,53 @@
 {
     "env": {
-        "node": true,
+        "es6": true,
         "browser": true,
         "jest": true
     },
-    "parser": "babel-eslint",
+    "parser": "@typescript-eslint/parser",
     "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:jest/recommended",
+        "prettier",
+        "plugin:prettier/recommended"
     ],
     "parserOptions": {
-      "ecmaFeatures": {
-        "tsx": true
-      },
-      "sourceType": "module",
-      "ecmaVersion": 2018
+        "ecmaFeatures": {
+            "jsx": true,
+            "useJSXTextNode": true
+        },
+        "sourceType": "module",
+        "ecmaVersion": 2018,
+        "project": "./testing/sandbox/react-ts/my-app/tsconfig.json"
     },
-    "plugins": ["react", "react-hooks", "unused-imports"],
+    "plugins": ["react", "react-hooks", "unused-imports", "@typescript-eslint", "jest"],
     "ignorePatterns": ["node_modules/"],
     "rules": {
-      "react/jsx-uses-react": "error",
-      "react/jsx-uses-vars": "error",
-      "no-unused-vars": [2, {"args": "after-used", "argsIgnorePattern": "^props"}],
-      "unused-imports/no-unused-imports": "error",
-      "unused-imports/no-unused-vars": [
-        "error",
-        {
-          "vars": "all",
-          "varsIgnorePattern": "^props",
-          "args": "after-used",
-          "argsIgnorePattern": "^props"
-        }
-      ],
-      "react/display-name": "off",
-      "react/prop-types": "off",
-      "react/react-in-jsx-scope": "off"
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error",
+        "no-unused-vars": [2, {"args": "after-used", "argsIgnorePattern": "^props"}],
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+            "error",
+            {
+            "vars": "all",
+            "varsIgnorePattern": "^props",
+            "args": "after-used",
+            "argsIgnorePattern": "^props"
+            }
+        ],
+        "react/display-name": "off",
+        "react/prop-types": "off",
+        "react/react-in-jsx-scope": "off"
     },
     "settings": {
-      "react": {
-        "version": "latest"
-      }
+        "react": {
+            "version": "detect"
+        },
+        "import/resolver": {
+            "node": {
+            "extensions": [".ts", ".tsx"]
+            }
+        }
     }
 }
