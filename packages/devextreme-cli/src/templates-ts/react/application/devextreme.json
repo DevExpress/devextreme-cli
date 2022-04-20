@@ -1,5 +1,8 @@
 {
   "applicationEngine": "react",
+  "react": {
+    "template": "typescript"
+   },
   "build": {
       "commands": [
           {

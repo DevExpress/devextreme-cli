@@ -85,5 +85,5 @@ module.exports = {
     getPackageJsonPath,
     updateScripts,
     updateName,
-    addDevextreme,
+    addDevextreme
 };
