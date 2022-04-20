@@ -35,11 +35,8 @@ const preparePackageJsonForTemplate = (appPath, appName, isTypeScript) => {
     ];
 
     if(isTypeScript) {
-        dependencies.push({ name: '@testing-library/react', version: '^11.1.0' });
-        dependencies.push({ name: '@types/react-router-dom', version: '^5.0.0' });
-        dependencies.push({ name: '@types/react-dom', version: '^17.0.11' });
-        dependencies.push({ name: '@types/jest', version: '26.0.10' });
-        packageJsonUtils.removeDependencies(appPath, [{ name: '@types/node' }, { name: '@types/react' }]);
+        dependencies.push({ name: '@types/react-router-dom', version: '^5.1.5' });
+        dependencies.push({ name: '@types/react', version: '^17.0.39' });
     }
 
     packageJsonUtils.addDependencies(appPath, dependencies);
