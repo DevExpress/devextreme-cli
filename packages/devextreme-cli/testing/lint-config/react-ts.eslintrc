@@ -8,8 +8,7 @@
     "extends": [
         "plugin:@typescript-eslint/recommended",
         "plugin:jest/recommended",
-        "prettier",
-        "plugin:prettier/recommended"
+        "prettier"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -25,7 +24,8 @@
     "rules": {
         "react/jsx-uses-react": "error",
         "react/jsx-uses-vars": "error",
-        "no-unused-vars": [2, {"args": "after-used", "argsIgnorePattern": "^props"}],
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": ["error"],
         "unused-imports/no-unused-imports": "error",
         "unused-imports/no-unused-vars": [
             "error",
