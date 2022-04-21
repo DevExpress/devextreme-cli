@@ -39,9 +39,7 @@ npm run create-template -- -- -e angular
 npm run create-template -- -- -e react
 npm run create-template -- -- -e react-ts
 npm run create-template -- -- -e vue-v2
-npm run create-template -- -- -e vue-v2-ts
 npm run create-template -- -- -e vue-v3
-npm run create-template -- -- -e vue-v3-ts
 ```
 
 ## Lint Applications
@@ -57,9 +55,7 @@ npm run lint-template -- -- -e angular
 npm run lint-template -- -- -e react
 npm run lint-template -- -- -e react-ts
 npm run lint-template -- -- -e vue-v2
-npm run lint-template -- -- -e vue-v2-ts
 npm run lint-template -- -- -e vue-v3
-npm run lint-template -- -- -e vue-v3-ts
 ```
 
 ## Test Applications
@@ -75,9 +71,7 @@ npm run test-template -- -- -e angular
 npm run test-template -- -- -e react
 npm run test-template -- -- -e react-ts
 npm run test-template -- -- -e vue-v2
-npm run test-template -- -- -e vue-v2-ts
 npm run test-template -- -- -e vue-v3
-npm run test-template -- -- -e vue-v3-ts
 ```
 
 ## Run Tests for Existing Test Applications
@@ -93,9 +87,7 @@ npm run test -- -- -t angular
 npm run test -- -- -t react
 npm run test -- -- -t react-ts
 npm run test -- -- -t vue-v2
-npm run test -- -- -t vue-v2-ts
 npm run test -- -- -t vue-v3
-npm run test -- -- -t vue-v3-ts
 ```
 
 ## Replace etalon
@@ -121,7 +113,5 @@ Modifying an application template directly is not recommended. Instead, generate
     npm run update-template -- -p react
     npm run update-template -- -p react-ts
     npm run update-template -- -p vue-v2
-    npm run update-template -- -p vue-v2-ts
     npm run update-template -- -p vue-v3
-    npm run update-template -- -p vue-v3-ts
     ```

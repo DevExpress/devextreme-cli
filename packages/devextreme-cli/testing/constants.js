@@ -5,9 +5,7 @@ exports.envs = [
     require('./env.react'),
     require('./env.react-ts'),
     require('./env.vue-v2'),
-    require('./env.vue-v2-ts'),
     require('./env.vue-v3'),
-    require('./env.vue-v3-ts')
 ];
 
 exports.viewports = {
