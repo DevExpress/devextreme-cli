@@ -14,7 +14,7 @@ const getTemplateType = (engine) => {
     const devextremeConfig = devextremeConfigUtils.read();
     return devextremeConfig[engine]
         ? devextremeConfig[engine].template
-        : 'typescript';
+        : 'javascript';
 };
 
 module.exports = {
