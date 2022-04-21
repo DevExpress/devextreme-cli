@@ -37,6 +37,7 @@ npm run create-template
 ```sh
 npm run create-template -- -- -e angular
 npm run create-template -- -- -e react
+npm run create-template -- -- -e react-ts
 npm run create-template -- -- -e vue-v2
 npm run create-template -- -- -e vue-v3
 ```
