@@ -150,7 +150,7 @@ const getComponentPageName = (viewName) => {
 const getNavigationData = (viewName, componentName, icon) => {
     const pagePath = stringUtils.dasherize(viewName);
     return {
-        route: `\n  {\n    path: \'/${pagePath}\',\n    element: <${componentName} />\n  }`,
+        route: `\n  {\n    path: \'/${pagePath}\',\n    element: ${componentName}\n  }`,
         navigation: `\n  {\n    text: \'${stringUtils.humanize(viewName)}\',\n    path: \'/${pagePath}\',\n    icon: \'${icon}\'\n  }`
     };
 };

@@ -140,7 +140,7 @@ module.exports = (env) => {
                                     if(env.engine === 'angular') {
                                         pageUrl = 'pages/' + pageUrl;
                                     }
-                                    const page = await openPage(`${appUrl}#${pageUrl}`);
+                                    const page = await openPage(`${appUrl}#/${pageUrl}`);
                                     const image = await page.screenshot();
 
                                     compareSnapshot(image, 'add-view');

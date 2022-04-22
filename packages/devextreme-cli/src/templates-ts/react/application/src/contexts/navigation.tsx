@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, createContext, useContext, useEffect } from 'react';
 
 interface INavigationData {
   currentPath: string;
@@ -27,7 +27,21 @@ function NavigationProvider(props: NavigationProviderType) {
   );
 }
 
+function withNavigationWatcher(Component: any, path: string) {
+  const WrappedComponent = function (props: any) {
+    const { setNavigationData } = useNavigation();
+
+    useEffect(() => {
+      setNavigationData!({ currentPath: path });
+    }, [path, setNavigationData]);
+
+    return <Component  {...props} />;
+  }
+  return <WrappedComponent />;
+}
+
 export {
   NavigationProvider,
   useNavigation,
+  withNavigationWatcher
 }
