@@ -62,7 +62,7 @@ async function createVueApp(name, version) {
         argList.push('-p "Default (Vue 3)"');
     }
 
-    return runCommand('npx', argList, { windowsVerbatimArguments: false });
+    return runCommand('npx', argList);
 }
 
 const create = async(appName, options) => {
