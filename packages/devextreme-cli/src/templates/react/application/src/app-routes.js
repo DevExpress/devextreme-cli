@@ -1,7 +1,7 @@
 import { HomePage, TasksPage, ProfilePage } from './pages';
 import { withNavigationWatcher } from './contexts/navigation';
 
-const routes = [
+const routes = [<%=^empty%>
     {
         path: '/tasks',
         element: TasksPage
@@ -14,7 +14,7 @@ const routes = [
         path: '/home',
         element: HomePage
     }
-];
+<%=/empty%>];
 
 export default routes.map(route => {
     return {
