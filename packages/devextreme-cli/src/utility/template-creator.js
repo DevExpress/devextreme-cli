@@ -12,9 +12,9 @@ const applyTemplateToFile = (filePath, templateOptions) => {
     return content;
 };
 
-const addPageToApp = (pageName, pageDir, templatePagesPath) => {
+const addPageToApp = (pageName, pageDir, templatePagesPath, getCorrectExtension) => {
     fs.readdirSync(templatePagesPath).forEach((pageItem) => {
-        const pagePath = path.join(pageDir, `${pageName}${extname(pageItem)}`);
+        const pagePath = path.join(pageDir, `${pageName}${getCorrectExtension(extname(pageItem))}`);
         if(fs.existsSync(pagePath)) {
             console.error('The page already exists');
             process.exit();
@@ -25,19 +25,19 @@ const addPageToApp = (pageName, pageDir, templatePagesPath) => {
     });
 };
 
-const moveTemplateFilesToProject = (templateFolder, appPath, templateOptions, pathToFileRelativelyRoot) => {
+const moveTemplateFilesToProject = (templateFolder, appPath, templateOptions, getCorrectPath, pathToFileRelativelyRoot) => {
     const relativePath = pathToFileRelativelyRoot || '';
     const pathToFiles = path.join(templateFolder, relativePath);
 
     fs.readdirSync(pathToFiles).forEach(file => {
-        const pathToAppFile = path.join(appPath, relativePath, file);
+        const pathToAppFile = getCorrectPath(extname(file), path.join(appPath, relativePath, file), templateOptions.isTypeScript);
         const nextFilePath = path.join(pathToFiles, file);
 
         if(fs.lstatSync(nextFilePath).isDirectory()) {
             if(!fs.existsSync(pathToAppFile)) {
                 fs.mkdirSync(pathToAppFile);
             }
-            moveTemplateFilesToProject(templateFolder, appPath, templateOptions, path.join(relativePath, file));
+            moveTemplateFilesToProject(templateFolder, appPath, templateOptions, getCorrectPath, path.join(relativePath, file));
         } else {
             const content = applyTemplateToFile(nextFilePath, templateOptions);
             fs.writeFileSync(pathToAppFile, content);
@@ -45,11 +45,8 @@ const moveTemplateFilesToProject = (templateFolder, appPath, templateOptions, pa
     });
 };
 
-const getTempaltePath = (app, isTypeScript) => {
-    const templatesFolder = isTypeScript ? 'templates-ts' : 'templates';
-    const templatesPath = path.join(__dirname, '..', templatesFolder, app);
-
-    return templatesPath;
+const getTempaltePath = (app) => {
+    return path.join(__dirname, '..', 'templates', app);
 };
 
 module.exports = {
