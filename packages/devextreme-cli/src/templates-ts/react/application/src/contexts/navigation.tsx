@@ -1,22 +1,10 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
+<%=#isTypeScript%>import { NavigationContextType, NavigationProviderType } from '../types';<%=/isTypeScript%>
 
-interface INavigationData {
-  currentPath: string;
-}
-
-type INavigationContextType = {
-  setNavigationData?: ({ currentPath }: INavigationData) => void;
-  navigationData: { currentPath: string };
-}
-
-const NavigationContext = createContext<INavigationContextType>({} as INavigationContextType);
+const NavigationContext = createContext<%=#isTypeScript%><NavigationContextType><%=/isTypeScript%>({}<%=#isTypeScript%> as NavigationContextType<%=/isTypeScript%>);
 const useNavigation = () => useContext(NavigationContext);
 
-type NavigationProviderType = {
-  children: React.ReactNode;
-}
-
-function NavigationProvider(props: NavigationProviderType) {
+function NavigationProvider(props<%=#isTypeScript%>: NavigationProviderType<%=/isTypeScript%>) {
   const [navigationData, setNavigationData] = useState({ currentPath: '' });
 
   return (
@@ -27,12 +15,12 @@ function NavigationProvider(props: NavigationProviderType) {
   );
 }
 
-function withNavigationWatcher(Component: any, path: string) {
-  const WrappedComponent = function (props: any) {
+function withNavigationWatcher(Component<%=#isTypeScript%>: any<%=/isTypeScript%>, path<%=#isTypeScript%>: string<%=/isTypeScript%>) {
+  const WrappedComponent = function (props<%=#isTypeScript%>: any<%=/isTypeScript%>) {
     const { setNavigationData } = useNavigation();
 
     useEffect(() => {
-      setNavigationData!({ currentPath: path });
+      setNavigationData<%=#isTypeScript%>!<%=/isTypeScript%>({ currentPath: path });
     }, [path, setNavigationData]);
 
     return <Component  {...props} />;

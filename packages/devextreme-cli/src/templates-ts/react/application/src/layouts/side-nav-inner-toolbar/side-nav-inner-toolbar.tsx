@@ -9,14 +9,10 @@ import './side-nav-inner-toolbar.scss';
 import { useScreenSize } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
 import { useMenuPatch } from '../../utils/patches';
+<%=#isTypeScript%>import { ISideNavToolbarProps } from '../../types';<%=/isTypeScript%>
 
-interface ISideNavInnerToolbarProps {
-  title: string;
-  children: React.ReactNode;
-}
-
-export default function SideNavInnerToolbar({ title, children }: ISideNavInnerToolbarProps) {
-  const scrollViewRef = useRef<ScrollView>(null);
+export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%>: ISideNavToolbarProps<%=/isTypeScript%>) {
+  const scrollViewRef = useRef<%=#isTypeScript%><ScrollView><%=/isTypeScript%>(null);
   const navigate = useNavigate();
   const { isXSmall, isLarge } = useScreenSize();
   const [patchCssClass, onMenuReady] = useMenuPatch();
@@ -57,7 +53,7 @@ export default function SideNavInnerToolbar({ title, children }: ISideNavInnerTo
     }
 
     navigate(path);
-    scrollViewRef.current?.instance.scrollTo(0);
+    scrollViewRef.current<%=#isTypeScript%>?<%=/isTypeScript%>.instance.scrollTo(0);
 
     if (!isLarge || menuStatus === MenuStatus.TemporaryOpened) {
       setMenuStatus(MenuStatus.Closed);
@@ -86,12 +82,12 @@ export default function SideNavInnerToolbar({ title, children }: ISideNavInnerTo
           />
           <ScrollView ref={scrollViewRef} className={'layout-body with-footer'}>
             <div className={'content'}>
-              {React.Children.map(children, (item: any) => {
+              {React.Children.map(children, (item<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
                 return item.type !== Footer && item;
               })}
             </div>
             <div className={'content-block'}>
-              {React.Children.map(children, (item: any) => {
+              {React.Children.map(children, (item<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
                 return item.type === Footer && item;
               })}
             </div>

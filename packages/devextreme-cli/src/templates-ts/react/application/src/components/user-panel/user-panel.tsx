@@ -4,12 +4,9 @@ import ContextMenu, { Position } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
 import { useAuth } from '../../contexts/auth';
 import './user-panel.scss';
+<%=#isTypeScript%>import { IUserPanelProps } from '../../types';<%=/isTypeScript%>
 
-interface IUserPanelProps {
-  menuMode: 'context' | 'list';
-}
-
-export default function UserPanel({ menuMode }: IUserPanelProps) {
+export default function UserPanel({ menuMode }<%=#isTypeScript%>: IUserPanelProps<%=/isTypeScript%>) {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -34,12 +31,12 @@ export default function UserPanel({ menuMode }: IUserPanelProps) {
         <div className={'image-container'}>
           <div
             style={{
-              background: `url(${user!.avatarUrl}) no-repeat #fff`,
+              background: `url(${user<%=#isTypeScript%>!<%=/isTypeScript%>.avatarUrl}) no-repeat #fff`,
               backgroundSize: 'cover'
             }}
             className={'user-image'} />
         </div>
-        <div className={'user-name'}>{user!.email}</div>
+        <div className={'user-name'}>{user<%=#isTypeScript%>!<%=/isTypeScript%>.email}</div>
       </div>
 
       {menuMode === 'context' && (

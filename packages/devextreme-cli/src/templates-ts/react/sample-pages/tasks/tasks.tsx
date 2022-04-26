@@ -15,7 +15,7 @@ export default function Task() {
 
       <DataGrid
         className={'dx-card wide-card'}
-        dataSource={dataSource as any}
+        dataSource={dataSource<%=#isTypeScript%> as any<%=/isTypeScript%>}
         showBorders={false}
         focusedRowEnabled={true}
         defaultFocusedRowIndex={0}

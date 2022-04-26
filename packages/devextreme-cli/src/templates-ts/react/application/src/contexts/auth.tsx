@@ -1,24 +1,9 @@
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
 import { getUser, signIn as sendSignInRequest } from '../api/auth';
+<%=#isTypeScript%>import { IAuthProviderProps, IUser, IAuthContextType } from '../types';<%=/isTypeScript%>
 
-interface IUser {
-  email: string;
-  avatarUrl: string;
-}
-
-type IAuthContextType = {
-  user?: IUser;
-  signIn: (email: string, password: string) => Promise<{isOk: boolean, data?: IUser, message?: string}>;
-  signOut: () => void;
-  loading: boolean;
-}
-
-interface IAuthProviderProps {
-  children: React.ReactNode;
-}
-
-function AuthProvider(props: IAuthProviderProps) {
-  const [user, setUser] = useState<IUser>();
+function AuthProvider(props<%=#isTypeScript%>: IAuthProviderProps<%=/isTypeScript%>) {
+  const [user, setUser] = useState<%=#isTypeScript%><IUser><%=/isTypeScript%>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,7 +17,7 @@ function AuthProvider(props: IAuthProviderProps) {
     })();
   }, []);
 
-  const signIn = useCallback(async (email: string, password: string) => {
+  const signIn = useCallback(async (email<%=#isTypeScript%>: string<%=/isTypeScript%>, password<%=#isTypeScript%>: string<%=/isTypeScript%>) => {
     const result = await sendSignInRequest(email, password);
     if (result.isOk) {
       setUser(result.data);
@@ -51,7 +36,7 @@ function AuthProvider(props: IAuthProviderProps) {
   );
 }
 
-const AuthContext = createContext<IAuthContextType>({ loading: false } as IAuthContextType);
+const AuthContext = createContext<%=#isTypeScript%><IAuthContextType><%=/isTypeScript%>({ loading: false }<%=#isTypeScript%> as IAuthContextType<%=/isTypeScript%>);
 const useAuth = () => useContext(AuthContext);
 
 export { AuthProvider, useAuth }

@@ -4,18 +4,11 @@ import { navigation } from '../../app-navigation';
 import { useNavigation } from '../../contexts/navigation';
 import { useScreenSize } from '../../utils/media-query';
 import './side-navigation-menu.scss';
+<%=#isTypeScript%>import { ISideNavigationMenuProps } from '../../types';<%=/isTypeScript%>
 
 import * as events from 'devextreme/events';
 
-interface ISideNavigationMenuProps {
-  selectedItemChanged: (e: any) => void;
-  openMenu: (e: any) => void;
-  compactMode: boolean;
-  onMenuReady: (e: any) => void;
-  children: React.ReactNode;
-}
-
-export default function SideNavigationMenu(props: ISideNavigationMenuProps) {
+export default function SideNavigationMenu(props<%=#isTypeScript%>: ISideNavigationMenuProps<%=/isTypeScript%>) {
   const {
     children,
     selectedItemChanged,
@@ -42,7 +35,7 @@ export default function SideNavigationMenu(props: ISideNavigationMenuProps) {
 
   const { navigationData: { currentPath } } = useNavigation();
 
-  const treeViewRef = useRef<TreeView>(null);
+  const treeViewRef = useRef<%=#isTypeScript%><TreeView><%=/isTypeScript%>(null);
   const wrapperRef = useRef();
   const getWrapperRef = useCallback((element) => {
     const prevElement = wrapperRef.current;
@@ -51,7 +44,7 @@ export default function SideNavigationMenu(props: ISideNavigationMenuProps) {
     }
 
     wrapperRef.current = element;
-    events.on(element, 'dxclick', (e: any) => {
+    events.on(element, 'dxclick', (e<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
       openMenu(e);
     });
   }, [openMenu]);

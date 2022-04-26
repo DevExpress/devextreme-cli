@@ -4,14 +4,9 @@ import Button from 'devextreme-react/button';
 import UserPanel from '../user-panel/user-panel';
 import './header.scss';
 import { Template } from 'devextreme-react/core/template';
+<%=#isTypeScript%>import { IHeaderProps } from '../../types';<%=/isTypeScript%>
 
-interface IHeaderProps {
-  menuToggleEnabled: boolean;
-  title?: string;
-  toggleMenu: (e: any) => void;
-}
-
-export default function Header({ menuToggleEnabled, title, toggleMenu }: IHeaderProps) {
+export default function Header({ menuToggleEnabled, title, toggleMenu }<%=#isTypeScript%>: IHeaderProps<%=/isTypeScript%>) {
   return (
     <header className={'header-component'}>
       <Toolbar className={'header-toolbar'}>

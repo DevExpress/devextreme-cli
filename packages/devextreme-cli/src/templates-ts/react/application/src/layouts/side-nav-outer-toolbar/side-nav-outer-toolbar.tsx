@@ -7,14 +7,10 @@ import './side-nav-outer-toolbar.scss';
 import { useScreenSize } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
 import { useMenuPatch } from '../../utils/patches';
+<%=#isTypeScript%>import { ISideNavToolbarProps } from '../../types';<%=/isTypeScript%>
 
-interface ISideNavOuterToolbarProps {
-  title: string;
-  children: React.ReactNode;
-}
-
-export default function SideNavOuterToolbar({ title, children }: ISideNavOuterToolbarProps) {
-  const scrollViewRef = useRef<ScrollView>(null);
+export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%>: ISideNavToolbarProps<%=/isTypeScript%>) {
+  const scrollViewRef = useRef<%=#isTypeScript%><ScrollView><%=/isTypeScript%>(null);
   const navigate = useNavigate();
   const { isXSmall, isLarge } = useScreenSize();
   const [patchCssClass, onMenuReady] = useMenuPatch();
@@ -55,7 +51,7 @@ export default function SideNavOuterToolbar({ title, children }: ISideNavOuterTo
     }
 
     navigate(path);
-    scrollViewRef.current?.instance.scrollTo(0);
+    scrollViewRef.current<%=#isTypeScript%>?<%=/isTypeScript%>.instance.scrollTo(0);
 
     if (!isLarge || menuStatus === MenuStatus.TemporaryOpened) {
       setMenuStatus(MenuStatus.Closed);
@@ -85,12 +81,12 @@ export default function SideNavOuterToolbar({ title, children }: ISideNavOuterTo
         <div className={'container'}>
           <ScrollView ref={scrollViewRef} className={'layout-body with-footer'}>
             <div className={'content'}>
-              {React.Children.map(children, (item: any) => {
+              {React.Children.map(children, (item<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
                 return item.type !== Footer && item;
               })}
             </div>
             <div className={'content-block'}>
-              {React.Children.map(children, (item: any) => {
+              {React.Children.map(children, (item<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
                 return item.type === Footer && item;
               })}
             </div>
