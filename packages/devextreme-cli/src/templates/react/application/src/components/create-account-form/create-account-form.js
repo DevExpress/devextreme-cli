@@ -28,7 +28,7 @@ export default function CreateAccountForm(props) {
     setLoading(false);
 
     if (result.isOk) {
-      navigate.push('/login');
+      navigate('/login');
     } else {
       notify(result.message, 'error', 2000);
     }
