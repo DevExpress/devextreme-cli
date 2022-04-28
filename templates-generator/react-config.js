@@ -1,23 +1,58 @@
 module.exports = {
-    sourcePath: 'packages/devextreme-cli/testing/sandbox/react/my-app/',
+    sourcePath: 'packages/devextreme-cli/testing/sandbox/react-ts/my-app/',
     targetPath: 'packages/devextreme-cli/src/templates/react/application/',
-    sourceGlob: '**/*.{js,scss,json}',
+    sourceGlob: '**/*.{tsx,ts,scss,json}',
     ignoreList: [
         'src/themes/generated/*.*',
         'src/pages/new-page/new-page.scss',
         'node_modules/**/*.*',
         'public/*.*',
         'build/**/*.*',
-        'src/App.test.js',
-        'src/setupTests.js',
-        'src/reportWebVitals.js',
-        'src/index.js',
+        'src/App.test.tsx',
+        'src/setupTests.ts',
+        'src/reportWebVitals.ts',
+        'src/react-app-env.d.ts',
+        'src/index.tsx',
         'package.json',
-        'package-lock.json'
+        'package-lock.json',
+        'tsconfig.json',
     ],
     replaceRules: [
         {
-            glob: 'src/app-routes.js',
+            glob: ['**/*.ts*', '!**/types.ts*'],
+            definitions: [
+                {
+                    before: /: string|: any|\?: string|import(.*?)types';|: [A-Z]\w+\[]| as any/g,
+                    after: '<%=#isTypeScript%>$&<%=/isTypeScript%>'
+                },
+                {
+                    before: /(?<before>\S)\!(?<after>(\.|\())/g,
+                    after: '$<before><%=#isTypeScript%>!<%=/isTypeScript%>$<after>'
+                },
+                {
+                    before: /\?\./g,
+                    after: '<%=#isTypeScript%>?<%=/isTypeScript%>.'
+                },
+                {
+                    before: /(?<type>: [A-Z]\w+)\)/g,
+                    after: '<%=#isTypeScript%>$<type><%=/isTypeScript%>)'
+                },
+                {
+                    before: /}(?<type> as [A-Z]\w+)/g,
+                    after: '}<%=#isTypeScript%>$<type><%=/isTypeScript%>'
+                },
+                {
+                    before: /\](?<type> as \[(.*?)\])/g,
+                    after: ']<%=#isTypeScript%>$<type><%=/isTypeScript%>'
+                },
+                {
+                    before: /(?<name>(useState|useRef|createContext))(?<type><(.*?)>)/g,
+                    after: '$<name><%=#isTypeScript%>$<type><%=/isTypeScript%>'
+                }
+            ]
+        },
+        {
+            glob: 'src/app-routes.tsx',
             definitions: [
                 {
                     before: /(\nimport {([^}]*)} from '.\/pages';)/,
@@ -30,7 +65,7 @@ module.exports = {
             ],
         },
         {
-            glob: 'src/app-info.js',
+            glob: 'src/app-info.tsx',
             definitions: [
                 {
                     before: 'My App',
@@ -39,7 +74,7 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/app-navigation.js',
+            glob: 'src/app-navigation.tsx',
             definitions: [
                 {
                     before: '= [',
@@ -52,7 +87,7 @@ module.exports = {
             ]
         },
         {
-            glob:'src/pages/new-page/new-page.js',
+            glob:'src/pages/new-page/new-page.tsx',
             definitions: [
                 {
                     before:'new-page',
@@ -65,7 +100,7 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/Content.js',
+            glob: 'src/Content.tsx',
             definitions: [
                 {
                     before: /SideNav(Outer|Inner)Toolbar/,
@@ -103,7 +138,7 @@ module.exports = {
     ],
     removeRules: [
         {
-            glob: 'src/App.js',
+            glob: 'src/App.tsx',
             definitions: [
                 'import \'devextreme/dist/css/dx.common.css\';\n',
                 'import \'./themes/generated/theme.base.css\';\n',
@@ -111,19 +146,19 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/app-routes.js',
+            glob: 'src/app-routes.tsx',
             definitions: [
                     ', NewPagePage'                   
             ]
         },
         {
-            glob: 'src/app-navigation.js|src/app-routes.js',
+            glob: 'src/app-navigation.tsx|src/app-routes.tsx',
             definitions: [
                 /,\s+{[^}]*'\/new-page'[^}]*}/            
             ]
         },
         {
-            glob:'src/pages/index.js',
+            glob:'src/pages/index.tsx',
             definitions: [
                 'export { default as NewPagePage } from \'./new-page/new-page\';\n'
             ]
@@ -131,17 +166,17 @@ module.exports = {
     ],
     moveRules: [
         {
-            glob: 'src/pages/!(new-page/new-page.js)',
+            glob: 'src/pages/!(new-page/new-page.tsx)',
             definition: {
                 sourcePath: 'src/pages',
                 targetPath: 'packages/devextreme-cli/src/templates/react/sample-pages'
             }
         },
         {
-            glob: 'src/pages/new-page/new-page.js',
+            glob: 'src/pages/new-page/new-page.tsx',
             definition: {
-                sourcePath: 'src/pages/new-page/new-page.js',
-                targetPath: 'packages/devextreme-cli/src/templates/react/page/page.js'
+                sourcePath: 'src/pages/new-page/new-page.tsx',
+                targetPath: 'packages/devextreme-cli/src/templates/react/page/page.tsx'
             }
         }
     ]

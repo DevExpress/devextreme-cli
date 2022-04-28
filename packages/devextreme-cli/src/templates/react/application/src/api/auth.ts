@@ -51,7 +51,7 @@ export async function createAccount(email<%=#isTypeScript%>: string<%=/isTypeScr
   }
 }
 
-export async function changePassword(email<%=#isTypeScript%>: string<%=/isTypeScript%>, recoveryCode<%=#isTypeScript%>: string | undefined<%=/isTypeScript%>) {
+export async function changePassword(email<%=#isTypeScript%>: string<%=/isTypeScript%>, recoveryCode<%=#isTypeScript%>?: string<%=/isTypeScript%>) {
   try {
     // Send request
     console.log(email, recoveryCode);

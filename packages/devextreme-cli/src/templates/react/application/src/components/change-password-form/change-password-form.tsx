@@ -16,7 +16,7 @@ export default function ChangePasswordForm() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const formData = useRef({ password: '' });
-  const { recoveryCode } = useParams<%=#isTypeScript%><{recoveryCode: string}><%=/isTypeScript%>();
+  const { recoveryCode } = useParams();
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
