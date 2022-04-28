@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Form, {
   Item,
   Label,
@@ -15,7 +15,7 @@ import { useAuth } from '../../contexts/auth';
 import './login-form.scss';
 
 export default function LoginForm() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const formData = useRef({});
@@ -33,8 +33,8 @@ export default function LoginForm() {
   }, [signIn]);
 
   const onCreateAccountClick = useCallback(() => {
-    history.push('/create-account');
-  }, [history]);
+    navigate('/create-account');
+  }, [navigate]);
 
   return (
     <form className={'login-form'} onSubmit={onSubmit}>

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ContextMenu, { Position } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
 import { useAuth } from '../../contexts/auth';
@@ -7,10 +7,10 @@ import './user-panel.scss';
 
 export default function UserPanel({ menuMode }) {
   const { user, signOut } = useAuth();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   function navigateToProfile() {
-    history.push("/profile");
+    navigate("/profile");
   }
   const menuItems = useMemo(() => ([
     {

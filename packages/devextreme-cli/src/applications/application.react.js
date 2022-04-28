@@ -23,16 +23,21 @@ const pathToPagesIndex = (isTypeScript) => {
     return typescriptUtils.setFileExtension(pageIndexPath, isTypeScript);
 };
 
-const preparePackageJsonForTemplate = (appPath, appName) => {
+const preparePackageJsonForTemplate = (appPath, appName, isTypeScript) => {
     const dependencies = [
         { name: 'sass', version: '^1.34.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
-        { name: 'react-router-dom', version: '^5.0.0' },
+        { name: 'react-router-dom', version: '^6.3.0' },
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
         { name: 'postinstall', value: 'npm run build-themes' }
     ];
+
+    if(isTypeScript) {
+        dependencies.push({ name: '@types/react-router-dom', version: '^5.1.5' });
+        dependencies.push({ name: '@types/react', version: '^17.0.39' });
+    }
 
     packageJsonUtils.addDependencies(appPath, dependencies);
     packageJsonUtils.updateScripts(appPath, scripts);
@@ -103,14 +108,14 @@ const addTemplate = (appPath, appName, templateOptions) => {
         addSamplePages(appPath, templateOptions);
     }
 
-    preparePackageJsonForTemplate(appPath, appName);
+    preparePackageJsonForTemplate(appPath, appName, templateOptions.isTypeScript);
     updateJsonPropName(manifestPath, appName);
     addPolyfills(packageJsonUtils.getPackageJsonPath(), indexPath);
-    install({}, appPath, styles);
+    install({ isTypeScript: templateOptions.isTypeScript }, appPath, styles);
 };
 
 const install = (options, appPath, styles) => {
-    const isTypeScript = typescriptUtils.isTypeScript(typescriptUtils.getTemplateType('react'));
+    const isTypeScript = options.isTypeScript !== undefined ? options.isTypeScript : typescriptUtils.isTypeScript(typescriptUtils.getTemplateType('react'));
 
     appPath = appPath ? appPath : process.cwd();
     const pathToMainComponent = typescriptUtils.setFileExtension(
@@ -145,7 +150,7 @@ const getComponentPageName = (viewName) => {
 const getNavigationData = (viewName, componentName, icon) => {
     const pagePath = stringUtils.dasherize(viewName);
     return {
-        route: `\n  {\n    path: \'/${pagePath}\',\n    component: ${componentName}\n  }`,
+        route: `\n  {\n    path: \'/${pagePath}\',\n    element: ${componentName}\n  }`,
         navigation: `\n  {\n    text: \'${stringUtils.humanize(viewName)}\',\n    path: \'/${pagePath}\',\n    icon: \'${icon}\'\n  }`
     };
 };

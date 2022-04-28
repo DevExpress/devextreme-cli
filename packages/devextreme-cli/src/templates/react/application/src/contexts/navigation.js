@@ -14,17 +14,17 @@ function NavigationProvider(props) {
   );
 }
 
-function withNavigationWatcher(Component) {
-  return function (props) {
-    const { path } = props.match;
+function withNavigationWatcher(Component, path) {
+  const WrappedComponent = function (props) {
     const { setNavigationData } = useNavigation();
 
     useEffect(() => {
       setNavigationData({ currentPath: path });
     }, [path, setNavigationData]);
 
-    return React.createElement(Component, props);
+    return <Component  {...props} />;
   }
+  return <WrappedComponent />;
 }
 
 export {

@@ -3,7 +3,7 @@ import Drawer from 'devextreme-react/drawer';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import React, { useState, useCallback, useRef } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Header, SideNavigationMenu, Footer } from '../../components';
 import './side-nav-inner-toolbar.scss';
 import { useScreenSize } from '../../utils/media-query';
@@ -12,7 +12,7 @@ import { useMenuPatch } from '../../utils/patches';
 
 export default function SideNavInnerToolbar({ title, children }) {
   const scrollViewRef = useRef();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isXSmall, isLarge } = useScreenSize();
   const [patchCssClass, onMenuReady] = useMenuPatch();
   const [menuStatus, setMenuStatus] = useState(
@@ -50,14 +50,14 @@ export default function SideNavInnerToolbar({ title, children }) {
       return;
     }
 
-    history.push(path);
+    navigate(path);
     scrollViewRef.current.instance.scrollTo(0);
 
     if (!isLarge || menuStatus === MenuStatus.TemporaryOpened) {
       setMenuStatus(MenuStatus.Closed);
       event.stopPropagation();
     }
-  }, [history, menuStatus, isLarge]);
+  }, [navigate, menuStatus, isLarge]);
 
   return (
     <div className={'side-nav-inner-toolbar'}>
