@@ -1,9 +1,9 @@
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
 import { getUser, signIn as sendSignInRequest } from '../api/auth';
-<%=#isTypeScript%>import { IAuthProviderProps, IUser, IAuthContextType } from '../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import { AuthProviderProps, User, AuthContextType } from '../types';<%=/isTypeScript%>
 
-function AuthProvider(props<%=#isTypeScript%>: IAuthProviderProps<%=/isTypeScript%>) {
-  const [user, setUser] = useState<%=#isTypeScript%><IUser><%=/isTypeScript%>();
+function AuthProvider(props<%=#isTypeScript%>: AuthProviderProps<%=/isTypeScript%>) {
+  const [user, setUser] = useState<%=#isTypeScript%><User><%=/isTypeScript%>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ function AuthProvider(props<%=#isTypeScript%>: IAuthProviderProps<%=/isTypeScrip
   );
 }
 
-const AuthContext = createContext<%=#isTypeScript%><IAuthContextType><%=/isTypeScript%>({ loading: false }<%=#isTypeScript%> as IAuthContextType<%=/isTypeScript%>);
+const AuthContext = createContext<%=#isTypeScript%><AuthContextType><%=/isTypeScript%>({ loading: false }<%=#isTypeScript%> as AuthContextType<%=/isTypeScript%>);
 const useAuth = () => useContext(AuthContext);
 
 export { AuthProvider, useAuth }

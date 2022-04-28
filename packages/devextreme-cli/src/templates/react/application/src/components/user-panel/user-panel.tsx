@@ -4,9 +4,9 @@ import ContextMenu, { Position } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
 import { useAuth } from '../../contexts/auth';
 import './user-panel.scss';
-<%=#isTypeScript%>import { IUserPanelProps } from '../../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import { UserPanelProps } from '../../types';<%=/isTypeScript%>
 
-export default function UserPanel({ menuMode }<%=#isTypeScript%>: IUserPanelProps<%=/isTypeScript%>) {
+export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps<%=/isTypeScript%>) {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 

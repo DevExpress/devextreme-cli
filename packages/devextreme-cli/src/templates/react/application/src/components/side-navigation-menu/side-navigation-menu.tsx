@@ -4,11 +4,11 @@ import { navigation } from '../../app-navigation';
 import { useNavigation } from '../../contexts/navigation';
 import { useScreenSize } from '../../utils/media-query';
 import './side-navigation-menu.scss';
-<%=#isTypeScript%>import { ISideNavigationMenuProps } from '../../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import { SideNavigationMenuProps } from '../../types';<%=/isTypeScript%>
 
 import * as events from 'devextreme/events';
 
-export default function SideNavigationMenu(props<%=#isTypeScript%>: ISideNavigationMenuProps<%=/isTypeScript%>) {
+export default function SideNavigationMenu(props<%=#isTypeScript%>: SideNavigationMenuProps<%=/isTypeScript%>) {
   const {
     children,
     selectedItemChanged,

@@ -1,9 +1,9 @@
 import React from 'react';
 import ScrollView from 'devextreme-react/scroll-view';
 import './single-card.scss';
-<%=#isTypeScript%>import { ISingleCardProps } from '../../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import { SingleCardProps } from '../../types';<%=/isTypeScript%>
 
-export default function SingleCard({ title, description, children }<%=#isTypeScript%>: ISingleCardProps<%=/isTypeScript%>) {
+export default function SingleCard({ title, description, children }<%=#isTypeScript%>: SingleCardProps<%=/isTypeScript%>) {
   return (
     <ScrollView height={'100%'} width={'100%'} className={'with-footer single-card'}>
       <div className={'dx-card content'}>

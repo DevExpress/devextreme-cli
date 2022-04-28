@@ -7,9 +7,9 @@ import './side-nav-outer-toolbar.scss';
 import { useScreenSize } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
 import { useMenuPatch } from '../../utils/patches';
-<%=#isTypeScript%>import { ISideNavToolbarProps } from '../../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import { SideNavToolbarProps } from '../../types';<%=/isTypeScript%>
 
-export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%>: ISideNavToolbarProps<%=/isTypeScript%>) {
+export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%>: SideNavToolbarProps<%=/isTypeScript%>) {
   const scrollViewRef = useRef<%=#isTypeScript%><ScrollView><%=/isTypeScript%>(null);
   const navigate = useNavigate();
   const { isXSmall, isLarge } = useScreenSize();

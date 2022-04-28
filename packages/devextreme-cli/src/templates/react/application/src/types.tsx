@@ -1,12 +1,12 @@
 import React from 'react';
 
-export interface IHeaderProps {
+export interface HeaderProps {
     menuToggleEnabled: boolean;
     title?: string;
     toggleMenu: (e: any) => void;
 }
 
-export interface ISideNavigationMenuProps {
+export interface SideNavigationMenuProps {
     selectedItemChanged: (e: any) => void;
     openMenu: (e: any) => void;
     compactMode: boolean;
@@ -14,32 +14,32 @@ export interface ISideNavigationMenuProps {
     children: React.ReactNode;
 }
 
-export interface IUserPanelProps {
+export interface UserPanelProps {
     menuMode: 'context' | 'list';
 }
 
-export interface IUser {
+export interface User {
     email: string;
     avatarUrl: string;
 }
 
-export type IAuthContextType = {
-    user?: IUser;
-    signIn: (email: string, password: string) => Promise<{isOk: boolean, data?: IUser, message?: string}>;
+export type AuthContextType = {
+    user?: User;
+    signIn: (email: string, password: string) => Promise<{isOk: boolean, data?: User, message?: string}>;
     signOut: () => void;
     loading: boolean;
 }
 
-export interface IAuthProviderProps {
+export interface AuthProviderProps {
     children: React.ReactNode;
 }
 
-export interface ISideNavToolbarProps {
+export interface SideNavToolbarProps {
     title: string;
     children: React.ReactNode;
 }
 
-export interface ISingleCardProps {
+export interface SingleCardProps {
     title?: string;
     description?: string;
     children: React.ReactNode;
@@ -47,13 +47,13 @@ export interface ISingleCardProps {
 
 export type Handle = () => void;
 
-interface INavigationData {
+interface NavigationData {
     currentPath: string;
 }
 
 export type NavigationContextType = {
-    setNavigationData?: ({ currentPath }: INavigationData) => void;
-    navigationData: INavigationData;
+    setNavigationData?: ({ currentPath }: NavigationData) => void;
+    navigationData: NavigationData;
 }
 
 export type NavigationProviderType = {
