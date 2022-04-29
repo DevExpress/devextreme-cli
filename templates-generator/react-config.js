@@ -34,7 +34,7 @@ module.exports = {
                     after: '<%=#isTypeScript%>?<%=/isTypeScript%>.'
                 },
                 {
-                    before: /(?<type>: [A-Z]\w+)\)/g,
+                    before: /(?<type>: [A-Z](.*?))\)/g,
                     after: '<%=#isTypeScript%>$<type><%=/isTypeScript%>)'
                 },
                 {

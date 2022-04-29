@@ -8,7 +8,7 @@ import './side-navigation-menu.scss';
 
 import * as events from 'devextreme/events';
 
-export default function SideNavigationMenu(props<%=#isTypeScript%>: SideNavigationMenuProps<%=/isTypeScript%>) {
+export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsWithChildren<SideNavigationMenuProps><%=/isTypeScript%>) {
   const {
     children,
     selectedItemChanged,
@@ -19,12 +19,9 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: SideNavigati
 
   const { isLarge } = useScreenSize();
   function normalizePath () {
-    return navigation.map((item) => {
-      if(item.path && !(/^\//.test(item.path))){
-        item.path = `/${item.path}`;
-      }
-      return {...item, expanded: isLarge};
-    });
+    return navigation.map((item) => (
+      { ...item, expanded: isLarge, path: item.path && !(/^\//.test(item.path)) ? `/${item.path}` : item.path }
+    ))
   }
 
   const items = useMemo(

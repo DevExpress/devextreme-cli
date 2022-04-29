@@ -1,10 +1,10 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-<%=#isTypeScript%>import { NavigationContextType, NavigationProviderType } from '../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import { NavigationContextType } from '../types';<%=/isTypeScript%>
 
 const NavigationContext = createContext<%=#isTypeScript%><NavigationContextType><%=/isTypeScript%>({}<%=#isTypeScript%> as NavigationContextType<%=/isTypeScript%>);
 const useNavigation = () => useContext(NavigationContext);
 
-function NavigationProvider(props<%=#isTypeScript%>: NavigationProviderType<%=/isTypeScript%>) {
+function NavigationProvider(props<%=#isTypeScript%>: React.PropsWithChildren<{}><%=/isTypeScript%>) {
   const [navigationData, setNavigationData] = useState({ currentPath: '' });
 
   return (

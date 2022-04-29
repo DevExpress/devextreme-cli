@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface HeaderProps {
     menuToggleEnabled: boolean;
     title?: string;
@@ -11,7 +9,6 @@ export interface SideNavigationMenuProps {
     openMenu: (e: any) => void;
     compactMode: boolean;
     onMenuReady: (e: any) => void;
-    children: React.ReactNode;
 }
 
 export interface UserPanelProps {
@@ -30,19 +27,13 @@ export type AuthContextType = {
     loading: boolean;
 }
 
-export interface AuthProviderProps {
-    children: React.ReactNode;
-}
-
 export interface SideNavToolbarProps {
     title: string;
-    children: React.ReactNode;
 }
 
 export interface SingleCardProps {
     title?: string;
     description?: string;
-    children: React.ReactNode;
 }
 
 export type Handle = () => void;
@@ -54,8 +45,4 @@ interface NavigationData {
 export type NavigationContextType = {
     setNavigationData?: ({ currentPath }: NavigationData) => void;
     navigationData: NavigationData;
-}
-
-export type NavigationProviderType = {
-    children: React.ReactNode;
 }

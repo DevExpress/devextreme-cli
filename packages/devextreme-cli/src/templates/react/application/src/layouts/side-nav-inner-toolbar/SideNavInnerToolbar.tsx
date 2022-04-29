@@ -11,7 +11,7 @@ import { Template } from 'devextreme-react/core/template';
 import { useMenuPatch } from '../../utils/patches';
 <%=#isTypeScript%>import { SideNavToolbarProps } from '../../types';<%=/isTypeScript%>
 
-export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%>: SideNavToolbarProps<%=/isTypeScript%>) {
+export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%>: React.PropsWithChildren<SideNavToolbarProps><%=/isTypeScript%>) {
   const scrollViewRef = useRef<%=#isTypeScript%><ScrollView><%=/isTypeScript%>(null);
   const navigate = useNavigate();
   const { isXSmall, isLarge } = useScreenSize();
