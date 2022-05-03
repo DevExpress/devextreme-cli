@@ -12,7 +12,7 @@ import Form, {
 import notify from 'devextreme/ui/notify';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import { createAccount } from '../../api/auth';
-import './create-account-form.scss';
+import './CreateAccountForm.scss';
 
 export default function CreateAccountForm() {
   const navigate = useNavigate();

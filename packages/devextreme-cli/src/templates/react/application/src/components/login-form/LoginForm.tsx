@@ -12,7 +12,7 @@ import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
 import { useAuth } from '../../contexts/auth';
 
-import './login-form.scss';
+import './LoginForm.scss';
 
 export default function LoginForm() {
   const navigate = useNavigate();
