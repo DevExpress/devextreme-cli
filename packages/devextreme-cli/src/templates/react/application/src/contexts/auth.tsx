@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
 import { getUser, signIn as sendSignInRequest } from '../api/auth';
-<%=#isTypeScript%>import { User, AuthContextType } from '../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import type { User, AuthContextType } from '../types';<%=/isTypeScript%>
 
 function AuthProvider(props<%=#isTypeScript%>: React.PropsWithChildren<any><%=/isTypeScript%>) {
   const [user, setUser] = useState<%=#isTypeScript%><User><%=/isTypeScript%>();

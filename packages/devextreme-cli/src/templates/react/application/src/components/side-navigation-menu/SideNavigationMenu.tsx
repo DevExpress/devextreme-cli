@@ -4,7 +4,7 @@ import { navigation } from '../../app-navigation';
 import { useNavigation } from '../../contexts/navigation';
 import { useScreenSize } from '../../utils/media-query';
 import './SideNavigationMenu.scss';
-<%=#isTypeScript%>import { SideNavigationMenuProps } from '../../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import type { SideNavigationMenuProps } from '../../types';<%=/isTypeScript%>
 
 import * as events from 'devextreme/events';
 

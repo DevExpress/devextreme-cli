@@ -1,5 +1,5 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-<%=#isTypeScript%>import { NavigationContextType } from '../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import type { NavigationContextType } from '../types';<%=/isTypeScript%>
 
 const NavigationContext = createContext<%=#isTypeScript%><NavigationContextType><%=/isTypeScript%>({}<%=#isTypeScript%> as NavigationContextType<%=/isTypeScript%>);
 const useNavigation = () => useContext(NavigationContext);

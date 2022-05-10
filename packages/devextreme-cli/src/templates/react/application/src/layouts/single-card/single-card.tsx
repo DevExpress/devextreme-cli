@@ -1,7 +1,7 @@
 import React from 'react';
 import ScrollView from 'devextreme-react/scroll-view';
 import './single-card.scss';
-<%=#isTypeScript%>import { SingleCardProps } from '../../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import type { SingleCardProps } from '../../types';<%=/isTypeScript%>
 
 export default function SingleCard({ title, description, children }<%=#isTypeScript%>: React.PropsWithChildren<SingleCardProps><%=/isTypeScript%>) {
   return (

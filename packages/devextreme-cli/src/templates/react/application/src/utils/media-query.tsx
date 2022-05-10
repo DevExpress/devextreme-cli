@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-<%=#isTypeScript%>import { Handle } from '../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import type { Handle } from '../types';<%=/isTypeScript%>
 
 export const useScreenSize = () => {
   const [screenSize, setScreenSize] = useState(getScreenSize());
