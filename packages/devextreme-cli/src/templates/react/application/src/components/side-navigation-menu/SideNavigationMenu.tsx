@@ -41,7 +41,7 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
     }
 
     wrapperRef.current = element;
-    events.on(element, 'dxclick', (e<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
+    events.on(element, 'dxclick', (e<%=#isTypeScript%>: React.PointerEvent<%=/isTypeScript%>) => {
       openMenu(e);
     });
   }, [openMenu]);

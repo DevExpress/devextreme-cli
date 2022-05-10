@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext, useContext, useCallback } fr
 import { getUser, signIn as sendSignInRequest } from '../api/auth';
 <%=#isTypeScript%>import type { User, AuthContextType } from '../types';<%=/isTypeScript%>
 
-function AuthProvider(props<%=#isTypeScript%>: React.PropsWithChildren<any><%=/isTypeScript%>) {
+function AuthProvider(props<%=#isTypeScript%>: React.PropsWithChildren<unknown><%=/isTypeScript%>) {
   const [user, setUser] = useState<%=#isTypeScript%><User><%=/isTypeScript%>();
   const [loading, setLoading] = useState(true);
 
