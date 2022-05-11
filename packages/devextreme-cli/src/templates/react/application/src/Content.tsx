@@ -1,5 +1,4 @@
-import React from 'react';
-import { Switch, Route<%=^empty%>, Redirect<%=/empty%> } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import appInfo from './app-info';
 import routes from './app-routes';
 import { <%=layout%> as SideNavBarLayout } from './layouts';
@@ -8,17 +7,19 @@ import { Footer } from './components';
 export default function Content() {
   return (
     <SideNavBarLayout title={appInfo.title}>
-      <Switch>
-        {routes.map(({ path, component }) => (
+      <Routes>
+        {routes.map(({ path, element }) => (
           <Route
-            exact
             key={path}
             path={path}
-            component={component}
+            element={element}
           />
-        ))}<%=^empty%>
-        <Redirect to={'/home'} /><%=/empty%>
-      </Switch>
+        ))}
+        <Route
+          path='*'
+          element={<Navigate to='/home' />}
+        />
+      </Routes>
       <Footer>
         Copyright © 2011-{new Date().getFullYear()} {appInfo.title} Inc.
         <br />
@@ -28,3 +29,4 @@ export default function Content() {
     </SideNavBarLayout>
   );
 }
+

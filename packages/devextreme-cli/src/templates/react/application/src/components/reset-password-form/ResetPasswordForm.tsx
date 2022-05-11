@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Form, {
   Item,
   Label,
@@ -11,14 +11,14 @@ import Form, {
 import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
 import { resetPassword } from '../../api/auth';
-import './reset-password-form.scss';
+import './ResetPasswordForm.scss';
 
 const notificationText = 'We\'ve sent a link to reset your password. Check your inbox.';
 
-export default function ResetPasswordForm(props) {
-  const history = useHistory();
+export default function ResetPasswordForm() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const formData = useRef({});
+  const formData = useRef({ email: '', password: '' });
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -29,12 +29,12 @@ export default function ResetPasswordForm(props) {
     setLoading(false);
 
     if (result.isOk) {
-      history.push('/login');
+      navigate('/login');
       notify(notificationText, 'success', 2500);
     } else {
       notify(result.message, 'error', 2000);
     }
-  }, [history]);
+  }, [navigate]);
 
   return (
     <form className={'reset-password-form'} onSubmit={onSubmit}>

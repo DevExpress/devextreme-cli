@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Form, {
   Item,
   Label,
@@ -12,13 +12,13 @@ import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
 import { useAuth } from '../../contexts/auth';
 
-import './login-form.scss';
+import './LoginForm.scss';
 
 export default function LoginForm() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
-  const formData = useRef({});
+  const formData = useRef({ email: '', password: '' });
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -33,8 +33,8 @@ export default function LoginForm() {
   }, [signIn]);
 
   const onCreateAccountClick = useCallback(() => {
-    history.push('/create-account');
-  }, [history]);
+    navigate('/create-account');
+  }, [navigate]);
 
   return (
     <form className={'login-form'} onSubmit={onSubmit}>

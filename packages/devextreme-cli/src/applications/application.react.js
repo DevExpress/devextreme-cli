@@ -1,7 +1,8 @@
 const runCommand = require('../utility/run-command');
 const path = require('path');
 const fs = require('fs');
-const getLayoutInfo = require('../utility/prompts/layout').getLayoutInfo;
+const getLayoutInfo = require('../utility/prompts/layout');
+const getTemplateTypeInfo = require('../utility/prompts/typescript');
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
@@ -9,24 +10,38 @@ const modifyJson = require('../utility/modify-json-file');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
+const typescriptUtils = require('../utility/typescript-extension');
 const removeFile = require('../utility/file-operations').remove;
-const pathToPagesIndex = path.join(process.cwd(), 'src', 'pages', 'index.js');
 const latestVersions = require('../utility/latest-versions');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
 ];
 
-const preparePackageJsonForTemplate = (appPath, appName) => {
+const getExtension = (appPath) => {
+    return fs.existsSync(path.join(appPath, 'src', 'App.tsx')) ? '.tsx' : '.js';
+};
+
+const pathToPagesIndex = () => {
+    const extension = getExtension(process.cwd());
+    return path.join(process.cwd(), 'src', 'pages', `index${extension}`);
+};
+
+const preparePackageJsonForTemplate = (appPath, appName, isTypeScript) => {
     const dependencies = [
         { name: 'sass', version: '^1.34.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
-        { name: 'react-router-dom', version: '^5.0.0' },
+        { name: 'react-router-dom', version: '^6.3.0' },
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
         { name: 'postinstall', value: 'npm run build-themes' }
     ];
+
+    if(isTypeScript) {
+        dependencies.push({ name: '@types/react-router-dom', version: '^5.1.5' });
+        dependencies.push({ name: '@types/react', version: '^17.0.39' });
+    }
 
     packageJsonUtils.addDependencies(appPath, dependencies);
     packageJsonUtils.updateScripts(appPath, scripts);
@@ -41,48 +56,66 @@ const updateJsonPropName = (path, name) => {
     });
 };
 
-const create = (appName, options) => {
-    const commandArguments = ['-p=create-react-app', 'create-react-app', appName];
+const create = async(appName, options) => {
+    const templateType = await getTemplateTypeInfo(options.template);
+    const layoutType = await getLayoutInfo(options.layout);
 
-    getLayoutInfo(options.layout).then((layoutInfo) => {
-        runCommand('npx', commandArguments).then(() => {
-            const appPath = path.join(process.cwd(), appName);
-            const humanizedName = stringUtils.humanize(appName);
-            const templateOptions = Object.assign({}, options, {
-                project: humanizedName,
-                layout: stringUtils.classify(layoutInfo.layout)
-            });
-            modifyIndexHtml(appPath, humanizedName);
-            addTemplate(appPath, appName, templateOptions);
-        });
+    const templateOptions = Object.assign({}, options, {
+        project: stringUtils.humanize(appName),
+        layout: stringUtils.classify(layoutType),
+        isTypeScript: typescriptUtils.isTypeScript(templateType)
     });
+
+    const commandArguments = ['-p=create-react-app', 'create-react-app', appName];
+    if(templateOptions.isTypeScript) {
+        commandArguments.push('--template typescript');
+    }
+
+    await runCommand('npx', commandArguments);
+
+    const appPath = path.join(process.cwd(), appName);
+
+    modifyIndexHtml(appPath, templateOptions.project);
+    addTemplate(appPath, appName, templateOptions);
 };
 
 const modifyIndexHtml = (appPath, appName) => {
     const indexHtmlPath = path.join(appPath, 'public', 'index.html');
-    let htmlContent = fs.readFileSync(indexHtmlPath).toString();
 
+    let htmlContent = fs.readFileSync(indexHtmlPath).toString();
     htmlContent = htmlContent.replace(/<title>(\w+\s*)+<\/title>/, `<title>${appName}<\/title>`);
     htmlContent = htmlContent.replace('<body>', '<body class="dx-viewport">');
+
     fs.writeFileSync(indexHtmlPath, htmlContent);
 };
 
+const getCorrectPath = (extension, pathToApp, isTypeScript) => {
+    return extension === '.ts' || extension === '.tsx' ? typescriptUtils.setFileExtension(pathToApp, isTypeScript) : pathToApp;
+};
+
 const addTemplate = (appPath, appName, templateOptions) => {
-    const templateSourcePath = path.join(__dirname, '..', 'templates', 'react', 'application');
+    const applicationTemplatePath = path.join(
+        templateCreator.getTempaltePath('react'),
+        'application'
+    );
+
     const manifestPath = path.join(appPath, 'public', 'manifest.json');
-    const indexPath = path.join(appPath, 'src', 'index.js');
+    const indexPath = path.join(appPath, 'src', templateOptions.isTypeScript ? 'index.tsx' : 'index.js');
+
     const styles = [
         './themes/generated/theme.additional.css',
         './themes/generated/theme.base.css',
         'devextreme/dist/css/dx.common.css'
     ];
 
-    templateCreator.moveTemplateFilesToProject(templateSourcePath, appPath, templateOptions);
+    templateCreator.moveTemplateFilesToProject(applicationTemplatePath, appPath, templateOptions, getCorrectPath);
     removeFile(path.join(appPath, 'src', 'App.css'));
+    !templateOptions.isTypeScript && removeFile(path.join(appPath, 'src', 'types.js'));
     if(!templateOptions.empty) {
-        addSamplePages(appPath);
+        addSamplePages(appPath, templateOptions);
     }
-    preparePackageJsonForTemplate(appPath, appName);
+
+    preparePackageJsonForTemplate(appPath, appName, templateOptions.isTypeScript);
     updateJsonPropName(manifestPath, appName);
     addPolyfills(packageJsonUtils.getPackageJsonPath(), indexPath);
     install({}, appPath, styles);
@@ -90,7 +123,8 @@ const addTemplate = (appPath, appName, templateOptions) => {
 
 const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
-    const pathToMainComponent = path.join(appPath, 'src', 'App.js');
+
+    const pathToMainComponent = path.join(appPath, 'src', `App${getExtension(appPath)}`);
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
@@ -119,7 +153,7 @@ const getComponentPageName = (viewName) => {
 const getNavigationData = (viewName, componentName, icon) => {
     const pagePath = stringUtils.dasherize(viewName);
     return {
-        route: `\n  {\n    path: \'/${pagePath}\',\n    component: ${componentName}\n  }`,
+        route: `\n  {\n    path: \'/${pagePath}\',\n    element: ${componentName}\n  }`,
         navigation: `\n  {\n    text: \'${stringUtils.humanize(viewName)}\',\n    path: \'/${pagePath}\',\n    icon: \'${icon}\'\n  }`
     };
 };
@@ -130,7 +164,7 @@ const createPathToPage = (pageName) => {
 
     if(!fs.existsSync(pagesPath)) {
         fs.mkdirSync(pagesPath);
-        createPagesIndex();
+        fs.writeFileSync(pathToPagesIndex(), '');
     }
 
     if(!fs.existsSync(newPagePath)) {
@@ -140,27 +174,37 @@ const createPathToPage = (pageName) => {
     return newPagePath;
 };
 
-const createPagesIndex = () => {
-    fs.writeFileSync(pathToPagesIndex, '');
-};
+const addSamplePages = (appPath, templateOptions) => {
+    const samplePageTemplatePath = path.join(
+        templateCreator.getTempaltePath('react'),
+        'sample-pages'
+    );
 
-const addSamplePages = (appPath) => {
-    const templateSourcePath = path.join(__dirname, '..', 'templates', 'react', 'sample-pages');
     const pagesPath = path.join(appPath, 'src', 'pages');
     fs.mkdirSync(pagesPath);
-    templateCreator.moveTemplateFilesToProject(templateSourcePath, pagesPath, {});
+    templateCreator.moveTemplateFilesToProject(samplePageTemplatePath, pagesPath, {
+        isTypeScript: templateOptions.isTypeScript
+    }, getCorrectPath);
 };
 
 const addView = (pageName, options) => {
+    const pageTemplatePath = path.join(
+        templateCreator.getTempaltePath('react'),
+        'page'
+    );
+    const extension = getExtension(process.cwd());
+
     const componentName = getComponentPageName(pageName);
     const pathToPage = createPathToPage(pageName);
-    const pageTemplatePath = path.join(__dirname, '..', 'templates', 'react', 'page');
-    const routingModulePath = path.join(process.cwd(), 'src', 'app-routes.js');
-    const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js');
+    const routingModulePath = path.join(process.cwd(), 'src', `app-routes${extension}`);
+    const navigationModulePath = path.join(process.cwd(), 'src', `app-navigation${extension}`);
     const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'folder');
 
-    templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath);
-    moduleUtils.insertExport(pathToPagesIndex, componentName, `./${pageName}/${pageName}`);
+    const getCorrectExtension = (fileExtension) => {
+        return fileExtension === '.tsx' ? extension : fileExtension;
+    };
+    templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath, getCorrectExtension);
+    moduleUtils.insertExport(pathToPagesIndex(), componentName, `./${pageName}/${pageName}`);
     moduleUtils.insertImport(routingModulePath, './pages', componentName);
     insertItemToArray(routingModulePath, navigationData.route);
     insertItemToArray(navigationModulePath, navigationData.navigation);

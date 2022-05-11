@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Form, {
   Item,
   Label,
@@ -12,12 +12,12 @@ import Form, {
 import notify from 'devextreme/ui/notify';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import { createAccount } from '../../api/auth';
-import './create-account-form.scss';
+import './CreateAccountForm.scss';
 
-export default function CreateAccountForm(props) {
-  const history = useHistory();
+export default function CreateAccountForm() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const formData = useRef({});
+  const formData = useRef({ email: '', password: '' });
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -28,11 +28,11 @@ export default function CreateAccountForm(props) {
     setLoading(false);
 
     if (result.isOk) {
-      history.push('/login');
+      navigate('/login');
     } else {
       notify(result.message, 'error', 2000);
     }
-  }, [history]);
+  }, [navigate]);
 
   const confirmPassword = useCallback(
     ({ value }) => value === formData.current.password,

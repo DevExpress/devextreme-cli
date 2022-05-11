@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        APPROACH: [ angular, vue-v3, vue-v2, react ]
+        APPROACH: [ angular, vue-v3, vue-v2, react, react-ts ]
         NODE: [ 14, 16 ]
 
     runs-on: ubuntu-latest

@@ -1,4 +1,4 @@
-const getLayoutInfo = require('../utility/prompts/layout').getLayoutInfo;
+const getLayoutInfo = require('../utility/prompts/layout');
 const path = require('path');
 const moduleWorker = require('../utility/module');
 const runCommand = require('../utility/run-command');
@@ -70,7 +70,9 @@ const install = (options) => {
     runSchematicCommand('install', { ...options, globalNgCliVersion });
 };
 
-const create = (appName, options) => {
+const create = async(appName, options) => {
+    const layout = await getLayoutInfo(options.layout);
+
     const commandArguments = [
         'new',
         appName,
@@ -80,22 +82,18 @@ const create = (appName, options) => {
         '--skip-install=true',
     ];
 
-    getLayoutInfo(options.layout).then(layoutInfo => {
-        runNgCommand(commandArguments).then(() => {
-            const appPath = path.join(process.cwd(), appName);
+    await runNgCommand(commandArguments);
 
-            options.resolveConflicts = 'override';
-            options.updateBudgets = true;
-            options.layout = layoutInfo.layout;
-            addTemplate(appName, options, {
-                cwd: appPath
-            });
+    const appPath = path.join(process.cwd(), appName);
 
-            changeMainTs(appPath);
-        }).catch((e) => {
-            console.log(e);
-        });
+    options.resolveConflicts = 'override';
+    options.updateBudgets = true;
+    options.layout = layout;
+    addTemplate(appName, options, {
+        cwd: appPath
     });
+
+    changeMainTs(appPath);
 };
 
 const addTemplate = (appName, options, evaluatingOptions) => {

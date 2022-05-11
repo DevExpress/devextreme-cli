@@ -1,18 +1,17 @@
-import Button from 'devextreme-react/button';
 import Drawer from 'devextreme-react/drawer';
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar, { Item } from 'devextreme-react/toolbar';
 import React, { useState, useCallback, useRef } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Header, SideNavigationMenu, Footer } from '../../components';
-import './side-nav-inner-toolbar.scss';
+import './side-nav-outer-toolbar.scss';
 import { useScreenSize } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
 import { useMenuPatch } from '../../utils/patches';
+<%=#isTypeScript%>import type { SideNavToolbarProps } from '../../types';<%=/isTypeScript%>
 
-export default function SideNavInnerToolbar({ title, children }) {
-  const scrollViewRef = useRef();
-  const history = useHistory();
+export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%>: React.PropsWithChildren<SideNavToolbarProps><%=/isTypeScript%>) {
+  const scrollViewRef = useRef<%=#isTypeScript%><ScrollView><%=/isTypeScript%>(null);
+  const navigate = useNavigate();
   const { isXSmall, isLarge } = useScreenSize();
   const [patchCssClass, onMenuReady] = useMenuPatch();
   const [menuStatus, setMenuStatus] = useState(
@@ -42,6 +41,7 @@ export default function SideNavInnerToolbar({ title, children }) {
         ? MenuStatus.Closed
         : prevMenuStatus
     );
+    return true;
   }, [isLarge]);
 
   const onNavigationChanged = useCallback(({ itemData: { path }, event, node }) => {
@@ -50,17 +50,22 @@ export default function SideNavInnerToolbar({ title, children }) {
       return;
     }
 
-    history.push(path);
-    scrollViewRef.current.instance.scrollTo(0);
+    navigate(path);
+    scrollViewRef.current<%=#isTypeScript%>?<%=/isTypeScript%>.instance.scrollTo(0);
 
     if (!isLarge || menuStatus === MenuStatus.TemporaryOpened) {
       setMenuStatus(MenuStatus.Closed);
       event.stopPropagation();
     }
-  }, [history, menuStatus, isLarge]);
+  }, [navigate, menuStatus, isLarge]);
 
   return (
-    <div className={'side-nav-inner-toolbar'}>
+    <div className={'side-nav-outer-toolbar'}>
+      <Header
+        menuToggleEnabled
+        toggleMenu={toggleMenu}
+        title={title}
+      />
       <Drawer
         className={['drawer', patchCssClass].join(' ')}
         position={'before'}
@@ -74,18 +79,14 @@ export default function SideNavInnerToolbar({ title, children }) {
         template={'menu'}
       >
         <div className={'container'}>
-          <Header
-            menuToggleEnabled={isXSmall}
-            toggleMenu={toggleMenu}
-          />
           <ScrollView ref={scrollViewRef} className={'layout-body with-footer'}>
             <div className={'content'}>
-              {React.Children.map(children, item => {
+              {React.Children.map(children, (item<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
                 return item.type !== Footer && item;
               })}
             </div>
             <div className={'content-block'}>
-              {React.Children.map(children, item => {
+              {React.Children.map(children, (item<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
                 return item.type === Footer && item;
               })}
             </div>
@@ -98,18 +99,6 @@ export default function SideNavInnerToolbar({ title, children }) {
             openMenu={temporaryOpenMenu}
             onMenuReady={onMenuReady}
           >
-            <Toolbar id={'navigation-header'}>
-              {
-                !isXSmall &&
-                <Item
-                  location={'before'}
-                  cssClass={'menu-button'}
-                >
-                  <Button icon="menu" stylingMode="text" onClick={toggleMenu} />
-                </Item>
-              }
-              <Item location={'before'} cssClass={'header-title'} text={title} />
-            </Toolbar>
           </SideNavigationMenu>
         </Template>
       </Drawer>

@@ -1,6 +1,6 @@
 import defaultUser from '../utils/default-user';
 
-export async function signIn(email, password) {
+export async function signIn(email<%=#isTypeScript%>: string<%=/isTypeScript%>, password<%=#isTypeScript%>: string<%=/isTypeScript%>) {
   try {
     // Send request
     console.log(email, password);
@@ -34,7 +34,7 @@ export async function getUser() {
   }
 }
 
-export async function createAccount(email, password) {
+export async function createAccount(email<%=#isTypeScript%>: string<%=/isTypeScript%>, password<%=#isTypeScript%>: string<%=/isTypeScript%>) {
   try {
     // Send request
     console.log(email, password);
@@ -51,7 +51,7 @@ export async function createAccount(email, password) {
   }
 }
 
-export async function changePassword(email, recoveryCode) {
+export async function changePassword(email<%=#isTypeScript%>: string<%=/isTypeScript%>, recoveryCode<%=#isTypeScript%>?: string<%=/isTypeScript%>) {
   try {
     // Send request
     console.log(email, recoveryCode);
@@ -68,7 +68,7 @@ export async function changePassword(email, recoveryCode) {
   }
 }
 
-export async function resetPassword(email) {
+export async function resetPassword(email<%=#isTypeScript%>: string<%=/isTypeScript%>) {
   try {
     // Send request
     console.log(email);

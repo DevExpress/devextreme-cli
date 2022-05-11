@@ -1,16 +1,17 @@
 import React, { useMemo } from 'react';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ContextMenu, { Position } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
 import { useAuth } from '../../contexts/auth';
-import './user-panel.scss';
+import './UserPanel.scss';
+<%=#isTypeScript%>import type { UserPanelProps } from '../../types';<%=/isTypeScript%>
 
-export default function UserPanel({ menuMode }) {
+export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps<%=/isTypeScript%>) {
   const { user, signOut } = useAuth();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   function navigateToProfile() {
-    history.push("/profile");
+    navigate("/profile");
   }
   const menuItems = useMemo(() => ([
     {
@@ -24,19 +25,18 @@ export default function UserPanel({ menuMode }) {
       onClick: signOut
     }
   ]), [signOut]);
-
   return (
     <div className={'user-panel'}>
       <div className={'user-info'}>
         <div className={'image-container'}>
           <div
             style={{
-              background: `url(${user.avatarUrl}) no-repeat #fff`,
+              background: `url(${user<%=#isTypeScript%>!<%=/isTypeScript%>.avatarUrl}) no-repeat #fff`,
               backgroundSize: 'cover'
             }}
             className={'user-image'} />
         </div>
-        <div className={'user-name'}>{user.email}</div>
+        <div className={'user-name'}>{user<%=#isTypeScript%>!<%=/isTypeScript%>.email}</div>
       </div>
 
       {menuMode === 'context' && (

@@ -3,11 +3,12 @@ import TreeView from 'devextreme-react/tree-view';
 import { navigation } from '../../app-navigation';
 import { useNavigation } from '../../contexts/navigation';
 import { useScreenSize } from '../../utils/media-query';
-import './side-navigation-menu.scss';
+import './SideNavigationMenu.scss';
+<%=#isTypeScript%>import type { SideNavigationMenuProps } from '../../types';<%=/isTypeScript%>
 
 import * as events from 'devextreme/events';
 
-export default function SideNavigationMenu(props) {
+export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsWithChildren<SideNavigationMenuProps><%=/isTypeScript%>) {
   const {
     children,
     selectedItemChanged,
@@ -18,12 +19,9 @@ export default function SideNavigationMenu(props) {
 
   const { isLarge } = useScreenSize();
   function normalizePath () {
-    return navigation.map((item) => {
-      if(item.path && !(/^\//.test(item.path))){
-        item.path = `/${item.path}`;
-      }
-      return {...item, expanded: isLarge};
-    });
+    return navigation.map((item) => (
+      { ...item, expanded: isLarge, path: item.path && !(/^\//.test(item.path)) ? `/${item.path}` : item.path }
+    ))
   }
 
   const items = useMemo(
@@ -34,7 +32,7 @@ export default function SideNavigationMenu(props) {
 
   const { navigationData: { currentPath } } = useNavigation();
 
-  const treeViewRef = useRef();
+  const treeViewRef = useRef<%=#isTypeScript%><TreeView><%=/isTypeScript%>(null);
   const wrapperRef = useRef();
   const getWrapperRef = useCallback((element) => {
     const prevElement = wrapperRef.current;
@@ -43,7 +41,7 @@ export default function SideNavigationMenu(props) {
     }
 
     wrapperRef.current = element;
-    events.on(element, 'dxclick', e => {
+    events.on(element, 'dxclick', (e<%=#isTypeScript%>: React.PointerEvent<%=/isTypeScript%>) => {
       openMenu(e);
     });
   }, [openMenu]);

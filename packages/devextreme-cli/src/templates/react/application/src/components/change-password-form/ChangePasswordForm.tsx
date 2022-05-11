@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Form, {
   Item,
   Label,
@@ -12,10 +12,10 @@ import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
 import { changePassword } from '../../api/auth';
 
-export default function ChangePasswordForm(props) {
-  const history = useHistory();
+export default function ChangePasswordForm() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const formData = useRef({});
+  const formData = useRef({ password: '' });
   const { recoveryCode } = useParams();
 
   const onSubmit = useCallback(async (e) => {
@@ -27,11 +27,11 @@ export default function ChangePasswordForm(props) {
     setLoading(false);
 
     if (result.isOk) {
-      history.push('/login');
+      navigate('/login');
     } else {
       notify(result.message, 'error', 2000);
     }
-  }, [history, recoveryCode]);
+  }, [navigate, recoveryCode]);
 
   const confirmPassword = useCallback(
     ({ value }) => value === formData.current.password,

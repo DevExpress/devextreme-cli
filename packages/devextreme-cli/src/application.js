@@ -4,10 +4,10 @@ const vueApplication = require('./applications/application.vue');
 const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
-    return [ 'new', 'add' ].indexOf(command) > -1;
+    return [ 'new', 'add' ].includes(command);
 };
 
-const run = (commands, options, devextremeConfig) => {
+const run = async(commands, options, devextremeConfig) => {
     if(!commands[1]) {
         console.error('Command is incomplete. Please specify parameters.');
         printHelp(commands[0]);
@@ -15,23 +15,23 @@ const run = (commands, options, devextremeConfig) => {
     }
 
     if(commands[0] === 'new') {
-        if(commands[1] === 'angular-app') {
-            angularApplication.create(commands[2] || 'my-app', options);
-            return;
-        }
+        const app = commands[1];
+        const appName = commands[2] || 'my-app';
 
-        if(commands[1] === 'react-app') {
-            reactApplication.create(commands[2] || 'my-app', options);
-            return;
+        switch(app) {
+            case 'angular-app':
+                await angularApplication.create(appName, options);
+                return;
+            case 'react-app':
+                await reactApplication.create(appName, options);
+                return;
+            case 'vue-app':
+                await vueApplication.create(appName, options);
+                return;
+            default:
+                console.error(`The '${app}' application type is not valid`);
+                printHelp(commands[0]);
         }
-
-        if(commands[1] === 'vue-app') {
-            vueApplication.create(commands[2] || 'my-app', options);
-            return;
-        }
-
-        console.error(`The '${commands[1]}' application type is not valid`);
-        printHelp(commands[0]);
     } else {
         if(commands[0] === 'add') {
             if(commands[1] === 'devextreme-angular') {

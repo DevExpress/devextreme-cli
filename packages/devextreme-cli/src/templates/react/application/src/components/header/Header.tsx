@@ -1,11 +1,12 @@
 import React from 'react';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import Button from 'devextreme-react/button';
-import UserPanel from '../user-panel/user-panel';
-import './header.scss';
+import UserPanel from '../user-panel/UserPanel';
+import './Header.scss';
 import { Template } from 'devextreme-react/core/template';
+<%=#isTypeScript%>import type { HeaderProps } from '../../types';<%=/isTypeScript%>
 
-export default function Header({ menuToggleEnabled, title, toggleMenu }) {
+export default function Header({ menuToggleEnabled, title, toggleMenu }<%=#isTypeScript%>: HeaderProps<%=/isTypeScript%>) {
   return (
     <header className={'header-component'}>
       <Toolbar className={'header-toolbar'}>
