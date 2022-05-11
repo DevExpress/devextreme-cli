@@ -110,7 +110,6 @@ Modifying an application template directly is not recommended. Instead, generate
 
     ```sh
     npm run update-template -- -p angular
-    npm run update-template -- -p react
     npm run update-template -- -p react-ts
     npm run update-template -- -p vue-v2
     npm run update-template -- -p vue-v3

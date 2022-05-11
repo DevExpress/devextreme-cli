@@ -72,7 +72,7 @@ async function createVueApp(name, templateOptions) {
     }
 
 
-    return runCommand('npx', argList, { windowsVerbatimArguments: false });
+    return runCommand('npx', argList);
 }
 
 const create = async(appName, options) => {
@@ -103,6 +103,10 @@ const modifyIndexHtml = (appPath, appName) => {
     fs.writeFileSync(indexHtmlPath, htmlContent);
 };
 
+const getCorrectPath = (extension, pathToApp) => {
+    return pathToApp;
+};
+
 const addTemplate = (appPath, appName, templateOptions) => {
     const { version, isTypeScript } = templateOptions;
 
@@ -120,7 +124,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
         'devextreme/dist/css/dx.common.css'
     ];
 
-    templateCreator.moveTemplateFilesToProject(applicationTemplatePath, appPath, templateOptions);
+    templateCreator.moveTemplateFilesToProject(applicationTemplatePath, appPath, templateOptions, getCorrectPath);
     if(!templateOptions.empty) {
         addSamplePages(appPath, templateOptions);
     }
@@ -161,7 +165,7 @@ const addSamplePages = (appPath, templateOptions) => {
         'sample-pages'
     );
     const pagesPath = createPathToPage(appPath);
-    templateCreator.moveTemplateFilesToProject(samplePageTemplatePath, pagesPath, {});
+    templateCreator.moveTemplateFilesToProject(samplePageTemplatePath, pagesPath, {}, getCorrectPath);
 };
 
 const getComponentPageName = (viewName) => {
@@ -231,8 +235,8 @@ const addView = (pageName, options) => {
         isTypeScript
     );
     const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'folder', version);
-
-    templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath);
+    const getCorrectExtension = (fileExtension) => fileExtension;
+    templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath, getCorrectExtension);
     moduleUtils.insertImport(routingModulePath, `./views/${pageName}`, componentName, true);
     insertItemToArray(routingModulePath, navigationData.route);
     insertItemToArray(navigationModulePath, navigationData.navigation);

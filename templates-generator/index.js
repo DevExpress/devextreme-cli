@@ -12,7 +12,7 @@ const args = require('minimist')(process.argv.slice(2),
     }));
 
 const platformsConfigs = {
-    react: './react-config.js',
+    'react-ts': './react-config.js',
     angular: './angular-config.js',
     vue: './vue-config.js'
 };
@@ -48,7 +48,7 @@ function generateTemplate(platform) {
 
 function updateContent(relativePath, content, replaceRules, removeRules) {
     replaceRules.forEach(replacement => {
-        if(micromatch.isMatch(relativePath, replacement.glob)) {
+        if(micromatch.every(relativePath, replacement.glob)) {
             replacement.definitions.forEach(definition => {
                 content = content.replace(definition.before, definition.after);
             });
