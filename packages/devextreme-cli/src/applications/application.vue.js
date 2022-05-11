@@ -71,7 +71,6 @@ async function createVueApp(name, templateOptions) {
         }
     }
 
-
     return runCommand('npx', argList);
 }
 
