@@ -1,0 +1,36 @@
+name: Applications Scheduler
+
+on:
+  workflow_dispatch:
+  schedule: 
+    - cron: '0 1 * * 1-5'
+
+jobs:
+  application-test:
+    runs-on: ubuntu-latest
+    name: Applications tests
+
+    steps:
+        - name: Run actions
+          run: |
+            FILE_NAME="applications.yml"
+            WORKFLOW_NAME="Application tests"
+            WORKFLOW_ID=$(curl https://api.github.com/repos/${{ github.repository }}/actions/workflows | jq -c '.workflows[] | select( .name == "'$WORKFLOW_NAME'" )' | jq .id)
+            echo "Workflow id: $WORKFLOW_ID"
+            MAJOR_REFS=$(curl https://api.github.com/repos/${{ github.repository }}/branches | jq -r .[].name | grep -oP "master")
+            echo "Major refs: $MAJOR_REFS"
+            for REF in $MAJOR_REFS
+            do
+              echo "Testing workflow in branch: $REF"
+              STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" https://github.com/${{ github.repository }}/blob/$REF/.github/workflows/$FILE_NAME)
+              echo "Status: $STATUS"
+              if [ "$STATUS" != "404" ]; then
+                echo "Starting $WORKFLOW_NAME for $REF branch"
+                curl \
+                  -X POST \
+                  -H "Accept: application/vnd.github.v3+json" \
+                  -H "Authorization: Bearer ${{ secrets.DXROBOT_PAT }}" \
+                  https://api.github.com/repos/${{ github.repository }}/actions/workflows/$WORKFLOW_ID/dispatches \
+                  -d '{"ref":"'$REF'"}'
+              fi
+            done
