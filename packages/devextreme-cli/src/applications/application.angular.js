@@ -36,7 +36,7 @@ async function runNgCommand(commandArguments, evaluatingOptions) {
     const npmCommandName = hasNg ? 'ng' : 'npx';
     const ngCommandArguments = hasNg
         ? []
-        : ['-p', '@angular/cli', 'ng'];
+        : ['-p', '@angular/cli@13.3.7', 'ng'];
 
     ngCommandArguments.push(...commandArguments);
     return runCommand(npmCommandName, ngCommandArguments, evaluatingOptions);
