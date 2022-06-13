@@ -64,7 +64,13 @@ function hasSutableNgCli() {
             }
 
             const parsingResult = parseNgCliVersion(stdout);
-            if(parsingResult && parsingResult.compare(minNgCliVersion) >= 0) {
+            if(!parsingResult) {
+                resolve(false);
+            }
+
+            const supportVersion = parsingResult.compare(minNgCliVersion) >= 0
+                && parsingResult.compare(new semver('14.0.0')) < 0;
+            if(supportVersion) {
                 globalNgCliVersion = parsingResult.version;
                 resolve(true);
             } else {
