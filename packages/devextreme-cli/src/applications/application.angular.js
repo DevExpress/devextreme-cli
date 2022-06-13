@@ -32,10 +32,14 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
 }
 
 async function runNgCommand(commandArguments, evaluatingOptions) {
-    const ngCommandArguments = await hasSutableNgCli() ? [] : ['-p', '@angular/cli'];
+    const hasNg = await hasSutableNgCli();
+    const npmCommandName = hasNg ? 'ng' : 'npx';
+    const ngCommandArguments = hasNg
+        ? []
+        : ['-p', '@angular/cli', 'ng'];
 
-    ngCommandArguments.push('ng', ...commandArguments);
-    return runCommand('npx', ngCommandArguments, evaluatingOptions);
+    ngCommandArguments.push(...commandArguments);
+    return runCommand(npmCommandName, ngCommandArguments, evaluatingOptions);
 }
 
 function localPackageExists(packageName) {
@@ -50,9 +54,17 @@ function localPackageExists(packageName) {
 
 function hasSutableNgCli() {
     return new Promise((resolve, reject) => {
+        if(globalNgCliVersion !== '') {
+            resolve(true);
+        }
+
         exec('ng v', (err, stdout, stderr) => {
-            const parsingResult = !stderr && parseNgCliVersion(stdout);
-            if(parsingResult && parsingResult.compare(minNgCliVersion) < 0) {
+            if(!!err) {
+                resolve(false);
+            }
+
+            const parsingResult = parseNgCliVersion(stdout);
+            if(parsingResult && parsingResult.compare(minNgCliVersion) >= 0) {
                 globalNgCliVersion = parsingResult.version;
                 resolve(true);
             } else {
