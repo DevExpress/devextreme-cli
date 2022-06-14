@@ -4,35 +4,14 @@ const moduleWorker = require('../utility/module');
 const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
 const fs = require('fs');
-const exec = require('child_process').exec;
+const ngVersion = require('../utility/ng-version');
 const latestVersions = require('../utility/latest-versions');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
 const minNgCliVersion = new semver('8.0.0');
-let globalNgCliVersion = '';
 
 const kebabize = (str) =>
     str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
-
-const getNgCliVersion = async() => new Promise((resolve, reject) => {
-    if(globalNgCliVersion !== '') {
-        resolve(globalNgCliVersion);
-    }
-
-    exec('ng v && echo Angular CLI: && npm view @angular/cli version', (err, stdout, stderr) => {
-        if(!!err) {
-            resolve('');
-            return;
-        }
-
-        const parsingResult = parseNgCliVersion(stdout);
-        if(!parsingResult) {
-            resolve('');
-        }
-
-        resolve(parsingResult.version);
-    });
-});
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -77,29 +56,19 @@ function localPackageExists(packageName) {
 }
 
 const hasSutableNgCli = async() => {
-    const cliVersion = await getNgCliVersion();
-    if(globalNgCliVersion === '' || cliVersion === '') {
+    const localVersion = ngVersion.getLocalNgVersion();
+    if(!localVersion) {
         return false;
     }
 
-    const isSupportVersion = (new semver(cliVersion)).compare(minNgCliVersion);
-    if(isSupportVersion) {
-        globalNgCliVersion = cliVersion;
-        return true;
-    } else {
-        return false;
-    }
+    const isSupportVersion = localVersion.compare(minNgCliVersion) >= 0;
+    return isSupportVersion;
 };
 
-function parseNgCliVersion(stdout) {
-    return new semver(/angular.cli:\s*(\S+)/ig.exec(stdout.toString())[1]);
-}
-
 const install = async(options) => {
-    globalNgCliVersion = await getNgCliVersion();
     runSchematicCommand('install', {
         ...options,
-        globalNgCliVersion: globalNgCliVersion
+        globalNgCliVersion: ngVersion.getNgCliVersion().version
     });
 };
 
@@ -130,11 +99,10 @@ const create = async(appName, options) => {
 };
 
 const addTemplate = async(appName, options, evaluatingOptions) => {
-    globalNgCliVersion = await getNgCliVersion();
     const schematicOptions = {
         ...(appName && { project: appName }),
         ...options,
-        globalNgCliVersion: globalNgCliVersion
+        globalNgCliVersion: ngVersion.getNgCliVersion().version
     };
     runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
