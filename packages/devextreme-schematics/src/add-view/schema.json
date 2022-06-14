@@ -12,7 +12,7 @@
         "index": 0
       }
     },
-    "addRoute": {
+    "add-route": {
       "type": "boolean",
       "description": "Specifies whether to register a route for the view",
       "default": true
@@ -30,12 +30,12 @@
       "type": "string",
       "description": "The name of a project to modify"
     },
-    "skipTests": {
+    "skip-tests": {
       "type": "boolean",
       "description": "When true, does not create \"spec.ts\" test files for the new component.",
       "default": false
     },
-    "inlineStyle": {
+    "inline-style": {
       "description": "Specifies whether to define styles in the ts file",
       "type": "boolean",
       "default": false

@@ -7,7 +7,7 @@ Add a view to a DevExtreme Angular application.
 - name (string)  
  The view name
 
-- addRoute (Boolean)  
+- add-route (Boolean)  
  Specifies whether to register a route for the view
 
 - icon (string)  
@@ -22,7 +22,7 @@ Add a view to a DevExtreme Angular application.
 - spec (Boolean)  
  Specifies whether to generate a spec file
 
-- inlineStyle (Boolean)  
+- inline-style (Boolean)  
  Specifies whether to define styles in the ts file
 
 - prefix (string)  

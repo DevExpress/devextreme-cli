@@ -18,7 +18,7 @@
         ]
       }
     },
-    "resolveConflicts": {
+    "resolve-conflicts": {
       "type": "string",
       "enum": ["createNew", "override"],
       "description": "Specifies whether to override the existing app component or create a component with another name.",
@@ -39,15 +39,15 @@
         "$source": "projectName"
       }
     },
-    "skipInstall": {
+    "skip-install": {
       "type": "boolean",
       "description": "Specifies whether to skip the dependency package installation.",
       "default": false
     },
-    "updateBudgets": {
+    "update-budgets": {
       "type": "boolean"
     },
-    "globalNgCliVersion": {
+    "global-ng-cli-version": {
       "type":"string",
       "default": "^12.0.0"
     }

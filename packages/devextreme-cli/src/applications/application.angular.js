@@ -5,12 +5,34 @@ const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
 const fs = require('fs');
 const exec = require('child_process').exec;
-const minNgCliVersion = new semver('8.0.0');
 const latestVersions = require('../utility/latest-versions');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
+
+const minNgCliVersion = new semver('8.0.0');
 let globalNgCliVersion = '';
 
+const kebabize = (str) =>
+    str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
+
+const getNgCliVersion = async() => new Promise((resolve, reject) => {
+    exec('ng v', (err, stdout, stderr) => {
+        if(!!err) {
+            resolve('');
+            return;
+        }
+
+        const parsingResult = parseNgCliVersion(stdout);
+        if(!parsingResult) {
+            resolve('');
+        }
+
+        resolve(parsingResult.version);
+    });
+});
+
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
+    globalNgCliVersion = await getNgCliVersion();
+
     const collectionName = 'devextreme-schematics';
     let collectionPath = `${collectionName}@${schematicsVersion}`;
 
@@ -20,13 +42,15 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
     }
 
     if(!localPackageExists(collectionName)) {
-        await runNgCommand(['add', collectionPath, '--skipConfirmation=true'], evaluatingOptions);
+        await runNgCommand(['add', collectionPath, '--skip-confirmation=true'], evaluatingOptions);
     }
 
     const commandArguments = ['g', `${collectionName}:${schematicCommand}`];
     for(let option in options) {
-        commandArguments.push(`--${option}=${options[option]}`);
+        commandArguments.push(`--${kebabize(option)}=${options[option]}`);
     }
+
+    console.table(commandArguments);
 
     runNgCommand(commandArguments, evaluatingOptions);
 }
@@ -36,7 +60,7 @@ async function runNgCommand(commandArguments, evaluatingOptions) {
     const npmCommandName = hasNg ? 'ng' : 'npx';
     const ngCommandArguments = hasNg
         ? []
-        : ['-p', '@angular/cli@13.3.7', 'ng'];
+        : ['-p', '@angular/cli', 'ng'];
 
     ngCommandArguments.push(...commandArguments);
     return runCommand(npmCommandName, ngCommandArguments, evaluatingOptions);
@@ -52,41 +76,30 @@ function localPackageExists(packageName) {
     return fs.existsSync(packageJsonPath);
 }
 
-function hasSutableNgCli() {
-    return new Promise((resolve, reject) => {
-        if(globalNgCliVersion !== '') {
-            resolve(true);
-        }
+const hasSutableNgCli = async() => {
+    const cliVersion = await getNgCliVersion();
+    if(globalNgCliVersion === '' || cliVersion === '') {
+        return false;
+    }
 
-        exec('ng v', (err, stdout, stderr) => {
-            if(!!err) {
-                resolve(false);
-                return;
-            }
-
-            const parsingResult = parseNgCliVersion(stdout);
-            if(!parsingResult) {
-                resolve(false);
-            }
-
-            const isSupportVersion = parsingResult.compare(minNgCliVersion) >= 0
-                && parsingResult.compare(new semver('14.0.0')) < 0;
-            if(isSupportVersion) {
-                globalNgCliVersion = parsingResult.version;
-                resolve(true);
-            } else {
-                resolve(false);
-            }
-        });
-    });
-}
+    const isSupportVersion = (new semver(cliVersion)).compare(minNgCliVersion);
+    if(isSupportVersion) {
+        globalNgCliVersion = cliVersion;
+        return true;
+    } else {
+        return false;
+    }
+};
 
 function parseNgCliVersion(stdout) {
     return new semver(/angular.cli:\s*(\S+)/ig.exec(stdout.toString())[1]);
 }
 
 const install = (options) => {
-    runSchematicCommand('install', { ...options, globalNgCliVersion });
+    runSchematicCommand('install', {
+        ...options,
+        'global-ng-cli-version': globalNgCliVersion
+    });
 };
 
 const create = async(appName, options) => {
@@ -105,8 +118,8 @@ const create = async(appName, options) => {
 
     const appPath = path.join(process.cwd(), appName);
 
-    options.resolveConflicts = 'override';
-    options.updateBudgets = true;
+    options['resolve-conflicts'] = 'override';
+    options['update-budgets'] = true;
     options.layout = layout;
     addTemplate(appName, options, {
         cwd: appPath

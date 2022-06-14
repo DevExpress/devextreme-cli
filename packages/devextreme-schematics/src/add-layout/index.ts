@@ -327,7 +327,7 @@ export default function(options: any): Rule {
     const appPath = await getApplicationPath(host, project);
     const sourcePath = await getSourceRootPath(host, project);
     const layout = options.layout;
-    const override = options.resolveConflicts === 'override';
+    const override = options['resolve-conflicts'] === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath?.replace(/\/?(\w)+\/?/g, '../');
     const templateOptions = {
@@ -359,14 +359,14 @@ export default function(options: any): Rule {
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),
-      addPackagesToDependency(options.globalNgCliVersion)
+      addPackagesToDependency(options['global-ng-cli-version'])
     ];
 
-    if (options.updateBudgets) {
+    if (options['update-budgets']) {
       rules.push(() => updateBudgets(host, options) as any);
     }
 
-    if (!options.skipInstall) {
+    if (!options['skip-install']) {
       rules.push((_: Tree, context: SchematicContext) => {
         context.addTask(new NodePackageInstallTask());
       });
