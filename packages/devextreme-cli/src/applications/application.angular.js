@@ -50,8 +50,6 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
         commandArguments.push(`--${kebabize(option)}=${options[option]}`);
     }
 
-    console.table(commandArguments);
-
     runNgCommand(commandArguments, evaluatingOptions);
 }
 
@@ -98,7 +96,7 @@ function parseNgCliVersion(stdout) {
 const install = (options) => {
     runSchematicCommand('install', {
         ...options,
-        'global-ng-cli-version': globalNgCliVersion
+        globalNgCliVersion: globalNgCliVersion
     });
 };
 
