@@ -118,8 +118,8 @@ const create = async(appName, options) => {
 
     const appPath = path.join(process.cwd(), appName);
 
-    options['resolve-conflicts'] = 'override';
-    options['update-budgets'] = true;
+    options.resolveConflicts = 'override';
+    options.updateBudgets = true;
     options.layout = layout;
     addTemplate(appName, options, {
         cwd: appPath

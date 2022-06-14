@@ -18,7 +18,7 @@
         ]
       }
     },
-    "resolve-conflicts": {
+    "resolveConflicts": {
       "type": "string",
       "enum": ["createNew", "override"],
       "description": "Specifies whether to override the existing app component or create a component with another name.",
@@ -41,7 +41,7 @@
       "description": "The DevExtreme version",
       "default": "^20.2.4"
     },
-    "global-ng-cli-version": {
+    "globalNgCliVersion": {
       "type":"string",
       "default": "^12.0.0"
     },
@@ -50,7 +50,7 @@
       "description": "Specifies whether to skip sample views generation",
       "default": false
     },
-    "update-budgets": {
+    "updateBudgets": {
       "type": "boolean",
       "visible": false
     }

@@ -12,11 +12,11 @@ export default function(options: any): Rule {
     }),
     schematic('add-layout', {
       layout: options.layout,
-      resolveConflicts: options['resolve-conflicts'],
+      resolveConflicts: options.resolveConflicts,
       project: options.project,
       skipInstall: true,
-      updateBudgets: options['update-budgets'],
-      globalNgCliVersion: options['global-ng-cli-version']
+      updateBudgets: options.updateBudgets,
+      globalNgCliVersion: options.globalNgCliVersion
     })
   ];
 

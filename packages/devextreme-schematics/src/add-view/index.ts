@@ -141,7 +141,7 @@ function addContentToView(options: any) {
 
 export default function(options: any): Rule {
   return async (host: Tree) => {
-    const addRoute = options['add-route'];
+    const addRoute = options.addRoute;
     const project = await getProjectName(host, options.project);
     const module = getModuleName(addRoute, options.module);
     const name = getPathForView(options.name);
@@ -150,8 +150,8 @@ export default function(options: any): Rule {
         name,
         project,
         module,
-        skipTests: options['skip-tests'],
-        inlineStyle: options['inline-style'],
+        skipTests: options.skipTests,
+        inlineStyle: options.inlineStyle,
         prefix: options.prefix
       }),
       addContentToView({ name, project }) as any
