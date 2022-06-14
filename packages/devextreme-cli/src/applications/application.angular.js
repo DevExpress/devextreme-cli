@@ -15,7 +15,11 @@ const kebabize = (str) =>
     str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
 
 const getNgCliVersion = async() => new Promise((resolve, reject) => {
-    exec('ng v', (err, stdout, stderr) => {
+    if(globalNgCliVersion !== '') {
+        resolve(globalNgCliVersion);
+    }
+
+    exec('ng v && echo Angular CLI: && npm view @angular/cli version', (err, stdout, stderr) => {
         if(!!err) {
             resolve('');
             return;
@@ -31,8 +35,6 @@ const getNgCliVersion = async() => new Promise((resolve, reject) => {
 });
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
-    globalNgCliVersion = await getNgCliVersion();
-
     const collectionName = 'devextreme-schematics';
     let collectionPath = `${collectionName}@${schematicsVersion}`;
 
@@ -93,7 +95,8 @@ function parseNgCliVersion(stdout) {
     return new semver(/angular.cli:\s*(\S+)/ig.exec(stdout.toString())[1]);
 }
 
-const install = (options) => {
+const install = async(options) => {
+    globalNgCliVersion = await getNgCliVersion();
     runSchematicCommand('install', {
         ...options,
         globalNgCliVersion: globalNgCliVersion
@@ -126,8 +129,13 @@ const create = async(appName, options) => {
     changeMainTs(appPath);
 };
 
-const addTemplate = (appName, options, evaluatingOptions) => {
-    const schematicOptions = { ...(appName && { project: appName }), ...options };
+const addTemplate = async(appName, options, evaluatingOptions) => {
+    globalNgCliVersion = await getNgCliVersion();
+    const schematicOptions = {
+        ...(appName && { project: appName }),
+        ...options,
+        globalNgCliVersion: globalNgCliVersion
+    };
     runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
 
