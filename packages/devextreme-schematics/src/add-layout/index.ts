@@ -22,6 +22,8 @@ import { strings } from '@angular-devkit/core';
 
 import { join, basename } from 'path';
 
+import { SemVer } from 'semver';
+
 import {
   getApplicationPath,
   getSourceRootPath,
@@ -226,11 +228,12 @@ function hasRoutingModule(host: Tree, sourcePath: string) {
 }
 
 function addPackagesToDependency(globalNgCliVersion: string) {
+  const version = new SemVer(globalNgCliVersion);
   return (host: Tree) => {
     addPackageJsonDependency(host, {
       type: NodeDependencyType.Default,
       name: '@angular/cdk',
-      version: globalNgCliVersion
+      version: `~${version.major}.${version.minor}.0`
     });
 
     return host;

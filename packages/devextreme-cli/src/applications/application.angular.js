@@ -4,14 +4,12 @@ const moduleWorker = require('../utility/module');
 const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
 const fs = require('fs');
+const dasherize = require('../utility/string').dasherize;
 const ngVersion = require('../utility/ng-version');
 const latestVersions = require('../utility/latest-versions');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
-const minNgCliVersion = new semver('8.0.0');
-
-const kebabize = (str) =>
-    str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
+const minNgCliVersion = new semver('12.0.0');
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -28,7 +26,7 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
 
     const commandArguments = ['g', `${collectionName}:${schematicCommand}`];
     for(let option in options) {
-        commandArguments.push(`--${kebabize(option)}=${options[option]}`);
+        commandArguments.push(`--${dasherize(option)}=${options[option]}`);
     }
 
     runNgCommand(commandArguments, evaluatingOptions);
