@@ -10,9 +10,9 @@ A schematic that adds a DevExtreme layout to a DevExtreme Angular application.
 - project (string)
  The name of a project to modify
 
-- resolveConflicts (string)
+- resolve-conflicts (string)
  Specifies whether to override the existing app component or create a component with another name
 
-- skipInstall (boolean)
+- skip-install (boolean)
  Specifies whether to skip the dependency package installation
 

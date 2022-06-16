@@ -16,11 +16,13 @@ import {
 
 import {
   SourceFile
-} from 'typescript';
+} from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 
 import { strings } from '@angular-devkit/core';
 
 import { join, basename } from 'path';
+
+import { SemVer } from 'semver';
 
 import {
   getApplicationPath,
@@ -226,11 +228,12 @@ function hasRoutingModule(host: Tree, sourcePath: string) {
 }
 
 function addPackagesToDependency(globalNgCliVersion: string) {
+  const version = new SemVer(globalNgCliVersion);
   return (host: Tree) => {
     addPackageJsonDependency(host, {
       type: NodeDependencyType.Default,
       name: '@angular/cdk',
-      version: globalNgCliVersion
+      version: `~${version.major}.${version.minor}.0`
     });
 
     return host;

@@ -4,11 +4,12 @@ const moduleWorker = require('../utility/module');
 const runCommand = require('../utility/run-command');
 const semver = require('semver').SemVer;
 const fs = require('fs');
-const exec = require('child_process').exec;
-const minNgCliVersion = new semver('8.0.0');
+const dasherize = require('../utility/string').dasherize;
+const ngVersion = require('../utility/ng-version');
 const latestVersions = require('../utility/latest-versions');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
-let globalNgCliVersion = '';
+
+const minNgCliVersion = new semver('12.0.0');
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -20,12 +21,12 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
     }
 
     if(!localPackageExists(collectionName)) {
-        await runNgCommand(['add', collectionPath, '--skipConfirmation=true'], evaluatingOptions);
+        await runNgCommand(['add', collectionPath, '--skip-confirmation=true'], evaluatingOptions);
     }
 
     const commandArguments = ['g', `${collectionName}:${schematicCommand}`];
     for(let option in options) {
-        commandArguments.push(`--${option}=${options[option]}`);
+        commandArguments.push(`--${dasherize(option)}=${options[option]}`);
     }
 
     runNgCommand(commandArguments, evaluatingOptions);
@@ -36,7 +37,7 @@ async function runNgCommand(commandArguments, evaluatingOptions) {
     const npmCommandName = hasNg ? 'ng' : 'npx';
     const ngCommandArguments = hasNg
         ? []
-        : ['-p', '@angular/cli@13.3.7', 'ng'];
+        : ['-p', '@angular/cli', 'ng'];
 
     ngCommandArguments.push(...commandArguments);
     return runCommand(npmCommandName, ngCommandArguments, evaluatingOptions);
@@ -52,41 +53,21 @@ function localPackageExists(packageName) {
     return fs.existsSync(packageJsonPath);
 }
 
-function hasSutableNgCli() {
-    return new Promise((resolve, reject) => {
-        if(globalNgCliVersion !== '') {
-            resolve(true);
-        }
+const hasSutableNgCli = async() => {
+    const localVersion = ngVersion.getLocalNgVersion();
+    if(!localVersion) {
+        return false;
+    }
 
-        exec('ng v', (err, stdout, stderr) => {
-            if(!!err) {
-                resolve(false);
-                return;
-            }
+    const isSupportVersion = localVersion.compare(minNgCliVersion) >= 0;
+    return isSupportVersion;
+};
 
-            const parsingResult = parseNgCliVersion(stdout);
-            if(!parsingResult) {
-                resolve(false);
-            }
-
-            const isSupportVersion = parsingResult.compare(minNgCliVersion) >= 0
-                && parsingResult.compare(new semver('14.0.0')) < 0;
-            if(isSupportVersion) {
-                globalNgCliVersion = parsingResult.version;
-                resolve(true);
-            } else {
-                resolve(false);
-            }
-        });
+const install = async(options) => {
+    runSchematicCommand('install', {
+        ...options,
+        globalNgCliVersion: ngVersion.getNgCliVersion().version
     });
-}
-
-function parseNgCliVersion(stdout) {
-    return new semver(/angular.cli:\s*(\S+)/ig.exec(stdout.toString())[1]);
-}
-
-const install = (options) => {
-    runSchematicCommand('install', { ...options, globalNgCliVersion });
 };
 
 const create = async(appName, options) => {
@@ -115,8 +96,12 @@ const create = async(appName, options) => {
     changeMainTs(appPath);
 };
 
-const addTemplate = (appName, options, evaluatingOptions) => {
-    const schematicOptions = { ...(appName && { project: appName }), ...options };
+const addTemplate = async(appName, options, evaluatingOptions) => {
+    const schematicOptions = {
+        ...(appName && { project: appName }),
+        ...options,
+        globalNgCliVersion: ngVersion.getNgCliVersion().version
+    };
     runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
 

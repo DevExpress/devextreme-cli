@@ -35,7 +35,7 @@ const run = async(commands, options, devextremeConfig) => {
     } else {
         if(commands[0] === 'add') {
             if(commands[1] === 'devextreme-angular') {
-                angularApplication.install(options);
+                await angularApplication.install(options);
                 return;
             }
 
@@ -50,7 +50,7 @@ const run = async(commands, options, devextremeConfig) => {
             }
 
             if(commands[1] === 'angular-template') {
-                angularApplication.addTemplate(commands[2], options);
+                await angularApplication.addTemplate(commands[2], options);
                 return;
             }
 

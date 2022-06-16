@@ -142,7 +142,7 @@ function addContentToView(options: any) {
 export default function(options: any): Rule {
   return async (host: Tree) => {
     const addRoute = options.addRoute;
-    const project = await getProjectName(host, options);
+    const project = await getProjectName(host, options.project);
     const module = getModuleName(addRoute, options.module);
     const name = getPathForView(options.name);
 
