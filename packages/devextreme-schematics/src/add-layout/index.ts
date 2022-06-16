@@ -16,7 +16,7 @@ import {
 
 import {
   SourceFile
-} from 'typescript';
+} from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 
 import { strings } from '@angular-devkit/core';
 

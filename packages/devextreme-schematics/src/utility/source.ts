@@ -3,7 +3,7 @@ import {
   createSourceFile,
   ScriptTarget,
   SourceFile
-} from 'typescript';
+} from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 
 export function getSourceFile(host: Tree, filePath: string): SourceFile | undefined {
   const buffer = host.read(filePath);
