@@ -21,12 +21,10 @@
     "src/*/files/**/*.ts"
   ],
   "schematics": "./src/collection.json",
-  "peerDependencies": {
+  "dependencies": {
     "@angular-devkit/core": "^12.0.0",
     "@angular-devkit/schematics": "^12.0.0",
     "@schematics/angular": "^12.0.0"
-  },
-  "dependencies": {
   },
   "devDependencies": {
     "@types/jasmine": "~3.10.3",
