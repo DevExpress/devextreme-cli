@@ -51,3 +51,7 @@ export type NavigationContextType = {
     setNavigationData?: ({ currentPath }: NavigationData) => void;
     navigationData: NavigationData;
 }
+
+export type ValidationType = {
+    value: string;
+}

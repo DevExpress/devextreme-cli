@@ -10,6 +10,7 @@ import Form, {
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
+<%=#isTypeScript%>import { ValidationType } from '../../types';<%=/isTypeScript%>
 import { changePassword } from '../../api/auth';
 
 export default function ChangePasswordForm() {
@@ -18,7 +19,7 @@ export default function ChangePasswordForm() {
   const formData = useRef({ password: '' });
   const { recoveryCode } = useParams();
 
-  const onSubmit = useCallback(async (e) => {
+  const onSubmit = useCallback(async (e<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
     e.preventDefault();
     const { password } = formData.current;
     setLoading(true);
@@ -34,7 +35,7 @@ export default function ChangePasswordForm() {
   }, [navigate, recoveryCode]);
 
   const confirmPassword = useCallback(
-    ({ value }) => value === formData.current.password,
+    ({ value }<%=#isTypeScript%>: ValidationType<%=/isTypeScript%>) => value === formData.current.password,
     []
   );
 
