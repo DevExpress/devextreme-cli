@@ -16,7 +16,7 @@ function NavigationProvider(props<%=#isTypeScript%>: React.PropsWithChildren<unk
 }
 
 function withNavigationWatcher(Component<%=#isTypeScript%>: React.ElementType<%=/isTypeScript%>, path<%=#isTypeScript%>: string<%=/isTypeScript%>) {
-  const WrappedComponent = function (props<%=#isTypeScript%>: unknown<%=/isTypeScript%>) {
+  const WrappedComponent = function (props<%=#isTypeScript%>: Record<string, unknown><%=/isTypeScript%>) {
     const { setNavigationData } = useNavigation();
 
     useEffect(() => {

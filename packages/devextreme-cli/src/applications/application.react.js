@@ -38,11 +38,6 @@ const preparePackageJsonForTemplate = (appPath, appName, isTypeScript) => {
         { name: 'postinstall', value: 'npm run build-themes' }
     ];
 
-    if(isTypeScript) {
-        dependencies.push({ name: '@types/react-router-dom', version: '^5.1.5' });
-        dependencies.push({ name: '@types/react', version: '^17.0.39' });
-    }
-
     packageJsonUtils.addDependencies(appPath, dependencies);
     packageJsonUtils.updateScripts(appPath, scripts);
     packageJsonUtils.updateName(appPath, appName);
