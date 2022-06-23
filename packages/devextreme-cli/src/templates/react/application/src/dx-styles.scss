@@ -5,26 +5,38 @@
   display: flex;
   height: 100%;
   width: 100%;
+
+  .content {
+    line-height: 1.5;
+    flex-grow: 1;
+
+    h2 {
+      font-size: 30px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .container {
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+  }
+
+  .layout-body {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .content-block {
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-top: 20px;
+  }
 }
 
 .side-nav-outer-toolbar .dx-drawer {
   height: calc(100% - 56px)
-}
-
-.app .content {
-  line-height: 1.5;
-
-  h2 {
-    font-size: 30px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-}
-
-.app .content-block {
-  margin-left: 40px;
-  margin-right: 40px;
-  margin-top: 20px;
 }
 
 .screen-x-small .content-block {
