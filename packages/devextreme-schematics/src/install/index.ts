@@ -9,7 +9,8 @@ import { addStylesToApp } from '../utility/styles';
 
 import {
   NodeDependencyType,
-  addPackageJsonDependency
+  addPackageJsonDependency,
+  removePackageJsonDependency
 } from '@schematics/angular/utility/dependencies';
 
 import {
@@ -21,13 +22,16 @@ import { modifyJSONFile } from '../utility/modify-json-file';
 import { getProjectName } from '../utility/project';
 
 export default function(options: any): Rule {
+
   return chain([
+    (host: Tree) => sassEmbedded.addDependency(host),
     (host: Tree) => addDevExtremeDependency(host, { dxversion: options.dxversion }),
     (host: Tree) => addDevExtremeCSS(host, { project: options.project }),
     (host: Tree) => reqisterJSZip(host),
     (_, context: SchematicContext) => {
       context.addTask(new NodePackageInstallTask());
-    }
+    },
+    (host: Tree) => sassEmbedded.removeDependency(host),
   ]);
 }
 
@@ -86,3 +90,17 @@ function reqisterJSZip(host: Tree) {
 
   return host;
 }
+
+const sassEmbedded = {
+  _package: 'sass-embedded',
+  addDependency(host: Tree) {
+    addPackageJsonDependency(host, {
+      type: NodeDependencyType.Dev,
+      name: this._package,
+      version: 'latest'
+    });
+  },
+  removeDependency(host: Tree) {
+    removePackageJsonDependency(host, this._package);
+  }
+};

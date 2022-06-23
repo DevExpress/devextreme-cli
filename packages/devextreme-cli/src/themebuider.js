@@ -5,7 +5,6 @@ const stripBom = require('strip-bom');
 const importCwd = require('import-cwd');
 const packageManager = require('./utility/package-manager');
 const lock = require('./utility/file-lock');
-const runCommand = require('./utility/run-command');
 
 const commands = {
     BUILD_THEME: 'build-theme',
@@ -153,12 +152,6 @@ const getVarsFilter = (options) => {
     return (vars instanceof Array) ? vars : vars.split(',');
 };
 
-const downloadSassEmbedded = async() => {
-    await runCommand('npm', ['run', 'postinstall'], {
-        cwd: path.join(process.cwd(), 'node_modules', 'sass-embedded')
-    });
-};
-
 const runThemeBuilder = async rawOptions => {
     const options = await readInput(camelize(rawOptions));
     const version = options.version || getInstalledPackageVersion('devextreme') || 'latest';
@@ -169,7 +162,6 @@ const runThemeBuilder = async rawOptions => {
 
     if(version === 'latest' || semver.gte(version, '22.1.3')) {
         options.sassCompiler = scssCompiler;
-        await downloadSassEmbedded();
     }
 
     options.lessCompiler = require('less/lib/less-node');
