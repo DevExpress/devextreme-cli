@@ -69,7 +69,7 @@ export default {
   },
   setup(props) {
     const route = useRoute();
-    
+
     const scrollViewRef = ref(null);
     const menuOpened = ref(props.isLarge);
     const menuTemporaryOpened = ref(false);
@@ -117,7 +117,7 @@ export default {
         }
       }
     );
-    
+
     watch(
       () => route.path,
       () => {
@@ -154,21 +154,6 @@ export default {
 <style lang="scss">
 .side-nav-inner-toolbar {
   width: 100%;
-}
-
-.container {
-  height: 100%;
-  flex-direction: column;
-  display: flex;
-}
-
-.layout-body {
-  flex: 1;
-  min-height: 0;
-}
-
-.content {
-  flex-grow: 1;
 }
 
 #navigation-header {

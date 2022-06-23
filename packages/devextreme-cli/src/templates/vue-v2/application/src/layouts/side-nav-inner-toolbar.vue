@@ -137,21 +137,6 @@ export default {
   width: 100%;
 }
 
-.container {
-  height: 100%;
-  flex-direction: column;
-  display: flex;
-}
-
-.layout-body {
-  flex: 1;
-  min-height: 0;
-}
-
-.content {
-  flex-grow: 1;
-}
-
 #navigation-header {
   @import "../themes/generated/variables.additional.scss";
   background-color: $base-accent;
