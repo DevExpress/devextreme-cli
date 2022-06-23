@@ -121,7 +121,7 @@ describe('ThemeBuilder save metadata and variables tests', () => {
                 expect(content.items).toEqual(
                     (meta.items || []).map(item => ({
                         // we should not change @->$ for old versions
-                        key: version !== '20.1.13' ? item.key.replace('@', '$') : item.key,
+                        key: version !== '20.1.15' ? item.key.replace('@', '$') : item.key,
                         value: item.value
                     }))
                 );

@@ -113,4 +113,4 @@ jobs:
         run: npm install --no-package-lock --no-audit --no-fund
 
       - name: Schematic tests
-        run: cd packages/devextrem-schematics && npm run test
+        run: cd packages/devextreme-schematics && npm run test
