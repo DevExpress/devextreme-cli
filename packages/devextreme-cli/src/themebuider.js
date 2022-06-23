@@ -158,7 +158,7 @@ const runThemeBuilder = async rawOptions => {
     const initialItems = options.items ? [...options.items] : [];
 
     options.reader = readFile;
-    options.sassCompiler = semver.gte(version, '22.1.3') ? scssCompiler : scssCompilerDart;
+    options.sassCompiler = (version === 'latest' || semver.gte(version, '22.1.3')) ? scssCompiler : scssCompilerDart;
 
     options.lessCompiler = require('less/lib/less-node');
 
