@@ -2,7 +2,12 @@ import {
   Rule,
   chain,
   schematic,
+  Tree,
 } from '@angular-devkit/schematics';
+
+import { resolve, join } from 'path';
+
+import { execSync } from 'child_process';
 
 export default function(options: any): Rule {
   const rules = [
@@ -17,7 +22,16 @@ export default function(options: any): Rule {
       skipInstall: true,
       updateBudgets: options.updateBudgets,
       globalNgCliVersion: options.globalNgCliVersion
-    })
+    }),
+    (host: Tree) => {
+      // schematics installed packages with flag --ignore-scripts
+      const resPath = resolve(join('.', 'node_modules', 'sass-embedded'));
+      execSync('npm run postinstall', {
+        cwd: resPath,
+      });
+
+      return host;
+    }
   ];
 
   if (!options.empty) {
