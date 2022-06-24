@@ -24,6 +24,7 @@ export default function(options: any): Rule {
       globalNgCliVersion: options.globalNgCliVersion
     }),
     // schematics installed packages with flag --ignore-scripts
+    // @angular/cli@14 add option allowScript to NodePackageInstallTask
     (host: Tree) => {
       const isWin = /^win/.test(process.platform);
       const resPath = resolve(join('.', 'node_modules', 'sass-embedded'));
