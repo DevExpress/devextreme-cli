@@ -26,7 +26,7 @@ export default function(options: any): Rule {
     (host: Tree) => {
       // schematics installed packages with flag --ignore-scripts
       const resPath = resolve(join('.', 'node_modules', 'sass-embedded'));
-      execSync('npm run postinstall', {
+      execSync('-c npm run postinstall', {
         cwd: resPath,
       });
 
