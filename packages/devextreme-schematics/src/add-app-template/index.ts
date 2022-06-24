@@ -7,7 +7,7 @@ import {
 
 import { resolve, join } from 'path';
 
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 
 export default function(options: any): Rule {
   const rules = [
@@ -23,11 +23,15 @@ export default function(options: any): Rule {
       updateBudgets: options.updateBudgets,
       globalNgCliVersion: options.globalNgCliVersion
     }),
+    // schematics installed packages with flag --ignore-scripts
     (host: Tree) => {
-      // schematics installed packages with flag --ignore-scripts
+      const isWin = /^win/.test(process.platform);
       const resPath = resolve(join('.', 'node_modules', 'sass-embedded'));
-      execSync('-c npm run postinstall', {
+
+      spawnSync('npm', ['run', 'postinstall'], {
         cwd: resPath,
+        windowsVerbatimArguments: true,
+        shell: isWin ? false : true
       });
 
       return host;
