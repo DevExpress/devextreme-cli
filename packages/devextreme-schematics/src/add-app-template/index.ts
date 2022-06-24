@@ -2,7 +2,12 @@ import {
   Rule,
   chain,
   schematic,
+  Tree,
 } from '@angular-devkit/schematics';
+
+import { resolve, join } from 'path';
+
+import { spawnSync } from 'child_process';
 
 export default function(options: any): Rule {
   const rules = [
@@ -17,7 +22,21 @@ export default function(options: any): Rule {
       skipInstall: true,
       updateBudgets: options.updateBudgets,
       globalNgCliVersion: options.globalNgCliVersion
-    })
+    }),
+    // schematics installed packages with flag --ignore-scripts
+    // @angular/cli@14 add option allowScript to NodePackageInstallTask
+    (host: Tree) => {
+      const isWin = /^win/.test(process.platform);
+      const resPath = resolve(join('.', 'node_modules', 'sass-embedded'));
+
+      spawnSync('npm', ['run', 'postinstall'], {
+        cwd: resPath,
+        windowsVerbatimArguments: true,
+        shell: isWin ? false : true
+      });
+
+      return host;
+    }
   ];
 
   if (!options.empty) {

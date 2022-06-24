@@ -49,7 +49,7 @@
     },
     "globalNgCliVersion": {
       "type":"string",
-      "default": "^12.0.0"
+      "default": "12.2.0"
     }
   }
 }

@@ -9,7 +9,7 @@ import { addStylesToApp } from '../utility/styles';
 
 import {
   NodeDependencyType,
-  addPackageJsonDependency
+  addPackageJsonDependency,
 } from '@schematics/angular/utility/dependencies';
 
 import {
@@ -21,13 +21,14 @@ import { modifyJSONFile } from '../utility/modify-json-file';
 import { getProjectName } from '../utility/project';
 
 export default function(options: any): Rule {
+
   return chain([
     (host: Tree) => addDevExtremeDependency(host, { dxversion: options.dxversion }),
     (host: Tree) => addDevExtremeCSS(host, { project: options.project }),
     (host: Tree) => reqisterJSZip(host),
     (_, context: SchematicContext) => {
       context.addTask(new NodePackageInstallTask());
-    }
+    },
   ]);
 }
 
