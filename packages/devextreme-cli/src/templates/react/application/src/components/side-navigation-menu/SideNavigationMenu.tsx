@@ -33,8 +33,8 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
   const { navigationData: { currentPath } } = useNavigation();
 
   const treeViewRef = useRef<%=#isTypeScript%><TreeView><%=/isTypeScript%>(null);
-  const wrapperRef = useRef();
-  const getWrapperRef = useCallback((element) => {
+  const wrapperRef = useRef<%=#isTypeScript%><HTMLDivElement><%=/isTypeScript%>();
+  const getWrapperRef = useCallback((element<%=#isTypeScript%>: HTMLDivElement<%=/isTypeScript%>) => {
     const prevElement = wrapperRef.current;
     if (prevElement) {
       events.off(prevElement, 'dxclick');

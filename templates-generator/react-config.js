@@ -22,7 +22,7 @@ module.exports = {
             glob: ['**/*.ts*', '!**/types.ts*'],
             definitions: [
                 {
-                    before: /: string|: any|: unknown|\?: string|import(.*?)types';|: [A-Z]\w+\[]| as any/g,
+                    before: /: string|: any|: unknown|\?: string|import(.*?)types';|import(.*?)ClickEvent(.*?);|: [A-Z]\w+\[]| as any/g,
                     after: '<%=#isTypeScript%>$&<%=/isTypeScript%>'
                 },
                 {
@@ -35,7 +35,7 @@ module.exports = {
                 },
                 
                 {
-                    before: /(?<before>\S)(?<type>: [A-Z]\w+((\.\w+)?(<\w+>)?))(?<after>,|\))/g,
+                    before: /(?<before>\S)(?<type>: [A-Z]\w+((\.\w+)?(<(.*?)>)?))(?<after>,|\))/g,
                     after: '$<before><%=#isTypeScript%>$<type><%=/isTypeScript%>$<after>'
                 },
                 {

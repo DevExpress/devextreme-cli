@@ -20,7 +20,7 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const formData = useRef({ email: '', password: '' });
 
-  const onSubmit = useCallback(async (e) => {
+  const onSubmit = useCallback(async (e<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
     e.preventDefault();
     const { email, password } = formData.current;
     setLoading(true);

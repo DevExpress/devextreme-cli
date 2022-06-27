@@ -12,6 +12,7 @@ import Form, {
 import notify from 'devextreme/ui/notify';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import { createAccount } from '../../api/auth';
+<%=#isTypeScript%>import { ValidationType } from '../../types';<%=/isTypeScript%>
 import './CreateAccountForm.scss';
 
 export default function CreateAccountForm() {
@@ -19,7 +20,7 @@ export default function CreateAccountForm() {
   const [loading, setLoading] = useState(false);
   const formData = useRef({ email: '', password: '' });
 
-  const onSubmit = useCallback(async (e) => {
+  const onSubmit = useCallback(async (e<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
     e.preventDefault();
     const { email, password } = formData.current;
     setLoading(true);
@@ -35,7 +36,7 @@ export default function CreateAccountForm() {
   }, [navigate]);
 
   const confirmPassword = useCallback(
-    ({ value }) => value === formData.current.password,
+    ({ value }<%=#isTypeScript%>: ValidationType<%=/isTypeScript%>) => value === formData.current.password,
     []
   );
 

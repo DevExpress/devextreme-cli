@@ -65,8 +65,7 @@ const hasSutableNgCli = async() => {
 
 const install = async(options) => {
     runSchematicCommand('install', {
-        ...options,
-        globalNgCliVersion: ngVersion.getNgCliVersion().version
+        ...options
     });
 };
 

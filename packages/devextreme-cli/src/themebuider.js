@@ -14,7 +14,7 @@ const commands = {
 
 const themeBuilderPackagePath = path.join(process.cwd(), 'node_modules', 'devextreme-themebuilder');
 
-const scssCompiler = {
+const scssCompilerDart = {
     render: (scss) => {
         return new Promise((resolve, reject) => {
             require('dart-sass').render({
@@ -26,6 +26,16 @@ const scssCompiler = {
                     resolve(result.css.toString());
                 }
             });
+        });
+    }
+};
+
+const scssCompiler = {
+    render: (scss) => {
+        return new Promise((resolve, reject) => {
+            require('sass-embeded').compileStringAsync(scss)
+                .then((data) => resolve(data.css.toString()))
+                .catch((error) => reject(error.message));
         });
     }
 };
@@ -144,9 +154,16 @@ const getVarsFilter = (options) => {
 
 const runThemeBuilder = async rawOptions => {
     const options = await readInput(camelize(rawOptions));
+    const version = options.version || getInstalledPackageVersion('devextreme') || 'latest';
     const initialItems = options.items ? [...options.items] : [];
+
     options.reader = readFile;
-    options.sassCompiler = scssCompiler;
+    options.sassCompiler = scssCompilerDart;
+
+    if(version === 'latest' || semver.gte(version, '22.1.3')) {
+        options.sassCompiler = scssCompiler;
+    }
+
     options.lessCompiler = require('less/lib/less-node');
 
     options.lessCompiler.options = options.lessCompiler.options || {};
@@ -156,8 +173,6 @@ const runThemeBuilder = async rawOptions => {
     if(options.assetsBasePath) {
         options.lessCompiler.options['rootpath'] = options.assetsBasePath;
     }
-
-    const version = options.version || getInstalledPackageVersion('devextreme') || 'latest';
 
     await lock.acquire();
 

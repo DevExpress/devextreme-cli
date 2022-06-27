@@ -9,7 +9,9 @@ import './side-nav-inner-toolbar.scss';
 import { useScreenSize } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
 import { useMenuPatch } from '../../utils/patches';
+<%=#isTypeScript%>import { ItemClickEvent } from 'devextreme/ui/tree_view';<%=/isTypeScript%>
 <%=#isTypeScript%>import type { SideNavToolbarProps } from '../../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import { ClickEvent } from 'devextreme/ui/button';<%=/isTypeScript%>
 
 export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%>: React.PropsWithChildren<SideNavToolbarProps><%=/isTypeScript%>) {
   const scrollViewRef = useRef<%=#isTypeScript%><ScrollView><%=/isTypeScript%>(null);
@@ -20,13 +22,13 @@ export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%
     isLarge ? MenuStatus.Opened : MenuStatus.Closed
   );
 
-  const toggleMenu = useCallback(({ event }) => {
+  const toggleMenu = useCallback(({ event }<%=#isTypeScript%>: ClickEvent<%=/isTypeScript%>) => {
     setMenuStatus(
       prevMenuStatus => prevMenuStatus === MenuStatus.Closed
         ? MenuStatus.Opened
         : MenuStatus.Closed
     );
-    event.stopPropagation();
+    event<%=#isTypeScript%>?<%=/isTypeScript%>.stopPropagation();
   }, []);
 
   const temporaryOpenMenu = useCallback(() => {
@@ -46,18 +48,18 @@ export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%
     return true;
   }, [isLarge]);
 
-  const onNavigationChanged = useCallback(({ itemData: { path }, event, node }) => {
-    if (menuStatus === MenuStatus.Closed || !path || node.selected) {
-      event.preventDefault();
+  const onNavigationChanged = useCallback(({ itemData, event, node }<%=#isTypeScript%>: ItemClickEvent<%=/isTypeScript%>) => {
+    if (menuStatus === MenuStatus.Closed || !itemData<%=#isTypeScript%>?<%=/isTypeScript%>.path || node<%=#isTypeScript%>?<%=/isTypeScript%>.selected) {
+      event<%=#isTypeScript%>?<%=/isTypeScript%>.preventDefault();
       return;
     }
 
-    navigate(path);
+    navigate(itemData.path);
     scrollViewRef.current<%=#isTypeScript%>?<%=/isTypeScript%>.instance.scrollTo(0);
 
     if (!isLarge || menuStatus === MenuStatus.TemporaryOpened) {
       setMenuStatus(MenuStatus.Closed);
-      event.stopPropagation();
+      event<%=#isTypeScript%>?<%=/isTypeScript%>.stopPropagation();
     }
   }, [navigate, menuStatus, isLarge]);
 

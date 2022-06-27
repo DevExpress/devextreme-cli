@@ -228,7 +228,7 @@ function hasRoutingModule(host: Tree, sourcePath: string) {
 }
 
 function addPackagesToDependency(globalNgCliVersion: string) {
-  const version = new SemVer(globalNgCliVersion);
+  const version = new SemVer(globalNgCliVersion.replace(/\^|\~/g, ''));
   return (host: Tree) => {
     addPackageJsonDependency(host, {
       type: NodeDependencyType.Default,

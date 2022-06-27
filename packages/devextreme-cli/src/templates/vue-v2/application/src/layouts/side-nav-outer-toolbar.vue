@@ -119,13 +119,4 @@ export default {
 .layout-header {
   z-index: 1501;
 }
-
-.layout-body {
-  flex: 1;
-  min-height: 0;
-}
-
-.content {
-  flex-grow: 1;
-}
 </style>
