@@ -29,7 +29,7 @@
   "devDependencies": {
     "@types/jasmine": "~3.10.6",
     "@types/node": "ts4.3",
-    "@types/semver": "^7.3.9",
+    "@types/semver": "^7.3.10",
     "jasmine": "^2.8.0",
     "rxjs": "^6.0.0",
     "tslint": "^5.15.0",
