@@ -16,7 +16,7 @@ import { latestVersions } from '../utility/latest-versions';
 import { modifyJSONFile } from '../utility/modify-json-file';
 import { getProjectName } from '../utility/project';
 
-import * as patch from '../utility/patch';
+import { PatchNodePackageInstallTask } from '../utility/patch';
 
 export default function(options: any): Rule {
 
@@ -25,7 +25,7 @@ export default function(options: any): Rule {
     (host: Tree) => addDevExtremeCSS(host, { project: options.project }),
     (host: Tree) => reqisterJSZip(host),
     (_, context: SchematicContext) => {
-      context.addTask(new patch.CustomNodePackageInstallTask());
+      context.addTask(new PatchNodePackageInstallTask());
     },
   ]);
 }

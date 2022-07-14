@@ -68,7 +68,7 @@ import {
 import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { Change } from '@schematics/angular/utility/change';
 
-import * as patch from '../utility/patch';
+import { PatchNodePackageInstallTask } from '../utility/patch';
 
 const projectFilesSource = './files/src';
 const workspaceFilesSource = './files';
@@ -369,7 +369,7 @@ export default function(options: any): Rule {
 
     if (!options.skipInstall) {
       rules.push((_: Tree, context: SchematicContext) => {
-        context.addTask(new patch.CustomNodePackageInstallTask());
+        context.addTask(new PatchNodePackageInstallTask());
       });
     }
 

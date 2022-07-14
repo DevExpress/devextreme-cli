@@ -1,6 +1,6 @@
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
-export class CustomNodePackageInstallTask extends NodePackageInstallTask {
+export class PatchNodePackageInstallTask extends NodePackageInstallTask {
     toConfiguration = (): any => {
         const rootOptions = super.toConfiguration();
         const resultObject = {
