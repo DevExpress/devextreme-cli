@@ -1,4 +1,4 @@
-import { NodePackageInstallTask } from "@angular-devkit/schematics/tasks";
+import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 export class CustomNodePackageInstallTask extends NodePackageInstallTask {
     toConfiguration = (): any => {
