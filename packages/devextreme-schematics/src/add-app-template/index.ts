@@ -5,6 +5,7 @@ import {
   Tree,
 } from '@angular-devkit/schematics';
 
+import { existsSync } from 'fs';
 import { resolve, join } from 'path';
 
 import { spawnSync } from 'child_process';
@@ -26,15 +27,7 @@ export default function(options: any): Rule {
     // schematics installed packages with flag --ignore-scripts
     // @angular/cli@14 add option allowScript to NodePackageInstallTask
     (host: Tree) => {
-      const isWin = /^win/.test(process.platform);
-      const resPath = resolve(join('.', 'node_modules', 'sass-embedded'));
-
-      spawnSync('npm', ['run', 'postinstall'], {
-        cwd: resPath,
-        windowsVerbatimArguments: true,
-        shell: isWin ? false : true
-      });
-
+      postinstallScripts();
       return host;
     }
   ];
@@ -46,4 +39,18 @@ export default function(options: any): Rule {
   }
 
   return chain(rules);
+}
+
+const postinstallScripts = () => {
+  const isWin = /^win/.test(process.platform);
+
+  const sassEmbeddedPath = resolve('node_modules', 'sass-embedded');
+  const sassVendorPath = join(sassEmbeddedPath, 'dist', 'lib', 'src', 'vendor', 'dart-sass-embedded');
+  if(!existsSync(sassVendorPath)) {
+    spawnSync('npm', ['run', 'postinstall'], {
+      cwd: resolve(join('node_modules', 'sass-embedded')),
+      windowsVerbatimArguments: true,
+      shell: isWin ? false : true
+    });
+  }
 }
