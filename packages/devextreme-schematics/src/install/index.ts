@@ -12,13 +12,11 @@ import {
   addPackageJsonDependency,
 } from '@schematics/angular/utility/dependencies';
 
-import {
-  NodePackageInstallTask
-} from '@angular-devkit/schematics/tasks';
-
 import { latestVersions } from '../utility/latest-versions';
 import { modifyJSONFile } from '../utility/modify-json-file';
 import { getProjectName } from '../utility/project';
+
+import { PatchNodePackageInstallTask } from '../utility/patch';
 
 export default function(options: any): Rule {
 
@@ -27,7 +25,7 @@ export default function(options: any): Rule {
     (host: Tree) => addDevExtremeCSS(host, { project: options.project }),
     (host: Tree) => reqisterJSZip(host),
     (_, context: SchematicContext) => {
-      context.addTask(new NodePackageInstallTask());
+      context.addTask(new PatchNodePackageInstallTask());
     },
   ]);
 }

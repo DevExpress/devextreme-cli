@@ -48,10 +48,6 @@ import {
   addPackageJsonDependency
 } from '@schematics/angular/utility/dependencies';
 
-import {
-  NodePackageInstallTask
-} from '@angular-devkit/schematics/tasks';
-
 import { getSourceFile } from '../utility/source';
 
 import {
@@ -71,6 +67,8 @@ import {
 
 import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { Change } from '@schematics/angular/utility/change';
+
+import { PatchNodePackageInstallTask } from '../utility/patch';
 
 const projectFilesSource = './files/src';
 const workspaceFilesSource = './files';
@@ -371,7 +369,7 @@ export default function(options: any): Rule {
 
     if (!options.skipInstall) {
       rules.push((_: Tree, context: SchematicContext) => {
-        context.addTask(new NodePackageInstallTask());
+        context.addTask(new PatchNodePackageInstallTask());
       });
     }
 
