@@ -2,13 +2,13 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 export class PatchNodePackageInstallTask extends NodePackageInstallTask {
     toConfiguration = (): any => {
-        const rootOptions = super.toConfiguration();
-        const resultObject = {
-            name: rootOptions.name,
-            dependencies: rootOptions.dependencies,
-            options: Object.assign({}, rootOptions.options, { allowScripts: true })
-        };
+        const rootConfigurations = super.toConfiguration();
+        const customOptions = Object.assign({}, rootConfigurations.options, { allowScripts: true });
 
-        return resultObject;
+        return {
+            name: rootConfigurations.name,
+            dependencies: rootConfigurations.dependencies,
+            options: customOptions
+        };
     }
 }
