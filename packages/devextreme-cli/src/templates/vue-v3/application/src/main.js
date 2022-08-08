@@ -3,8 +3,11 @@ import router from "./router";
 
 import App from "./App";
 import appInfo from "./app-info";
+import themes from "devextreme/ui/themes";
 
-const app = createApp(App);
-app.use(router);
-app.config.globalProperties.$appInfo = appInfo;
-app.mount('#app');
+themes.initialized(() => {
+    const app = createApp(App);
+    app.use(router);
+    app.config.globalProperties.$appInfo = appInfo;
+    app.mount('#app');
+});
