@@ -43,7 +43,7 @@ export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%
         ? MenuStatus.Closed
         : prevMenuStatus
     );
-    return true;
+    return menuStatus === MenuStatus.Closed ? true : false;
   }, [isLarge]);
 
   const onNavigationChanged = useCallback(({ itemData, event, node }<%=#isTypeScript%>: ItemClickEvent<%=/isTypeScript%>) => {
