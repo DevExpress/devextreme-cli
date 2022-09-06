@@ -25,7 +25,8 @@ exports.createApp = async() => {
         path.join(process.cwd(), './index.js'),
         'new',
         'react-app',
-        '--layout=side-nav-outer-toolbar'
+        '--layout=side-nav-outer-toolbar',
+        '--template=javascript'
     ], {
         cwd: sandboxPath,
         forceNoCmd: true
