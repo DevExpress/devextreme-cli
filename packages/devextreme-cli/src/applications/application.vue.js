@@ -2,7 +2,6 @@ const path = require('path');
 const fs = require('fs');
 const getLayoutInfo = require('../utility/prompts/layout');
 const getVersionInfo = require('../utility/prompts/vue-version');
-const getTemplateTypeInfo = require('../utility/prompts/typescript');
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
@@ -10,7 +9,6 @@ const runCommand = require('../utility/run-command');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
-const typescriptUtils = require('../utility/typescript-extension');
 const latestVersions = require('../utility/latest-versions');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
@@ -56,19 +54,13 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
 };
 
 async function createVueApp(name, templateOptions) {
-    const { version, isTypeScript } = templateOptions;
+    const { version } = templateOptions;
     const argList = ['-p', '@vue/cli', 'vue', 'create', name];
 
-    if(isTypeScript) {
-        const presetPath = path.join(__dirname, '..', 'templates-ts', `vue-${version}`);
-
-        argList.push(`-p "${presetPath}"`);
+    if(version === 'v2') {
+        argList.push('-p "Default (Vue 2)"');
     } else {
-        if(version === 'v2') {
-            argList.push('-p "Default (Vue 2)"');
-        } else {
-            argList.push('-p "Default (Vue 3)"');
-        }
+        argList.push('-p "Default (Vue 3)"');
     }
 
     return runCommand('npx', argList);
@@ -76,14 +68,12 @@ async function createVueApp(name, templateOptions) {
 
 const create = async(appName, options) => {
     const version = await getVersionInfo(options.version);
-    const templateType = await getTemplateTypeInfo(options.template);
     const layout = await getLayoutInfo(options.layout);
 
     const templateOptions = {
         project: stringUtils.humanize(appName),
         layout: layout,
-        version: version,
-        isTypeScript: typescriptUtils.isTypeScript(templateType)
+        version: version
     };
 
     await createVueApp(appName, templateOptions);
@@ -107,16 +97,13 @@ const getCorrectPath = (extension, pathToApp) => {
 };
 
 const addTemplate = (appPath, appName, templateOptions) => {
-    const { version, isTypeScript } = templateOptions;
+    const { version } = templateOptions;
 
     if(!version) {
         version = getVueVersion();
     }
 
-    const applicationTemplatePath = path.join(
-        templateCreator.getTempaltePath(`vue-${version}`, isTypeScript),
-        'application'
-    );
+    const applicationTemplatePath = path.join(templateCreator.getTempaltePath(`vue-${version}`), 'application');
     const styles = [
         './themes/generated/theme.additional.css',
         './themes/generated/theme.base.css',
@@ -140,12 +127,7 @@ const install = (options, appPath, styles) => {
 };
 
 const addStylesToApp = (appPath, styles) => {
-    const isTypeScript = typescriptUtils.isTypeScript(typescriptUtils.getTemplateType('vue'));
-
-    const mainModulePath = typescriptUtils.setFileExtension(
-        path.join(appPath, 'src', 'main.js'),
-        isTypeScript
-    );
+    const mainModulePath = path.join(appPath, 'src', 'main.js');
 
     styles.forEach(style => {
         moduleUtils.insertImport(mainModulePath, style);
@@ -153,16 +135,13 @@ const addStylesToApp = (appPath, styles) => {
 };
 
 const addSamplePages = (appPath, templateOptions) => {
-    const { version, isTypeScript } = templateOptions;
+    const { version } = templateOptions;
 
     if(!version) {
         version = getVueVersion();
     }
 
-    const samplePageTemplatePath = path.join(
-        templateCreator.getTempaltePath(`vue-${version}`, isTypeScript),
-        'sample-pages'
-    );
+    const samplePageTemplatePath = path.join(templateCreator.getTempaltePath(`vue-${version}`), 'sample-pages');
     const pagesPath = createPathToPage(appPath);
     templateCreator.moveTemplateFilesToProject(samplePageTemplatePath, pagesPath, {}, getCorrectPath);
 };
@@ -216,23 +195,13 @@ const createPathToPage = (appPath) => {
 
 const addView = (pageName, options) => {
     const version = getVueVersion();
-    const isTypeScript = typescriptUtils.isTypeScript(typescriptUtils.getTemplateType('vue'));
 
-    const pageTemplatePath = path.join(
-        templateCreator.getTempaltePath(`vue-${version}`, isTypeScript),
-        'page'
-    );
+    const pageTemplatePath = path.join(templateCreator.getTempaltePath(`vue-${version}`), 'page');
 
     const componentName = getComponentPageName(pageName);
     const pathToPage = createPathToPage(process.cwd());
-    const routingModulePath = typescriptUtils.setFileExtension(
-        path.join(process.cwd(), 'src', 'router.js'),
-        isTypeScript
-    );
-    const navigationModulePath = typescriptUtils.setFileExtension(
-        path.join(process.cwd(), 'src', 'app-navigation.js'),
-        isTypeScript
-    );
+    const routingModulePath = path.join(process.cwd(), 'src', 'router.js');
+    const navigationModulePath = path.join(process.cwd(), 'src', 'app-navigation.js');
     const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'folder', version);
     const getCorrectExtension = (fileExtension) => fileExtension;
     templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath, getCorrectExtension);
