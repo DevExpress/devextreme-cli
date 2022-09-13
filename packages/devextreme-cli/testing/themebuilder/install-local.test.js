@@ -32,10 +32,10 @@ describe('ThemeBuilder local install tests', () => {
 
     test.each`
     devextreme   | devextremeThemebuilder | expectInstall
-    ${'21.1.4'}  | ${'21.1.4'}            | ${null}
-    ${'21.1.4'}  | ${null}                | ${'21.1.4'}
-    ${'21.1.4'}  | ${'21.1.3'}            | ${'21.1.4'}
-    ${null}      | ${'21.1.3'}            | ${'latest'}
+    ${'22.1.4'}  | ${'22.1.4'}            | ${null}
+    ${'22.1.4'}  | ${null}                | ${'22.1.4'}
+    ${'22.1.4'}  | ${'22.1.3'}            | ${'22.1.4'}
+    ${null}      | ${'22.1.4'}            | ${'latest'}
     ${null}      | ${null}                | ${'latest'}
     `('devextreme: $devextreme, devextreme-themebuilder: $devextremeThemebuilder', async({
         devextreme,

@@ -97,7 +97,7 @@ const getCorrectPath = (extension, pathToApp) => {
 };
 
 const addTemplate = (appPath, appName, templateOptions) => {
-    const { version } = templateOptions;
+    let { version } = templateOptions;
 
     if(!version) {
         version = getVueVersion();
@@ -135,7 +135,7 @@ const addStylesToApp = (appPath, styles) => {
 };
 
 const addSamplePages = (appPath, templateOptions) => {
-    const { version } = templateOptions;
+    let { version } = templateOptions;
 
     if(!version) {
         version = getVueVersion();
