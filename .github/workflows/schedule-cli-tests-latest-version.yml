@@ -1,0 +1,12 @@
+name: Schedule tests for current versions of external CLIs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * 1-5"
+
+jobs:
+  call_tests_workflow:
+    uses: ./.github/workflows/applications.yml
+    with:
+      external-tools-version: latest
