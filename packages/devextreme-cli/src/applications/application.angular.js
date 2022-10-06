@@ -7,6 +7,7 @@ const fs = require('fs');
 const dasherize = require('../utility/string').dasherize;
 const ngVersion = require('../utility/ng-version');
 const latestVersions = require('../utility/latest-versions');
+const { extractToolingVersion, toolingVersionOptionName } = require('../utility/extract-tooling-version');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
 const minNgCliVersion = new semver('12.0.0');
@@ -21,26 +22,29 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
     }
 
     if(!localPackageExists(collectionName)) {
-        await runNgCommand(['add', collectionPath, '--skip-confirmation=true'], evaluatingOptions);
+        await runNgCommand(['add', collectionPath, '--skip-confirmation=true'], options, evaluatingOptions);
     }
 
     const commandArguments = ['g', `${collectionName}:${schematicCommand}`];
-    for(let option in options) {
+
+    const { [toolingVersionOptionName]: _, ...optionsToArguments } = options; // eslint-disable-line no-unused-vars
+    for(let option in optionsToArguments) {
         commandArguments.push(`--${dasherize(option)}=${options[option]}`);
     }
 
-    runNgCommand(commandArguments, evaluatingOptions);
+    runNgCommand(commandArguments, options, evaluatingOptions);
 }
 
-async function runNgCommand(commandArguments, evaluatingOptions) {
+async function runNgCommand(commandArguments, commandOptions, commandConfig) {
     const hasNg = await hasSutableNgCli();
-    const npmCommandName = hasNg ? 'ng' : 'npx';
-    const ngCommandArguments = hasNg
+    const toolingVersion = extractToolingVersion(commandOptions);
+    const npmCommandName = hasNg && !toolingVersion ? 'ng' : 'npx';
+    const ngCommandArguments = hasNg && !toolingVersion
         ? []
-        : ['-p', '@angular/cli', 'ng'];
+        : ['-p', `@angular/cli${toolingVersion}`, 'ng'];
 
     ngCommandArguments.push(...commandArguments);
-    return runCommand(npmCommandName, ngCommandArguments, evaluatingOptions);
+    return runCommand(npmCommandName, ngCommandArguments, commandConfig);
 }
 
 function localPackageExists(packageName) {
@@ -81,7 +85,7 @@ const create = async(appName, options) => {
         '--skip-install=true',
     ];
 
-    await runNgCommand(commandArguments);
+    await runNgCommand(commandArguments, options);
 
     const appPath = path.join(process.cwd(), appName);
 

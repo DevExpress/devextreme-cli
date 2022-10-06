@@ -13,6 +13,7 @@ const stringUtils = require('../utility/string');
 const typescriptUtils = require('../utility/typescript-extension');
 const removeFile = require('../utility/file-operations').remove;
 const latestVersions = require('../utility/latest-versions');
+const { extractToolingVersion } = require('../utility/extract-tooling-version');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
@@ -60,8 +61,9 @@ const create = async(appName, options) => {
         layout: stringUtils.classify(layoutType),
         isTypeScript: typescriptUtils.isTypeScript(templateType)
     });
-
-    const commandArguments = ['-p=create-react-app', 'create-react-app', appName];
+    const toolingVersion = extractToolingVersion(options);
+    const commandArguments = [`-p=create-react-app${toolingVersion}`, 'create-react-app', appName];
+    console.log(commandArguments);
     if(templateOptions.isTypeScript) {
         commandArguments.push('--template typescript');
     }
