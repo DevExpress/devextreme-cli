@@ -4,6 +4,7 @@ const path = require('path');
 
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
+const { toolingVersionOptionName } = require('../src/utility/extract-tooling-version');
 const classify = require('../src/utility/string').classify;
 
 const appName = 'my-app';
@@ -17,16 +18,18 @@ exports.deployPath = path.join(appPath, 'build');
 exports.npmArgs = ['run', 'build'];
 exports.fileExtention = 'ts';
 
-exports.createApp = async() => {
+exports.createApp = async(toolingVersion) => {
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 
+    const additionalArguments = toolingVersion && [`--${toolingVersionOptionName} ${toolingVersion}`] || [];
     await runCommand('node', [
         path.join(process.cwd(), './index.js'),
         'new',
         'react-app',
         '--layout=side-nav-outer-toolbar',
-        '--template=typescript'
+        '--template=typescript',
+        ...additionalArguments
     ], {
         cwd: sandboxPath,
         forceNoCmd: true
