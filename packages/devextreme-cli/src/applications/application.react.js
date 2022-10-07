@@ -63,7 +63,7 @@ const create = async(appName, options) => {
     });
     const toolingVersion = extractToolingVersion(options);
     const commandArguments = [`-p=create-react-app${toolingVersion}`, 'create-react-app', appName];
-    console.log(commandArguments);
+
     if(templateOptions.isTypeScript) {
         commandArguments.push('--template typescript');
     }
