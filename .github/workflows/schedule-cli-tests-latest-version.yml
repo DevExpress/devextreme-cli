@@ -23,3 +23,4 @@ jobs:
         with:
           hook_url: ${{secrets.TEAMS_ALERT_WEBHOOK}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
+          only_on_push: false
