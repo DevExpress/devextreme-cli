@@ -10,6 +10,7 @@ const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
 const latestVersions = require('../utility/latest-versions');
+const { toolingVersionOptionName, extractToolingVersion } = require('../utility/extract-tooling-version');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css',
     'devextreme/dist/css/dx.common.css'
@@ -55,7 +56,8 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
 
 async function createVueApp(name, templateOptions) {
     const { version } = templateOptions;
-    const argList = ['-p', '@vue/cli', 'vue', 'create', name];
+    const toolingVersion = extractToolingVersion(templateOptions);
+    const argList = ['-p', `@vue/cli${toolingVersion}`, 'vue', 'create', name];
 
     if(version === 'v2') {
         argList.push('-p "Default (Vue 2)"');
@@ -73,7 +75,8 @@ const create = async(appName, options) => {
     const templateOptions = {
         project: stringUtils.humanize(appName),
         layout: layout,
-        version: version
+        version: version,
+        [toolingVersionOptionName]: options[toolingVersionOptionName]
     };
 
     await createVueApp(appName, templateOptions);

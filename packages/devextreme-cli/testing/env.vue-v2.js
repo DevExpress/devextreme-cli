@@ -3,6 +3,7 @@ const path = require('path');
 
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
+const { toolingVersionOptionName } = require('../src/utility/extract-tooling-version');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/vue-v2');
@@ -15,16 +16,18 @@ exports.deployPath = path.join(appPath, 'dist');
 exports.npmArgs = ['run', 'build'];
 exports.fileExtention = 'js';
 
-exports.createApp = async() => {
+exports.createApp = async(toolingVersion) => {
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 
+    const additionalArguments = toolingVersion && [`--${toolingVersionOptionName} ${toolingVersion}`] || [];
     await runCommand('node', [
         path.join(process.cwd(), './index.js'),
         'new',
         'vue-app',
         '--layout=side-nav-outer-toolbar',
-        '--version=2'
+        '--version=2',
+        ...additionalArguments
     ], {
         cwd: sandboxPath,
         forceNoCmd: true

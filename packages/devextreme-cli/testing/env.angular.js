@@ -4,6 +4,7 @@ const path = require('path');
 const packageManager = require('../src/utility/package-manager');
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
+const { toolingVersionOptionName } = require('../src/utility/extract-tooling-version');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
@@ -30,18 +31,19 @@ exports.deployPath = path.join(appPath, 'dist', 'my-app');
 exports.npmArgs = ['run', 'build', '--', '--configuration', 'development'];
 exports.fileExtention = 'ts';
 
-exports.createApp = async() => {
+exports.createApp = async(toolingVersion) => {
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 
     await prepareSchematics();
-
+    const additionalArguments = toolingVersion && [`--${toolingVersionOptionName} ${toolingVersion}`] || [];
     await runCommand('node', [
         path.join(process.cwd(), './index.js'),
         'new',
         'angular-app',
         '--layout=side-nav-outer-toolbar',
         `--c=${schematicsDirectory}`,
+        ...additionalArguments
     ], {
         cwd: sandboxPath,
         forceNoCmd: true
@@ -53,6 +55,7 @@ exports.createApp = async() => {
         'view',
         'new-page',
         `--c=${schematicsDirectory}`,
+        ...additionalArguments
     ], {
         cwd: appPath,
         forceNoCmd: true

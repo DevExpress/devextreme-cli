@@ -1,4 +1,5 @@
 const minimist = require('minimist');
+const { toolingVersionOptionName } = require('../src/utility/extract-tooling-version');
 const envs = require('./constants').envs;
 
 const args = minimist(process.argv.slice(2), {
@@ -15,9 +16,11 @@ const args = minimist(process.argv.slice(2), {
     const filteredEnvs = args.e === 'all'
         ? envs
         : envs.filter(e => e.engine === args.e);
+
+    const toolingVersion = args[toolingVersionOptionName];
     filteredEnvs.forEach(async env => {
         try {
-            await env.createApp();
+            await env.createApp(toolingVersion);
         } catch(e) {
             process.exit(1);
         }

@@ -1,0 +1,25 @@
+name: Schedule tests for current versions of external CLIs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * 1-5"
+
+jobs:
+  call_tests_workflow:
+    name: Run CLI tests
+    uses: ./.github/workflows/applications.yml
+    with:
+      external-tools-version: latest
+
+  teams_notification_on_failure:
+    name: Send Teams notification
+    runs-on: ubuntu-latest
+    needs: [call_tests_workflow]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: DevExpress/github-actions/send-teams-notification@main
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT_WEBHOOK}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}

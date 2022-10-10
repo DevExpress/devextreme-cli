@@ -1,7 +1,16 @@
 name: Application tests
 
-on: [push, pull_request]
-
+on: 
+  push:
+  pull_request:
+  workflow_call:
+    inputs:
+      external-tools-version:
+        description: 'Version of external tools'
+        default: latest
+        required: false
+        type: string
+      
 jobs:
   application-test:
     strategy:
@@ -13,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VUE_CLI_CONFIG_PATH: /home/runner/work/devextreme-cli/devextreme-cli/.vuerc
+      TOOLING_VERSION_PARAM: ${{ inputs.external-tools-version != '' && format('--tooling-version {0}', inputs.external-tools-version) || '' }}
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}
 
     steps:
@@ -67,14 +77,14 @@ jobs:
       working-directory: ./packages/devextreme-cli
 
     - name: Create applications
-      run: npm run create-template -- -- -e ${{ matrix.APPROACH }}
+      run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
       timeout-minutes: 20
 
     - name: Lint applications
-      run: npm run lint-template -- -- -e ${{ matrix.APPROACH }}
+      run: npm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
     
     - name: Run test
-      run: npm run test-template -- -- -e ${{ matrix.APPROACH }}
+      run: npm run test-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
       timeout-minutes: 20
 
     - name: Archive artifacts
