@@ -24,7 +24,7 @@ jobs:
     env:
       VUE_CLI_CONFIG_PATH: /home/runner/work/devextreme-cli/devextreme-cli/.vuerc
       TOOLING_VERSION_PARAM: ${{ inputs.external-tools-version != '' && format('--tooling-version {0}', inputs.external-tools-version) || '' }}
-    name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}
+    name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}, ${{ matrix.OS }}
 
     steps:
 
