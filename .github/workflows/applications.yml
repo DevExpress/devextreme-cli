@@ -80,6 +80,7 @@ jobs:
       run: npm install --no-package-lock --no-audit --no-fund
 
     - name: Run docker image
+      if: ${{ runner.os != 'Windows' }}
       run: npm run docker:build && npm run docker:run
       working-directory: ./packages/devextreme-cli
 
@@ -91,6 +92,7 @@ jobs:
       run: npm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
     
     - name: Run test
+      if: ${{ runner.os != 'Windows' }}
       run: npm run test-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
       timeout-minutes: 20
 
