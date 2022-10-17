@@ -18,8 +18,9 @@ jobs:
       matrix:
         APPROACH: [ angular, vue-v3, vue-v2, react, react-ts ]
         NODE: [ 14, 16 ]
+        OS: [ubuntu-latest, windows-latest]
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.OS }}
     env:
       VUE_CLI_CONFIG_PATH: /home/runner/work/devextreme-cli/devextreme-cli/.vuerc
       TOOLING_VERSION_PARAM: ${{ inputs.external-tools-version != '' && format('--tooling-version {0}', inputs.external-tools-version) || '' }}
