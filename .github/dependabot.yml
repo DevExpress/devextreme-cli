@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    reviewers:
+      - 'DevExpress/devextreme-devops'
+
+  - package-ecosystem: 'npm'
+    directory: '/packages/devextreme-cli/'
+    schedule:
+      interval: 'weekly'
+    reviewers:
+      - 'DevExpress/devextreme-devops'
+
+  - package-ecosystem: 'npm'
+    directory: '/packages/devextreme-schematics/'
+    schedule:
+      interval: 'weekly'
+    reviewers:
+      - 'DevExpress/devextreme-devops'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    reviewers:
+      - 'DevExpress/devextreme-devops'
