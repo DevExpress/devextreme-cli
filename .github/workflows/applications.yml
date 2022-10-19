@@ -22,7 +22,7 @@ jobs:
 
     runs-on: ${{ matrix.OS }}
     env:
-      VUE_CLI_CONFIG_PATH: ${{ $HOME }}/runner/work/devextreme-cli/devextreme-cli/.vuerc
+      VUE_CLI_CONFIG_PATH: ${{ env.HOME }}/runner/work/devextreme-cli/devextreme-cli/.vuerc
       TOOLING_VERSION_PARAM: ${{ inputs.external-tools-version != '' && format('--tooling-version {0}', inputs.external-tools-version) || '' }}
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}, ${{ matrix.OS }}
 
