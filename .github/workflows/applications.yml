@@ -24,6 +24,7 @@ jobs:
     env:
       VUE_CLI_CONFIG_PATH: /home/runner/work/devextreme-cli/devextreme-cli/.vuerc
       TOOLING_VERSION_PARAM: ${{ inputs.external-tools-version != '' && format('--tooling-version {0}', inputs.external-tools-version) || '' }}
+      IS_WINDOWS:  ${{ runner.os == 'Windows' }}
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}, ${{ matrix.OS }}
 
     steps:
@@ -51,9 +52,10 @@ jobs:
       with:
         node-version: ${{ matrix.NODE }}
 
-    # - name: Disable taobao registry
-    #   run: |
-    #     echo {\"useTaobaoRegistry\": false} > ${{ env.VUE_CLI_CONFIG_PATH }}
+    - name: Disable taobao registry
+      if: ${{ !IS_WINDOWS }}
+      run: |
+        echo {\"useTaobaoRegistry\": false} > ${{ env.VUE_CLI_CONFIG_PATH }}
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
@@ -80,7 +82,7 @@ jobs:
       run: npm install --no-package-lock --no-audit --no-fund
 
     - name: Run docker image
-      if: ${{ runner.os != 'Windows' }}
+      if: ${{ !IS_WINDOWS }}
       run: npm run docker:build && npm run docker:run
       working-directory: ./packages/devextreme-cli
 
@@ -89,10 +91,11 @@ jobs:
       timeout-minutes: 20
 
     - name: Lint applications
+      if: ${{ !IS_WINDOWS }}
       run: npm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
     
     - name: Run test
-      if: ${{ runner.os != 'Windows' }}
+      if: ${{ !IS_WINDOWS }}
       run: npm run test-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
       timeout-minutes: 20
 
