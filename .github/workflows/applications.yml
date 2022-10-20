@@ -24,6 +24,7 @@ jobs:
     env:
       VUE_CLI_CONFIG_PATH: $GITHUB_WORKSPACE/.vuerc
       TOOLING_VERSION_PARAM: ${{ inputs.external-tools-version != '' && format('--tooling-version {0}', inputs.external-tools-version) || '' }}
+      SHELL: ${{ matrix.OS == 'windows-latest' && 'pwsh' || 'bash' }}
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}, ${{ matrix.OS }}
 
     steps:
@@ -41,11 +42,11 @@ jobs:
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
       run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-      shell: format('{0}', ${{ matrix.OS == 'windows-latest' && 'pwsh' || 'bash' }})
+      shell: ${{ env.SHELL }}
 
     - name: Print yarn cache path
       run: echo ${{ steps.yarn-cache-dir-path.outputs.dir }}  
-      shell: format('{0}', ${{ matrix.OS == 'windows-latest' && 'pwsh' || 'bash' }})
+      shell: ${{ env.SHELL }}
 
     - name: Disable taobao registry
       if: ${{ startsWith( matrix.APPROACH, 'vue') }}
