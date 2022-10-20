@@ -44,7 +44,7 @@ jobs:
       run: echo "dir=$(yarn cache dir)" >> ${{ matrix.OS != 'windows-latest' && '$GITHUB_OUTPUT ' || '$env:GITHUB_OUTPUT' }}
 
     - name: Cache yarn
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
         key: ${{ runner.os }}-yarn-${{ matrix.NODE }}-${{ hashFiles('**/yarn.lock') }}
