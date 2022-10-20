@@ -38,6 +38,13 @@ jobs:
         cache: 'npm'
         cache-dependency-path: '**/package-lock.json'
 
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+    - name: Print yarn cache path
+      run: echo ${{ steps.yarn-cache-dir-path.outputs.dir }}  
+
     - name: Disable taobao registry
       if: ${{ startsWith( matrix.APPROACH, 'vue') }}
       run: |
