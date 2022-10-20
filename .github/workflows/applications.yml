@@ -41,10 +41,7 @@ jobs:
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
-      run: ${{ matrix.OS != 'windows-latest' && 'echo ' || '' }}"dir=$(yarn cache dir)" >> $env:GITHUB_OUTPUT
-
-    - name: Check yarn cache dir output
-      run: yarn cache dir 
+      run: echo "dir=$(yarn cache dir)" >> ${{ matrix.OS != 'windows-latest' && '$GITHUB_OUTPUT ' || '$env:GITHUB_OUTPUT' }}
 
     - name: Print yarn cache path
       run: echo "${{ steps.yarn-cache-dir-path.outputs.dir }}"  
