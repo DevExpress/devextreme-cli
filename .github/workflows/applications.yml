@@ -19,10 +19,6 @@ jobs:
         APPROACH: [ angular, vue-v3, vue-v2, react, react-ts ]
         NODE: [ 16, 18 ]
         OS: [ubuntu-latest, windows-latest]
-    
-    defaults:
-      run:
-        shell: ${{ matrix.OS == 'windows-latest' && 'pwsh' || 'bash' }}
 
     runs-on: ${{ matrix.OS }}
     env:
@@ -48,7 +44,7 @@ jobs:
       run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
     - name: Print yarn cache path
-      run: echo ${{ steps.yarn-cache-dir-path.outputs.dir }}  
+      run: echo "${{ steps.yarn-cache-dir-path.outputs.dir }}"  
 
     - name: Disable taobao registry
       if: ${{ startsWith( matrix.APPROACH, 'vue') }}
