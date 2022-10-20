@@ -41,11 +41,11 @@ jobs:
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
       run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-      shell: ${{ matrix.OS == 'windows-latest' && pwsh || bash }}
+      shell: format('{0}', ${{ matrix.OS == 'windows-latest' && 'pwsh' || 'bash' }})
 
     - name: Print yarn cache path
       run: echo ${{ steps.yarn-cache-dir-path.outputs.dir }}  
-      shell: ${{ matrix.OS == 'windows-latest' && pwsh || bash }}
+      shell: format('{0}', ${{ matrix.OS == 'windows-latest' && 'pwsh' || 'bash' }})
 
     - name: Disable taobao registry
       if: ${{ startsWith( matrix.APPROACH, 'vue') }}
