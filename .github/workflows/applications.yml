@@ -32,7 +32,7 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v3
 
-    - name: Use Node.js
+    - name: Set up and cache Node.js
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.NODE }}
@@ -43,8 +43,14 @@ jobs:
       id: yarn-cache-dir-path
       run: echo "dir=$(yarn cache dir)" >> ${{ matrix.OS != 'windows-latest' && '$GITHUB_OUTPUT ' || '$env:GITHUB_OUTPUT' }}
 
-    - name: Print yarn cache path
-      run: echo "${{ steps.yarn-cache-dir-path.outputs.dir }}"  
+    - name: Cache yarn
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.NODE }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-${{ matrix.NODE }}
+          ${{ runner.os }}-yarn-
 
     - name: Disable taobao registry
       if: ${{ startsWith( matrix.APPROACH, 'vue') }}
