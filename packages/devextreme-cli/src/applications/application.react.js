@@ -15,8 +15,7 @@ const removeFile = require('../utility/file-operations').remove;
 const latestVersions = require('../utility/latest-versions');
 const { extractToolingVersion } = require('../utility/extract-tooling-version');
 const defaultStyles = [
-    'devextreme/dist/css/dx.light.css',
-    'devextreme/dist/css/dx.common.css'
+    'devextreme/dist/css/dx.light.css'
 ];
 
 const getExtension = (appPath) => {
