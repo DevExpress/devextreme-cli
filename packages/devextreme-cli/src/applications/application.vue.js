@@ -12,8 +12,7 @@ const stringUtils = require('../utility/string');
 const latestVersions = require('../utility/latest-versions');
 const { toolingVersionOptionName, extractToolingVersion } = require('../utility/extract-tooling-version');
 const defaultStyles = [
-    'devextreme/dist/css/dx.light.css',
-    'devextreme/dist/css/dx.common.css'
+    'devextreme/dist/css/dx.light.css'
 ];
 const defaultVueVersion = 'v3';
 
