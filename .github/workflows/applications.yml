@@ -1,6 +1,6 @@
 name: Application tests
 
-on: 
+on:
   push:
   pull_request:
   workflow_call:
@@ -10,7 +10,7 @@ on:
         default: latest
         required: false
         type: string
-      
+
 jobs:
   application-test:
     strategy:
@@ -72,15 +72,15 @@ jobs:
     - name: Lint created application
       if: ${{ matrix.OS != 'windows-latest' }}
       run: npm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
-    
+
     - name: Run template tests
       if: ${{ matrix.OS != 'windows-latest' }}
       run: npm run test-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
-      timeout-minutes: 20
+      timeout-minutes: 30
 
     - name: Archive artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: artifacts
         path: |
@@ -94,7 +94,7 @@ jobs:
 
       - name: Get sources
         uses: actions/checkout@v3
-      
+
       - name: Set up Node.js and restore cache
         uses: actions/setup-node@v3
         with:
