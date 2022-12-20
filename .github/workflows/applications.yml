@@ -86,6 +86,7 @@ jobs:
         path: |
           test-results.xml
           packages/devextreme-cli/testing/__tests__/__diff_snapshots__
+          packages/devextreme-cli/testing/__tests__/__received_snapshots__
           packages/devextreme-cli/testing/sandbox/logs
 
   schematics-test:

@@ -10,6 +10,7 @@ const defaultLayout = 'side-nav-outer-toolbar';
 module.exports = (env) => {
     const appUrl = `http://${ip.address()}:8080/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
+    const receivedSnapshotsDir = path.join('testing/__tests__/__received_snapshots__', env.engine);
 
     describe(`${env.engine} app-template`, () => {
         let browser;
@@ -81,7 +82,8 @@ module.exports = (env) => {
                                     customDiffConfig: customConfig,
                                     customSnapshotIdentifier: `${layout}-${theme}-${viewportName}-${name}`,
                                     customDiffDir: diffSnapshotsDir,
-                                    storeReceivedOnFailure: true
+                                    storeReceivedOnFailure: true,
+                                    customReceivedDir: receivedSnapshotsDir
                                 });
                             }
 
