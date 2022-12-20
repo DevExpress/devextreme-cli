@@ -80,7 +80,8 @@ module.exports = (env) => {
                                 expect(image).toMatchImageSnapshot({
                                     customDiffConfig: customConfig,
                                     customSnapshotIdentifier: `${layout}-${theme}-${viewportName}-${name}`,
-                                    customDiffDir: diffSnapshotsDir
+                                    customDiffDir: diffSnapshotsDir,
+                                    storeReceivedOnFailure: true
                                 });
                             }
 
