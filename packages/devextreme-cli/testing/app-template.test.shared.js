@@ -56,13 +56,10 @@ module.exports = (env) => {
                                 await page.goto('about:blank');
                                 await page.setViewport(viewport);
                                 await page.goto(url, {
-                                    timeout: 0,
                                     waitUntil: 'networkidle0',
                                     ...options
                                 });
-                                await page.waitFor('.with-footer', {
-                                    // timeout: 0
-                                });
+                                await page.waitFor('.with-footer');
 
                                 return page;
                             }
@@ -70,9 +67,9 @@ module.exports = (env) => {
                             async function logOut() {
                                 const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                 await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
-                                await page.waitFor('.dx-icon-runner', { timeout: 0 });
+                                await page.waitFor('.dx-icon-runner');
                                 await page.click('.dx-icon-runner');
-                                await page.waitFor('.login-header, .login-form', { timeout: 0 });
+                                await page.waitFor('.login-header, .login-form');
                             }
 
                             const customConfig = { threshold: 0.012 };
@@ -205,7 +202,7 @@ module.exports = (env) => {
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     await page.click('.dx-button-normal');
-                                    await page.waitFor('.create-account-form', { timeout: 0 });
+                                    await page.waitFor('.create-account-form');
 
                                     await hideScroll();
 
@@ -223,7 +220,7 @@ module.exports = (env) => {
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     await page.click('a');
-                                    await page.waitFor('form', { timeout: 0 });
+                                    await page.waitFor('form');
 
                                     await hideScroll();
 
@@ -243,7 +240,7 @@ module.exports = (env) => {
                                     await page.evaluate(
                                         'const a = document.createElement("a");a.href="#/change-password/123";a.click()'
                                     );
-                                    await page.waitFor('form', { timeout: 0 });
+                                    await page.waitFor('form');
 
                                     await hideScroll();
 
