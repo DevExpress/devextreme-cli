@@ -79,7 +79,7 @@ module.exports = (env) => {
                             function compareSnapshot(image, name) {
                                 expect(image).toMatchImageSnapshot({
                                     customDiffConfig: customConfig,
-                                    customSnapshotIdentifier: `${layout}-${theme}-${viewportName}-${name}`,
+                                    customSnapshotIdentifier: `${layout}-${theme}-${viewportName}-${name}-snap`,
                                     customDiffDir: diffSnapshotsDir,
                                     storeReceivedOnFailure: true,
                                     customReceivedDir: diffSnapshotsDir

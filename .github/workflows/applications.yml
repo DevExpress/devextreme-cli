@@ -17,15 +17,15 @@ jobs:
       fail-fast: false
       matrix:
         APPROACH: [ 
-          # angular,
-          # vue-v3,
-          # vue-v2,
-          # react,
+          angular,
+          vue-v3,
+          vue-v2,
+          react,
           react-ts ]
         NODE: [ 16, 18 ]
         OS: [
           ubuntu-latest,
-          # windows-latest
+          windows-latest
         ]
 
     runs-on: ${{ matrix.OS }}
