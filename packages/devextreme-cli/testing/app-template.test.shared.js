@@ -67,9 +67,13 @@ module.exports = (env) => {
                             async function logOut() {
                                 const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                 await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
+
+                                await page.waitFor(500);
                                 await page.waitFor('.dx-icon-runner');
                                 await page.click('.dx-icon-runner');
-                                // await page.waitFor('.login-form');
+
+                                await page.waitFor('.login-form');
+                                await page.waitFor(500);
                             }
 
                             const customConfig = { threshold: 0.012 };
@@ -202,6 +206,7 @@ module.exports = (env) => {
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     await page.click('.dx-button-normal');
+                                    await page.waitFor(500);
                                     await page.waitFor('.create-account-form');
 
                                     await hideScroll();
@@ -220,7 +225,8 @@ module.exports = (env) => {
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     await page.click('a');
-                                    await page.waitFor('form');
+                                    await page.waitFor(500);
+                                    await page.waitFor('.reset-password-form');
 
                                     await hideScroll();
 
