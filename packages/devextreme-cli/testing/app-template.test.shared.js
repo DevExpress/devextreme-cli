@@ -69,7 +69,7 @@ module.exports = (env) => {
                                 await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
                                 await page.waitFor('.dx-icon-runner');
                                 await page.click('.dx-icon-runner');
-                                await page.waitFor('.login-header, .login-form');
+                                // await page.waitFor('.login-form');
                             }
 
                             const customConfig = { threshold: 0.012 };
