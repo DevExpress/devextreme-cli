@@ -15,7 +15,7 @@ const getLocalNgVersion = () => {
 };
 
 const getPublicNgVersion = () => {
-    const version = execSync('npm view @angular/cli version').toString();
+    const version = '15.2.9'; // execSync('npm view @angular/cli version').toString();
     return new semver(version);
 };
 
