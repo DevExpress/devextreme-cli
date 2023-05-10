@@ -164,7 +164,7 @@ const runThemeBuilder = async rawOptions => {
         options.sassCompiler = scssCompiler;
     }
 
-    options.lessCompiler = require('less/lib/less-node');
+    options.lessCompiler = require('less');
 
     options.lessCompiler.options = options.lessCompiler.options || {};
     options.lessCompiler.options['math'] = 'always';
