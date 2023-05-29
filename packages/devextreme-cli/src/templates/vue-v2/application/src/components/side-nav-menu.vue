@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import DxTreeView from "devextreme-vue/ui/tree-view";
+import DxTreeView from "devextreme-vue/tree-view";
 import { sizes } from '../utils/media-query';
 import navigation from '../app-navigation';
 

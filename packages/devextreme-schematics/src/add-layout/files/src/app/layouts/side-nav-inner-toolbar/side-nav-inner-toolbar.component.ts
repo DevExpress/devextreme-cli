@@ -1,11 +1,10 @@
 import { Component, OnInit, NgModule, Input, ViewChild } from '@angular/core';
 import { SideNavigationMenuModule, HeaderModule } from '../../shared/components';
 import { ScreenService } from '../../shared/services';
-import { ItemClickEvent as TreeViewItemClickEvent } from 'devextreme/ui/tree_view';
-import { ItemClickEvent as ToolbarItemClickEvent } from 'devextreme/ui/toolbar';
+import { DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { DxDrawerModule } from 'devextreme-angular/ui/drawer';
 import { DxScrollViewModule, DxScrollViewComponent } from 'devextreme-angular/ui/scroll-view';
-import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
+import { DxToolbarModule, DxToolbarTypes } from 'devextreme-angular/ui/toolbar';
 import { CommonModule } from '@angular/common';
 
 import { Router, NavigationEnd } from '@angular/router';
@@ -56,7 +55,7 @@ export class SideNavInnerToolbarComponent implements OnInit {
     this.shaderEnabled = !isLarge;
   }
 
-  toggleMenu = (e: ToolbarItemClickEvent) => {
+  toggleMenu = (e: DxToolbarTypes.ItemClickEvent) => {
     this.menuOpened = !this.menuOpened;
     e.event?.stopPropagation();
   }
@@ -69,7 +68,7 @@ export class SideNavInnerToolbarComponent implements OnInit {
     return !this.menuOpened;
   }
 
-  navigationChanged(event: TreeViewItemClickEvent) {
+  navigationChanged(event: DxTreeViewTypes.ItemClickEvent) {
     const path = (event.itemData as any).path;
     const pointerEvent = event.event;
 
