@@ -3,8 +3,7 @@ const puppeteer = require('puppeteer');
 module.exports.getBrowser = () => {
     if(Boolean(process.env.LAUNCH_BROWSER)) {
         return puppeteer.launch({
-            args: ['--no-sandbox'],
-            dumpio: true
+            args: ['--no-sandbox']
         });
     } else {
         return puppeteer.connect({
