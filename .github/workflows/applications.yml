@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        APPROACH: [ 
+        APPROACH: [
           angular,
           vue-v3,
           vue-v2,
@@ -32,6 +32,7 @@ jobs:
     env:
       VUE_CLI_CONFIG_PATH: $GITHUB_WORKSPACE/.vuerc
       TOOLING_VERSION_PARAM: ${{ inputs.external-tools-version != '' && format('--tooling-version {0}', inputs.external-tools-version) || '' }}
+      VUE_CLI_TEST: true
 
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}, ${{ matrix.OS }}
 
