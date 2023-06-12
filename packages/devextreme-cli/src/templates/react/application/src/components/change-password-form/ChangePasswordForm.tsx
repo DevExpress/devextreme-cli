@@ -58,7 +58,7 @@ export default function ChangePasswordForm() {
           <RequiredRule message="Password is required" />
           <CustomRule
             message={'Passwords do not match'}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // eslint-disable-next-line
             // @ts-ignore
             validationCallback={confirmPassword}
           />
