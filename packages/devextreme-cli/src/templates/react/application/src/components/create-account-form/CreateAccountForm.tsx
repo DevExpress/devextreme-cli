@@ -68,6 +68,7 @@ export default function CreateAccountForm() {
           <RequiredRule message="Password is required" />
           <CustomRule
             message={'Passwords do not match'}
+            // @ts-ignore
             validationCallback={confirmPassword}
           />
           <Label visible={false} />

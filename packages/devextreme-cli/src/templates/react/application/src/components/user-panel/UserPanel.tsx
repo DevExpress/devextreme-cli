@@ -47,7 +47,7 @@ export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps
           width={210}
           cssClass={'user-menu'}
         >
-          <Position my={'top center'} at={'bottom center'} />
+          <Position my={{ x: 'center', y: 'top' }} at={{ x: 'center', y: 'bottom' }} />
         </ContextMenu>
       )}
       {menuMode === 'list' && (
