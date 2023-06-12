@@ -63,7 +63,7 @@ jobs:
     - name: Disable taobao registry
       if: ${{ startsWith( matrix.APPROACH, 'vue') }}
       run: |
-        echo "{""useTaobaoRegistry"": false}" > ${{ env.VUE_CLI_CONFIG_PATH }}
+        echo '{"useTaobaoRegistry": false}' > ${{ env.VUE_CLI_CONFIG_PATH }}
 
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund
