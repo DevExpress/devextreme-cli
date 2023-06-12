@@ -56,7 +56,7 @@ const preparePackageJsonForTemplate = (appPath, appName, version) => {
 async function createVueApp(name, templateOptions) {
     const { version } = templateOptions;
     const toolingVersion = extractToolingVersion(templateOptions);
-    const argList = ['-p', `@vue/cli${toolingVersion}`, 'vue', 'create', name];
+    const argList = ['-p', `@vue/cli${toolingVersion}`, 'vue', 'create', name, '--registry', 'https://registry.npmjs.org/'];
 
     if(version === 'v2') {
         argList.push('-p "Default (Vue 2)"');
