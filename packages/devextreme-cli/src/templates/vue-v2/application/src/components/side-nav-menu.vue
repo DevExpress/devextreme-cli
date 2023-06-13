@@ -20,17 +20,17 @@
 </template>
 
 <script>
-import DxTreeView from "devextreme-vue/ui/tree-view";
+import DxTreeView from "devextreme-vue";
 import { sizes } from '../utils/media-query';
 import navigation from '../app-navigation';
 
 const treeViewRef = "treeViewRef";
 const isLargeScreen = sizes()['screen-large'];
 const items = navigation.map((item) => {
-      if(item.path && !(/^\//.test(item.path))){ 
+      if(item.path && !(/^\//.test(item.path))){
         item.path = `/${item.path}`;
       }
-      return {...item, expanded: isLargeScreen} 
+      return {...item, expanded: isLargeScreen}
     });
 
 export default {

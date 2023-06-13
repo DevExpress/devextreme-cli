@@ -20,11 +20,11 @@
 </template>
 
 <script>
-import DxTreeView from "devextreme-vue/ui/tree-view";
+import DxTreeView from "devextreme-vue";
 import { sizes } from '../utils/media-query';
 import navigation from '../app-navigation';
 import { onMounted, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router'; 
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
   props: {
@@ -36,10 +36,10 @@ export default {
 
     const isLargeScreen = sizes()['screen-large'];
     const items = navigation.map((item) => {
-      if(item.path && !(/^\//.test(item.path))){ 
+      if(item.path && !(/^\//.test(item.path))){
         item.path = `/${item.path}`;
       }
-      return {...item, expanded: isLargeScreen} 
+      return {...item, expanded: isLargeScreen}
     });
 
     const treeViewRef = ref(null);
@@ -67,13 +67,13 @@ export default {
       treeViewRef.value.instance.expandItem(route.path);
     }
 
-    onMounted(() => { 
+    onMounted(() => {
       updateSelection();
       if (props.compactMode) {
         treeViewRef.value.instance.collapseAll();
       }
     });
-    
+
 
     watch(
       () => route.path,
@@ -81,7 +81,7 @@ export default {
         updateSelection();
       }
     );
-    
+
     watch(
       () => props.compactMode,
       () => {
