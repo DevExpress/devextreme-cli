@@ -7,8 +7,8 @@ import './side-nav-outer-toolbar.scss';
 import { useScreenSize } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
 import { useMenuPatch } from '../../utils/patches';
-<%=#isTypeScript%>import { ClickEvent } from 'devextreme/ui/button';<%=/isTypeScript%>
-<%=#isTypeScript%>import { ItemClickEvent } from 'devextreme/ui/tree_view';<%=/isTypeScript%>
+<%=#isTypeScript%>import { ButtonTypes } from 'devextreme-react/button';<%=/isTypeScript%>
+<%=#isTypeScript%>import { TreeViewTypes } from 'devextreme-react/tree-view';<%=/isTypeScript%>
 <%=#isTypeScript%>import type { SideNavToolbarProps } from '../../types';<%=/isTypeScript%>
 
 export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%>: React.PropsWithChildren<SideNavToolbarProps><%=/isTypeScript%>) {
@@ -20,7 +20,7 @@ export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%
     isLarge ? MenuStatus.Opened : MenuStatus.Closed
   );
 
-  const toggleMenu = useCallback(({ event }<%=#isTypeScript%>: ClickEvent<%=/isTypeScript%>) => {
+  const toggleMenu = useCallback(({ event }<%=#isTypeScript%>: ButtonTypes.ClickEvent<%=/isTypeScript%>) => {
     setMenuStatus(
       prevMenuStatus => prevMenuStatus === MenuStatus.Closed
         ? MenuStatus.Opened
@@ -46,7 +46,7 @@ export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%
     return menuStatus === MenuStatus.Closed ? true : false;
   }, [isLarge]);
 
-  const onNavigationChanged = useCallback(({ itemData, event, node }<%=#isTypeScript%>: ItemClickEvent<%=/isTypeScript%>) => {
+  const onNavigationChanged = useCallback(({ itemData, event, node }<%=#isTypeScript%>: TreeViewTypes.ItemClickEvent<%=/isTypeScript%>) => {
     if (menuStatus === MenuStatus.Closed || !itemData<%=#isTypeScript%>?<%=/isTypeScript%>.path || node<%=#isTypeScript%>?<%=/isTypeScript%>.selected) {
       event<%=#isTypeScript%>?<%=/isTypeScript%>.preventDefault();
       return;
