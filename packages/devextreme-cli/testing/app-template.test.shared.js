@@ -68,12 +68,12 @@ module.exports = (env) => {
                                 const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                 await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
 
-                                await page.waitFor(500);
-                                await page.waitFor('.dx-icon-runner');
+                                await page.waitForTimeout(500);
+                                await page.waitForSelector('.dx-icon-runner');
                                 await page.click('.dx-icon-runner');
 
-                                await page.waitFor('.login-form');
-                                await page.waitFor(500);
+                                await page.waitForSelector('.login-form');
+                                await page.waitForTimeout(500);
                             }
 
                             const customConfig = { threshold: 0.012 };
@@ -95,7 +95,7 @@ module.exports = (env) => {
                                     scrollElement.style.display = 'none';
                                     scrollElement.className += ' dx-state-invisible';
                                 });
-                                await page.waitFor(3000);
+                                await page.waitForTimeout(3000);
                             }
 
                             describe(`${viewportName}`, () => {
@@ -108,7 +108,7 @@ module.exports = (env) => {
                                             domcontentloaded: true
                                         }
                                     }]);
-                                    await page.waitFor(5000);
+                                    await page.waitForTimeout(5000);
 
                                     const image = await page.screenshot({
                                         clip: {
@@ -132,7 +132,7 @@ module.exports = (env) => {
                                 it('Tasks view', async() => {
                                     const page = await openPage(`${appUrl}#/tasks`);
                                     // NOTE: Wait for the DataGrid is loaded
-                                    await page.waitFor('.dx-row-focused');
+                                    await page.waitForSelector('.dx-row-focused');
                                     const image = await page.screenshot();
 
                                     compareSnapshot(image, 'tasks');
@@ -156,7 +156,7 @@ module.exports = (env) => {
                                     await page.click(menuButtonSelector);
 
                                     // NOTE: Wait for animation complete
-                                    await page.waitFor(1000);
+                                    await page.waitForTimeout(1000);
                                     const image = await page.screenshot();
 
                                     compareSnapshot(image, 'toggle');
@@ -167,7 +167,7 @@ module.exports = (env) => {
                                     const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                     await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
                                     // NOTE: Wait for animation complete
-                                    await page.waitFor(1000);
+                                    await page.waitForTimeout(1000);
                                     const image = await page.screenshot({
                                         clip: {
                                             x: viewport.width - 300,
@@ -206,8 +206,8 @@ module.exports = (env) => {
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     await page.click('.dx-button-normal');
-                                    await page.waitFor(500);
-                                    await page.waitFor('.create-account-form');
+                                    await page.waitForTimeout(500);
+                                    await page.waitForSelector('.create-account-form');
 
                                     await hideScroll();
 
@@ -225,8 +225,8 @@ module.exports = (env) => {
                                     const page = await openPage(appUrl);
                                     await logOut();
                                     await page.click('a');
-                                    await page.waitFor(500);
-                                    await page.waitFor('.reset-password-form');
+                                    await page.waitForTimeout(500);
+                                    await page.waitForSelector('.reset-password-form');
 
                                     await hideScroll();
 
@@ -246,7 +246,7 @@ module.exports = (env) => {
                                     await page.evaluate(
                                         'const a = document.createElement("a");a.href="#/change-password/123";a.click()'
                                     );
-                                    await page.waitFor('form');
+                                    await page.waitForSelector('form');
 
                                     await hideScroll();
 
