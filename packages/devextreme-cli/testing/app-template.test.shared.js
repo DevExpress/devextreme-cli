@@ -59,7 +59,7 @@ module.exports = (env) => {
                                     waitUntil: 'networkidle0',
                                     ...options
                                 });
-                                await page.waitFor('.with-footer');
+                                await page.waitForSelector('.with-footer');
 
                                 return page;
                             }

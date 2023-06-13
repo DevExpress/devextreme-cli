@@ -5,6 +5,6 @@
   "author": "Developer Express Inc.",
   "license": "MIT",
   "dependencies": {
-    "puppeteer": "^2.1.1"
+    "puppeteer": "^19.11.1"
   }
 }
