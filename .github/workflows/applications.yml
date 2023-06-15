@@ -41,33 +41,33 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v3
 
-    - name: Set up Node.js and restore cache
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.NODE }}
-        cache: 'npm'
-        cache-dependency-path: '**/package-lock.json'
+#    - name: Set up Node.js and restore cache
+#      uses: actions/setup-node@v3
+#      with:
+#        node-version: ${{ matrix.NODE }}
+#        cache: 'npm'
+#        cache-dependency-path: '**/package-lock.json'
 
-    - name: Get Yarn cache directory path
-      id: yarn-cache-dir-path
-      run: echo "dir=$(yarn cache dir)" >> ${{ matrix.OS != 'windows-latest' && '$GITHUB_OUTPUT ' || '$env:GITHUB_OUTPUT' }}
+#    - name: Get Yarn cache directory path
+#      id: yarn-cache-dir-path
+#      run: echo "dir=$(yarn cache dir)" >> ${{ matrix.OS != 'windows-latest' && '$GITHUB_OUTPUT ' || '$env:GITHUB_OUTPUT' }}
 
-    - name: Restore Yarn cache
-      uses: actions/cache@v3
-      with:
-        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ matrix.NODE }}-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-${{ matrix.NODE }}
-          ${{ runner.os }}-yarn-
+#    - name: Restore Yarn cache
+#      uses: actions/cache@v3
+#      with:
+#        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+#        key: ${{ runner.os }}-yarn-${{ matrix.NODE }}-${{ hashFiles('**/yarn.lock') }}
+#        restore-keys: |
+#          ${{ runner.os }}-yarn-${{ matrix.NODE }}
+#          ${{ runner.os }}-yarn-
 
-    - name: Disable taobao registry
-      if: ${{ startsWith( matrix.APPROACH, 'vue') }}
-      run: |
-        echo '{"useTaobaoRegistry": false}' > ${{ env.VUE_CLI_CONFIG_PATH }}
+#    - name: Disable taobao registry
+#      if: ${{ startsWith( matrix.APPROACH, 'vue') }}
+#      run: |
+#        echo '{"useTaobaoRegistry": false}' > ${{ env.VUE_CLI_CONFIG_PATH }}
 
-    - name: Run npm install - root
-      run: npm install --no-package-lock --no-audit --no-fund
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
 #
 #    - name: Run docker image
 #      if: ${{ matrix.OS != 'windows-latest' }}
