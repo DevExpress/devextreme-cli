@@ -86,7 +86,7 @@ jobs:
     - name: Run puppeteer
       env:
         CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-      run: node ./packages/devextreme-cli/testing/docker/index.js
+      run: node ./packages/devextreme-cli/testing/docker/index.js &
 
     - name: Create ${{ matrix.APPROACH }} application
       run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
@@ -126,6 +126,8 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: Run npm install
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
         run: npm install --no-package-lock --no-audit --no-fund
 
       - name: Run schematics tests
