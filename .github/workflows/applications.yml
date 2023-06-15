@@ -67,11 +67,15 @@ jobs:
 
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund
+#
+#    - name: Run docker image
+#      if: ${{ matrix.OS != 'windows-latest' }}
+#      run: npm run docker:build && npm run docker:run
+#      working-directory: ./packages/devextreme-cli
 
-    - name: Run docker image
-      if: ${{ matrix.OS != 'windows-latest' }}
-      run: npm run docker:build && npm run docker:run
-      working-directory: ./packages/devextreme-cli
+    - name: Run puppeteer
+      run: node index.js &
+      working-directory: ./packages/devextreme-cli/testing/docker
 
     - name: Create ${{ matrix.APPROACH }} application
       run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
