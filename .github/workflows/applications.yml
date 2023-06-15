@@ -32,6 +32,7 @@ jobs:
     env:
       VUE_CLI_CONFIG_PATH: $GITHUB_WORKSPACE/.vuerc
       TOOLING_VERSION_PARAM: ${{ inputs.external-tools-version != '' && format('--tooling-version {0}', inputs.external-tools-version) || '' }}
+      PUPPETEER_SKIP_DOWNLOAD: true
 
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}, ${{ matrix.OS }}
 
@@ -73,13 +74,12 @@ jobs:
 #      run: npm run docker:build && npm run docker:run
 #      working-directory: ./packages/devextreme-cli
 
-    - name: Run npm install - testing
-      run: npm install --no-package-lock --no-audit --no-fund
-      working-directory: ./packages/devextreme-cli/testing/docker
+#    - name: Run npm install - testing
+#      run: npm install --no-package-lock --no-audit --no-fund
+#      working-directory: ./packages/devextreme-cli/testing/docker
 
     - name: Run puppeteer
-      run: node index.js &
-      working-directory: ./packages/devextreme-cli/testing/docker
+      run: node ./packages/devextreme-cli/testing/dockerindex.js &
 
     - name: Create ${{ matrix.APPROACH }} application
       run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
