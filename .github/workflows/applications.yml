@@ -75,11 +75,11 @@ jobs:
 #      working-directory: ./packages/devextreme-cli
 
     - name: Run npm install - testing
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: PUPPETEER_CACHE_DIR=$(pwd) npm install puppeteer --no-package-lock --no-audit --no-fund
       working-directory: ./packages/devextreme-cli/testing/docker
 
     - name: Run puppeteer
-      run: node index.js &
+      run: PUPPETEER_CACHE_DIR=$(pwd) node index.js &
       working-directory: ./packages/devextreme-cli/testing/docker
 
     - name: Create ${{ matrix.APPROACH }} application
