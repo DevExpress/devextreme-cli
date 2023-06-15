@@ -32,6 +32,7 @@ jobs:
     env:
       VUE_CLI_CONFIG_PATH: $GITHUB_WORKSPACE/.vuerc
       TOOLING_VERSION_PARAM: ${{ inputs.external-tools-version != '' && format('--tooling-version {0}', inputs.external-tools-version) || '' }}
+      PUPPETEER_SKIP_DOWNLOAD: true
 
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}, ${{ matrix.OS }}
 
