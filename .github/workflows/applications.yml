@@ -79,7 +79,7 @@ jobs:
 #      working-directory: ./packages/devextreme-cli/testing/docker
 
     - name: Run puppeteer
-      run: node ./packages/devextreme-cli/testing/dockerindex.js &
+      run: node ./packages/devextreme-cli/testing/docker/index.js &
 
     - name: Create ${{ matrix.APPROACH }} application
       run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
