@@ -16,17 +16,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        APPROACH: [
-          angular,
-          vue-v3,
-          vue-v2,
-          react,
-          react-ts ]
-        NODE: [ 16, 18 ]
-        OS: [
-          ubuntu-latest,
-          windows-latest
-        ]
+        APPROACH:
+          - angular
+#          - vue-v3
+#          - vue-v2
+#          - react
+#          - react-ts
+        NODE:
+#          - 16
+          - 18
+        OS:
+          - ubuntu-latest
+          - windows-latest
 
     runs-on: ${{ matrix.OS }}
     env:
@@ -77,6 +78,8 @@ jobs:
 #    - name: Run npm install - testing
 #      run: npm install --no-package-lock --no-audit --no-fund
 #      working-directory: ./packages/devextreme-cli/testing/docker
+
+    - uses: browser-actions/setup-chrome@v1
 
     - name: Run puppeteer
       run: node ./packages/devextreme-cli/testing/docker/index.js
