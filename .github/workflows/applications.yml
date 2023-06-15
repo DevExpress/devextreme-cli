@@ -79,11 +79,13 @@ jobs:
 #      run: npm install --no-package-lock --no-audit --no-fund
 #      working-directory: ./packages/devextreme-cli/testing/docker
 
-    - run: chrome --version
     - uses: browser-actions/setup-chrome@v1
-    - run: chrome --version
+      id: setup-chrome
+    - run: ${{ steps.setup-chrome.outputs.chrome-path }} --version
 
     - name: Run puppeteer
+      env:
+        CHROME_PATH: steps.setup-chrome.outputs.chrome-path
       run: node ./packages/devextreme-cli/testing/docker/index.js
 
     - name: Create ${{ matrix.APPROACH }} application
