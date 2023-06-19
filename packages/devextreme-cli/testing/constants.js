@@ -40,7 +40,7 @@ exports.layouts = [
 
 exports.swatchModes = {
     base: 'light',
-    // additional: 'dark'
+    additional: 'dark'
 };
 
 exports.baseFontFamily = {
