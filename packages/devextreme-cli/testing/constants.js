@@ -13,29 +13,29 @@ exports.viewports = {
         width: 1280,
         height: 1024,
     },
-    // small: {
-    //     width: 667,
-    //     height: 375,
-    //     isMobile: true,
-    //     hasTouch: true,
-    //     isLandscape: true
-    // },
-    // xsmall: {
-    //     width: 320,
-    //     height: 568,
-    //     isMobile: true,
-    //     hasTouch: true,
-    // }
+    small: {
+        width: 667,
+        height: 375,
+        isMobile: true,
+        hasTouch: true,
+        isLandscape: true
+    },
+    xsmall: {
+        width: 320,
+        height: 568,
+        isMobile: true,
+        hasTouch: true,
+    }
 };
 
 exports.themes = {
-    // material: 'material.orange',
+    material: 'material.orange',
     generic: 'generic'
 };
 
 exports.layouts = [
     'side-nav-outer-toolbar',
-    // 'side-nav-inner-toolbar'
+    'side-nav-inner-toolbar'
 ];
 
 exports.swatchModes = {
