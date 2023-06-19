@@ -18,12 +18,12 @@ jobs:
       matrix:
         APPROACH:
           - angular
-#          - vue-v3
-#          - vue-v2
-#          - react
-#          - react-ts
+          - vue-v3
+          - vue-v2
+          - react
+          - react-ts
         NODE:
-#          - 16
+          - 16
           - 18
         OS:
           - ubuntu-latest
