@@ -91,9 +91,12 @@ module.exports = (env) => {
                                 await page.evaluate(() => {
                                     // eslint-disable-next-line no-undef
                                     const scrollElement = document.getElementsByClassName('dx-scrollable-scroll')[0];
-                                    scrollElement.style.transition = 'none';
-                                    scrollElement.style.display = 'none';
-                                    scrollElement.className += ' dx-state-invisible';
+
+                                    if(scrollElement) {
+                                        scrollElement.style.transition = 'none';
+                                        scrollElement.style.display = 'none';
+                                        scrollElement.className += ' dx-state-invisible';
+                                    }
                                 });
                                 await page.waitForTimeout(3000);
                             }
