@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   themebuilder-test:
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         NODE: [ 16, 18 ]
 
