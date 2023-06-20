@@ -131,7 +131,7 @@ const installThemeBuilder = async version => {
         cwd: process.cwd(),
         stdio: 'inherit'
     }, {
-        npm: ['--no-save', '--fund=false', '--package-lock=false', '--omit=dev', '--omit=optional']
+        npm: ['--no-save', '--fund=false', '--package-lock=false', '--omit=dev']
     });
 };
 
