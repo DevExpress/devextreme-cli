@@ -177,7 +177,8 @@ module.exports = (env) => {
                                             y: 0,
                                             width: 300,
                                             height: 300
-                                        }
+                                        },
+                                        captureBeyondViewport: false
                                     });
 
                                     compareSnapshot(image, 'user-panel');
