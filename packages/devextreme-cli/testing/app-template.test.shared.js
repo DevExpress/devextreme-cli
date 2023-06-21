@@ -18,6 +18,19 @@ module.exports = (env) => {
         beforeAll(async() => {
             browser = await getBrowser();
             page = await browser.newPage();
+
+            page.evaluateOnNewDocument(() => {
+                /* eslint-disable no-undef */
+                var style = document.createElement('style');
+                style.innerHTML = `
+                    body {
+                        -webkit-font-smoothing: auto !important;
+                        -moz-osx-font-smoothing: auto !important;
+                    }
+                `;
+                document.getElementsByTagName('head')[0].appendChild(style);
+                /* eslint-enable no-undef */
+            });
         });
 
         afterAll(async() => {
@@ -60,8 +73,6 @@ module.exports = (env) => {
                                     ...options
                                 });
                                 await page.waitForSelector('.with-footer');
-
-                                return page;
                             }
 
                             async function logOut() {
@@ -76,7 +87,7 @@ module.exports = (env) => {
                                 await page.waitForTimeout(500);
                             }
 
-                            const customConfig = { threshold: 0.1 };
+                            const customConfig = { threshold: 0.012 };
                             function compareSnapshot(image, name) {
                                 expect(image).toMatchImageSnapshot({
                                     customDiffConfig: customConfig,
@@ -103,7 +114,7 @@ module.exports = (env) => {
 
                             describe(`${viewportName}`, () => {
                                 it('Home view', async() => {
-                                    const page = await openPage(appUrl, { timeout: 5000 });
+                                    await openPage(appUrl, { timeout: 5000 });
                                     await page.reload([{
                                         waitUntil: {
                                             networkidle0: 5000,
@@ -128,14 +139,14 @@ module.exports = (env) => {
                                 });
 
                                 it('Profile view', async() => {
-                                    const page = await openPage(`${appUrl}#/profile`);
+                                    await openPage(`${appUrl}#/profile`);
                                     const image = await page.screenshot();
 
                                     compareSnapshot(image, 'profile');
                                 });
 
                                 it('Tasks view', async() => {
-                                    const page = await openPage(`${appUrl}#/tasks`);
+                                    await openPage(`${appUrl}#/tasks`);
                                     // NOTE: Wait for the DataGrid is loaded
                                     await page.waitForSelector('.dx-row-focused');
                                     const image = await page.screenshot();
@@ -148,7 +159,7 @@ module.exports = (env) => {
                                     if(env.engine === 'angular') {
                                         pageUrl = 'pages/' + pageUrl;
                                     }
-                                    const page = await openPage(`${appUrl}#/${pageUrl}`);
+                                    await openPage(`${appUrl}#/${pageUrl}`);
                                     const image = await page.screenshot();
 
                                     compareSnapshot(image, 'add-view');
@@ -156,7 +167,7 @@ module.exports = (env) => {
 
                                 it('Menu toggle', async() => {
                                     const menuButtonSelector = '.menu-button .dx-button';
-                                    const page = await openPage(`${appUrl}#/profile`);
+                                    await openPage(`${appUrl}#/profile`);
                                     await page.waitForSelector(menuButtonSelector);
                                     await page.click(menuButtonSelector);
 
@@ -168,7 +179,7 @@ module.exports = (env) => {
                                 });
 
                                 it('User panel', async() => {
-                                    const page = await openPage(`${appUrl}#/profile`);
+                                    await openPage(`${appUrl}#/profile`);
                                     const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                     await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
                                     // NOTE: Wait for animation complete
@@ -193,7 +204,7 @@ module.exports = (env) => {
                                     }
 
                                     const name = 'login';
-                                    const page = await openPage(appUrl);
+                                    await openPage(appUrl);
                                     await logOut();
 
                                     await hideScroll();
@@ -209,7 +220,7 @@ module.exports = (env) => {
                                         return;
                                     }
 
-                                    const page = await openPage(appUrl);
+                                    await openPage(appUrl);
                                     await logOut();
                                     await page.click('.dx-button-normal');
                                     await page.waitForTimeout(500);
@@ -228,7 +239,7 @@ module.exports = (env) => {
                                         return;
                                     }
 
-                                    const page = await openPage(appUrl);
+                                    await openPage(appUrl);
                                     await logOut();
                                     await page.click('a');
                                     await page.waitForTimeout(500);
@@ -247,7 +258,7 @@ module.exports = (env) => {
                                         return;
                                     }
 
-                                    const page = await openPage(appUrl);
+                                    await openPage(appUrl);
                                     await logOut();
                                     await page.evaluate(
                                         'const a = document.createElement("a");a.href="#/change-password/123";a.click()'
