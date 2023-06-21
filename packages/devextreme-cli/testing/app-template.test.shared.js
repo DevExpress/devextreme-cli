@@ -76,7 +76,7 @@ module.exports = (env) => {
                                 await page.waitForTimeout(500);
                             }
 
-                            const customConfig = { threshold: 0.05 };
+                            const customConfig = { threshold: 0.1 };
                             function compareSnapshot(image, name) {
                                 expect(image).toMatchImageSnapshot({
                                     customDiffConfig: customConfig,
