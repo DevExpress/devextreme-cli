@@ -112,6 +112,7 @@ module.exports = (env) => {
 
                             async function takeScreenshot(options) {
                                 await disableAntialiasing();
+                                await page.waitForTimeout(1000);
                                 return await page.screenshot({
                                     ...(options || {}),
                                     captureBeyondViewport: false
