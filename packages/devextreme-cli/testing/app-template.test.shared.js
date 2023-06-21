@@ -18,19 +18,6 @@ module.exports = (env) => {
         beforeAll(async() => {
             browser = await getBrowser();
             page = await browser.newPage();
-
-            page.evaluateOnNewDocument(() => {
-                /* eslint-disable no-undef */
-                var style = document.createElement('style');
-                style.innerHTML = `
-                    body {
-                        -webkit-font-smoothing: auto !important;
-                        -moz-osx-font-smoothing: auto !important;
-                    }
-                `;
-                document.getElementsByTagName('head')[0].appendChild(style);
-                /* eslint-enable no-undef */
-            });
         });
 
         afterAll(async() => {
@@ -112,6 +99,22 @@ module.exports = (env) => {
                                 await page.waitForTimeout(3000);
                             }
 
+                            async function disableAntialiasing() {
+                                await page.addStyleTag({
+                                    content: `
+                                        body {
+                                            -webkit-font-smoothing: auto !important;
+                                            -moz-osx-font-smoothing: auto !important;
+                                        }
+                                    `
+                                });
+                            }
+
+                            async function takeScreenshot(options) {
+                                await disableAntialiasing();
+                                return await page.screenshot(options);
+                            }
+
                             describe(`${viewportName}`, () => {
                                 it('Home view', async() => {
                                     await openPage(appUrl, { timeout: 5000 });
@@ -124,7 +127,7 @@ module.exports = (env) => {
                                     }]);
                                     await page.waitForTimeout(5000);
 
-                                    const image = await page.screenshot({
+                                    const image = await takeScreenshot({
                                         clip: {
                                             x: 0,
                                             y: 0,
@@ -133,14 +136,12 @@ module.exports = (env) => {
                                         }
                                     });
 
-                                    await page.evaluate(() => { debugger; });
-
                                     compareSnapshot(image, 'home');
                                 });
 
                                 it('Profile view', async() => {
                                     await openPage(`${appUrl}#/profile`);
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'profile');
                                 });
@@ -149,7 +150,7 @@ module.exports = (env) => {
                                     await openPage(`${appUrl}#/tasks`);
                                     // NOTE: Wait for the DataGrid is loaded
                                     await page.waitForSelector('.dx-row-focused');
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'tasks');
                                 });
@@ -160,7 +161,7 @@ module.exports = (env) => {
                                         pageUrl = 'pages/' + pageUrl;
                                     }
                                     await openPage(`${appUrl}#/${pageUrl}`);
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'add-view');
                                 });
@@ -173,7 +174,7 @@ module.exports = (env) => {
 
                                     // NOTE: Wait for animation complete
                                     await page.waitForTimeout(1000);
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'toggle');
                                 });
@@ -184,7 +185,7 @@ module.exports = (env) => {
                                     await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
                                     // NOTE: Wait for animation complete
                                     await page.waitForTimeout(1000);
-                                    const image = await page.screenshot({
+                                    const image = await takeScreenshot({
                                         clip: {
                                             x: viewport.width - 300,
                                             y: 0,
@@ -209,7 +210,7 @@ module.exports = (env) => {
 
                                     await hideScroll();
 
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, name);
                                 });
@@ -228,7 +229,7 @@ module.exports = (env) => {
 
                                     await hideScroll();
 
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'create-account');
                                 });
@@ -247,7 +248,7 @@ module.exports = (env) => {
 
                                     await hideScroll();
 
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'reset-password');
                                 });
@@ -267,7 +268,7 @@ module.exports = (env) => {
 
                                     await hideScroll();
 
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'change-password');
                                 });
