@@ -241,10 +241,7 @@ module.exports = (env) => {
                                     await page.hover('.dx-button-normal');
                                     await page.waitForTimeout(1000);
                                     await page.click('.dx-button-normal');
-
-                                    try {
-                                        await page.waitForSelector('.create-account-form');
-                                    } catch(e) {}
+                                    await page.waitForSelector('.create-account-form');
 
                                     await hideScroll();
 
