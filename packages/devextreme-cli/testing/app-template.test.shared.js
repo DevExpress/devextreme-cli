@@ -105,8 +105,9 @@ module.exports = (env) => {
                             // of this effect.
                             async function hideFooter() {
                                 await page.evaluate(() => {
-                                    // eslint-disable-next-line no-undef
-                                    const footer = document.getElementsByTagName('footer')[0];
+                                    /* eslint-disable no-undef */
+                                    const footer = document.getElementsByTagName('app-footer')[0]
+                                        || document.getElementsByTagName('footer')[0];
 
                                     if(footer) {
                                         footer.style = {
@@ -116,6 +117,7 @@ module.exports = (env) => {
                                         };
                                         footer.className += ' dx-state-invisible';
                                     }
+                                    /* eslint-enable no-undef */
                                 });
                                 await page.waitForTimeout(3000);
                             }
