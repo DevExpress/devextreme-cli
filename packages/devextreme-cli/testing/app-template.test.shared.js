@@ -99,20 +99,26 @@ module.exports = (env) => {
                                 await page.waitForTimeout(3000);
                             }
 
-                            async function disableAntialiasing() {
-                                await page.addStyleTag({
-                                    content: `
-                                        body {
-                                            -webkit-font-smoothing: auto !important;
-                                            -moz-osx-font-smoothing: auto !important;
-                                        }
-                                    `
+                            // The footer text is antialiased differently in Angular and React,
+                            // so we are hiding the footer before taking screenshots to prevent
+                            // false failures. Moving forward, we need to investigate the cause
+                            // of this effect.
+                            async function hideFooter() {
+                                await page.evaluate(() => {
+                                    // eslint-disable-next-line no-undef
+                                    const footer = document.getElementsByTagName('footer');
+
+                                    if(footer) {
+                                        footer.style.transition = 'none';
+                                        footer.style.display = 'none';
+                                        footer.className += ' dx-state-invisible';
+                                    }
                                 });
+                                await page.waitForTimeout(3000);
                             }
 
                             async function takeScreenshot(options) {
-                                await disableAntialiasing();
-                                await page.waitForTimeout(1000);
+                                await hideFooter();
                                 return await page.screenshot({
                                     ...(options || {}),
                                     captureBeyondViewport: false
