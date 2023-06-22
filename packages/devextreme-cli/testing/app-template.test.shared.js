@@ -109,8 +109,11 @@ module.exports = (env) => {
                                     const footer = document.getElementsByTagName('footer');
 
                                     if(footer) {
-                                        footer.style.transition = 'none';
-                                        footer.style.display = 'none';
+                                        footer.style = {
+                                            ...(footer.style || {}),
+                                            transition: 'none',
+                                            display: 'none'
+                                        };
                                         footer.className += ' dx-state-invisible';
                                     }
                                 });
