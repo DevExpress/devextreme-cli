@@ -106,7 +106,7 @@ module.exports = (env) => {
                             async function hideFooter() {
                                 await page.evaluate(() => {
                                     // eslint-disable-next-line no-undef
-                                    const footer = document.getElementsByTagName('footer');
+                                    const footer = document.getElementsByTagName('footer')[0];
 
                                     if(footer) {
                                         footer.style = {
