@@ -45,7 +45,7 @@
     "mustache": "^3.0.1",
     "prompts": "^2.0.4",
     "sass": "^1.25.0",
-    "semver": "^5.6.0",
+    "semver": "^7.0.0",
     "strip-bom": "^4.0.0"
   },
   "devDependencies": {
