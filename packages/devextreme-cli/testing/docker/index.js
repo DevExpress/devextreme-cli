@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer');
 
 puppeteer.launch({
-    headless: true,
+    headless: 'new',
+    executablePath: process.env.CHROME_PATH,
     args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',

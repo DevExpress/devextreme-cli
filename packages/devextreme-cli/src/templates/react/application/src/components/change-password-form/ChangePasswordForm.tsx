@@ -10,7 +10,7 @@ import Form, {
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
-<%=#isTypeScript%>import { ValidationType } from '../../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import { ValidationCallbackData } from 'devextreme-react/common';<%=/isTypeScript%>
 import { changePassword } from '../../api/auth';
 
 export default function ChangePasswordForm() {
@@ -35,7 +35,7 @@ export default function ChangePasswordForm() {
   }, [navigate, recoveryCode]);
 
   const confirmPassword = useCallback(
-    ({ value }<%=#isTypeScript%>: ValidationType<%=/isTypeScript%>) => value === formData.current.password,
+    ({ value }<%=#isTypeScript%>: ValidationCallbackData<%=/isTypeScript%>) => value === formData.current.password,
     []
   );
 

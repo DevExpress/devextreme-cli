@@ -12,7 +12,7 @@ import Form, {
 import notify from 'devextreme/ui/notify';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import { createAccount } from '../../api/auth';
-<%=#isTypeScript%>import { ValidationType } from '../../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import { ValidationCallbackData } from 'devextreme-react/common';<%=/isTypeScript%>
 import './CreateAccountForm.scss';
 
 export default function CreateAccountForm() {
@@ -36,7 +36,7 @@ export default function CreateAccountForm() {
   }, [navigate]);
 
   const confirmPassword = useCallback(
-    ({ value }<%=#isTypeScript%>: ValidationType<%=/isTypeScript%>) => value === formData.current.password,
+    ({ value }<%=#isTypeScript%>: ValidationCallbackData<%=/isTypeScript%>) => value === formData.current.password,
     []
   );
 

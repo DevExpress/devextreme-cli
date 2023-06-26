@@ -59,21 +59,19 @@ module.exports = (env) => {
                                     waitUntil: 'networkidle0',
                                     ...options
                                 });
-                                await page.waitFor('.with-footer');
-
-                                return page;
+                                await page.waitForSelector('.with-footer');
                             }
 
                             async function logOut() {
                                 const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                 await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
 
-                                await page.waitFor(500);
-                                await page.waitFor('.dx-icon-runner');
+                                await page.waitForTimeout(500);
+                                await page.waitForSelector('.dx-icon-runner');
                                 await page.click('.dx-icon-runner');
 
-                                await page.waitFor('.login-form');
-                                await page.waitFor(500);
+                                await page.waitForSelector('.login-form');
+                                await page.waitForTimeout(500);
                             }
 
                             const customConfig = { threshold: 0.012 };
@@ -91,16 +89,50 @@ module.exports = (env) => {
                                 await page.evaluate(() => {
                                     // eslint-disable-next-line no-undef
                                     const scrollElement = document.getElementsByClassName('dx-scrollable-scroll')[0];
-                                    scrollElement.style.transition = 'none';
-                                    scrollElement.style.display = 'none';
-                                    scrollElement.className += ' dx-state-invisible';
+
+                                    if(scrollElement) {
+                                        scrollElement.style.transition = 'none';
+                                        scrollElement.style.display = 'none';
+                                        scrollElement.className += ' dx-state-invisible';
+                                    }
                                 });
-                                await page.waitFor(3000);
+                                await page.waitForTimeout(3000);
+                            }
+
+                            // The footer text is antialiased differently in Angular and React,
+                            // so we are hiding the footer before taking screenshots to prevent
+                            // false failures. Moving forward, we need to investigate the cause
+                            // of this effect.
+                            async function hideFooter() {
+                                await page.evaluate(() => {
+                                    /* eslint-disable no-undef */
+                                    const footer = document.getElementsByTagName('app-footer')[0]
+                                        || document.getElementsByTagName('footer')[0];
+
+                                    if(footer) {
+                                        footer.style = {
+                                            ...(footer.style || {}),
+                                            transition: 'none',
+                                            display: 'none'
+                                        };
+                                        footer.className += ' dx-state-invisible';
+                                    }
+                                    /* eslint-enable no-undef */
+                                });
+                                await page.waitForTimeout(3000);
+                            }
+
+                            async function takeScreenshot(options) {
+                                await hideFooter();
+                                return await page.screenshot({
+                                    ...(options || {}),
+                                    captureBeyondViewport: false
+                                });
                             }
 
                             describe(`${viewportName}`, () => {
                                 it('Home view', async() => {
-                                    const page = await openPage(appUrl, { timeout: 5000 });
+                                    await openPage(appUrl, { timeout: 5000 });
                                     await page.reload([{
                                         waitUntil: {
                                             networkidle0: 5000,
@@ -108,9 +140,9 @@ module.exports = (env) => {
                                             domcontentloaded: true
                                         }
                                     }]);
-                                    await page.waitFor(5000);
+                                    await page.waitForTimeout(5000);
 
-                                    const image = await page.screenshot({
+                                    const image = await takeScreenshot({
                                         clip: {
                                             x: 0,
                                             y: 0,
@@ -123,17 +155,17 @@ module.exports = (env) => {
                                 });
 
                                 it('Profile view', async() => {
-                                    const page = await openPage(`${appUrl}#/profile`);
-                                    const image = await page.screenshot();
+                                    await openPage(`${appUrl}#/profile`);
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'profile');
                                 });
 
                                 it('Tasks view', async() => {
-                                    const page = await openPage(`${appUrl}#/tasks`);
+                                    await openPage(`${appUrl}#/tasks`);
                                     // NOTE: Wait for the DataGrid is loaded
-                                    await page.waitFor('.dx-row-focused');
-                                    const image = await page.screenshot();
+                                    await page.waitForSelector('.dx-row-focused');
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'tasks');
                                 });
@@ -143,32 +175,32 @@ module.exports = (env) => {
                                     if(env.engine === 'angular') {
                                         pageUrl = 'pages/' + pageUrl;
                                     }
-                                    const page = await openPage(`${appUrl}#/${pageUrl}`);
-                                    const image = await page.screenshot();
+                                    await openPage(`${appUrl}#/${pageUrl}`);
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'add-view');
                                 });
 
                                 it('Menu toggle', async() => {
                                     const menuButtonSelector = '.menu-button .dx-button';
-                                    const page = await openPage(`${appUrl}#/profile`);
+                                    await openPage(`${appUrl}#/profile`);
                                     await page.waitForSelector(menuButtonSelector);
                                     await page.click(menuButtonSelector);
 
                                     // NOTE: Wait for animation complete
-                                    await page.waitFor(1000);
-                                    const image = await page.screenshot();
+                                    await page.waitForTimeout(1000);
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'toggle');
                                 });
 
                                 it('User panel', async() => {
-                                    const page = await openPage(`${appUrl}#/profile`);
+                                    await openPage(`${appUrl}#/profile`);
                                     const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                     await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
                                     // NOTE: Wait for animation complete
-                                    await page.waitFor(1000);
-                                    const image = await page.screenshot({
+                                    await page.waitForTimeout(1000);
+                                    const image = await takeScreenshot({
                                         clip: {
                                             x: viewport.width - 300,
                                             y: 0,
@@ -187,12 +219,12 @@ module.exports = (env) => {
                                     }
 
                                     const name = 'login';
-                                    const page = await openPage(appUrl);
+                                    await openPage(appUrl);
                                     await logOut();
 
                                     await hideScroll();
 
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, name);
                                 });
@@ -203,15 +235,17 @@ module.exports = (env) => {
                                         return;
                                     }
 
-                                    const page = await openPage(appUrl);
+                                    await openPage(appUrl);
                                     await logOut();
+                                    await page.waitForSelector('.dx-button-normal');
+                                    await page.hover('.dx-button-normal');
+                                    await page.waitForTimeout(1000);
                                     await page.click('.dx-button-normal');
-                                    await page.waitFor(500);
-                                    await page.waitFor('.create-account-form');
+                                    await page.waitForSelector('.create-account-form');
 
                                     await hideScroll();
 
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'create-account');
                                 });
@@ -222,15 +256,15 @@ module.exports = (env) => {
                                         return;
                                     }
 
-                                    const page = await openPage(appUrl);
+                                    await openPage(appUrl);
                                     await logOut();
                                     await page.click('a');
-                                    await page.waitFor(500);
-                                    await page.waitFor('.reset-password-form');
+                                    await page.waitForTimeout(500);
+                                    await page.waitForSelector('.reset-password-form');
 
                                     await hideScroll();
 
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'reset-password');
                                 });
@@ -241,16 +275,16 @@ module.exports = (env) => {
                                         return;
                                     }
 
-                                    const page = await openPage(appUrl);
+                                    await openPage(appUrl);
                                     await logOut();
                                     await page.evaluate(
                                         'const a = document.createElement("a");a.href="#/change-password/123";a.click()'
                                     );
-                                    await page.waitFor('form');
+                                    await page.waitForSelector('form');
 
                                     await hideScroll();
 
-                                    const image = await page.screenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'change-password');
                                 });
