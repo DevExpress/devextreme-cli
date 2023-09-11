@@ -27,7 +27,7 @@
     "@schematics/angular": "^12.0.0"
   },
   "devDependencies": {
-    "@types/jasmine": "~3.10.6",
+    "@types/jasmine": "~3.10.12",
     "@types/node": "ts4.3",
     "@types/semver": "^7.5.1",
     "jasmine": "^2.8.0",
