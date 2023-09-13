@@ -1,0 +1,29 @@
+name: Publish NPM package
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build & Publish NPM package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Run npm install - root
+        run: npm install --no-audit --no-fund
+
+      - name: Run npm install - devextreme-schematics
+        working-directory: packages/devextreme-schematics
+        run: npm install --no-audit --no-fund
+
+      - name: Test devextreme-schematics
+        working-directory: packages/devextreme-schematics
+        run: npm run test
+
+      - name: Build devextreme-schematics
+        working-directory: packages/devextreme-schematics
+        run: npm run build
