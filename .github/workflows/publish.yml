@@ -36,15 +36,13 @@ jobs:
         working-directory: packages/devextreme-schematics
         run: npm run build
 
-      - name: Update config
+      - name: Update configs
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
+          npm set "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}"
 
       - name: Bump version and publish package
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npx lerna version ${{ github.event.inputs.version }} -y
           npx lerna publish from-git -y
-
