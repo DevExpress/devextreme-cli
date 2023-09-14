@@ -1,0 +1,46 @@
+name: Publish NPM package
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: choice
+        required: true
+        description: Bump version
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  build:
+    name: Build & Publish NPM package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Run npm install - root
+        run: npm install --no-audit --no-fund
+
+      - name: Run npm install - devextreme-schematics
+        working-directory: packages/devextreme-schematics
+        run: npm install --no-audit --no-fund
+
+      - name: Test devextreme-schematics
+        working-directory: packages/devextreme-schematics
+        run: npm run test
+
+      - name: Build devextreme-schematics
+        working-directory: packages/devextreme-schematics
+        run: npm run build
+
+      - name: Update configs
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          npm set "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}"
+
+      - name: Publish package
+        run: npx lerna publish ${{ github.event.inputs.version }} -y
