@@ -43,4 +43,7 @@ jobs:
           npm set "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}"
 
       - name: Publish package
-        run: npx lerna publish ${{ github.event.inputs.version }} -y
+        run: |
+          npx lerna version ${{ github.event.inputs.version }} -y --no-push
+          git push -f --follow-tags --no-verify --atomic origin master
+          npx lerna publish from-git -y
