@@ -39,7 +39,7 @@
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
     "import-cwd": "^3.0.0",
-    "ip": "^1.1.5",
+    "ip": "^1.1.8",
     "less": "3.13.1",
     "minimist": "^1.2.0",
     "mustache": "^3.0.1",
