@@ -4,24 +4,25 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        type: choice
+        type: string
         required: true
-        description: Bump version
-        options:
-          - patch
-          - minor
-          - major
+        description: Publishing version (tag name, e.g. v1.6.0)
 
 jobs:
   build:
     name: Build & Publish NPM package
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - name: Get sources
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.version }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Run npm install - root
         run: npm install --no-audit --no-fund
@@ -38,16 +39,14 @@ jobs:
         working-directory: packages/devextreme-schematics
         run: npm run build
 
-      - uses: fregante/setup-git-user@v2
-
-      - name: Update NPM config
-        run: npm set "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}"
-
-      - name: Publish package
+      - name: Publish to NPM devextreme-cli package
+        working-directory: packages/devextreme-cli
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npx lerna version ${{ github.event.inputs.version }} -y --no-push
-          git push -f --follow-tags --no-verify --atomic origin master
-          npx lerna publish from-git -y
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
+
+      - name: Publish to NPM devextreme-schematics package
+        working-directory: packages/devextreme-schematics
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
