@@ -46,7 +46,7 @@ export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%
         : prevMenuStatus
     );
     return menuStatus === MenuStatus.Closed ? true : false;
-  }, [isLarge]);
+  }, [isLarge, menuStatus]);
 
   const onNavigationChanged = useCallback(({ itemData, event, node }<%=#isTypeScript%>: TreeViewTypes.ItemClickEvent<%=/isTypeScript%>) => {
     if (menuStatus === MenuStatus.Closed || !itemData<%=#isTypeScript%>?<%=/isTypeScript%>.path || node<%=#isTypeScript%>?<%=/isTypeScript%>.selected) {
