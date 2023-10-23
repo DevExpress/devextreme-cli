@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useNavigate } from "react-router-dom";
 import ContextMenu, { Position } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
@@ -10,9 +10,9 @@ export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
-  function navigateToProfile() {
+  const navigateToProfile = useCallback(() => {
     navigate("/profile");
-  }
+  }, [navigate]);
   const menuItems = useMemo(() => ([
     {
       text: 'Profile',
@@ -24,7 +24,7 @@ export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps
       icon: 'runner',
       onClick: signOut
     }
-  ]), [signOut]);
+  ]), [navigateToProfile, signOut]);
   return (
     <div className={'user-panel'}>
       <div className={'user-info'}>

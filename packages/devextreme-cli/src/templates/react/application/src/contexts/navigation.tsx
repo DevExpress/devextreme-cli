@@ -21,7 +21,7 @@ function withNavigationWatcher(Component<%=#isTypeScript%>: React.ElementType<%=
 
     useEffect(() => {
       setNavigationData<%=#isTypeScript%>!<%=/isTypeScript%>({ currentPath: path });
-    }, [path, setNavigationData]);
+    }, [setNavigationData]);
 
     return <Component {...props} />;
   }
