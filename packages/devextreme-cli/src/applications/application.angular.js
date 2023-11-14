@@ -87,7 +87,7 @@ const create = async(appName, options) => {
         '--skip-install=true'
     ];
 
-    if(ngCliWithStandalone.compare(currentNgVersion) >= 0) {
+    if(ngCliWithStandalone.compare(currentNgVersion) <= 0) {
         commandArguments.push('--standalone=false');
     }
 
