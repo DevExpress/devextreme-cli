@@ -83,6 +83,7 @@ const create = async(appName, options) => {
         '--routing=false',
         '--skip-tests=true',
         '--skip-install=true',
+        '--standalone=false'
     ];
 
     await runNgCommand(commandArguments, options);
