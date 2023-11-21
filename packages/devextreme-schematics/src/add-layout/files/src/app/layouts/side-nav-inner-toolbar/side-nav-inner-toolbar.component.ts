@@ -2,7 +2,7 @@ import { Component, OnInit, NgModule, Input, ViewChild } from '@angular/core';
 import { SideNavigationMenuModule, HeaderModule } from '../../shared/components';
 import { ScreenService } from '../../shared/services';
 import { DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
-import { DxDrawerModule } from 'devextreme-angular/ui/drawer';
+import { DxDrawerModule, DxDrawerTypes } from 'devextreme-angular/ui/drawer';
 import { DxScrollViewModule, DxScrollViewComponent } from 'devextreme-angular/ui/scroll-view';
 import { DxToolbarModule, DxToolbarTypes } from 'devextreme-angular/ui/toolbar';
 import { CommonModule } from '@angular/common';
@@ -24,8 +24,8 @@ export class SideNavInnerToolbarComponent implements OnInit {
   @Input()
   title!: string;
 
-  menuMode = 'shrink';
-  menuRevealMode = 'expand';
+  menuMode: DxDrawerTypes.OpenedStateMode = 'shrink';
+  menuRevealMode: DxDrawerTypes.RevealMode = 'expand';
   minMenuSize = 0;
   shaderEnabled = false;
 
