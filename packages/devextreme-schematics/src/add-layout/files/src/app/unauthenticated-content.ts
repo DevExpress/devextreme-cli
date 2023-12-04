@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { SingleCardModule } from 'src/app/layouts';
+import { SingleCardModule } from './layouts';
 import { Router } from '@angular/router';
 
 @Component({
