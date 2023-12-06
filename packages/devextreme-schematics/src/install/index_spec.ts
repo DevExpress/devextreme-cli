@@ -75,7 +75,7 @@ describe('install', () => {
     const tsconfig = JSON.parse(tree.readContent('tsconfig.app.json'));
     const jszip = tsconfig['compilerOptions']['paths']['jszip'];
 
-    expect(jszip[0]).toBe('node_modules/jszip/dist/jszip.min.js');
+    expect(jszip[0]).toBe('./node_modules/jszip/dist/jszip.min.js');
   });
 
   it('should add devextreme styles to the specified project', async () => {
