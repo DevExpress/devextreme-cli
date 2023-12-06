@@ -75,7 +75,7 @@ function reqisterJSZip(host: Tree) {
     }
 
     if (!paths['jszip']) {
-      paths['jszip'] = ['node_modules/jszip/dist/jszip.min.js'];
+      paths['jszip'] = ['./node_modules/jszip/dist/jszip.min.js'];
     }
 
     compilerOptions['paths'] = paths;
