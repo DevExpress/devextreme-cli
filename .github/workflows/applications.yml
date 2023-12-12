@@ -83,13 +83,6 @@ jobs:
       - name: Get sources
         uses: actions/checkout@v3
 
-      - name: Set up Node.js and restore cache
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
-
       - name: Run npm install
         env:
           PUPPETEER_SKIP_DOWNLOAD: true
