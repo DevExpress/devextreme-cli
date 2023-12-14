@@ -23,6 +23,15 @@ jobs:
       with:
         node-version: ${{ matrix.NODE }}
 
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: themebuilder-${{ runner.os }}-node-${{ matrix.NODE }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          themebuilder-${{ runner.os }}-node-${{ matrix.NODE }}
+          themebuilder-${{ runner.os }}-node-
+
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund
 
