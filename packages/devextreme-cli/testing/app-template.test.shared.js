@@ -60,6 +60,7 @@ module.exports = (env) => {
                                     ...options
                                 });
                                 await page.waitForSelector('.with-footer');
+                                await page.waitForTimeout(3000);
                             }
 
                             async function logOut() {
