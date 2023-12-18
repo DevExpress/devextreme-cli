@@ -26,7 +26,6 @@ exports.createApp = async(toolingVersion) => {
         'new',
         'vue-app',
         '--layout=side-nav-outer-toolbar',
-        '--version=3',
         ...additionalArguments
     ], {
         cwd: sandboxPath,

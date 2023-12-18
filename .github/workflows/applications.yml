@@ -19,7 +19,6 @@ jobs:
         APPROACH:
           - angular
           - vue-v3
-          - vue-v2
           - react
           - react-ts
         NODE:
