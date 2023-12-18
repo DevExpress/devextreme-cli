@@ -60,6 +60,7 @@ module.exports = (env) => {
                                     ...options
                                 });
                                 await page.waitForSelector('.with-footer');
+                                await page.waitForTimeout(3000);
                             }
 
                             async function logOut() {
@@ -156,6 +157,8 @@ module.exports = (env) => {
 
                                 it('Profile view', async() => {
                                     await openPage(`${appUrl}#/profile`);
+
+                                    await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'profile');
@@ -165,6 +168,7 @@ module.exports = (env) => {
                                     await openPage(`${appUrl}#/tasks`);
                                     // NOTE: Wait for the DataGrid is loaded
                                     await page.waitForSelector('.dx-row-focused');
+                                    await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'tasks');
@@ -176,6 +180,7 @@ module.exports = (env) => {
                                         pageUrl = 'pages/' + pageUrl;
                                     }
                                     await openPage(`${appUrl}#/${pageUrl}`);
+                                    await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'add-view');
@@ -188,7 +193,7 @@ module.exports = (env) => {
                                     await page.click(menuButtonSelector);
 
                                     // NOTE: Wait for animation complete
-                                    await page.waitForTimeout(1000);
+                                    await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'toggle');
@@ -199,7 +204,7 @@ module.exports = (env) => {
                                     const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                     await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
                                     // NOTE: Wait for animation complete
-                                    await page.waitForTimeout(1000);
+                                    await page.waitForTimeout(2000);
                                     const image = await takeScreenshot({
                                         clip: {
                                             x: viewport.width - 300,
@@ -224,6 +229,7 @@ module.exports = (env) => {
 
                                     await hideScroll();
 
+                                    await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, name);
@@ -245,6 +251,7 @@ module.exports = (env) => {
 
                                     await hideScroll();
 
+                                    await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'create-account');
@@ -261,6 +268,7 @@ module.exports = (env) => {
                                     await page.click('a');
                                     await page.waitForTimeout(500);
                                     await page.waitForSelector('.reset-password-form');
+                                    await page.waitForTimeout(3000);
 
                                     await hideScroll();
 
@@ -283,6 +291,7 @@ module.exports = (env) => {
                                     await page.waitForSelector('form');
 
                                     await hideScroll();
+                                    await page.waitForTimeout(3000);
 
                                     const image = await takeScreenshot();
 

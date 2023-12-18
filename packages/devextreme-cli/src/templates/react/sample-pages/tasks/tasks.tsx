@@ -84,6 +84,7 @@ export default function Task() {
 
 const dataSource = {
   store: {
+    version: 2,
     type: 'odata',
     key: 'Task_ID',
     url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks'
