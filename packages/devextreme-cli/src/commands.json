@@ -16,9 +16,6 @@
                 "name": "--empty",
                 "description": "Skips sample view generation (default: false)"
             }, {
-                "name": "--version",
-                "description": "Specifies whether to generate a Vue 2 or Vue 3 application. Available values: 2 (default) and 3"
-            }, {
                 "name": "--template",
                 "description": "Create template with typescsript support. Specifies for React & Vue application"
             }]
