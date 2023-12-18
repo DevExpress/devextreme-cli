@@ -74,7 +74,7 @@ const getCorrectPath = (extension, pathToApp) => {
 };
 
 const addTemplate = (appPath, appName, templateOptions) => {
-    const applicationTemplatePath = path.join(templateCreator.getTempaltePath(`vue-v3`), 'application');
+    const applicationTemplatePath = path.join(templateCreator.getTempaltePath('vue-v3'), 'application');
     const styles = [
         './themes/generated/theme.additional.css',
         './themes/generated/theme.base.css',
@@ -106,7 +106,7 @@ const addStylesToApp = (appPath, styles) => {
 };
 
 const addSamplePages = (appPath) => {
-    const samplePageTemplatePath = path.join(templateCreator.getTempaltePath(`vue-v3`), 'sample-pages');
+    const samplePageTemplatePath = path.join(templateCreator.getTempaltePath('vue-v3'), 'sample-pages');
     const pagesPath = createPathToPage(appPath);
     templateCreator.moveTemplateFilesToProject(samplePageTemplatePath, pagesPath, {}, getCorrectPath);
 };
@@ -147,7 +147,7 @@ const createPathToPage = (appPath) => {
 };
 
 const addView = (pageName, options) => {
-    const pageTemplatePath = path.join(templateCreator.getTempaltePath(`vue-v3`), 'page');
+    const pageTemplatePath = path.join(templateCreator.getTempaltePath('vue-v3'), 'page');
 
     const componentName = getComponentPageName(pageName);
     const pathToPage = createPathToPage(process.cwd());
