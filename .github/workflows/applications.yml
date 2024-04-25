@@ -53,6 +53,11 @@ jobs:
       run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
       timeout-minutes: 30
 
+    - name: Install Internal Packages
+      uses: DevExpress/github-actions/install-internal-package@main
+      with:
+        working-directory: packages/devextreme-cli/testing/sandbox/${{ matrix.APPROACH }}/my-app
+
     - name: Lint created application
       if: ${{ matrix.OS != 'windows-latest' }}
       run: npm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
