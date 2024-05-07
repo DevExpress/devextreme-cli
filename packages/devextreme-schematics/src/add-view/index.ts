@@ -146,7 +146,7 @@ export default function(options: any): Rule {
     const module = getModuleName(addRoute, options.module);
     const name = getPathForView(options.name);
 
-    const rules = [externalSchematic('@schematics/angular', 'component', {
+    const rules = [externalSchematic('../node_modules/@schematics/angular', 'component', {
         name,
         project,
         module,
