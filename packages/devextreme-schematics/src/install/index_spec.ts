@@ -20,7 +20,7 @@ describe('install', () => {
 
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
-    version: '16.2.10'
+    version: '16.0.0'
   };
 
   const angularSchematicsCollection = require.resolve('../../node_modules/@schematics/angular/collection.json');

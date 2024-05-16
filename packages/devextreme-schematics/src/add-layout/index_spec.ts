@@ -31,7 +31,7 @@ describe('layout', () => {
   const options: any = {
     layout: 'side-nav-outer-toolbar',
     resolveConflicts: 'override',
-    globalNgCliVersion: '^16.2.10'
+    globalNgCliVersion: '^16.2.0'
   };
 
   const angularSchematicsCollection = require.resolve('../../node_modules/@schematics/angular/collection.json');
