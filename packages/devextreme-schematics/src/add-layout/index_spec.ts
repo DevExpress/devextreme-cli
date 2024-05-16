@@ -25,7 +25,7 @@ describe('layout', () => {
 
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
-    version: '16.2.10'
+    version: '16.0.0'
   };
 
   const options: any = {
