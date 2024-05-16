@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
   "$id": "SchematicsDevextremeAddAppTemplate",
-  "title": "Add a DevExtreme layout template to an Anular application",
+  "title": "Add a DevExtreme layout template to an Angular application",
   "type": "object",
   "properties": {
     "layout": {
@@ -43,7 +43,7 @@
     },
     "globalNgCliVersion": {
       "type":"string",
-      "default": "^12.0.0"
+      "default": "^16.2.10"
     },
     "empty": {
       "type": "boolean",
