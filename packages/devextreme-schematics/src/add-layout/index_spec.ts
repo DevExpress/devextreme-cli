@@ -178,7 +178,7 @@ describe('layout', () => {
     const tree = await runner.runSchematic('add-layout', options, appTree);
     const packageConfig = JSON.parse(tree.readContent('package.json'));
 
-    expect(packageConfig.dependencies['@angular/cdk']).toBe('~16.2.10');
+    expect(packageConfig.dependencies['@angular/cdk']).toBe('~16.2.0');
   });
 
   it('should update budgets if updateBudgets option is true', async () => {
