@@ -10,7 +10,7 @@ const latestVersions = require('../utility/latest-versions');
 const { extractToolingVersion, toolingVersionOptionName } = require('../utility/extract-tooling-version');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
-const minNgCliVersion = new semver('16.2.10');
+const minNgCliVersion = new semver('16.0.0');
 const ngCliWithStandalone = new semver('17.0.0');
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
