@@ -30,14 +30,14 @@ describe('sample views', () => {
   let appTree: UnitTestTree;
 
   beforeEach(async () => {
-    appTree =  await schematicRunner.runSchematicAsync('workspace', workspaceOptions).toPromise();
-    appTree = await schematicRunner.runSchematicAsync('application', appOptions, appTree).toPromise();
+    appTree =  await schematicRunner.runSchematic('workspace', workspaceOptions);
+    appTree = await schematicRunner.runSchematic('application', appOptions, appTree);
   });
 
   it('should add sample views', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
-    let tree = await runner.runSchematicAsync('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree).toPromise();
-    tree = await runner.runSchematicAsync('add-sample-views', sampleViewsOptions, tree).toPromise();
+    let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
+    tree = await runner.runSchematic('add-sample-views', sampleViewsOptions, tree);
 
     const moduleContent = tree.readContent('/src/app/app-routing.module.ts');
 

@@ -40,7 +40,6 @@ import {
 
 import {
   modifyJSONFile,
-  parseJson
  } from '../utility/modify-json-file';
 
 import {
@@ -318,8 +317,6 @@ const modifyRoutingModule = (host: Tree, routingModulePath: string) => {
 
 export default function(options: any): Rule {
   return async (host: Tree) => {
-    const ngConfig = host.read('./angular.json')!.toString();
-    const defaultProjectName = parseJson(ngConfig).defaultProject;
     const project = await getProjectName(host, options.project);
     const workspace = await getWorkspace(host);
     const ngProject = workspace.projects.get(project);
@@ -371,13 +368,6 @@ export default function(options: any): Rule {
       rules.push((_: Tree, context: SchematicContext) => {
         context.addTask(new PatchNodePackageInstallTask());
       });
-    }
-
-    if (override) {
-      if (project === defaultProjectName) {
-        rules.push(modifyContentByTemplate('./', workspaceFilesSource, 'e2e/src/app.e2e-spec.ts', { title }));
-        rules.push(modifyContentByTemplate('./', workspaceFilesSource, 'e2e/src/app.po.ts'));
-      }
     }
 
     return chain(rules);

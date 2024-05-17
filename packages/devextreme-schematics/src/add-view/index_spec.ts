@@ -38,14 +38,14 @@ describe('view', () => {
   let appTree: UnitTestTree;
 
   beforeEach(async () => {
-    appTree = await schematicRunner.runSchematicAsync('workspace', workspaceOptions).toPromise();
-    appTree = await schematicRunner.runSchematicAsync('application', appOptions, appTree).toPromise();
+    appTree = await schematicRunner.runSchematic('workspace', workspaceOptions);
+    appTree = await schematicRunner.runSchematic('application', appOptions, appTree);
   });
 
   it('should create new view', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
-    let tree = await runner.runSchematicAsync('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree).toPromise();
-    tree = await runner.runSchematicAsync('add-view', componentOptions, appTree).toPromise();
+    let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
+    tree = await runner.runSchematic('add-view', componentOptions, appTree);
 
     expect(tree.files).toContain('/src/app/pages/test/test.component.ts');
     expect(tree.files).toContain('/src/app/pages/test/test.component.html');
@@ -59,9 +59,9 @@ describe('view', () => {
     const options = { ...componentOptions, addRoute: true };
 
     const runner = new SchematicTestRunner('schematics', collectionPath);
-    let tree = await runner.runSchematicAsync('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree).toPromise();
-    tree = await runner.runSchematicAsync('add-view', options, tree).toPromise();
-    tree = await runner.runSchematicAsync('add-view', { ...options, name: 'test2' }, tree).toPromise();
+    let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
+    tree = await runner.runSchematic('add-view', options, tree);
+    tree = await runner.runSchematic('add-view', { ...options, name: 'test2' }, tree);
     const moduleContent = tree.readContent('/src/app/app-routing.module.ts');
 
     expect(moduleContent).toContain(`const routes: Routes = [
@@ -91,18 +91,18 @@ describe('view', () => {
     const options = { ...componentOptions, addRoute: true, module: 'test/test-routing' };
 
     const runner = new SchematicTestRunner('schematics', collectionPath);
-    let tree = await runner.runExternalSchematicAsync('@schematics/angular', 'module', {
+    let tree = await runner.runExternalSchematic('@schematics/angular', 'module', {
       name: 'test',
       routing: true,
       project: 'testApp'
-    }, appTree).toPromise();
+    }, appTree);
 
-    tree = await runner.runSchematicAsync('add-layout', {
+    tree = await runner.runSchematic('add-layout', {
       layout: 'side-nav-outer-toolbar',
       project: 'testApp',
       name: 'test'
-    }, tree).toPromise();
-    tree = await runner.runSchematicAsync('add-view', options, tree).toPromise();
+    }, tree);
+    tree = await runner.runSchematic('add-view', options, tree);
 
     const moduleContent = tree.readContent('/src/app/test/test-routing.module.ts');
 
@@ -113,12 +113,12 @@ describe('view', () => {
 
   it('should add view to navigation', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
-    let tree = await runner.runSchematicAsync('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree).toPromise();
-    tree = await runner.runSchematicAsync('add-view', componentOptions, tree).toPromise();
+    let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
+    tree = await runner.runSchematic('add-view', componentOptions, tree);
 
     componentOptions.name = 'some test';
     componentOptions.icon = 'home';
-    tree = await runner.runSchematicAsync('add-view', componentOptions, tree).toPromise();
+    tree = await runner.runSchematic('add-view', componentOptions, tree);
 
     const moduleContent = tree.readContent('/src/app/app-navigation.ts');
 
@@ -146,8 +146,8 @@ describe('view', () => {
   it('should create new view with path', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     componentOptions.name = 'folder/test';
-    let tree = await runner.runSchematicAsync('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree).toPromise();
-    tree = await runner.runSchematicAsync('add-view', componentOptions, appTree).toPromise();
+    let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
+    tree = await runner.runSchematic('add-view', componentOptions, appTree);
 
     expect(tree.files).toContain('/src/app/folder/test/test.component.ts');
     expect(tree.files).toContain('/src/app/folder/test/test.component.html');
