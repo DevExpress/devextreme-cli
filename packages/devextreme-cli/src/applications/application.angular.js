@@ -88,7 +88,7 @@ const create = async(appName, options) => {
     ];
 
     if(ngCliWithStandalone.compare(currentNgVersion) <= 0) {
-        commandArguments.push('--standalone=false');
+        commandArguments.push('--standalone=false', '--ssr=false');
     }
 
     await runNgCommand(commandArguments, options);
