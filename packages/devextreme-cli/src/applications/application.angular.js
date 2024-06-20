@@ -40,9 +40,10 @@ async function runNgCommand(commandArguments, commandOptions, commandConfig) {
     const hasNg = await hasSutableNgCli();
     const toolingVersion = extractToolingVersion(commandOptions);
     const npmCommandName = hasNg && !toolingVersion ? 'ng' : 'npx';
+    const [minCliLtsVersion] = minNgCliVersion.version.split('.');
     const ngCommandArguments = hasNg && !toolingVersion
         ? []
-        : ['-p', '@angular/cli@v15-lts', 'ng'];
+        : ['-p', `@angular/cli@v${minCliLtsVersion}-lts`, 'ng'];
 
     ngCommandArguments.push(...commandArguments);
     return runCommand(npmCommandName, ngCommandArguments, commandConfig);

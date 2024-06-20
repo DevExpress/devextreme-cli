@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
-import TreeView from 'devextreme-react/tree-view';
+import { TreeView<%=#isTypeScript%>, TreeViewRef<%=/isTypeScript%> } from 'devextreme-react/tree-view';
 import { navigation } from '../../app-navigation';
 import { useNavigation } from '../../contexts/navigation';
 import { useScreenSize } from '../../utils/media-query';
@@ -32,7 +32,7 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
 
   const { navigationData: { currentPath } } = useNavigation();
 
-  const treeViewRef = useRef<%=#isTypeScript%><TreeView><%=/isTypeScript%>(null);
+  const treeViewRef = useRef<%=#isTypeScript%><TreeViewRef><%=/isTypeScript%>(null);
   const wrapperRef = useRef<%=#isTypeScript%><HTMLDivElement><%=/isTypeScript%>();
   const getWrapperRef = useCallback((element<%=#isTypeScript%>: HTMLDivElement<%=/isTypeScript%>) => {
     const prevElement = wrapperRef.current;
@@ -47,7 +47,7 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
   }, [openMenu]);
 
   useEffect(() => {
-    const treeView = treeViewRef.current && treeViewRef.current.instance;
+    const treeView = treeViewRef.current && treeViewRef.current.instance();
     if (!treeView) {
       return;
     }
