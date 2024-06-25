@@ -181,6 +181,7 @@ function updateAppModule(host: Tree, sourcePath: string) {
   };
 
   const rules = [
+    modifyFileRule(appModulePath, importSetter('DxHttpModule', 'devextreme-angular/http')),
     modifyFileRule(appModulePath, importSetter('SideNavOuterToolbarModule', './layouts')),
     modifyFileRule(appModulePath, importSetter('SideNavInnerToolbarModule', './layouts')),
     modifyFileRule(appModulePath, importSetter('SingleCardModule', './layouts')),
