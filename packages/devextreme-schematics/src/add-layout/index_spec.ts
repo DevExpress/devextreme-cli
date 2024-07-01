@@ -99,6 +99,7 @@ describe('layout', () => {
     expect(styles[2]).toBe('src/themes/generated/theme.additional.css');
 
     const moduleContent = tree.readContent('/src/app/app.module.ts');
+    expect(moduleContent).toContain('import { DxHttpModule }');
     expect(moduleContent)
       .toContain('import { SideNavOuterToolbarModule, SideNavInnerToolbarModule, SingleCardModule }');
     expect(moduleContent)
