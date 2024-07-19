@@ -1,6 +1,6 @@
 import Button from 'devextreme-react/button';
 import Drawer from 'devextreme-react/drawer';
-import ScrollView from 'devextreme-react/scroll-view';
+import { ScrollView<%=#isTypeScript%>, ScrollViewRef<%=/isTypeScript%> } from 'devextreme-react/scroll-view';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import React, { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router';
@@ -14,7 +14,7 @@ import { useMenuPatch } from '../../utils/patches';
 <%=#isTypeScript%>import { ButtonTypes } from 'devextreme-react/button';<%=/isTypeScript%>
 
 export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%>: React.PropsWithChildren<SideNavToolbarProps><%=/isTypeScript%>) {
-  const scrollViewRef = useRef<%=#isTypeScript%><ScrollView><%=/isTypeScript%>(null);
+  const scrollViewRef = useRef<%=#isTypeScript%><ScrollViewRef><%=/isTypeScript%>(null);
   const navigate = useNavigate();
   const { isXSmall, isLarge } = useScreenSize();
   const [patchCssClass, onMenuReady] = useMenuPatch();
@@ -55,7 +55,7 @@ export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%
     }
 
     navigate(itemData.path);
-    scrollViewRef.current<%=#isTypeScript%>?<%=/isTypeScript%>.instance.scrollTo(0);
+    scrollViewRef.current<%=#isTypeScript%>?<%=/isTypeScript%>.instance().scrollTo(0);
 
     if (!isLarge || menuStatus === MenuStatus.TemporaryOpened) {
       setMenuStatus(MenuStatus.Closed);
