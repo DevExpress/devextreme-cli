@@ -17,5 +17,10 @@
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 20px;
   padding-bottom: 24px;
+  margin: 0 40px;
+
+  .screen-x-small & {
+    margin: 0 20px;
+  }
 }
 </style>

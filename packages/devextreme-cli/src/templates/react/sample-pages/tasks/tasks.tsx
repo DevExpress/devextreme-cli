@@ -11,10 +11,10 @@ import DataGrid, {
 export default function Task() {
   return (
     <React.Fragment>
-      <h2 className={'content-block'}>Tasks</h2>
+      <h2>Tasks</h2>
 
       <DataGrid
-        className={'dx-card wide-card'}
+        className={'dx-card content-block'}
         dataSource={dataSource<%=#isTypeScript%> as any<%=/isTypeScript%>}
         showBorders={false}
         focusedRowEnabled={true}
