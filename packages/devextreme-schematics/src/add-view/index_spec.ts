@@ -52,7 +52,7 @@ describe('view', () => {
 
     const content = tree.readContent('/src/app/pages/test/test.component.html');
 
-    expect(content).toMatch(/<h2 class="content-block">Test<\/h2>/);
+    expect(content).toMatch(/<h2>Test<\/h2>/);
   });
 
   it('should add view to default routing module', async () => {
@@ -140,7 +140,7 @@ describe('view', () => {
   }
 ];`);
     const pageContent = tree.readContent('/src/app/pages/some-test/some-test.component.html');
-    expect(pageContent).toMatch(/<h2 class="content-block">Some Test<\/h2>/);
+    expect(pageContent).toMatch(/<h2>Some Test<\/h2>/);
   });
 
   it('should create new view with path', async () => {
