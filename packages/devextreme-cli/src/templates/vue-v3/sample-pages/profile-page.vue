@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="content-block">Profile</h2>
+    <h2>Profile</h2>
 
     <div class="content-block dx-card responsive-paddings">
       <div class="form-avatar">

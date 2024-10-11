@@ -21,7 +21,7 @@ export default function Profile() {
 
   return (
     <React.Fragment>
-      <h2 className={'content-block'}>Profile</h2>
+      <h2>Profile</h2>
 
       <div className={'content-block dx-card responsive-paddings'}>
         <div className={'form-avatar'}>

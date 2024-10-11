@@ -26,11 +26,11 @@ body {
   .content {
     line-height: 1.5;
     flex-grow: 1;
+    padding: 40px;
 
     h2 {
       font-size: 30px;
-      margin-top: 20px;
-      margin-bottom: 20px;
+      margin: 0;
     }
   }
 
@@ -46,8 +46,6 @@ body {
   }
 
   .content-block {
-    margin-left: 40px;
-    margin-right: 40px;
     margin-top: 20px;
   }
 }
@@ -56,9 +54,8 @@ body {
   height: calc(100% - 56px)
 }
 
-.screen-x-small .content-block {
-  margin-left: 20px;
-  margin-right: 20px;
+.screen-x-small .content {
+  padding: 20px;
 }
 
 .responsive-paddings {
