@@ -7,9 +7,7 @@
         :is-x-small="screen.getScreenSizeInfo.isXSmall"
         :is-large="screen.getScreenSizeInfo.isLarge"
       >
-      <div class="content">
         <router-view></router-view>
-      </div>
         <template #footer>
           <app-footer />
         </template>

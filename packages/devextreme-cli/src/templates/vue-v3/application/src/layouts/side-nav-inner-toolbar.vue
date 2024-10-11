@@ -18,7 +18,9 @@
           :toggle-menu-func="toggleMenu"
         />
         <dx-scroll-view ref="scrollViewRef" class="layout-body with-footer">
-          <slot />
+          <div class="content">
+            <slot />
+          </div>
           <slot name="footer" />
         </dx-scroll-view>
       </div>
