@@ -1,3 +1,5 @@
+@use "../../variables.scss" as *;
+
 .logos-container {
   margin: 0 0 40px 0;
 
@@ -9,6 +11,16 @@
 .devextreme-logo {
   width: 255px;
   height: 60px;
+
+  > path {
+    fill: var(--devextreme-logo-color);
+  }
+
+  .by-devexpress {
+    path {
+      fill: var(--devextreme-logo-color);
+    }
+  }
 }
 
 .react-logo {
@@ -20,6 +32,10 @@
   margin: 20px;
   width: 22px;
   height: 22px;
+
+  path {
+    fill:  var(--plus-icon-color);
+  }
 }
 
 .screen-x-small .logos-container {
