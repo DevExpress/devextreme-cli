@@ -4,7 +4,7 @@
     @click="forwardClick"
   >
     <slot />
-    <div class="menu-container theme-dependent">
+    <div class="menu-container">
       <dx-tree-view
         ref="treeViewRef"
         :items="items"

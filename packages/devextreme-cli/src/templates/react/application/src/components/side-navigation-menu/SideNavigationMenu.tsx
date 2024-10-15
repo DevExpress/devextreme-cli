@@ -68,7 +68,7 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
       ref={getWrapperRef}
     >
       {children}
-      <div className={'menu-container theme-dependent'}>
+      <div className={'menu-container'}>
         <TreeView
           ref={treeViewRef}
           items={items}
