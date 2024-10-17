@@ -28,7 +28,7 @@ exports.viewports = {
 };
 
 exports.themes = {
-    material: 'material.orange',
+    material: 'material.blue',
     generic: 'generic'
 };
 
@@ -39,7 +39,7 @@ exports.layouts = [
 
 exports.swatchModes = {
     base: 'light',
-    additional: 'dark'
+    additional: 'light'
 };
 
 exports.baseFontFamily = {
