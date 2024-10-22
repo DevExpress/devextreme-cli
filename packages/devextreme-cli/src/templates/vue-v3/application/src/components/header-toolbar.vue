@@ -120,14 +120,14 @@ export default {
 @import "../themes/generated/variables.base.scss";
 @import "../dx-styles.scss";
 
+header {
+  background-color: $base-bg;
+}
+
 .header-component {
   flex: 0 0 auto;
   z-index: 1;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-
-  .dx-toolbar .dx-toolbar-item.menu-button > .dx-toolbar-item-content .dx-icon {
-    color: $base-accent;
-  }
 }
 
 .dx-toolbar.header-toolbar .dx-toolbar-items-container .dx-toolbar-after {

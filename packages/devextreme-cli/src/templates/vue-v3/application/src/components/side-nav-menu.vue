@@ -160,7 +160,7 @@ export default {
       .dx-treeview-node {
         &[aria-level="1"] {
           font-weight: bold;
-          border-bottom: 1px solid $base-border-color;
+          border-bottom: 1px solid var(--dx-color-border);
         }
 
         &[aria-level="2"] .dx-treeview-item-content {
@@ -170,35 +170,6 @@ export default {
       }
       // ##
     }
-
-    // ## Selected & Focuced items customization
-    .dx-treeview {
-      .dx-treeview-node-container {
-        .dx-treeview-node {
-          &.dx-state-selected:not(.dx-state-focused) > .dx-treeview-item {
-            background: transparent;
-          }
-
-          &.dx-state-selected > .dx-treeview-item * {
-            color: $base-accent;
-          }
-
-          &:not(.dx-state-focused) > .dx-treeview-item.dx-state-hover {
-            background-color: lighten($base-bg, 4);
-          }
-        }
-      }
-    }
-
-    .dx-theme-generic .dx-treeview {
-      .dx-treeview-node-container
-        .dx-treeview-node.dx-state-selected.dx-state-focused
-        > .dx-treeview-item
-        * {
-        color: inherit;
-      }
-    }
-    // ##
   }
 }
 </style>
