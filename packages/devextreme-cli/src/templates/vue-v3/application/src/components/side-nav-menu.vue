@@ -111,12 +111,13 @@ export default {
 @import "../dx-styles.scss";
 @import "../themes/generated/variables.additional.scss";
 
-.side-navigation-menu {
+div.dx-swatch-additional.side-navigation-menu {
   display: flex;
   flex-direction: column;
   min-height: 100%;
   height: 100%;
   width: 250px !important;
+  background-color: $base-bg;
 
   .menu-container {
     min-height: 100%;
@@ -132,6 +133,7 @@ export default {
       .dx-treeview-item {
         padding-left: 0;
         flex-direction: row-reverse;
+        border-radius: 0;
 
         .dx-icon {
           width: $side-panel-min-width !important;
