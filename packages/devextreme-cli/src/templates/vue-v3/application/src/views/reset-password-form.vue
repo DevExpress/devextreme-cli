@@ -91,7 +91,7 @@ export default {
       }
     }
 
-    return { 
+    return {
       loading,
       formData,
       onSubmit
@@ -101,15 +101,13 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
-
 .reset-password-form {
   .submit-button {
     margin-top: 10px;
   }
 
   .login-link {
-    color: $base-accent;
+    color: var(--base-accent);
     font-size: 16px;
     text-align: center;
   }

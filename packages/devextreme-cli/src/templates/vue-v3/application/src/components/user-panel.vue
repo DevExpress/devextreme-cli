@@ -45,8 +45,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
-
 .user-info {
   display: flex;
   align-items: center;
@@ -76,7 +74,7 @@ export default {
 
   .user-name {
     font-size: 14px;
-    color: $base-text-color;
+    color: var(--base-text-color);
     margin: 0 9px;
   }
 }
@@ -84,7 +82,7 @@ export default {
 .user-panel {
   .dx-list-item .dx-icon {
     vertical-align: middle;
-    color: $base-text-color;
+    color: var(--base-text-color);
     margin-right: 16px;
   }
   .dx-rtl .dx-list-item .dx-icon {

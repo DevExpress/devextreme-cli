@@ -20,7 +20,11 @@
         location="before"
         css-class="header-title dx-toolbar-label"
       >
-        <div>{{ title }}</div>
+        <div>{{ title }} </div>
+      </dx-item>
+
+      <dx-item location="after">
+        <div><theme-switcher /></div>
       </dx-item>
 
       <dx-item
@@ -41,7 +45,7 @@
           </div>
         </template>
       </dx-item>
-      
+
       <template #menuUserItem>
         <user-panel
           :email="email"
@@ -61,6 +65,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { ref } from 'vue';
 
 import UserPanel from "./user-panel";
+import ThemeSwitcher from './theme-switcher.vue';
 
 export default {
   props: {
@@ -75,7 +80,7 @@ export default {
 
     const email = ref("");
     auth.getUser().then((e) => email.value = e.data.email);
-    
+
     const userMenuItems = [{
         text: "Profile",
         icon: "user",
@@ -86,7 +91,7 @@ export default {
         icon: "runner",
         onClick: onLogoutClick
     }];
-      
+
     function onLogoutClick() {
       auth.logOut();
       router.push({
@@ -108,6 +113,7 @@ export default {
     };
   },
   components: {
+    ThemeSwitcher,
     DxButton,
     DxToolbar,
     DxItem,
@@ -117,11 +123,10 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
 @import "../dx-styles.scss";
 
 header {
-  background-color: $base-bg;
+  background-color: var(--base-bg);
 }
 
 .header-component {

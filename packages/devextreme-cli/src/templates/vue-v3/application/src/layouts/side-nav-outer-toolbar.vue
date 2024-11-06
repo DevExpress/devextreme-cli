@@ -132,6 +132,6 @@ export default {
 }
 
 .layout-header {
-  z-index: 1501;
+  z-index: 1505;
 }
 </style>

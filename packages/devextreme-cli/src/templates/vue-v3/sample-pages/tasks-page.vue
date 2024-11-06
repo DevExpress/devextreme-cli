@@ -132,3 +132,8 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+.dx-datagrid-filter-row {
+  background-color: transparent;
+}
+</style>

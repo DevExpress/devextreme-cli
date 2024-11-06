@@ -125,8 +125,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
-
 .login-form {
   .link {
     text-align: center;
@@ -140,7 +138,7 @@ export default {
 
   .form-text {
     margin: 10px 0;
-    color: rgba($base-text-color, alpha($base-text-color) * 0.7);
+    color: var(--base-text-color-alpha-7);
   }
 }
 </style>
