@@ -7,6 +7,7 @@ import DataGrid, {
   FilterRow,
   Lookup
 } from 'devextreme-react/data-grid';
+import './tasks.scss';
 
 export default function Task() {
   return (

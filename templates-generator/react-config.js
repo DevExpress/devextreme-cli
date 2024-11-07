@@ -33,7 +33,7 @@ module.exports = {
                     before: /\?\./g,
                     after: '<%=#isTypeScript%>?<%=/isTypeScript%>.'
                 },
-                
+
                 {
                     before: /(?<before>\S)(?<type>: [A-Z]\w+((\.\w+)?(<(.*?)>)?))(?<after>,|\))/g,
                     after: '$<before><%=#isTypeScript%>$<type><%=/isTypeScript%>$<after>'
@@ -141,21 +141,23 @@ module.exports = {
         {
             glob: 'src/App.tsx',
             definitions: [
-                'import \'devextreme/dist/css/dx.common.css\';\n',
-                'import \'./themes/generated/theme.base.css\';\n',
-                'import \'./themes/generated/theme.additional.css\';\n',
+              'import \'devextreme/dist/css/dx.common.css\';\n',
+              'import \'./themes/generated/theme.base.css\';\n',
+              'import \'./themes/generated/theme.base.dark.css\';\n',
+              'import \'./themes/generated/theme.additional.css\';\n',
+              'import \'./themes/generated/theme.additional.dark.css\';\n',
             ]
         },
         {
             glob: 'src/app-routes.tsx',
             definitions: [
-                    ', NewPagePage'                   
+                    ', NewPagePage'
             ]
         },
         {
             glob: 'src/app-navigation.tsx|src/app-routes.tsx',
             definitions: [
-                /,\s+{[^}]*'\/new-page'[^}]*}/            
+                /,\s+{[^}]*'\/new-page'[^}]*}/
             ]
         },
         {
