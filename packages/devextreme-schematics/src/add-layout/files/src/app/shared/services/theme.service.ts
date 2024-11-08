@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-
+import { Inject, Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 const themes = ['light', 'dark'] as const;
 const themeClassNamePrefix = 'dx-swatch-';
 
@@ -16,9 +16,9 @@ export class ThemeService {
 
   currentTheme: Theme = getNextTheme();
 
-  constructor() {
-    if (!document.body.className.includes(themeClassNamePrefix)) {
-      document.body.classList.add(themeClassNamePrefix + this.currentTheme);
+  constructor(@Inject(DOCUMENT) private document: Document) {
+    if (!this.document.body.className.includes(themeClassNamePrefix)) {
+      this.document.body.classList.add(themeClassNamePrefix + this.currentTheme);
     }
   }
 
@@ -27,7 +27,7 @@ export class ThemeService {
     const newTheme = getNextTheme(this.currentTheme);
     const isCurrentThemeDark = currentTheme === 'dark';
 
-    document.body.classList.replace(
+    this.document.body.classList.replace(
       themeClassNamePrefix + currentTheme,
       themeClassNamePrefix + newTheme
     );
