@@ -36,7 +36,7 @@ export class ThemeService {
     const additionalClassNamePostfix = isCurrentThemeDark ? '-' + currentTheme : '';
     const additionalClassName = `${additionalClassNamePrefix}${additionalClassNamePostfix}`
 
-    document.body
+    this.document.body
       .querySelector(`.${additionalClassName}`)?.classList
       .replace(additionalClassName, additionalClassNamePrefix + (isCurrentThemeDark ? '' : '-dark'));
 
