@@ -16,26 +16,20 @@ html, body {
   }
 
   .app {
-    background-color: var(--base-bg-darken-5);
     display: flex;
     height: 100%;
     width: 100%;
   }
 
-  background-color: var(--base-bg-darken-5);
-
-  .dx-drawer-wrapper .dx-overlay-content {
-    box-shadow: 0 4px 4px 0 var(--shadow-color-first), 0 1px 2px 0 var(--shadow-color-second);
-  }
-
   .content {
     line-height: 1.5;
     flex-grow: 1;
-    padding: 40px;
+    padding: 20px 40px;
 
     h2 {
-      font-size: 30px;
+      font-size: 32px;
       margin: 0;
+      line-height: 40px;
     }
 
     .screen-x-small & {
@@ -86,6 +80,15 @@ html, body {
       display: flex;
       flex-direction: column;
       min-height: 100%;
+    }
+  }
+}
+
+.dx-theme-fluent {
+  .dx-drawer-wrapper {
+    .dx-drawer-panel-content,
+    .dx-overlay-content {
+      box-shadow: 0 4px 4px 0 var(--shadow-color-first), 0 1px 2px 0 var(--shadow-color-second);
     }
   }
 }

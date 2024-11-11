@@ -211,14 +211,4 @@
     fill:  var(--plus-icon-color);
   }
 }
-
-.screen-x-small .logos-container {
-  svg {
-    width: 100%;
-    display: block;
-    &.plus {
-      margin: 0;
-    }
-  }
-}
 </style>

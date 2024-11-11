@@ -90,7 +90,6 @@ body {
 }
 
 .app {
-  background-color: var(--base-bg-darken-5);
   display: flex;
   height: 100%;
   width: 100%;
