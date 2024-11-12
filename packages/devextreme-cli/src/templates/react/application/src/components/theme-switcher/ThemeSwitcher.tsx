@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import Button from 'devextreme-react/button';
-import {useThemeContext} from '../../theme';
+import { ThemeContext } from '../../theme';
 
 export const ThemeSwitcher = () => {
-  const themeContext = useThemeContext();
+  const themeContext = useContext(ThemeContext);
 
   const onButtonClick = useCallback(() => {
     themeContext?.switchTheme();

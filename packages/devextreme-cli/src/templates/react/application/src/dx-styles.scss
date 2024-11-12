@@ -8,6 +8,10 @@ body {
 }
 
 .dx-viewport {
+  .dx-popup-wrapper {
+    z-index: 1510 !important;
+  }
+
   #root {
     height: 100%;
   }
@@ -17,6 +21,7 @@ body {
   }
 
   .app {
+    background-color: var(--base-bg-darken-5);
     display: flex;
     height: 100%;
     width: 100%;

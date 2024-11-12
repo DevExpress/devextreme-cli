@@ -9,7 +9,7 @@
 
 <script setup>
 import { DxButton } from 'devextreme-vue/button';
-import { themeService } from '../themes/theme-service';
+import { themeService } from '../theme-service';
 
 const currentTheme = themeService.currentTheme;
 

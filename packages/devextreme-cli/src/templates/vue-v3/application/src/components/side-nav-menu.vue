@@ -1,6 +1,6 @@
 <template>
   <div
-    class="dx-swatch-additional side-navigation-menu"
+    :class="[swatchClassName, 'side-navigation-menu', 'o____0']"
     @click="forwardClick"
   >
     <slot />
@@ -25,6 +25,7 @@ import { sizes } from '../utils/media-query';
 import navigation from '../app-navigation';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { themeService } from '../theme-service';
 
 export default {
   props: {
@@ -43,6 +44,7 @@ export default {
     });
 
     const treeViewRef = ref(null);
+    const swatchClassName = ref('');
 
     function forwardClick (...args) {
       context.emit("click", args);
@@ -83,6 +85,14 @@ export default {
     );
 
     watch(
+      () => themeService.isDark,
+      () => {
+        swatchClassName.value = themeService.isDark.value ? 'dx-swatch-additional-dark' : 'dx-swatch-additional';
+      },
+      { immediate: true }
+    );
+
+    watch(
       () => props.compactMode,
       () => {
         if (props.compactMode) {
@@ -98,7 +108,8 @@ export default {
       items,
       forwardClick,
       handleItemClick,
-      updateSelection
+      updateSelection,
+      swatchClassName,
     };
   },
   components: {

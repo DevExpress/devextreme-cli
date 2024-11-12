@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
 const themes = ['light', 'dark'] as const;
 const themeClassNamePrefix = 'dx-swatch-';
 
@@ -22,6 +23,8 @@ export class ThemeService {
     }
   }
 
+  isDark = new BehaviorSubject<boolean>(this.currentTheme === 'dark');
+
   switchTheme() {
     const currentTheme = this.currentTheme;
     const newTheme = getNextTheme(this.currentTheme);
@@ -41,5 +44,6 @@ export class ThemeService {
       .replace(additionalClassName, additionalClassNamePrefix + (isCurrentThemeDark ? '' : '-dark'));
 
     this.currentTheme = newTheme;
+    this.isDark.next(this.currentTheme === 'dark');
   }
 }

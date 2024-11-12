@@ -32,27 +32,15 @@
         locate-in-menu="auto"
         menu-item-template="menuUserItem"
       >
-      <template #default>
-          <div>
-            <dx-button
-              class="user-button authorization"
-              :width="210"
-              height="100%"
-              styling-mode="text"
-            >
-              <user-panel :email="email" :menu-items="userMenuItems" menu-mode="context" />
-            </dx-button>
-          </div>
+        <template #default>
+          <user-panel :menu-items="userMenuItems" menuMode="context"/>
         </template>
       </dx-item>
 
       <template #menuUserItem>
-        <user-panel
-          :email="email"
-          :menu-items="userMenuItems"
-          menu-mode="list"
-        />
+        <user-panel :menu-items="userMenuItems" menuMode="list"/>
       </template>
+
     </dx-toolbar>
   </header>
 </template>
@@ -82,15 +70,15 @@ export default {
     auth.getUser().then((e) => email.value = e.data.email);
 
     const userMenuItems = [{
-        text: "Profile",
-        icon: "user",
-        onClick: onProfileClick
-      },
+      text: "Profile",
+      icon: "user",
+      onClick: onProfileClick
+    },
       {
         text: "Logout",
         icon: "runner",
         onClick: onLogoutClick
-    }];
+      }];
 
     function onLogoutClick() {
       auth.logOut();

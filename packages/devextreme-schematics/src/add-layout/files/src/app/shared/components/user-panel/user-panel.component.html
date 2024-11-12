@@ -1,25 +1,24 @@
 <div class="user-panel">
-  <div class="user-info">
-    <div class="image-container">
-      <div class="user-image"></div>
-    </div>
-    <div class="user-name">{{user?.email}}</div>
-  </div>
-  <dx-context-menu
-    *ngIf="menuMode === 'context'"
-    [items]="menuItems"
-    target=".user-button"
-    showEvent="dxclick"
-    width="210px"
-    [position]="{
-      my: 'top',
-      at: 'bottom'
+  <dx-drop-down-button *ngIf="menuMode !== 'list'"
+                       stylingMode="text"
+                       [icon]="'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'"
+                       [showArrowIcon]="false"
+                       [items]="menuItems"
+                       displayExpr="text"
+                       keyExpr="id"
+                       [elementAttr]="{
+      class: 'user-button'
     }"
-    cssClass="user-menu">
-  </dx-context-menu>
-  <dx-list
-    *ngIf="menuMode === 'list'"
-    class="dx-toolbar-menu-action"
-    [items]="menuItems">
+                       [dropDownOptions]="{
+      width: '150px'
+    }"
+  >
+  </dx-drop-down-button>
+  <dx-list *ngIf="menuMode === 'list'"
+           displayExpr="text"
+           keyExpr="id"
+           width="130"
+           [items]="menuItems">
+
   </dx-list>
 </div>

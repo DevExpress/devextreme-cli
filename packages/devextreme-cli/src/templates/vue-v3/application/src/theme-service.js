@@ -1,7 +1,10 @@
+import { ref } from 'vue';
+
 class ThemeService {
   themes = ['light', 'dark']
   themeClassNamePrefix = 'dx-swatch-';
-  currentTheme = '';
+  currentTheme = ref('');
+  isDark = ref(false);
 
   constructor() {
     if (!document.body.className.includes(this.themeClassNamePrefix)) {
@@ -30,6 +33,8 @@ class ThemeService {
     document.body
       .querySelector(`.${additionalClassName}`)?.classList
       .replace(additionalClassName, additionalClassNamePrefix + (isCurrentThemeDark ? '' : '-dark'));
+
+    this.isDark.value = this.currentTheme.value === 'dark';
   }
 
 }

@@ -1,6 +1,10 @@
 $side-panel-min-width: 60px;
 
 .dx-viewport {
+  .dx-popup-wrapper {
+    z-index: 1510 !important;
+  }
+
   .content {
     line-height: 1.5;
     flex-grow: 1;
@@ -64,6 +68,7 @@ $side-panel-min-width: 60px;
   }
 
   #app {
+    background-color: var(--base-bg-darken-5);
     height: 100%;
   }
 }

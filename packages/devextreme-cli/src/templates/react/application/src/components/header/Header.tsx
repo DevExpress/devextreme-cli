@@ -30,23 +30,13 @@ export default function Header({ menuToggleEnabled, title, toggleMenu }<%=#isTyp
         >
           <ThemeSwitcher />
         </Item>
-        <Item
-          location={'after'}
-          locateInMenu={'auto'}
-          menuItemTemplate={'userPanelTemplate'}
-        >
-          <Button
-            className={'user-button authorization'}
-            width={210}
-            height={'100%'}
-            stylingMode={'text'}
-          >
-            <UserPanel menuMode={'context'} />
-          </Button>
+        <Item location='after' locateInMenu='auto' menuItemTemplate='userPanelTemplate'>
+          <UserPanel menuMode='context' />
         </Item>
-        <Template name={'userPanelTemplate'}>
-          <UserPanel menuMode={'list'} />
+        <Template name='userPanelTemplate'>
+          <UserPanel menuMode='list' />
         </Template>
+
       </Toolbar>
     </header>
 )}
