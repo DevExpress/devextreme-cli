@@ -51,4 +51,4 @@ export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps
       )}
     </div>
   );
-};
+}
