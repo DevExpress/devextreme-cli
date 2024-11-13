@@ -148,7 +148,7 @@ module.exports = (env) => {
                                             x: 0,
                                             y: 0,
                                             width: viewport.width,
-                                            height: 180
+                                            height: 155
                                         }
                                     });
 
