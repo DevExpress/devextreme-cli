@@ -40,7 +40,6 @@ module.exports = (env) => {
                                 await devServer.build();
                                 await devServer.start();
                             } catch(e) {
-                                console.log('----EXEPTION------>', e);
                                 // NOTE jest@27 will fail test, but jest@26 - not
                                 throw new Error(e);
                             }
@@ -149,7 +148,7 @@ module.exports = (env) => {
                                             x: 0,
                                             y: 0,
                                             width: viewport.width,
-                                            height: 155
+                                            height: 150
                                         }
                                     });
 
