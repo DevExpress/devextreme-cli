@@ -66,7 +66,7 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
 
   return (
     <div
-      className={`dx-swatch-additional${theme.isDark() ? '-dark' : ''} side-navigation-menu`}
+      className={`dx-swatch-additional${theme?.isDark() ? '-dark' : ''} side-navigation-menu`}
       ref={getWrapperRef}
     >
       {children}
