@@ -29,7 +29,8 @@ exports.viewports = {
 
 exports.themes = {
     material: 'material.blue',
-    generic: 'generic'
+    generic: 'generic',
+    fluent: 'fluent.blue'
 };
 
 exports.layouts = [
