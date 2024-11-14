@@ -12,7 +12,7 @@ function getCurrentTheme() {
   return currentTheme;
 }
 
-function toggleTheme(prevTheme) {
+function toggleTheme(prevTheme<%=#isTypeScript%>: string<%=/isTypeScript%>) {
   const isCurrentThemeDark = prevTheme === 'dark';
 
   const newTheme = getNextTheme(prevTheme);
