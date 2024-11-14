@@ -141,6 +141,10 @@ export default {
         white-space: nowrap;
         // ##
 
+        .dx-treeview-node-container:empty {
+          display: none;
+        }
+
         // ## Icon width customization
         .dx-treeview-item {
           padding-left: 0;
