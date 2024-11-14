@@ -32,7 +32,6 @@ const preparePackageJsonForTemplate = (appPath, appName, isTypeScript) => {
         { name: 'sass', version: '^1.34.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
         { name: 'react-router-dom', version: '^6.3.0' },
-        { name: 'ajv', version: '^7.2.4' },
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
