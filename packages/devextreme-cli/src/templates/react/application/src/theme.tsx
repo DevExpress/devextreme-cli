@@ -4,7 +4,7 @@ const themes = ['light', 'dark'];
 const themeClassNamePrefix = 'dx-swatch-';
 let currentTheme =  getNextTheme();
 
-function getNextTheme(theme = null) {
+function getNextTheme(theme = '') {
   return themes[themes.indexOf(theme) + 1] || themes[0];
 }
 
