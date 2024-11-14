@@ -50,4 +50,4 @@ export function useThemeContext() {
   return useMemo(()=> ({ theme, switchTheme, isDark }), [theme]);
 }
 
-export const ThemeContext = React.createContext(null);
+export const ThemeContext = React.createContext<%=#isTypeScript%><ReturnType<typeof useThemeContext> | null><%=/isTypeScript%>(null);
