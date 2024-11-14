@@ -40,6 +40,7 @@ module.exports = (env) => {
                                 await devServer.build();
                                 await devServer.start();
                             } catch(e) {
+                                console.log('----EXEPTION------>', e);
                                 // NOTE jest@27 will fail test, but jest@26 - not
                                 throw new Error(e);
                             }
