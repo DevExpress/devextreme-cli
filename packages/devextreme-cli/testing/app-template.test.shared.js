@@ -91,13 +91,6 @@ module.exports = (env) => {
                                 await page.click('.dx-button.theme-button');
                                 await page.waitForTimeout(500);
 
-                                await page.evaluate(() => {
-                                    // eslint-disable-next-line no-undef
-                                    document.querySelector('.dx-button.theme-button').blur();
-                                });
-
-                                await page.waitForTimeout(500);
-
                                 const image = await takeScreenshot();
 
                                 compareSnapshot(image, name + (mode === 'light' ? '' : '-dark'));
