@@ -76,6 +76,7 @@ module.exports = (env) => {
                             }
 
                             const customConfig = { threshold: 0.012 };
+
                             function compareSnapshot(image, name) {
                                 expect(image).toMatchImageSnapshot({
                                     customDiffConfig: customConfig,
@@ -84,6 +85,15 @@ module.exports = (env) => {
                                     storeReceivedOnFailure: true,
                                     customReceivedDir: diffSnapshotsDir
                                 });
+                            }
+
+                            async function compareThemeModeSnapshot(name) {
+                                await page.click('.dx-button.theme-button');
+                                await page.waitForTimeout(500);
+
+                                const image = await takeScreenshot();
+
+                                compareSnapshot(image, name + '-dark');
                             }
 
                             async function hideScroll() {
@@ -159,9 +169,11 @@ module.exports = (env) => {
                                     await openPage(`${appUrl}#/profile`);
 
                                     await page.waitForTimeout(3000);
-                                    const image = await takeScreenshot();
+                                    let image = await takeScreenshot();
 
                                     compareSnapshot(image, 'profile');
+
+                                    await compareThemeModeSnapshot('profile');
                                 });
 
                                 it('Tasks view', async() => {
