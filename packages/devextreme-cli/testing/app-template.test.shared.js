@@ -91,11 +91,8 @@ module.exports = (env) => {
                                 await page.click('.dx-button.theme-button');
                                 await page.waitForTimeout(500);
 
-                                await page.evaluate(() => {
-                                    // eslint-disable-next-line no-undef
-                                    document.querySelector('.dx-button.theme-button').blur();
-
-                                });
+                                await page.click('.dx-button.theme-button', { offset: { x: 0, y: -100 } });
+                                await page.waitForTimeout(500);
 
                                 const image = await takeScreenshot();
 
