@@ -87,13 +87,13 @@ module.exports = (env) => {
                                 });
                             }
 
-                            async function compareThemeModeSnapshot(name) {
+                            async function compareThemeModeSnapshot(name, mode) {
                                 await page.click('.dx-button.theme-button');
                                 await page.waitForTimeout(500);
 
                                 const image = await takeScreenshot();
 
-                                compareSnapshot(image, name + '-dark');
+                                compareSnapshot(image, name + (mode === 'light' ? '' : '-dark'));
                             }
 
                             async function hideScroll() {
@@ -173,7 +173,9 @@ module.exports = (env) => {
 
                                     compareSnapshot(image, 'profile');
 
-                                    await compareThemeModeSnapshot('profile');
+                                    await compareThemeModeSnapshot('profile', 'dark');
+
+                                    await compareThemeModeSnapshot('profile', 'light');
                                 });
 
                                 it('Tasks view', async() => {
