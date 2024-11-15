@@ -96,6 +96,8 @@ module.exports = (env) => {
                                     document.querySelector('.dx-button.theme-button').blur();
                                 });
 
+                                await page.waitForTimeout(500);
+
                                 const image = await takeScreenshot();
 
                                 compareSnapshot(image, name + (mode === 'light' ? '' : '-dark'));
