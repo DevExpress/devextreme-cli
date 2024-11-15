@@ -178,6 +178,8 @@ module.exports = (env) => {
                                     compareSnapshot(image, 'profile');
 
                                     await compareThemeModeSnapshot('profile', 'dark');
+
+                                    await compareThemeModeSnapshot('profile', 'light');
                                 });
 
                                 it('Tasks view', async() => {
