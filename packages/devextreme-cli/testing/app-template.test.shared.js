@@ -169,6 +169,7 @@ module.exports = (env) => {
                                     await openPage(`${appUrl}#/profile`);
 
                                     await page.waitForTimeout(3000);
+
                                     let image = await takeScreenshot();
 
                                     compareSnapshot(image, 'profile');
