@@ -43,7 +43,7 @@
     },
     "globalNgCliVersion": {
       "type":"string",
-      "default": "^16.2.0"
+      "default": "24.2-next"
     },
     "empty": {
       "type": "boolean",
