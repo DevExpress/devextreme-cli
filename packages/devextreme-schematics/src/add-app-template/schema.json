@@ -39,7 +39,7 @@
     "dxversion": {
       "type": "string",
       "description": "The DevExtreme version",
-      "default": "24.2-next"
+      "default": "~24.1.7"
     },
     "globalNgCliVersion": {
       "type":"string",
