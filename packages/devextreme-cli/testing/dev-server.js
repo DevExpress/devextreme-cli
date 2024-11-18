@@ -29,7 +29,6 @@ module.exports = class DevServer {
                 env: Object.assign(process.env, { CI: false })
             });
         } catch(e) {
-            console.log('----EXCEPTION------>', e);
             throw new Error(e);
         }
     }

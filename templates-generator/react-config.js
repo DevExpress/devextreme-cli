@@ -151,7 +151,7 @@ module.exports = {
         {
             glob: 'src/app-routes.tsx',
             definitions: [
-                    ', NewPagePage'
+                ', NewPagePage'
             ]
         },
         {

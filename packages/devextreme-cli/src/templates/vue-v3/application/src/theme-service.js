@@ -11,7 +11,6 @@ class ThemeService {
       this.currentTheme.value = this.themes[0];
 
       document.body.classList.add(this.themeClassNamePrefix + this.currentTheme.value);
-
     }
   }
 
@@ -36,7 +35,6 @@ class ThemeService {
 
     this.isDark.value = this.currentTheme.value === 'dark';
   }
-
 }
 
 export const themeService = new ThemeService();

@@ -13,8 +13,7 @@ import { ThemeService } from '../../services/theme.service';
       stylingMode="text"
       [icon]="themeService.currentTheme === 'dark' ? 'sun' : 'moon'"
       (onClick)="onButtonClick()"
-    ></dx-button>
-`,
+    ></dx-button>`,
   styleUrls: [],
 })
 export class ThemeSwitcherComponent {

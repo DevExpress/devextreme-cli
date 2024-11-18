@@ -1,25 +1,26 @@
 <template>
   <div class="user-panel">
     <dx-drop-down-button
-      v-if="menuMode !== 'list'"
-      stylingMode="text"
-      :icon="'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'"
-      :showArrowIcon="false"
-      :items="menuItems"
-      displayExpr="text"
-      keyExpr="id"
-      :elementAttr="{
+        v-if="menuMode !== 'list'"
+        stylingMode="text"
+        :icon="'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'"
+        :showArrowIcon="false"
+        :items="menuItems"
+        displayExpr="text"
+        keyExpr="id"
+        :elementAttr="{
       class: 'user-button'
     }"
-      :dropDownOptions="{
+        :dropDownOptions="{
       width: '150px'
     }"
     />
-    <dx-list v-if="menuMode === 'list'"
-             :items="menuItems"
-             displayExpr="text"
-             keyExpr="id"
-             width="130"
+    <dx-list
+        v-if="menuMode === 'list'"
+        :items="menuItems"
+        displayExpr="text"
+        keyExpr="id"
+        width="130"
     />
   </div>
 </template>
