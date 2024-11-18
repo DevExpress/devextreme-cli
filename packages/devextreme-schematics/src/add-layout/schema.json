@@ -49,7 +49,7 @@
     },
     "globalNgCliVersion": {
       "type":"string",
-      "default": "24.2.1-alpha-24256-1935"
+      "default": "16.2.0"
     }
   }
 }
