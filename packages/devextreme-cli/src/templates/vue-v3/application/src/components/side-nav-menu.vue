@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[swatchClassName, 'side-navigation-menu', 'o____0']"
+    :class="[swatchClassName, 'side-navigation-menu']"
     @click="forwardClick"
   >
     <slot />

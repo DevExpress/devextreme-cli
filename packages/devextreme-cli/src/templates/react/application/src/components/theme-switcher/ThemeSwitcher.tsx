@@ -14,6 +14,7 @@ export const ThemeSwitcher = () => {
       className='theme-button'
       stylingMode='text'
       icon={`${themeContext?.theme === 'dark' ? 'sun' : 'moon'}`}
-      onClick={onButtonClick} />
+      onClick={onButtonClick}
+    />
   </div>;
 };

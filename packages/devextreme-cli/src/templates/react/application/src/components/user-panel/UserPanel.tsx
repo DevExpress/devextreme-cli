@@ -38,12 +38,13 @@ export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps
   return (
     <div className='user-panel'>
       {menuMode === 'context' && (
-        <DropDownButton stylingMode='text'
-                        icon='https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
-                        showArrowIcon={false}
-                        elementAttr={dropDownButtonAttributes}
-                        dropDownOptions={buttonDropDownOptions}
-                        items={menuItems}>
+        <DropDownButton
+            stylingMode='text'
+            icon='https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
+            showArrowIcon={false}
+            elementAttr={dropDownButtonAttributes}
+            dropDownOptions={buttonDropDownOptions}
+            items={menuItems}>
         </DropDownButton>
       )}
       {menuMode === 'list' && (
