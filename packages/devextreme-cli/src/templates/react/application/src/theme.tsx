@@ -14,7 +14,6 @@ function getCurrentTheme() {
 
 function toggleTheme(prevTheme<%=#isTypeScript%>: string<%=/isTypeScript%>) {
   const isCurrentThemeDark = prevTheme === 'dark';
-
   const newTheme = getNextTheme(prevTheme);
 
   document.body.classList.replace(
@@ -38,7 +37,6 @@ function toggleTheme(prevTheme<%=#isTypeScript%>: string<%=/isTypeScript%>) {
 export function useThemeContext() {
   const [theme, setTheme] = useState(getCurrentTheme());
   const switchTheme = useCallback(() => setTheme((currentTheme) => toggleTheme(currentTheme)), []);
-
   const isDark = useCallback(()<%=#isTypeScript%>: boolean<%=/isTypeScript%> => {
     return currentTheme === 'dark';
   }, []);
