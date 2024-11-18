@@ -31,7 +31,7 @@ describe('layout', () => {
   const options: any = {
     layout: 'side-nav-outer-toolbar',
     resolveConflicts: 'override',
-    globalNgCliVersion: '24.2-next'
+    globalNgCliVersion: '24.2.1-alpha-24256-1935'
   };
 
   const angularSchematicsCollection = require.resolve('../../node_modules/@schematics/angular/collection.json');
@@ -181,7 +181,7 @@ describe('layout', () => {
     const tree = await runner.runSchematic('add-layout', options, appTree);
     const packageConfig = JSON.parse(tree.readContent('package.json'));
 
-    expect(packageConfig.dependencies['@angular/cdk']).toBe('24.2-next');
+    expect(packageConfig.dependencies['@angular/cdk']).toBe('24.2.1-alpha-24256-1935');
   });
 
   it('should update budgets if updateBudgets option is true', async () => {
