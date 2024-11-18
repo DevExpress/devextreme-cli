@@ -173,7 +173,7 @@ module.exports = (env) => {
 
                                     await page.waitForTimeout(3000);
 
-                                    let image = await takeScreenshot();
+                                    const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'profile');
 

@@ -141,11 +141,11 @@ module.exports = {
         {
             glob: 'src/App.tsx',
             definitions: [
-              'import \'devextreme/dist/css/dx.common.css\';\n',
-              'import \'./themes/generated/theme.base.css\';\n',
-              'import \'./themes/generated/theme.base.dark.css\';\n',
-              'import \'./themes/generated/theme.additional.css\';\n',
-              'import \'./themes/generated/theme.additional.dark.css\';\n',
+                'import \'devextreme/dist/css/dx.common.css\';\n',
+                'import \'./themes/generated/theme.base.css\';\n',
+                'import \'./themes/generated/theme.base.dark.css\';\n',
+                'import \'./themes/generated/theme.additional.css\';\n',
+                'import \'./themes/generated/theme.additional.dark.css\';\n',
             ]
         },
         {
