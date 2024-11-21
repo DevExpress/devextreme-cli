@@ -1,0 +1,8 @@
+{
+  "items": [],
+  "baseTheme": "fluent.blue.dark",
+  "assetsBasePath": "<%= path %>../../node_modules/devextreme/dist/css/",
+  "outputColorScheme": "dark",
+  "makeSwatch": true,
+  "base": true
+}

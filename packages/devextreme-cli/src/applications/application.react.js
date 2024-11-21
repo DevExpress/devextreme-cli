@@ -100,7 +100,9 @@ const addTemplate = (appPath, appName, templateOptions) => {
 
     const styles = [
         './themes/generated/theme.additional.css',
+        './themes/generated/theme.additional.dark.css',
         './themes/generated/theme.base.css',
+        './themes/generated/theme.base.dark.css',
         'devextreme/dist/css/dx.common.css'
     ];
 

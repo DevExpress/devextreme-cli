@@ -69,7 +69,7 @@ export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%
         title={title}
       />
       <Drawer
-        className={['drawer', patchCssClass].join(' ')}
+        className={['drawer layout-body', patchCssClass].join(' ')}
         position={'before'}
         closeOnOutsideClick={onOutsideClick}
         openedStateMode={isLarge ? 'shrink' : 'overlap'}
@@ -81,7 +81,7 @@ export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%
         template={'menu'}
       >
         <div className={'container'}>
-          <ScrollView ref={scrollViewRef} className={'layout-body with-footer'}>
+          <ScrollView ref={scrollViewRef} className={'with-footer'}>
             <div className={'content'}>
               {React.Children.map(children, (item<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
                 return item.type !== Footer && item;

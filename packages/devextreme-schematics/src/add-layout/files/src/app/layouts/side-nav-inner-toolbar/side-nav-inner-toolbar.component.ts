@@ -1,13 +1,15 @@
 import { Component, OnInit, NgModule, Input, ViewChild } from '@angular/core';
-import { SideNavigationMenuModule, HeaderModule } from '../../shared/components';
-import { ScreenService } from '../../shared/services';
+import { Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 import { DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { DxDrawerModule, DxDrawerTypes } from 'devextreme-angular/ui/drawer';
 import { DxScrollViewModule, DxScrollViewComponent } from 'devextreme-angular/ui/scroll-view';
 import { DxToolbarModule, DxToolbarTypes } from 'devextreme-angular/ui/toolbar';
-import { CommonModule } from '@angular/common';
 
-import { Router, NavigationEnd } from '@angular/router';
+import { SideNavigationMenuModule, HeaderModule } from '../../shared/components';
+import { ScreenService } from '../../shared/services';
+import { ThemeService } from '../../shared/services/theme.service';
 
 @Component({
   selector: 'app-side-nav-inner-toolbar',
@@ -28,8 +30,13 @@ export class SideNavInnerToolbarComponent implements OnInit {
   menuRevealMode: DxDrawerTypes.RevealMode = 'expand';
   minMenuSize = 0;
   shaderEnabled = false;
+  swatchClassName = 'dx-swatch-additional';
 
-  constructor(private screen: ScreenService, private router: Router) { }
+  constructor(protected themeService: ThemeService, private screen: ScreenService, private router: Router) {
+    themeService.isDark.subscribe((isDark) => {
+      this.swatchClassName = 'dx-swatch-additional' + (isDark ? '-dark' : '');
+    })
+  }
 
   ngOnInit() {
     this.menuOpened = this.screen.sizes['screen-large'];

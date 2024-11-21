@@ -110,9 +110,12 @@ async function addCustomThemeStyles(host: Tree, options: any, sourcePath: string
     const projectName = await getProjectName(host, options.project);
     modifyJSONFile(host, './angular.json', config => {
       const stylesList = [
+        `${sourcePath}/variables.scss`,
         `${sourcePath}/dx-styles.scss`,
         `${sourcePath}/themes/generated/theme.additional.css`,
+        `${sourcePath}/themes/generated/theme.additional.dark.css`,
         `${sourcePath}/themes/generated/theme.base.css`,
+        `${sourcePath}/themes/generated/theme.base.dark.css`,
         'node_modules/devextreme/dist/css/dx.common.css'
       ];
 

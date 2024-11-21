@@ -1,0 +1,37 @@
+:root {
+  .dx-swatch-light, .dx-swatch-additional {
+    @import "./themes/generated/variables.base.scss";
+
+    --base-text-color:  #{$base-text-color};
+    --base-bg: #{$base-bg};
+    --base-bg-darken-5: #{darken($base-bg, 5)};
+    --base-accent:  #{$base-accent};
+    --base-text-color-alpha-7:  #{rgba($base-text-color, alpha($base-text-color) * 0.7)};
+    --footer-border-color: rgba(224, 224, 224, 1);
+
+    --plus-icon-color: #242424;
+    --devextreme-logo-color: #596C7D;
+    --vue-logo-text-color: #35495E;
+
+    --shadow-color-first: rgba(0, 0, 0, 0.06);
+    --shadow-color-second: rgba(0, 0, 0, 0.12);
+  }
+
+  .dx-swatch-dark, .dx-swatch-additional-dark {
+    @import "./themes/generated/variables.base.dark.scss";
+
+    --base-text-color:  #{$base-text-color};
+    --base-bg: #{$base-bg};
+    --base-bg-darken-5: #{darken($base-bg, 5)};
+    --base-accent:  #{$base-accent};
+    --base-text-color-alpha-7:  #{rgba($base-text-color, alpha($base-text-color) * 0.7)};
+
+    --plus-icon-color: #fff;
+    --devextreme-logo-color: #fff;
+    --vue-logo-text-color: #fff;
+
+    --shadow-color-first: rgba(0, 0, 0, 0.12);
+    --shadow-color-second: rgba(0, 0, 0, 0.24);
+    --footer-border-color: rgba(97, 97, 97, 1);
+  }
+}

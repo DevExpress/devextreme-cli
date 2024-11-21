@@ -95,8 +95,10 @@ describe('layout', () => {
     const styles = angularContent.projects.testApp.architect.build.options.styles;
 
     expect(styles[0]).toBe('node_modules/devextreme/dist/css/dx.common.css');
-    expect(styles[1]).toBe('src/themes/generated/theme.base.css');
-    expect(styles[2]).toBe('src/themes/generated/theme.additional.css');
+    expect(styles[1]).toBe('src/themes/generated/theme.base.dark.css');
+    expect(styles[2]).toBe('src/themes/generated/theme.base.css');
+    expect(styles[3]).toBe('src/themes/generated/theme.additional.dark.css');
+    expect(styles[4]).toBe('src/themes/generated/theme.additional.css');
 
     const moduleContent = tree.readContent('/src/app/app.module.ts');
     expect(moduleContent).toContain('import { DxHttpModule }');
