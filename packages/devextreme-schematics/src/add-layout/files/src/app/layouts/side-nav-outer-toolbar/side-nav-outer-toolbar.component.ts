@@ -12,7 +12,8 @@ import { ScreenService, ThemeService } from '../../shared/services';
 @Component({
   selector: 'app-side-nav-outer-toolbar',
   templateUrl: './side-nav-outer-toolbar.component.html',
-  styleUrls: ['./side-nav-outer-toolbar.component.scss']
+  styleUrls: ['./side-nav-outer-toolbar.component.scss'],
+  standalone: false
 })
 export class SideNavOuterToolbarComponent implements OnInit {
   @ViewChild(DxScrollViewComponent, { static: true }) scrollView!: DxScrollViewComponent;

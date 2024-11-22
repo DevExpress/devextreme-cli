@@ -14,7 +14,8 @@ import { ThemeService } from '../../shared/services/theme.service';
 @Component({
   selector: 'app-side-nav-inner-toolbar',
   templateUrl: './side-nav-inner-toolbar.component.html',
-  styleUrls: ['./side-nav-inner-toolbar.component.scss']
+  styleUrls: ['./side-nav-inner-toolbar.component.scss'],
+  standalone: false
 })
 export class SideNavInnerToolbarComponent implements OnInit {
   @ViewChild(DxScrollViewComponent, { static: true }) scrollView!: DxScrollViewComponent;
