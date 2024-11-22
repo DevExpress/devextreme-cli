@@ -15,6 +15,7 @@ import { ThemeService } from '../../services/theme.service';
       (onClick)="onButtonClick()"
     ></dx-button>`,
   styleUrls: [],
+  standalone: false
 })
 export class ThemeSwitcherComponent {
   constructor(public themeService: ThemeService) {}

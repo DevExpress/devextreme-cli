@@ -8,7 +8,8 @@ import { DxContextMenuModule } from 'devextreme-angular/ui/context-menu';
 @Component({
   selector: 'app-user-panel',
   templateUrl: 'user-panel.component.html',
-  styleUrls: ['./user-panel.component.scss']
+  styleUrls: ['./user-panel.component.scss'],
+  standalone: false
 })
 
 export class UserPanelComponent {
