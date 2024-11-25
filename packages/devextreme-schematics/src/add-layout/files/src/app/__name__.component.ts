@@ -4,7 +4,8 @@ import { AuthService, ScreenService, AppInfoService } from './shared/services';
 @Component({
   selector: '<%= prefix %>-root',
   templateUrl: './<%= name %>.component.html',
-  styleUrls: ['./<%= name %>.component.scss']
+  styleUrls: ['./<%= name %>.component.scss'],
+  standalone: false
 })
 export class <%= strings.classify(name) %>Component  {
   @HostBinding('class') get getClass() {

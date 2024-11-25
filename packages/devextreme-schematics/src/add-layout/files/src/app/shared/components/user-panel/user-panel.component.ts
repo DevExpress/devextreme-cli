@@ -8,7 +8,8 @@ import { IUser } from '../../services/auth.service';
 @Component({
   selector: 'app-user-panel',
   templateUrl: 'user-panel.component.html',
-  styleUrls: ['./user-panel.component.scss']
+  styleUrls: ['./user-panel.component.scss'],
+  standalone: false
 })
 
 export class UserPanelComponent {
