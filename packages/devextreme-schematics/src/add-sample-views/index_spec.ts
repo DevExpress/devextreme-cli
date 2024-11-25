@@ -13,7 +13,8 @@ describe('sample views', () => {
     routing: true,
     style: 'css',
     skipTests: false,
-    skipPackageJson: false
+    skipPackageJson: false,
+    standalone: false
   };
 
   const workspaceOptions: WorkspaceOptions = {

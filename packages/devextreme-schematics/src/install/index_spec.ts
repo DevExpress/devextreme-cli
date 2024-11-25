@@ -20,7 +20,7 @@ describe('install', () => {
 
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
-    version: '16.0.0'
+    version: '17.0.0'
   };
 
   const angularSchematicsCollection = require.resolve('../../node_modules/@schematics/angular/collection.json');
@@ -86,7 +86,8 @@ describe('install', () => {
       routing: true,
       style: 'css',
       skipTests: false,
-      skipPackageJson: false
+      skipPackageJson: false,
+      standalone: false
     };
 
     appTree = await schematicRunner.runSchematic('application', secondAppOptions, appTree);

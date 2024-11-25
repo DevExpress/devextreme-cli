@@ -152,7 +152,8 @@ export default function(options: any): Rule {
         module,
         skipTests: options.skipTests,
         inlineStyle: options.inlineStyle,
-        prefix: options.prefix
+        prefix: options.prefix,
+        standalone: false
       }),
       addContentToView({ name, project }) as any
     ];
