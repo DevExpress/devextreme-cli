@@ -13,7 +13,8 @@ describe('view', () => {
     routing: true,
     style: 'css',
     skipTests: false,
-    skipPackageJson: false
+    skipPackageJson: false,
+    standalone: false
   };
 
   const workspaceOptions: WorkspaceOptions = {
@@ -50,9 +51,11 @@ describe('view', () => {
     expect(tree.files).toContain('/src/app/pages/test/test.component.ts');
     expect(tree.files).toContain('/src/app/pages/test/test.component.html');
 
-    const content = tree.readContent('/src/app/pages/test/test.component.html');
+    const contentHTML = tree.readContent('/src/app/pages/test/test.component.html');
+    const contentTS = tree.readContent('/src/app/pages/test/test.component.ts');
 
-    expect(content).toMatch(/<h2>Test<\/h2>/);
+    expect(contentHTML).toMatch(/<h2>Test<\/h2>/);
+    expect(contentTS).toContain('standalone: false');
   });
 
   it('should add view to default routing module', async () => {

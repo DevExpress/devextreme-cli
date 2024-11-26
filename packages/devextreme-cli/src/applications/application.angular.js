@@ -10,8 +10,7 @@ const latestVersions = require('../utility/latest-versions');
 const { extractToolingVersion, toolingVersionOptionName } = require('../utility/extract-tooling-version');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
-const minNgCliVersion = new semver('16.0.0');
-const ngCliWithStandalone = new semver('17.0.0');
+const minNgCliVersion = new semver('17.0.0');
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -77,7 +76,6 @@ const install = async(options) => {
 
 const create = async(appName, options) => {
     const layout = await getLayoutInfo(options.layout);
-    const currentNgVersion = ngVersion.getNgCliVersion().version;
 
     const commandArguments = [
         'new',
@@ -85,12 +83,10 @@ const create = async(appName, options) => {
         '--style=scss',
         '--routing=false',
         '--skip-tests=true',
-        '--skip-install=true'
+        '--skip-install=true',
+        '--standalone=false',
+        '--ssr=false'
     ];
-
-    if(ngCliWithStandalone.compare(currentNgVersion) <= 0) {
-        commandArguments.push('--standalone=false', '--ssr=false');
-    }
 
     await runNgCommand(commandArguments, options);
 

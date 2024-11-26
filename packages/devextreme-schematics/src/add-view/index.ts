@@ -120,23 +120,48 @@ function getModuleName(addRoute: boolean, moduleName: string) {
   return moduleName;
 }
 
-function addContentToView(options: any) {
+function overwriteModuleContent(options: any, path: string, content: string) {
   return async (host: Tree) => {
-    const name = strings.dasherize(basename(normalize(options.name)));
-    const path = `${dirname(options.name)}/${name}`;
-    const title = humanize(name);
-    const componentPath = `/${await getApplicationPath(host, options.project)}${path}/${name}.component.html`;
+    const componentPath = `/${await getApplicationPath(host, options.project)}${path}`;
     if (host.exists(componentPath)) {
-      host.overwrite(
-        componentPath,
-        `<h2>${title}</h2>
-<div class="content-block">
-    <div class="dx-card responsive-paddings">Put your content here</div>
-</div>
-`);
+      host.overwrite(componentPath, content);
     }
     return host;
   };
+}
+
+function addContentToView(options: any) {
+  const name = strings.dasherize(basename(normalize(options.name)));
+  const path = `${dirname(options.name)}/${name}`;
+  const title = humanize(name);
+  const componentPath = `${path}/${name}.component.html`;
+  const content = `<h2>${title}</h2>
+<div class="content-block">
+    <div class="dx-card responsive-paddings">Put your content here</div>
+</div>
+`;
+
+  return overwriteModuleContent(options, componentPath, content);
+}
+
+async function addContentToTS(options: any) {
+  const name = strings.dasherize(basename(normalize(options.name)));
+  const path = `${dirname(options.name)}/${name}`;
+  const componentPath = `${path}/${name}.component.ts`;
+  const content = `import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-new-page',
+  templateUrl: './new-page.component.html',
+  styleUrl: './new-page.component.css',
+  standalone: false
+})
+export class NewPageComponent {
+
+}
+`;
+
+  return overwriteModuleContent(options, componentPath, content);
 }
 
 export default function(options: any): Rule {
@@ -152,9 +177,11 @@ export default function(options: any): Rule {
         module,
         skipTests: options.skipTests,
         inlineStyle: options.inlineStyle,
-        prefix: options.prefix
+        prefix: options.prefix,
+        standalone: false
       }),
-      addContentToView({ name, project }) as any
+      addContentToView({ name, project }) as any,
+      addContentToTS({ name, project }) as any
     ];
 
     if (addRoute) {

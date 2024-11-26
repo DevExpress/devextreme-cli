@@ -7,7 +7,7 @@
     "dxversion": {
       "type": "string",
       "description": "The DevExtreme version",
-      "default": "24.1.7"
+      "default": "24.2.2-beta"
     },
     "project": {
       "type": "string",
