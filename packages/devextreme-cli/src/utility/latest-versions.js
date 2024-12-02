@@ -4,5 +4,5 @@ module.exports = {
     'devextreme-react': '24.2.2-beta',
     'devextreme-vue': '24.2.2-beta',
     'devextreme-cli': packageJson.version,
-    'devextreme-schematics': 'latest'
+    'devextreme-schematics': '1.7.3'
 };
