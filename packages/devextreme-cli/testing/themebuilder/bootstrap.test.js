@@ -69,7 +69,7 @@ describe('ThemeBuilder bootstrap integration tests', () => {
         expect(themeContent.indexOf('123456') !== -1).toBe(true);
     });
 
-    test('Change primary color (bootstrap 4)', async() => {
+    test('Change primary color (bootstrap 4) WIP', async() => {
         await writeFile(join(workDirectory, 'bootstrap4.scss'), '$primary: #123456;\n');
 
         const runResult = spawnSync('node', [
