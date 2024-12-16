@@ -22,7 +22,7 @@ jobs:
           - react
           - react-ts
         NODE:
-          - 18
+          - 20
         OS:
           - ubuntu-latest
           - windows-latest
