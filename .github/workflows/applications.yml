@@ -68,7 +68,7 @@ jobs:
       run: ls .
 
     - name: List working dir
-      run: ls .; ls ./packages/${{ matrix.APPROACH }}
+      run: ls .; ls ./packages
 
     - name: Run template tests
       if: ${{ matrix.OS != 'windows-latest' }}
