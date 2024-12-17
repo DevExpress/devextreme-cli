@@ -64,7 +64,13 @@ jobs:
       run: ls .
 
     - name: List working dir
-      run: ls .; ls ./packages
+      run: ls ./packages/devextreme-cli
+
+    - name: List working dir
+      run: ls ./packages/devextreme-cli/testing/sandbox
+
+    - name: List working dir
+      run: ls ./packages/devextreme-cli/testing/sandbox/react-ts
 
     - name: Lint created application
       if: ${{ matrix.OS != 'windows-latest' }}
