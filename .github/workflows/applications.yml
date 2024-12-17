@@ -58,10 +58,10 @@ jobs:
         working-directory: packages/devextreme-cli/testing/sandbox/${{ matrix.APPROACH }}/my-app
 
     - name: print working dir
-      run: ls
+      run: pwd
 
-    - name: print working dir
-      run: ls ./react/my-app
+    - name: List working dir
+      run: ls .
 
     - name: Lint created application
       if: ${{ matrix.OS != 'windows-latest' }}
