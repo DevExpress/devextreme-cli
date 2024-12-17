@@ -57,10 +57,11 @@ jobs:
       with:
         working-directory: packages/devextreme-cli/testing/sandbox/${{ matrix.APPROACH }}/my-app
 
+    - name: print working dir
+      run: pwd
+
     - name: Lint created application
       if: ${{ matrix.OS != 'windows-latest' }}
-      with:
-        working-directory: packages/devextreme-cli
       run: npm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
 
 
