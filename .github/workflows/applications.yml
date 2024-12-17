@@ -26,15 +26,6 @@ jobs:
         OS:
           - ubuntu-latest
           - windows-latest
-        include:
-          - APPROACH: angular
-            param: angular
-          - APPROACH: vue-v3
-            param: vue-v3
-          - APPROACH: react
-            param: react
-          - APPROACH: react-ts
-            param: react
 
     runs-on: ${{ matrix.OS }}
     env:
@@ -58,7 +49,7 @@ jobs:
     - run: ${{ steps.setup-chrome.outputs.chrome-path }} --version
 
     - name: Create ${{ matrix.APPROACH }} application
-      run: npm run create-template -- -- -e ${{ matrix.param }} ${{ env.TOOLING_VERSION_PARAM }}
+      run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
       timeout-minutes: 30
 
     - name: print working dir
