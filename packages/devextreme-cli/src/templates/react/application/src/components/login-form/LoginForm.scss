@@ -3,16 +3,12 @@
 .login-form {
   .link {
     text-align: center;
-    font-size: 16px;
+    font-size: 12px;
     font-style: normal;
-
-    a {
-      text-decoration: none;
-    }
+    margin: 6px 0 50px;
   }
 
   .form-text {
-    margin: 10px 0;
     color: var(--base-text-color-alpha-7);
   }
 }
