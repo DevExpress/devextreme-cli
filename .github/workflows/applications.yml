@@ -49,7 +49,7 @@ jobs:
     - run: ${{ steps.setup-chrome.outputs.chrome-path }} --version
 
     - name: Create ${{ matrix.APPROACH }} application
-      run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
+      run: npm config set legacy-peer-deps true; npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
       timeout-minutes: 30
 
     - name: print working dir
