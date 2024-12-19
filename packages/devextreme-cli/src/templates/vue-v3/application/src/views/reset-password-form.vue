@@ -20,13 +20,6 @@
         >
         </dx-button-options>
       </dx-button-item>
-      <dx-item>
-        <template #default>
-          <div class="login-link">
-            Return to <router-link to="/login-form">Sign In</router-link>
-          </div>
-        </template>
-      </dx-item>
       <template #resetTemplate>
         <div>
           <span class="dx-button-text">
@@ -36,6 +29,9 @@
         </div>
       </template>
     </dx-form>
+    <div class="login-link">
+      Return to <router-link to="/login-form">Sign In</router-link>
+    </div>
   </form>
 </template>
 
@@ -103,13 +99,14 @@ export default {
 <style lang="scss">
 .reset-password-form {
   .submit-button {
-    margin-top: 10px;
+    margin-top: 18px;
   }
 
   .login-link {
     color: var(--base-accent);
-    font-size: 16px;
+    font-size: 12px;
     text-align: center;
+    margin-top: 6px;
   }
 }
 </style>
