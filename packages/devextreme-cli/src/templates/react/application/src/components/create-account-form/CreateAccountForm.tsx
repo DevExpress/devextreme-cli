@@ -92,12 +92,10 @@ export default function CreateAccountForm() {
             </span>
           </ButtonOptions>
         </ButtonItem>
-        <Item>
-          <div className={'login-link'}>
-            Have an account? <Link to={'/login'}>Sign In</Link>
-          </div>
-        </Item>
       </Form>
+      <div className={'login-link'}>
+        Have an account? <Link to={'/login'}>Sign In</Link>
+      </div>
     </form>
   );
 }

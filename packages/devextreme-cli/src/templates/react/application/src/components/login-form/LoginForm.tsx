@@ -9,6 +9,7 @@ import Form, {
   EmailRule
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
+import Button from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 import { useAuth } from '../../contexts/auth';
 
@@ -78,19 +79,15 @@ export default function LoginForm() {
             </span>
           </ButtonOptions>
         </ButtonItem>
-        <Item>
-          <div className={'link'}>
-            <Link to={'/reset-password'}>Forgot password?</Link>
-          </div>
-        </Item>
-        <ButtonItem>
-          <ButtonOptions
-            text={'Create an account'}
-            width={'100%'}
-            onClick={onCreateAccountClick}
-          />
-        </ButtonItem>
       </Form>
+      <div className={'link'}>
+        <Link to={'/reset-password'}>Forgot password?</Link>
+      </div>
+      <Button
+        text={'Create an account'}
+        width={'100%'}
+        onClick={onCreateAccountClick}
+      />
     </form>
   );
 }
