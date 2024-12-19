@@ -19,7 +19,9 @@
       :close-on-outside-click="drawerOptions.closeOnOutsideClick"
     >
       <dx-scroll-view ref="scrollViewRef" class="with-footer">
-        <slot />
+        <div class="content">
+          <slot />
+        </div>
         <slot name="footer" />
       </dx-scroll-view>
       <template #menuTemplate>
@@ -130,6 +132,6 @@ export default {
 }
 
 .layout-header {
-  z-index: 1501;
+  z-index: 1505;
 }
 </style>

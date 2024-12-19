@@ -1,5 +1,5 @@
 import Drawer from 'devextreme-react/drawer';
-import ScrollView from 'devextreme-react/scroll-view';
+import { ScrollView<%=#isTypeScript%>, ScrollViewRef<%=/isTypeScript%> } from 'devextreme-react/scroll-view';
 import React, { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { Header, SideNavigationMenu, Footer } from '../../components';
@@ -12,7 +12,7 @@ import { useMenuPatch } from '../../utils/patches';
 <%=#isTypeScript%>import type { SideNavToolbarProps } from '../../types';<%=/isTypeScript%>
 
 export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%>: React.PropsWithChildren<SideNavToolbarProps><%=/isTypeScript%>) {
-  const scrollViewRef = useRef<%=#isTypeScript%><ScrollView><%=/isTypeScript%>(null);
+  const scrollViewRef = useRef<%=#isTypeScript%><ScrollViewRef><%=/isTypeScript%>(null);
   const navigate = useNavigate();
   const { isXSmall, isLarge } = useScreenSize();
   const [patchCssClass, onMenuReady] = useMenuPatch();
@@ -53,7 +53,7 @@ export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%
     }
 
     navigate(itemData.path);
-    scrollViewRef.current<%=#isTypeScript%>?<%=/isTypeScript%>.instance.scrollTo(0);
+    scrollViewRef.current<%=#isTypeScript%>?<%=/isTypeScript%>.instance().scrollTo(0);
 
     if (!isLarge || menuStatus === MenuStatus.TemporaryOpened) {
       setMenuStatus(MenuStatus.Closed);
@@ -69,7 +69,7 @@ export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%
         title={title}
       />
       <Drawer
-        className={['drawer', patchCssClass].join(' ')}
+        className={['drawer layout-body', patchCssClass].join(' ')}
         position={'before'}
         closeOnOutsideClick={onOutsideClick}
         openedStateMode={isLarge ? 'shrink' : 'overlap'}
@@ -81,7 +81,7 @@ export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%
         template={'menu'}
       >
         <div className={'container'}>
-          <ScrollView ref={scrollViewRef} className={'layout-body with-footer'}>
+          <ScrollView ref={scrollViewRef} className={'with-footer'}>
             <div className={'content'}>
               {React.Children.map(children, (item<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
                 return item.type !== Footer && item;

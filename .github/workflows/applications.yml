@@ -22,7 +22,6 @@ jobs:
           - react
           - react-ts
         NODE:
-          - 16
           - 18
         OS:
           - ubuntu-latest
@@ -49,9 +48,17 @@ jobs:
       id: setup-chrome
     - run: ${{ steps.setup-chrome.outputs.chrome-path }} --version
 
+    - name: Set Legacy-peer-deps=true
+      run: npm config set legacy-peer-deps true
+
     - name: Create ${{ matrix.APPROACH }} application
       run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
       timeout-minutes: 30
+
+    - name: Install Internal Packages
+      uses: DevExpress/github-actions/install-internal-package@main
+      with:
+        working-directory: packages/devextreme-cli/testing/sandbox/${{ matrix.APPROACH }}/my-app
 
     - name: Lint created application
       if: ${{ matrix.OS != 'windows-latest' }}
@@ -85,7 +92,7 @@ jobs:
       - name: Set up Node.js and restore cache
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
 

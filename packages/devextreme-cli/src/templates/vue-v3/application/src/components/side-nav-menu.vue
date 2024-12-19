@@ -1,6 +1,6 @@
 <template>
   <div
-    class="dx-swatch-additional side-navigation-menu"
+    :class="[swatchClassName, 'side-navigation-menu']"
     @click="forwardClick"
   >
     <slot />
@@ -25,6 +25,7 @@ import { sizes } from '../utils/media-query';
 import navigation from '../app-navigation';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { themeService } from '../theme-service';
 
 export default {
   props: {
@@ -43,6 +44,7 @@ export default {
     });
 
     const treeViewRef = ref(null);
+    const swatchClassName = ref('');
 
     function forwardClick (...args) {
       context.emit("click", args);
@@ -83,6 +85,14 @@ export default {
     );
 
     watch(
+      () => themeService.isDark,
+      () => {
+        swatchClassName.value = themeService.isDark.value ? 'dx-swatch-additional-dark' : 'dx-swatch-additional';
+      },
+      { immediate: true }
+    );
+
+    watch(
       () => props.compactMode,
       () => {
         if (props.compactMode) {
@@ -98,7 +108,8 @@ export default {
       items,
       forwardClick,
       handleItemClick,
-      updateSelection
+      updateSelection,
+      swatchClassName,
     };
   },
   components: {
@@ -108,97 +119,76 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../variables.scss";
 @import "../dx-styles.scss";
-@import "../themes/generated/variables.additional.scss";
 
-.side-navigation-menu {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  height: 100%;
-  width: 250px !important;
-
-  .menu-container {
-    min-height: 100%;
+.dx-swatch-additional, .dx-swatch-additional-dark {
+  &.side-navigation-menu {
     display: flex;
-    flex: 1;
+    flex-direction: column;
+    min-height: 100%;
+    height: 100%;
+    width: 250px !important;
+    background-color: var(--base-bg);
 
-    .dx-treeview {
-      // ## Long text positioning
-      white-space: nowrap;
-      // ##
+    .menu-container {
+      min-height: 100%;
+      display: flex;
+      flex: 1;
 
-      // ## Icon width customization
-      .dx-treeview-item {
-        padding-left: 0;
-        flex-direction: row-reverse;
+      .dx-treeview {
+        // ## Long text positioning
+        white-space: nowrap;
+        // ##
 
-        .dx-icon {
-          width: $side-panel-min-width !important;
-          margin: 0 !important;
-        }
-      }
-      // ##
-
-      // ## Arrow customization
-      .dx-treeview-node {
-        padding: 0 0 !important;
-      }
-
-      .dx-treeview-toggle-item-visibility {
-        right: 10px;
-        left: auto;
-      }
-
-      .dx-rtl .dx-treeview-toggle-item-visibility {
-        left: 10px;
-        right: auto;
-      }
-      // ##
-
-      // ## Item levels customization
-      .dx-treeview-node {
-        &[aria-level="1"] {
-          font-weight: bold;
-          border-bottom: 1px solid $base-border-color;
+        .dx-treeview-node-container:empty {
+          display: none;
         }
 
-        &[aria-level="2"] .dx-treeview-item-content {
-          font-weight: normal;
-          padding: 0 $side-panel-min-width;
-        }
-      }
-      // ##
-    }
+        // ## Icon width customization
+        .dx-treeview-item {
+          padding-left: 0;
+          border-radius: 0;
+          flex-direction: row-reverse;
 
-    // ## Selected & Focuced items customization
-    .dx-treeview {
-      .dx-treeview-node-container {
+          .dx-icon {
+            width: $side-panel-min-width !important;
+            margin: 0 !important;
+          }
+        }
+
+        // ##
+
+        // ## Arrow customization
         .dx-treeview-node {
-          &.dx-state-selected:not(.dx-state-focused) > .dx-treeview-item {
-            background: transparent;
+          padding: 0 0 !important;
+        }
+
+        .dx-treeview-toggle-item-visibility {
+          right: 10px;
+          left: auto;
+        }
+
+        .dx-rtl .dx-treeview-toggle-item-visibility {
+          left: 10px;
+          right: auto;
+        }
+        // ##
+
+        // ## Item levels customization
+        .dx-treeview-node {
+          &[aria-level="1"] {
+            font-weight: bold;
           }
 
-          &.dx-state-selected > .dx-treeview-item * {
-            color: $base-accent;
-          }
-
-          &:not(.dx-state-focused) > .dx-treeview-item.dx-state-hover {
-            background-color: lighten($base-bg, 4);
+          &[aria-level="2"] .dx-treeview-item-content {
+            font-weight: normal;
+            padding: 0 $side-panel-min-width;
           }
         }
+        // ##
       }
     }
-
-    .dx-theme-generic .dx-treeview {
-      .dx-treeview-node-container
-        .dx-treeview-node.dx-state-selected.dx-state-focused
-        > .dx-treeview-item
-        * {
-        color: inherit;
-      }
-    }
-    // ##
   }
 }
 </style>

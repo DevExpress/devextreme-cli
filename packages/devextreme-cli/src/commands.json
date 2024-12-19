@@ -57,7 +57,7 @@
             "description": "Specifies base theme name (default value is generic.light)"
         }, {
             "name": "--input-file",
-            "description": "Specifies file name with input data (a .json file with metadata or a .less/.scss file with Bootstrap variables)"
+            "description": "Specifies file name with input data (a .json file with metadata or a .scss file with Bootstrap 5 variables)"
         }, {
             "name": "--make-swatch",
             "description": "If present, adds a CSS scope to each CSS rule (.dx-swatch-xxx), where xxx is the value from the --output-color-scheme parameter"
@@ -76,9 +76,6 @@
         }, {
             "name": "--remove-external-resources",
             "description": "When present, removes links to external resources, such as fonts. The theme will use local fallbacks instead. Available from DevExtreme v20.2.7."
-        }, {
-            "name": "--bootstrap-version",
-            "description": "Specifies Bootstrap version 4 or 5 if '--input-file' is a '.scss' file. Available from DevExtreme v21.1.5. Default value: 4."
         }]
     }, {
         "name": "export-theme-vars",
@@ -89,7 +86,7 @@
             "description": "Specifies base theme name (default value is generic.light)"
         }, {
             "name": "--input-file",
-            "description": "Specifies file name with input data (a .json file with metadata or a .less/.scss file with Bootstrap variables)"
+            "description": "Specifies file name with input data (a .json file with metadata or a .scss file with Bootstrap 5 variables)"
         }, {
             "name": "--output-format",
             "description": "Specifies the format of output variables (less or scss) (default value is less or the extension extracted from the --output-file value (if it contains any))"
@@ -112,7 +109,7 @@
             "description": "Specifies base theme name (default value is generic.light)"
         }, {
             "name": "--input-file",
-            "description": "Specifies file name with input data (a .json file with metadata or a .less/.scss file with Bootstrap variables)"
+            "description": "Specifies file name with input data (a .json file with metadata or a .scss file with Bootstrap 5 variables)"
         }, {
             "name": "--output-file",
             "description": "Specifies output file name"

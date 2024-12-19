@@ -110,9 +110,12 @@ async function addCustomThemeStyles(host: Tree, options: any, sourcePath: string
     const projectName = await getProjectName(host, options.project);
     modifyJSONFile(host, './angular.json', config => {
       const stylesList = [
+        `${sourcePath}/variables.scss`,
         `${sourcePath}/dx-styles.scss`,
         `${sourcePath}/themes/generated/theme.additional.css`,
+        `${sourcePath}/themes/generated/theme.additional.dark.css`,
         `${sourcePath}/themes/generated/theme.base.css`,
+        `${sourcePath}/themes/generated/theme.base.dark.css`,
         'node_modules/devextreme/dist/css/dx.common.css'
       ];
 
@@ -181,6 +184,7 @@ function updateAppModule(host: Tree, sourcePath: string) {
   };
 
   const rules = [
+    modifyFileRule(appModulePath, importSetter('DxHttpModule', 'devextreme-angular/http')),
     modifyFileRule(appModulePath, importSetter('SideNavOuterToolbarModule', './layouts')),
     modifyFileRule(appModulePath, importSetter('SideNavInnerToolbarModule', './layouts')),
     modifyFileRule(appModulePath, importSetter('SingleCardModule', './layouts')),

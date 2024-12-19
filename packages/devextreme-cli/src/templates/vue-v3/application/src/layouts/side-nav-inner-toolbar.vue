@@ -18,7 +18,9 @@
           :toggle-menu-func="toggleMenu"
         />
         <dx-scroll-view ref="scrollViewRef" class="layout-body with-footer">
-          <slot />
+          <div class="content">
+            <slot />
+          </div>
           <slot name="footer" />
         </dx-scroll-view>
       </div>
@@ -157,13 +159,8 @@ export default {
 }
 
 #navigation-header {
-  @import "../themes/generated/variables.additional.scss";
-  background-color: $base-accent;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-
-  .menu-button .dx-icon {
-    color: $base-text-color;
-  }
+  background-color: var(--base-bg);
 
   .screen-x-small & {
     padding-left: 20px;

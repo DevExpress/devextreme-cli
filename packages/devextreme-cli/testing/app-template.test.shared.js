@@ -76,6 +76,7 @@ module.exports = (env) => {
                             }
 
                             const customConfig = { threshold: 0.012 };
+
                             function compareSnapshot(image, name) {
                                 expect(image).toMatchImageSnapshot({
                                     customDiffConfig: customConfig,
@@ -84,6 +85,18 @@ module.exports = (env) => {
                                     storeReceivedOnFailure: true,
                                     customReceivedDir: diffSnapshotsDir
                                 });
+                            }
+
+                            async function compareThemeModeSnapshot(name, mode) {
+                                await page.click('.dx-button.theme-button');
+                                await page.waitForTimeout(500);
+
+                                await page.click('.dx-button.theme-button', { offset: { x: 0, y: -100 } });
+                                await page.waitForTimeout(500);
+
+                                const image = await takeScreenshot();
+
+                                compareSnapshot(image, name + (mode === 'light' ? '' : '-dark'));
                             }
 
                             async function hideScroll() {
@@ -148,7 +161,7 @@ module.exports = (env) => {
                                             x: 0,
                                             y: 0,
                                             width: viewport.width,
-                                            height: 180
+                                            height: 150
                                         }
                                     });
 
@@ -159,9 +172,14 @@ module.exports = (env) => {
                                     await openPage(`${appUrl}#/profile`);
 
                                     await page.waitForTimeout(3000);
+
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'profile');
+
+                                    await compareThemeModeSnapshot('profile', 'dark');
+
+                                    await compareThemeModeSnapshot('profile', 'light');
                                 });
 
                                 it('Tasks view', async() => {

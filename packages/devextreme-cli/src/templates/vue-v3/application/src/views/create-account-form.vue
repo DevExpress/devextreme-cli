@@ -96,7 +96,7 @@ export default {
   },
   setup() {
     const router = useRouter();
-    
+
     const loading = ref(false);
     const formData = reactive({
       email:"",
@@ -120,7 +120,7 @@ export default {
     function confirmPassword(e) {
       return e.value === formData.password;
     }
-    
+
     return {
         formData,
         loading,
@@ -132,22 +132,20 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
-
 .create-account-form {
   .policy-info {
     margin: 10px 0;
-    color: rgba($base-text-color, alpha($base-text-color) * 0.7);
+    color: var(--base-text-color-alpha-7);
     font-size: 14px;
     font-style: normal;
 
     a {
-      color: rgba($base-text-color, alpha($base-text-color) * 0.7);
+      color: var(--base-text-color-alpha-7);
     }
   }
 
   .login-link {
-    color: $base-accent;
+    color: var(--base-accent);
     font-size: 16px;
     text-align: center;
   }
