@@ -31,7 +31,7 @@ describe('ThemeBuilder bootstrap integration tests', () => {
         await rm(join(workDirectory, 'node_modules'), { recursive: true, force: true });
     });
 
-    test('Change primary color (bootstrap 4) WIP', async() => {
+    test('Change primary color (bootstrap 4)', async() => {
         await writeFile(join(workDirectory, 'bootstrap4.scss'), '$primary: #123456;\n');
 
         const runResult = spawnSync('node', [
