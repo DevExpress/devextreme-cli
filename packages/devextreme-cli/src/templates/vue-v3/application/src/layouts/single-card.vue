@@ -73,7 +73,10 @@ export default {
 
       .description {
         color: var(--base-text-color-alpha-7);
-        line-height: 18px;
+        line-height: 16px;
+        font-size: 12px;
+        margin-top: 32px;
+        text-align: center;
       }
     }
   }
