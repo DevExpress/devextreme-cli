@@ -64,12 +64,10 @@ export default function ResetPasswordForm() {
             </span>
           </ButtonOptions>
         </ButtonItem>
-        <Item>
-          <div className={'login-link'}>
-            Return to <Link to={'/login'}>Sign In</Link>
-          </div>
-        </Item>
       </Form>
+      <div className={'login-link'}>
+        Return to <Link to={'/login'}>Sign In</Link>
+      </div>
     </form>
   );
 }
