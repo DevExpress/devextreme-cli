@@ -85,6 +85,7 @@ export default function LoginForm() {
       </div>
       <Button
         text={'Create an account'}
+        stylingMode={ 'outlined' }
         width={'100%'}
         onClick={onCreateAccountClick}
       />

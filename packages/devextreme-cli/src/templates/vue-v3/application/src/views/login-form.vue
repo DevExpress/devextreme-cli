@@ -48,6 +48,7 @@
     </div>
     <dx-button
       text="Create an account"
+      stylingMode="outlined"
       width="100%"
       @click="onCreateAccountClick"
     />
