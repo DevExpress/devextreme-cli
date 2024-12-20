@@ -123,7 +123,7 @@ export default {
 
 <style lang="scss">
 .login-form {
-  :deep(.form-text) {
+  .form-text {
     color: var(--base-text-color-alpha-7);
   }
 
