@@ -22,9 +22,9 @@
   ],
   "schematics": "./src/collection.json",
   "dependencies": {
-    "@angular-devkit/core": "^17.2.1",
-    "@angular-devkit/schematics": "^17.2.1",
-    "@schematics/angular": "^17.2.1"
+    "@angular-devkit/core": "^17.3.11",
+    "@angular-devkit/schematics": "^17.3.11",
+    "@schematics/angular": "^17.3.11"
   },
   "devDependencies": {
     "@types/jasmine": "~3.10.18",
