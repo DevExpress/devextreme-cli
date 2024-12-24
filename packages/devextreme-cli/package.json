@@ -1,6 +1,6 @@
 {
   "name": "devextreme-cli",
-  "version": "1.8.0-beta.0",
+  "version": "1.8.0",
   "description": "DevExtreme CLI",
   "keywords": [
     "devexpress",
@@ -43,7 +43,7 @@
     "minimist": "^1.2.8",
     "mustache": "^3.2.1",
     "prompts": "^2.4.2",
-    "sass": "^1.77.6",
+    "sass": "^1.83.0",
     "semver": "^5.7.2",
     "strip-bom": "^4.0.0"
   },
@@ -58,8 +58,8 @@
     "eslint-plugin-angular": "^4.1.0",
     "eslint-plugin-jest": "^22.21.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react": "^7.37.3",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-unused-imports": "^1.1.5",
     "eslint-plugin-vue": "^7.20.0",
     "eslint-stylish": "^0.2.0",
