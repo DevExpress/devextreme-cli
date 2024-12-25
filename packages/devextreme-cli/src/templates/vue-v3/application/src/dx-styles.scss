@@ -17,7 +17,7 @@ $side-panel-min-width: 60px;
     }
   }
 
-  .screen-x-small .content {
+  .screen-x-small :not(.dx-card).content {
     padding: 20px;
   }
 
