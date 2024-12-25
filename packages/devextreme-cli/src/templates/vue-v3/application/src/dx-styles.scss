@@ -15,10 +15,10 @@ $side-panel-min-width: 60px;
       margin: 0;
       line-height: 40px;
     }
+  }
 
-    .screen-x-small & {
-      padding: 20px;
-    }
+  .screen-x-small :not(.dx-card).content {
+    padding: 20px;
   }
 
   .container {

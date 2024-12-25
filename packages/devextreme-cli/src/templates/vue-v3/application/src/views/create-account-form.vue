@@ -46,13 +46,6 @@
         >
         </dx-button-options>
       </dx-button-item>
-      <dx-item>
-        <template #default>
-          <div class="login-link">
-            Have an account? <router-link to="/login-form">Sign In</router-link>
-          </div>
-        </template>
-      </dx-item>
       <template #createAccount>
         <div>
           <span class="dx-button-text">
@@ -62,6 +55,9 @@
         </div>
       </template>
     </dx-form>
+    <div class="login-link">
+      Have an account? <router-link to="/login-form">Sign In</router-link>
+    </div>
   </form>
 </template>
 
@@ -104,28 +100,28 @@ export default {
     });
 
     const onSubmit = async () => {
-    const { email, password } = formData;
-    loading.value = true;
+      const { email, password } = formData;
+      loading.value = true;
 
-    const result = await auth.createAccount(email, password);
-    loading.value = false;
+      const result = await auth.createAccount(email, password);
+      loading.value = false;
 
-    if (result.isOk) {
-      router.push("/login-form");
-    } else {
-      notify(result.message, 'error', 2000);
-    }
-  };
+      if (result.isOk) {
+        router.push("/login-form");
+      } else {
+        notify(result.message, 'error', 2000);
+      }
+    };
 
     function confirmPassword(e) {
       return e.value === formData.password;
     }
 
     return {
-        formData,
-        loading,
-        onSubmit,
-        confirmPassword
+      formData,
+      loading,
+      onSubmit,
+      confirmPassword
     }
   }
 }
@@ -134,9 +130,8 @@ export default {
 <style lang="scss">
 .create-account-form {
   .policy-info {
-    margin: 10px 0;
     color: var(--base-text-color-alpha-7);
-    font-size: 14px;
+    font-size: 12px;
     font-style: normal;
 
     a {
@@ -146,8 +141,10 @@ export default {
 
   .login-link {
     color: var(--base-accent);
-    font-size: 16px;
+    font-size: 12px;
     text-align: center;
+    padding: 6px 0 32px 0;
+    border-bottom: 1px solid var(--border-color);
   }
 }
 </style>
