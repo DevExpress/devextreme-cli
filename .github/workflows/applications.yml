@@ -37,7 +37,7 @@ jobs:
     steps:
 
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Run npm install
       env:
@@ -74,23 +74,36 @@ jobs:
 
     - name: Archive artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: artifacts
+        name: app-tests-artifacts-${{ matrix.APPROACH }}-${{ matrix.NODE }}-${{ matrix.OS }}
         path: |
           test-results.xml
           packages/devextreme-cli/testing/__tests__/__diff_snapshots__
           packages/devextreme-cli/testing/sandbox/logs
+
+  merge-artifacts:
+    runs-on: ubuntu-latest
+    needs: application-test
+    if: ${{ failure() && !cancelled() }}
+    steps:
+    - name: Merge Artifacts
+      uses: actions/upload-artifact/merge@v4
+      continue-on-error: true
+      with:
+        name: artifacts
+        pattern: app-tests-artifacts-*
+        delete-merged: true
 
   schematics-test:
     runs-on: ubuntu-latest
     steps:
 
       - name: Get sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js and restore cache
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
