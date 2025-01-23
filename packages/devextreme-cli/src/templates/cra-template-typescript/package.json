@@ -15,7 +15,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=14"
+    "node": ">=14.21.3"
   },
   "bugs": {
     "url": "https://github.com/facebook/create-react-app/issues"
