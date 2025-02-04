@@ -111,7 +111,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../dx-styles.scss";
+@use "../dx-styles.scss" as *;
 
 header {
   background-color: var(--base-bg);
