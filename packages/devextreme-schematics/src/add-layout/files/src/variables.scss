@@ -6,7 +6,7 @@
 @use "./themes/generated/variables.additional.scss" as variablesAdditional;
 @use "./themes/generated/variables.additional.dark.scss" as variablesAdditionalDark;
 
-@mixin themeVars($theme-name) {
+@mixin theme-variables($theme-name) {
   $theme: meta.module-variables($theme-name);
   $base-text-color: map.get($theme, 'base-text-color');
   $base-bg: map.get($theme, 'base-bg');
@@ -20,7 +20,7 @@
 
 :root {
   body {
-    @include themeVars('variablesBase');
+    @include theme-variables('variablesBase');
 
     --footer-border-color: rgba(224, 224, 224, 1);
     --plus-icon-color: #242424;
@@ -32,11 +32,11 @@
   }
 
   .dx-swatch-additional {
-    @include themeVars('variablesAdditional');
+    @include theme-variables('variablesAdditional');
   }
 
   .dx-swatch-dark {
-    @include themeVars('variablesBaseDark');;
+    @include theme-variables('variablesBaseDark');;
 
     --plus-icon-color: #fff;
     --devextreme-logo-color: #fff;
@@ -48,6 +48,6 @@
   }
 
   .dx-swatch-additional-dark {
-    @include themeVars('variablesAdditionalDark');
+    @include theme-variables('variablesAdditionalDark');
   }
 }
