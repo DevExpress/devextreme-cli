@@ -1,4 +1,4 @@
-@import "../../dx-styles.scss";
+@use "../../dx-styles.scss" as *;
 
 .dx-swatch-additional, .dx-swatch-additional-dark {
   &.side-navigation-menu {
