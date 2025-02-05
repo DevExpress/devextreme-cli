@@ -119,8 +119,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../variables.scss";
-@import "../dx-styles.scss";
+@use "../variables.scss" as *;
+@use "../dx-styles.scss" as *;
 
 .dx-swatch-additional, .dx-swatch-additional-dark {
   &.side-navigation-menu {
