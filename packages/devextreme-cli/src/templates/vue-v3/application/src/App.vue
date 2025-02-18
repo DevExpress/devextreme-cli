@@ -93,5 +93,6 @@ body {
   display: flex;
   height: 100%;
   width: 100%;
+  min-width: 320px;
 }
 </style>

@@ -35,7 +35,7 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
   const { navigationData: { currentPath } } = useNavigation();
 
   const treeViewRef = useRef<%=#isTypeScript%><TreeViewRef><%=/isTypeScript%>(null);
-  const wrapperRef = useRef<%=#isTypeScript%><HTMLDivElement><%=/isTypeScript%>();
+  const wrapperRef = useRef<%=#isTypeScript%><HTMLDivElement><%=/isTypeScript%>(null);
   const getWrapperRef = useCallback((element<%=#isTypeScript%>: HTMLDivElement<%=/isTypeScript%>) => {
     const prevElement = wrapperRef.current;
     if (prevElement) {

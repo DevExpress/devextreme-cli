@@ -46,10 +46,11 @@ export default {
   height: 100%;
 
   .dx-card {
-    width: 330px;
+    width: 360px;
     margin: auto auto;
-    padding: 40px;
+    padding: 24px;
     flex-grow: 0;
+    border-radius: 8px;
 
     .screen-x-small & {
       width: 100%;
@@ -62,18 +63,22 @@ export default {
     }
 
     .header {
-      margin-bottom: 30px;
+      margin: 24px 0;
 
       .title {
         color: var(--base-text-color);
-        line-height: 28px;
+        text-align: center;
+        line-height: 24px;
         font-weight: 500;
         font-size: 24px;
       }
 
       .description {
         color: var(--base-text-color-alpha-7);
-        line-height: 18px;
+        line-height: 16px;
+        font-size: 12px;
+        margin-top: 32px;
+        text-align: center;
       }
     }
   }

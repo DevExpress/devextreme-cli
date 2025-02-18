@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { DxFormModule } from 'devextreme-angular/ui/form';
+import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
 import { AuthService } from '../../services';
@@ -40,6 +41,7 @@ export class LoginFormComponent {
     CommonModule,
     RouterModule,
     DxFormModule,
+    DxButtonModule,
     DxLoadIndicatorModule
   ],
   declarations: [ LoginFormComponent ],

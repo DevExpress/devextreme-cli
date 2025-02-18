@@ -24,6 +24,7 @@ html, body {
     display: flex;
     height: 100%;
     width: 100%;
+    min-width: 320px;
   }
 
   .content {
@@ -36,10 +37,10 @@ html, body {
       margin: 0;
       line-height: 40px;
     }
+  }
 
-    .screen-x-small & {
-      padding: 20px;
-    }
+  .screen-x-small .content {
+    padding: 20px;
   }
 
   .container {

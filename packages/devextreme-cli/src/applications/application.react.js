@@ -63,9 +63,10 @@ const create = async(appName, options) => {
     const toolingVersion = extractToolingVersion(options);
     const commandArguments = [`-p=create-react-app${toolingVersion}`, 'create-react-app', appName];
 
-    if(templateOptions.isTypeScript) {
-        commandArguments.push('--template typescript');
-    }
+    const templateSuffix = templateOptions.isTypeScript ? '-typescript' : '';
+    const templatePath = path.resolve(__dirname, `../templates/cra-template${templateSuffix}`);
+
+    commandArguments.push(`--template file:${templatePath}`);
 
     await runCommand('npx', commandArguments);
 

@@ -43,7 +43,7 @@
     "minimist": "^1.2.8",
     "mustache": "^3.2.1",
     "prompts": "^2.4.2",
-    "sass": "^1.83.0",
+    "sass": "^1.85.0",
     "semver": "^5.7.2",
     "strip-bom": "^4.0.0"
   },
@@ -58,7 +58,7 @@
     "eslint-plugin-angular": "^4.1.0",
     "eslint-plugin-jest": "^22.21.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.37.3",
+    "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-unused-imports": "^1.1.5",
     "eslint-plugin-vue": "^7.20.0",
