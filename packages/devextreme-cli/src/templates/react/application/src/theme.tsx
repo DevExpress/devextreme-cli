@@ -45,7 +45,7 @@ export function useThemeContext() {
     document.body.classList.add(themeClassNamePrefix + theme);
   }
 
-  return useMemo(()=> ({ theme, switchTheme, isDark }), [theme]);
+  return useMemo(()=> ({ theme, switchTheme, isDark }), [theme, switchTheme, isDark]);
 }
 
 export const ThemeContext = React.createContext<%=#isTypeScript%><ReturnType<typeof useThemeContext> | null><%=/isTypeScript%>(null);
