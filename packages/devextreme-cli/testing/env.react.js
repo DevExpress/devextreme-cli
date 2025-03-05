@@ -10,7 +10,7 @@ const classify = require('../src/utility/string').classify;
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/react');
 const appPath = path.join(sandboxPath, appName);
-const appLayoutPath = path.join(sandboxPath, appName, 'src/Content.js');
+const appLayoutPath = path.join(sandboxPath, appName, 'src/Content.jsx');
 
 exports.engine = 'react';
 exports.appPath = appPath;
@@ -24,7 +24,7 @@ exports.createApp = async(toolingVersion) => {
 
     const additionalArguments = toolingVersion && [`--${toolingVersionOptionName} ${toolingVersion}`] || [];
     await runCommand('node', [
-        path.join(process.cwd(), './index.js'),
+        path.join(process.cwd(), './index.jsx'),
         'new',
         'react-app',
         '--layout=side-nav-outer-toolbar',
@@ -36,7 +36,7 @@ exports.createApp = async(toolingVersion) => {
     });
 
     await runCommand('node', [
-        path.join(process.cwd(), './index.js'),
+        path.join(process.cwd(), './index.jsx'),
         'add',
         'view',
         'new-page'
