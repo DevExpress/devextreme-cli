@@ -24,7 +24,7 @@ exports.createApp = async(toolingVersion) => {
 
     const additionalArguments = toolingVersion && [`--${toolingVersionOptionName} ${toolingVersion}`] || [];
     await runCommand('node', [
-        path.join(process.cwd(), './index.jsx'),
+        path.join(process.cwd(), './main.jsx'),
         'new',
         'react-app',
         '--layout=side-nav-outer-toolbar',
@@ -36,7 +36,7 @@ exports.createApp = async(toolingVersion) => {
     });
 
     await runCommand('node', [
-        path.join(process.cwd(), './index.jsx'),
+        path.join(process.cwd(), './main.jsx'),
         'add',
         'view',
         'new-page'
