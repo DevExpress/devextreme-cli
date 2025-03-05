@@ -19,7 +19,7 @@ const defaultStyles = [
 ];
 
 const getExtension = (appPath) => {
-    return fs.existsSync(path.join(appPath, 'src', 'App.tsx')) ? '.tsx' : '.js';
+    return fs.existsSync(path.join(appPath, 'src', 'App.tsx')) ? '.tsx' : '.jsx';
 };
 
 const pathToPagesIndex = () => {
@@ -27,9 +27,9 @@ const pathToPagesIndex = () => {
     return path.join(process.cwd(), 'src', 'pages', `index${extension}`);
 };
 
-const preparePackageJsonForTemplate = (appPath, appName, isTypeScript) => {
+const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
-        { name: 'sass', version: '^1.34.1' },
+        { name: 'sass-embedded', version: '^1.85.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
         { name: 'react-router-dom', version: '^6.3.0' },
     ];
@@ -61,26 +61,24 @@ const create = async(appName, options) => {
         isTypeScript: typescriptUtils.isTypeScript(templateType)
     });
     const toolingVersion = extractToolingVersion(options);
-    const commandArguments = [`-p=create-react-app${toolingVersion}`, 'create-react-app', appName];
+    const commandArguments = [`-p=create-vite${toolingVersion}`, 'create-vite', appName];
 
-    const templateSuffix = templateOptions.isTypeScript ? '-typescript' : '';
-    const templatePath = path.resolve(__dirname, `../templates/cra-template${templateSuffix}`);
-
-    commandArguments.push(`--template file:${templatePath}`);
+    commandArguments.push(`--template react${templateOptions.isTypeScript ? '-ts' : ''}`);
 
     await runCommand('npx', commandArguments);
 
     const appPath = path.join(process.cwd(), appName);
 
     modifyIndexHtml(appPath, templateOptions.project);
+
     addTemplate(appPath, appName, templateOptions);
 };
 
 const modifyIndexHtml = (appPath, appName) => {
-    const indexHtmlPath = path.join(appPath, 'public', 'index.html');
+    const indexHtmlPath = path.join(appPath, 'index.html');
 
     let htmlContent = fs.readFileSync(indexHtmlPath).toString();
-    htmlContent = htmlContent.replace(/<title>(\w+\s*)+<\/title>/, `<title>${appName}<\/title>`);
+    htmlContent = htmlContent.replace(/<title>[^<]+<\/title>/, `<title>${appName}<\/title>`);
     htmlContent = htmlContent.replace('<body>', '<body class="dx-viewport">');
 
     fs.writeFileSync(indexHtmlPath, htmlContent);
@@ -97,7 +95,6 @@ const addTemplate = (appPath, appName, templateOptions) => {
     );
 
     const manifestPath = path.join(appPath, 'public', 'manifest.json');
-    const indexPath = path.join(appPath, 'src', templateOptions.isTypeScript ? 'index.tsx' : 'index.js');
 
     const styles = [
         './themes/generated/theme.additional.css',
@@ -108,15 +105,15 @@ const addTemplate = (appPath, appName, templateOptions) => {
     ];
 
     templateCreator.moveTemplateFilesToProject(applicationTemplatePath, appPath, templateOptions, getCorrectPath);
-    removeFile(path.join(appPath, 'src', 'App.css'));
+
     !templateOptions.isTypeScript && removeFile(path.join(appPath, 'src', 'types.js'));
+
     if(!templateOptions.empty) {
         addSamplePages(appPath, templateOptions);
     }
 
     preparePackageJsonForTemplate(appPath, appName, templateOptions.isTypeScript);
     updateJsonPropName(manifestPath, appName);
-    addPolyfills(packageJsonUtils.getPackageJsonPath(), indexPath);
     install({}, appPath, styles);
 };
 
@@ -128,15 +125,6 @@ const install = (options, appPath, styles) => {
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
     packageManager.runInstall({ cwd: appPath });
-};
-
-const addPolyfills = (packagePath, indexPath) => {
-    const packages = [
-        { name: 'react-app-polyfill', version: '^1.0.0' }
-    ];
-
-    packageJsonUtils.addDependencies(packagePath, packages);
-    moduleUtils.insertImport(indexPath, './polyfills');
 };
 
 const addStylesToApp = (filePath, styles) => {
