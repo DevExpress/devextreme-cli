@@ -14,7 +14,7 @@ const appLayoutPath = path.join(sandboxPath, appName, 'src/Content.jsx');
 
 exports.engine = 'react';
 exports.appPath = appPath;
-exports.deployPath = path.join(appPath, 'build');
+exports.deployPath = path.join(appPath, 'dist');
 exports.npmArgs = ['run', 'build'];
 exports.fileExtention = 'js';
 
