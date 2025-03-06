@@ -54,26 +54,21 @@ const updateJsonPropName = (path, name) => {
 const create = async(appName, options) => {
     const templateType = await getTemplateTypeInfo(options.template);
     const layoutType = await getLayoutInfo(options.layout);
-    const isTs = typescriptUtils.isTypeScript(templateType);
 
     const templateOptions = Object.assign({}, options, {
         project: stringUtils.humanize(appName),
         layout: stringUtils.classify(layoutType),
-        isTypeScript: isTs,
+        isTypeScript: typescriptUtils.isTypeScript(templateType),
     });
 
     const toolingVersion = extractToolingVersion(options);
     const commandArguments = [`-p=create-vite${toolingVersion}`, 'create-vite', appName];
 
-    commandArguments.push(`--template react${isTs ? '-ts' : ''}`);
+    commandArguments.push(`--template react${templateOptions.isTypeScript ? '-ts' : ''}`);
 
     await runCommand('npx', commandArguments);
 
     const appPath = path.join(process.cwd(), appName);
-
-    if(isTs) {
-        patchTsConfig(appPath);
-    }
 
     modifyIndexHtml(appPath, templateOptions.project);
 
@@ -122,15 +117,6 @@ const addTemplate = (appPath, appName, templateOptions) => {
     updateJsonPropName(manifestPath, appName);
     install({}, appPath, styles);
 };
-
-function patchTsConfig(appPath) {
-    const tsConfigPath = path.join(appPath, 'tsconfig.json');
-    const tsConfig = JSON.parse(fs.readFileSync(tsConfigPath, 'utf8'));
-
-    tsConfig.include = ['src'];
-
-    fs.writeFileSync(tsConfigPath, JSON.stringify(tsConfig, null, 2), 'utf8');
-}
 
 const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();

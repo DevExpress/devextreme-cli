@@ -48,7 +48,7 @@ const customLint = async(env) => {
 
 async function lint(env) {
 
-    if(env.engine.startsWith('vue')) {
+    if(env.engine.startsWith('vue') || env.engine.startsWith('react')) {
         await projectLint(env.engine);
     } else {
         await customLint(env);
