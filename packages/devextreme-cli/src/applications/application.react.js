@@ -69,6 +69,8 @@ const create = async(appName, options) => {
 
     const appPath = path.join(process.cwd(), appName);
 
+    patchTsConfig(appPath);
+
     modifyIndexHtml(appPath, templateOptions.project);
 
     addTemplate(appPath, appName, templateOptions);
@@ -116,6 +118,15 @@ const addTemplate = (appPath, appName, templateOptions) => {
     updateJsonPropName(manifestPath, appName);
     install({}, appPath, styles);
 };
+
+function patchTsConfig(appPath) {
+    const tsConfigPath = path.join(appPath, 'tsconfig.json');
+    const tsConfig = JSON.parse(fs.readFileSync(tsConfigPath, 'utf8'));
+
+    tsConfig.include = ['src'];
+
+    fs.writeFileSync(tsConfigPath, JSON.stringify(tsConfig, null, 2), 'utf8');
+}
 
 const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
