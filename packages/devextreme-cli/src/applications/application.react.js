@@ -31,6 +31,11 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
         { name: 'sass-embedded', version: '^1.85.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
+        { name: '@testing-library/dom', version: '^10.4.0', dev: true },
+        { name: '@testing-library/jest-dom', version: '^6.6.3', dev: true },
+        { name: '@testing-library/react', version: '^16.2.0', dev: true },
+        { name: '@testing-library/user-event', version: '^14.6.1', dev: true },
+        { name: '@types/jest', version: '^29.5.14', dev: true },
         { name: 'react-router-dom', version: '^6.3.0' },
     ];
     const scripts = [
