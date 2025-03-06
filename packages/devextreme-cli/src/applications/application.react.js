@@ -54,13 +54,14 @@ const updateJsonPropName = (path, name) => {
 const create = async(appName, options) => {
     const templateType = await getTemplateTypeInfo(options.template);
     const layoutType = await getLayoutInfo(options.layout);
-    const isTs = templateOptions.isTypeScript;
+    const isTs = typescriptUtils.isTypeScript(templateType);
 
     const templateOptions = Object.assign({}, options, {
         project: stringUtils.humanize(appName),
         layout: stringUtils.classify(layoutType),
-        isTypeScript: typescriptUtils.isTypeScript(templateType)
+        isTypeScript: isTs,
     });
+
     const toolingVersion = extractToolingVersion(options);
     const commandArguments = [`-p=create-vite${toolingVersion}`, 'create-vite', appName];
 
