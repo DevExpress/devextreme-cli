@@ -54,6 +54,7 @@ const updateJsonPropName = (path, name) => {
 const create = async(appName, options) => {
     const templateType = await getTemplateTypeInfo(options.template);
     const layoutType = await getLayoutInfo(options.layout);
+    const isTs = templateOptions.isTypeScript;
 
     const templateOptions = Object.assign({}, options, {
         project: stringUtils.humanize(appName),
@@ -63,13 +64,15 @@ const create = async(appName, options) => {
     const toolingVersion = extractToolingVersion(options);
     const commandArguments = [`-p=create-vite${toolingVersion}`, 'create-vite', appName];
 
-    commandArguments.push(`--template react${templateOptions.isTypeScript ? '-ts' : ''}`);
+    commandArguments.push(`--template react${isTs ? '-ts' : ''}`);
 
     await runCommand('npx', commandArguments);
 
     const appPath = path.join(process.cwd(), appName);
 
-    patchTsConfig(appPath);
+    if(isTs) {
+        patchTsConfig(appPath);
+    }
 
     modifyIndexHtml(appPath, templateOptions.project);
 
