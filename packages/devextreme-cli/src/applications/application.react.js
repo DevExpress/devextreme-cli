@@ -63,7 +63,7 @@ const create = async(appName, options) => {
     const templateOptions = Object.assign({}, options, {
         project: stringUtils.humanize(appName),
         layout: stringUtils.classify(layoutType),
-        isTypeScript: typescriptUtils.isTypeScript(templateType),
+        isTypeScript: typescriptUtils.isTypeScript(templateType)
     });
 
     const toolingVersion = extractToolingVersion(options);

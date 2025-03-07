@@ -48,13 +48,12 @@ const customLint = async(env) => {
 };
 
 async function lint(env) {
-
-    if(env.engine.startsWith('vue') || env.engine.startsWith('react')) {
-        await projectLint(env.engine);
-    } else {
+    if(env.engine.startsWith('angular')) {
         await customLint(env);
+    } else {
+        await projectLint(env.engine);
     }
-};
+}
 
 (async function lintProcess() {
     const filteredEnvs = args.e === 'all'
