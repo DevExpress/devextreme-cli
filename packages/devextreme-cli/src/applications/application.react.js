@@ -112,7 +112,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
 
     templateCreator.moveTemplateFilesToProject(applicationTemplatePath, appPath, templateOptions, getCorrectPath);
 
-    !templateOptions.isTypeScript && removeFile(path.join(appPath, 'src', 'types.js'));
+    !templateOptions.isTypeScript && removeFile(path.join(appPath, 'src', 'types.jsx'));
 
     if(!templateOptions.empty) {
         addSamplePages(appPath, templateOptions);

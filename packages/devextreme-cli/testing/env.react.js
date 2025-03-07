@@ -16,7 +16,7 @@ exports.engine = 'react';
 exports.appPath = appPath;
 exports.deployPath = path.join(appPath, 'dist');
 exports.npmArgs = ['run', 'build'];
-exports.fileExtention = 'js';
+exports.fileExtention = 'jsx';
 
 exports.createApp = async(toolingVersion) => {
     await rimraf(sandboxPath);
