@@ -19,7 +19,8 @@ const isTypeScript = (engine) => engine.includes('-ts');
 
 const projectLint = async(app) => {
     await run('npm run lint', undefined, {
-        path: path.join(__dirname, 'sandbox', app, 'my-app')
+        cwd: path.join(__dirname, 'sandbox', app, 'my-app'),
+        forceNoCmd: true
     });
 };
 
