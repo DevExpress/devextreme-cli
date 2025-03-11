@@ -13,7 +13,6 @@ const stringUtils = require('../utility/string');
 const typescriptUtils = require('../utility/typescript-extension');
 const removeFile = require('../utility/file-operations').remove;
 const latestVersions = require('../utility/latest-versions');
-const { extractToolingVersion } = require('../utility/extract-tooling-version');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css'
 ];
@@ -61,8 +60,7 @@ const create = async(appName, options) => {
         isTypeScript: typescriptUtils.isTypeScript(templateType)
     });
 
-    const toolingVersion = extractToolingVersion(options);
-    const commandArguments = [`-p=create-vite${toolingVersion}`, 'create-vite', appName];
+    const commandArguments = [`-p=create-vite@${latestVersions['create-vite']}`, 'create-vite', appName];
 
     commandArguments.push(`--template react${templateOptions.isTypeScript ? '-ts' : ''}`);
 
