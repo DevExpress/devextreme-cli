@@ -1,6 +1,5 @@
 import React from 'react';
-import 'devextreme/data/odata/store';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-react/common/data';
 import DataGrid, {
   Column,
   Pager,
