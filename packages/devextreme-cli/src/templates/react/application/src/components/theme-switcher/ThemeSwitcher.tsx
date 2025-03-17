@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import Button from 'devextreme-react/button';
 import { ThemeContext } from '../../theme';
 

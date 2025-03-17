@@ -14,7 +14,7 @@ const appLayoutPath = path.join(sandboxPath, appName, 'src/Content.tsx');
 
 exports.engine = 'react-ts';
 exports.appPath = appPath;
-exports.deployPath = path.join(appPath, 'build');
+exports.deployPath = path.join(appPath, 'dist');
 exports.npmArgs = ['run', 'build'];
 exports.fileExtention = 'ts';
 

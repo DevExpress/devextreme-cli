@@ -44,7 +44,9 @@ const largeMedia = window.matchMedia('(min-width: 1280px)');
 
 [xSmallMedia, smallMedia, mediumMedia, largeMedia].forEach(media => {
   media.addListener((e) => {
-    e.matches && handlers.forEach(handler => handler());
+    if(e.matches) {
+      handlers.forEach(handler => handler())
+    }
   });
 });
 
