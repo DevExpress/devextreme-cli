@@ -1,6 +1,5 @@
 import { TreeViewTypes } from 'devextreme-react/tree-view';
 import { ButtonTypes } from 'devextreme-react/button';
-import React from 'react';
 
 export interface HeaderProps {
     menuToggleEnabled: boolean;

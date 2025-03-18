@@ -19,7 +19,8 @@ const isTypeScript = (engine) => engine.includes('-ts');
 
 const projectLint = async(app) => {
     await run('npm run lint', undefined, {
-        path: path.join(__dirname, 'sandbox', app, 'my-app')
+        cwd: path.join(__dirname, 'sandbox', app, 'my-app'),
+        forceNoCmd: true
     });
 };
 
@@ -47,13 +48,12 @@ const customLint = async(env) => {
 };
 
 async function lint(env) {
-
-    if(env.engine.startsWith('vue')) {
-        await projectLint(env.engine);
-    } else {
+    if(env.engine.startsWith('angular')) {
         await customLint(env);
+    } else {
+        await projectLint(env.engine);
     }
-};
+}
 
 (async function lintProcess() {
     const filteredEnvs = args.e === 'all'

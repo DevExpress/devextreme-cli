@@ -3,7 +3,7 @@ import Drawer from 'devextreme-react/drawer';
 import { ScrollView<%=#isTypeScript%>, ScrollViewRef<%=/isTypeScript%> } from 'devextreme-react/scroll-view';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import React, { useState, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Header, SideNavigationMenu, Footer } from '../../components';
 import './side-nav-inner-toolbar.scss';
 import { useScreenSize } from '../../utils/media-query';
@@ -84,13 +84,19 @@ export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%
           />
           <ScrollView ref={scrollViewRef} className={'layout-body with-footer'}>
             <div className={'content'}>
-              {React.Children.map(children, (item<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
-                return item.type !== Footer && item;
+              {React.Children.map(children, (item) => {
+                if (<%=#isTypeScript%>React.isValidElement(item) && <%=/isTypeScript%>item.type !== Footer) {
+                  return item;
+                }
+                return null;
               })}
             </div>
             <div className={'content-block'}>
-              {React.Children.map(children, (item<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
-                return item.type === Footer && item;
+              {React.Children.map(children, (item) => {
+                if (<%=#isTypeScript%>React.isValidElement(item) && <%=/isTypeScript%>item.type === Footer) {
+                  return item;
+                }
+                return null;
               })}
             </div>
           </ScrollView>
