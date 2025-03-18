@@ -1,4 +1,3 @@
-import React from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import './dx-styles.scss';
 import LoadPanel from 'devextreme-react/load-panel';

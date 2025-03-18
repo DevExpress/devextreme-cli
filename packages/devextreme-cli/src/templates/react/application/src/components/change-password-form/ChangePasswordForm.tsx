@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import <%=#isTypeScript%>React, <%=/isTypeScript%>{ useState, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Form, {
   Item,
@@ -19,7 +19,7 @@ export default function ChangePasswordForm() {
   const formData = useRef({ password: '' });
   const { recoveryCode } = useParams();
 
-  const onSubmit = useCallback(async (e<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
+  const onSubmit = useCallback(async (e<%=#isTypeScript%>: React.FormEvent<HTMLFormElement><%=/isTypeScript%>) => {
     e.preventDefault();
     const { password } = formData.current;
     setLoading(true);

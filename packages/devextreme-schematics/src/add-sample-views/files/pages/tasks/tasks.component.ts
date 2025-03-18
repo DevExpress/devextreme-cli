@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import 'devextreme/data/odata/store';
+import 'devextreme-angular/common/data';
 
 @Component({
   templateUrl: 'tasks.component.html',

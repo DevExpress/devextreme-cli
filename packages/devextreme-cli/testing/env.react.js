@@ -10,13 +10,13 @@ const classify = require('../src/utility/string').classify;
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/react');
 const appPath = path.join(sandboxPath, appName);
-const appLayoutPath = path.join(sandboxPath, appName, 'src/Content.js');
+const appLayoutPath = path.join(sandboxPath, appName, 'src/Content.jsx');
 
 exports.engine = 'react';
 exports.appPath = appPath;
-exports.deployPath = path.join(appPath, 'build');
+exports.deployPath = path.join(appPath, 'dist');
 exports.npmArgs = ['run', 'build'];
-exports.fileExtention = 'js';
+exports.fileExtention = 'jsx';
 
 exports.createApp = async(toolingVersion) => {
     await rimraf(sandboxPath);
