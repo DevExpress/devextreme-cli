@@ -1,6 +1,7 @@
 const minimist = require('minimist');
 const { toolingVersionOptionName } = require('../src/utility/extract-tooling-version');
 const envs = require('./constants').envs;
+
 const args = minimist(process.argv.slice(2), {
     default: {
         envirorment: 'all'
