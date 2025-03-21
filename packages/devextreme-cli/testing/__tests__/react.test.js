@@ -1,3 +1,4 @@
-const reactEnv = require('../env.react');
+const { reactJs, reactSwcJs } = require('../env.react');
 const testAppTemplate = require('../app-template.test.shared.js');
-testAppTemplate(reactEnv);
+testAppTemplate(reactJs);
+testAppTemplate(reactSwcJs);

@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const getLayoutInfo = require('../utility/prompts/layout');
 const getTemplateTypeInfo = require('../utility/prompts/typescript');
+const getTranspilerTypeInfo = require('../utility/prompts/transpiler');
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
@@ -52,6 +53,7 @@ const updateJsonPropName = (path, name) => {
 
 const create = async(appName, options) => {
     const templateType = await getTemplateTypeInfo(options.template);
+    const transpiler = await getTranspilerTypeInfo(options.transpiler);
     const layoutType = await getLayoutInfo(options.layout);
 
     const templateOptions = Object.assign({}, options, {
@@ -62,7 +64,7 @@ const create = async(appName, options) => {
 
     const commandArguments = [`-p=create-vite@${latestVersions['create-vite']}`, 'create-vite', appName];
 
-    commandArguments.push(`--template react${templateOptions.isTypeScript ? '-ts' : ''}`);
+    commandArguments.push(`--template react${transpiler === 'swc' ? '-swc' : ''}${templateOptions.isTypeScript ? '-ts' : ''}`);
 
     await runCommand('npx', commandArguments);
 

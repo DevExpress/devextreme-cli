@@ -16,7 +16,7 @@ exports.engine = 'react-ts';
 exports.appPath = appPath;
 exports.deployPath = path.join(appPath, 'dist');
 exports.npmArgs = ['run', 'build'];
-exports.fileExtention = 'ts';
+exports.fileExtension = 'ts';
 
 exports.createApp = async(toolingVersion) => {
     await rimraf(sandboxPath);
@@ -29,6 +29,7 @@ exports.createApp = async(toolingVersion) => {
         'react-app',
         '--layout=side-nav-outer-toolbar',
         '--template=typescript',
+        '--transpiler=babel',
         ...additionalArguments
     ], {
         cwd: sandboxPath,
