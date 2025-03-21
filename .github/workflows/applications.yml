@@ -20,7 +20,9 @@ jobs:
           - angular
           - vue-v3
           - react
+          - react-swc
           - react-ts
+          - react-swc-ts
         NODE:
           - 18
         OS:
