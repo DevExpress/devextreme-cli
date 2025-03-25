@@ -1,7 +1,7 @@
 const prompts = require('./prompts');
 
 const choices = [
-    { value: 'babel', title: 'Babel (default)' },
+    { value: 'babel', title: 'Babel' },
     { value: 'swc', title: 'SWC' }
 ];
 
