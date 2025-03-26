@@ -208,14 +208,16 @@ function updateAppModule(host: Tree, sourcePath: string) {
 
 function getComponentName(host: Tree, sourcePath: string) {
   let name = '';
-  const index = 1;
+  let index = 0;
 
   if (!host.exists(sourcePath + 'app.component.ts')) {
     name = 'app';
   }
 
   while (!name) {
+    index++;
     const componentName = `app${index}`;
+
     if (!host.exists(`${sourcePath}${componentName}.component.ts`)) {
       name = componentName;
     }

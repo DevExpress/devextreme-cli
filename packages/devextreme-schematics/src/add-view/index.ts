@@ -151,12 +151,12 @@ async function addContentToTS(options: any) {
   const content = `import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-new-page',
-  templateUrl: './new-page.component.html',
-  styleUrl: './new-page.component.css',
+  selector: 'app-${name}',
+  templateUrl: './${name}.component.html',
+  styleUrl: './${name}.component.css',
   standalone: false
 })
-export class NewPageComponent {
+export class ${strings.classify(basename(normalize(name)))}Component {
 
 }
 `;
