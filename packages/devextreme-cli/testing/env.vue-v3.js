@@ -14,7 +14,7 @@ exports.engine = 'vue-v3';
 exports.appPath = path.join(sandboxPath, appName);
 exports.deployPath = path.join(appPath, 'dist');
 exports.npmArgs = ['run', 'build'];
-exports.fileExtention = 'js';
+exports.fileExtension = 'js';
 
 exports.createApp = async(toolingVersion) => {
     await rimraf(sandboxPath);
