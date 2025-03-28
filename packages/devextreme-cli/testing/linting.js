@@ -34,7 +34,7 @@ const customLint = async(env) => {
     const lintFiles = isTypeScript(env.engine)
         ? [`./testing/sandbox/${env.engine}/my-app/src/**/*.ts`,
             `./testing/sandbox/${env.engine}/my-app/src/**/*.tsx`]
-        : [`./testing/sandbox/${env.engine}/my-app/src/**/*.${env.fileExtention}`];
+        : [`./testing/sandbox/${env.engine}/my-app/src/**/*.${env.fileExtension}`];
 
     const report = await eslint.lintFiles(lintFiles);
 

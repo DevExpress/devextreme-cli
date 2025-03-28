@@ -29,7 +29,7 @@ exports.appPath = appPath;
 exports.deployPath = path.join(appPath, 'dist', 'my-app', 'browser');
 // disable optimization due to https://github.com/angular/angular-cli/issues/20760
 exports.npmArgs = ['run', 'build', '--', '--configuration', 'development'];
-exports.fileExtention = 'ts';
+exports.fileExtension = 'ts';
 
 exports.createApp = async(toolingVersion) => {
     await rimraf(sandboxPath);
