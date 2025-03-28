@@ -14,6 +14,7 @@ const stringUtils = require('../utility/string');
 const typescriptUtils = require('../utility/typescript-extension');
 const removeFile = require('../utility/file-operations').remove;
 const latestVersions = require('../utility/latest-versions');
+const { extractDepsVersionTag } = require('../utility/extract-deps-version-tag');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css'
 ];
@@ -51,6 +52,17 @@ const updateJsonPropName = (path, name) => {
     });
 };
 
+const bumpReact = (appPath, versionTag) => {
+    const dependencies = [
+        { name: 'react', version: versionTag },
+        { name: 'react-dom', version: versionTag },
+        { name: '@types/react', version: versionTag, dev: true },
+        { name: '@types/react-dom', version: versionTag, dev: true },
+    ];
+
+    packageJsonUtils.addDependencies(appPath, dependencies);
+};
+
 const create = async(appName, options) => {
     const templateType = await getTemplateTypeInfo(options.template);
     const transpiler = await getTranspilerTypeInfo(options.transpiler);
@@ -61,8 +73,9 @@ const create = async(appName, options) => {
         layout: stringUtils.classify(layoutType),
         isTypeScript: typescriptUtils.isTypeScript(templateType)
     });
+    const depsVersionTag = extractDepsVersionTag(options);
 
-    const commandArguments = [`-p=create-vite@${latestVersions['create-vite']}`, 'create-vite', appName];
+    const commandArguments = [`-p=create-vite@${depsVersionTag || latestVersions['create-vite']}`, 'create-vite', appName];
 
     commandArguments.push(`--template react${transpiler === 'swc' ? '-swc' : ''}${templateOptions.isTypeScript ? '-ts' : ''}`);
 
@@ -71,6 +84,10 @@ const create = async(appName, options) => {
     const appPath = path.join(process.cwd(), appName);
 
     modifyIndexHtml(appPath, templateOptions.project);
+
+    if(depsVersionTag) {
+        bumpReact(appPath, depsVersionTag);
+    }
 
     addTemplate(appPath, appName, templateOptions);
 };

@@ -4,7 +4,7 @@ const path = require('path');
 const packageManager = require('../src/utility/package-manager');
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
-const { toolingVersionOptionName } = require('../src/utility/extract-tooling-version');
+const { depsVersionTagOptionName } = require('../src/utility/extract-deps-version-tag');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
@@ -31,12 +31,12 @@ exports.deployPath = path.join(appPath, 'dist', 'my-app', 'browser');
 exports.npmArgs = ['run', 'build', '--', '--configuration', 'development'];
 exports.fileExtension = 'ts';
 
-exports.createApp = async(toolingVersion) => {
+exports.createApp = async(depsVersionTag) => {
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 
     await prepareSchematics();
-    const additionalArguments = toolingVersion && [`--${toolingVersionOptionName} ${toolingVersion}`] || [];
+    const additionalArguments = depsVersionTag && [`--${depsVersionTagOptionName} ${depsVersionTag}`] || [];
     await runCommand('node', [
         path.join(process.cwd(), './index.js'),
         'new',
