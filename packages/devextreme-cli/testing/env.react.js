@@ -4,7 +4,7 @@ const path = require('path');
 
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
-const { toolingVersionOptionName } = require('../src/utility/extract-tooling-version');
+const { depsVersionTagOptionName } = require('../src/utility/extract-deps-version-tag');
 const classify = require('../src/utility/string').classify;
 
 function getConfig({ engine, template, fileExtension, templateExtension, transpiler }) {
@@ -21,11 +21,11 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
         fileExtension,
     };
 
-    config.createApp = async(toolingVersion) => {
+    config.createApp = async(depsVersionTag) => {
         await rimraf(sandboxPath);
         fs.mkdirSync(sandboxPath, { recursive: true });
 
-        const additionalArguments = toolingVersion && [`--${toolingVersionOptionName} ${toolingVersion}`] || [];
+        const additionalArguments = depsVersionTag && [`--${depsVersionTagOptionName} ${depsVersionTag}`] || [];
         await runCommand('node', [
             path.join(process.cwd(), './index.js'),
             'new',
