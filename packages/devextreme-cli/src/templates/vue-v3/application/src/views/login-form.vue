@@ -34,20 +34,6 @@
         >
         </dx-button-options>
       </dx-button-item>
-      <dx-item>
-        <template #default>
-          <div class="link">
-            <router-link to="/reset-password">Forgot password?</router-link>
-          </div>
-        </template>
-      </dx-item>
-      <dx-button-item>
-        <dx-button-options
-          text="Create an account"
-          width="100%"
-          :on-click="onCreateAccountClick"
-        />
-      </dx-button-item>
       <template #signInTemplate>
         <div>
           <span class="dx-button-text">
@@ -57,6 +43,15 @@
         </div>
       </template>
     </dx-form>
+    <div class="link">
+      <router-link to="/reset-password">Forgot password?</router-link>
+    </div>
+    <dx-button
+      text="Create an account"
+      stylingMode="outlined"
+      width="100%"
+      @click="onCreateAccountClick"
+    />
   </form>
 </template>
 
@@ -70,6 +65,7 @@ import DxForm, {
   DxButtonItem,
   DxButtonOptions
 } from "devextreme-vue/form";
+import { DxButton } from 'devextreme-vue';
 import notify from 'devextreme/ui/notify';
 
 import auth from "../auth";
@@ -119,28 +115,23 @@ export default {
     DxItem,
     DxLabel,
     DxButtonItem,
-    DxButtonOptions
+    DxButtonOptions,
+    DxButton
   }
 };
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
-
 .login-form {
-  .link {
-    text-align: center;
-    font-size: 16px;
-    font-style: normal;
-
-    a {
-      text-decoration: none;
-    }
+  .form-text {
+    color: var(--base-text-color-alpha-7);
   }
 
-  .form-text {
-    margin: 10px 0;
-    color: rgba($base-text-color, alpha($base-text-color) * 0.7);
+  .link {
+    text-align: center;
+    font-size: 12px;
+    font-style: normal;
+    margin: 6px 0 50px;
   }
 }
 </style>

@@ -1,5 +1,5 @@
 import React from 'react';
-import 'devextreme/data/odata/store';
+import { DataSource } from 'devextreme-react/common/data';
 import DataGrid, {
   Column,
   Pager,
@@ -7,6 +7,7 @@ import DataGrid, {
   FilterRow,
   Lookup
 } from 'devextreme-react/data-grid';
+import './tasks.scss';
 
 export default function Task() {
   return (
@@ -15,7 +16,7 @@ export default function Task() {
 
       <DataGrid
         className={'dx-card content-block'}
-        dataSource={dataSource<%=#isTypeScript%> as any<%=/isTypeScript%>}
+        dataSource={dataSource}
         showBorders={false}
         focusedRowEnabled={true}
         defaultFocusedRowIndex={0}
@@ -82,7 +83,7 @@ export default function Task() {
     </React.Fragment>
 )}
 
-const dataSource = {
+const dataSource = new DataSource({
   store: {
     version: 2,
     type: 'odata',
@@ -100,7 +101,7 @@ const dataSource = {
     'Task_Completion',
     'ResponsibleEmployee/Employee_Full_Name'
   ]
-};
+});
 
 const priorities = [
   { name: 'High', value: 4 },

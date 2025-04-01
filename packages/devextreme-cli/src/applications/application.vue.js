@@ -9,7 +9,7 @@ const insertItemToArray = require('../utility/file-content').insertItemToArray;
 const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
 const latestVersions = require('../utility/latest-versions');
-const { toolingVersionOptionName, extractToolingVersion } = require('../utility/extract-tooling-version');
+const { depsVersionTagOptionName, extractDepsVersionTag } = require('../utility/extract-deps-version-tag');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css'
 ];
@@ -37,25 +37,42 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     packageJsonUtils.updateName(appPath, appName);
 };
 
-async function createVueApp(name, templateOptions) {
-    const toolingVersion = extractToolingVersion(templateOptions);
-    const argList = ['-p', `@vue/cli${toolingVersion}`, 'vue', 'create', name, '--registry', 'https://registry.npmjs.org/', '-p "Default (Vue 3)"'];
+async function createVueApp(name, depsVersionTag) {
+    const argList = ['-p', `@vue/cli@${depsVersionTag}`, 'vue', 'create', name, '--registry', 'https://registry.npmjs.org/', '-p "Default (Vue 3)"'];
 
     return runCommand('npx', argList);
 }
 
+const bumpVue = (appPath, versionTag) => {
+    const dependencies = [
+        { name: 'vue', version: versionTag },
+        { name: 'vue-router', version: versionTag },
+        { name: '@vue/cli-plugin-babel', version: versionTag, dev: true },
+        { name: '@vue/cli-plugin-eslint', version: versionTag, dev: true },
+        { name: '@vue/cli-service', version: versionTag, dev: true },
+    ];
+
+    packageJsonUtils.addDependencies(appPath, dependencies);
+};
+
 const create = async(appName, options) => {
     const layout = await getLayoutInfo(options.layout);
+    const depsVersionTag = extractDepsVersionTag(options);
 
     const templateOptions = {
         project: stringUtils.humanize(appName),
         layout: layout,
-        [toolingVersionOptionName]: options[toolingVersionOptionName]
+        [depsVersionTagOptionName]: options[depsVersionTagOptionName]
     };
 
-    await createVueApp(appName, templateOptions);
+    await createVueApp(appName, depsVersionTag);
 
     const appPath = path.join(process.cwd(), appName);
+
+    if(depsVersionTag) {
+        bumpVue(appPath, depsVersionTag);
+    }
+
     modifyIndexHtml(appPath, templateOptions.project);
     addTemplate(appPath, appName, templateOptions);
 };
@@ -77,7 +94,9 @@ const addTemplate = (appPath, appName, templateOptions) => {
     const applicationTemplatePath = path.join(templateCreator.getTempaltePath('vue-v3'), 'application');
     const styles = [
         './themes/generated/theme.additional.css',
+        './themes/generated/theme.additional.dark.css',
         './themes/generated/theme.base.css',
+        './themes/generated/theme.base.dark.css',
         'devextreme/dist/css/dx.common.css'
     ];
 

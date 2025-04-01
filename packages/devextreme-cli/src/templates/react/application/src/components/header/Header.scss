@@ -1,5 +1,8 @@
-@import "../../themes/generated/variables.base.scss";
-@import "../../dx-styles.scss";
+@use "../../dx-styles.scss" as *;
+
+header {
+  background-color: var(--base-bg);
+}
 
 header {
   background-color: $base-bg;

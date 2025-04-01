@@ -1,5 +1,6 @@
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
+import { strings, basename, normalize } from '@angular-devkit/core';
 import * as path from 'path';
 
 const collectionPath = path.join(__dirname, '../collection.json');
@@ -13,7 +14,8 @@ describe('view', () => {
     routing: true,
     style: 'css',
     skipTests: false,
-    skipPackageJson: false
+    skipPackageJson: false,
+    standalone: false
   };
 
   const workspaceOptions: WorkspaceOptions = {
@@ -44,15 +46,22 @@ describe('view', () => {
 
   it('should create new view', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
+    const componentName = componentOptions.name;
     let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
     tree = await runner.runSchematic('add-view', componentOptions, appTree);
 
     expect(tree.files).toContain('/src/app/pages/test/test.component.ts');
     expect(tree.files).toContain('/src/app/pages/test/test.component.html');
 
-    const content = tree.readContent('/src/app/pages/test/test.component.html');
+    const contentHTML = tree.readContent('/src/app/pages/test/test.component.html');
+    const contentTS = tree.readContent('/src/app/pages/test/test.component.ts');
 
-    expect(content).toMatch(/<h2>Test<\/h2>/);
+    expect(contentHTML).toMatch(/<h2>Test<\/h2>/);
+    expect(contentTS).toContain(`selector: 'app-${componentName}'`);
+    expect(contentTS).toContain(`templateUrl: './${componentName}.component.html'`);
+    expect(contentTS).toContain(`styleUrl: './${componentName}.component.css'`);
+    expect(contentTS).toContain('standalone: false');
+    expect(contentTS).toContain(`export class ${strings.classify(basename(normalize(componentName)))}Component`);
   });
 
   it('should add view to default routing module', async () => {

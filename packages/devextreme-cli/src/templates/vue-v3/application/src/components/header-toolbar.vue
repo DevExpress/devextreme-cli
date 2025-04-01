@@ -20,7 +20,11 @@
         location="before"
         css-class="header-title dx-toolbar-label"
       >
-        <div>{{ title }}</div>
+        <div>{{ title }} </div>
+      </dx-item>
+
+      <dx-item location="after">
+        <div><theme-switcher /></div>
       </dx-item>
 
       <dx-item
@@ -28,27 +32,15 @@
         locate-in-menu="auto"
         menu-item-template="menuUserItem"
       >
-      <template #default>
-          <div>
-            <dx-button
-              class="user-button authorization"
-              :width="210"
-              height="100%"
-              styling-mode="text"
-            >
-              <user-panel :email="email" :menu-items="userMenuItems" menu-mode="context" />
-            </dx-button>
-          </div>
+        <template #default>
+          <user-panel :menu-items="userMenuItems" menuMode="context"/>
         </template>
       </dx-item>
-      
+
       <template #menuUserItem>
-        <user-panel
-          :email="email"
-          :menu-items="userMenuItems"
-          menu-mode="list"
-        />
+        <user-panel :menu-items="userMenuItems" menuMode="list"/>
       </template>
+
     </dx-toolbar>
   </header>
 </template>
@@ -61,6 +53,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { ref } from 'vue';
 
 import UserPanel from "./user-panel";
+import ThemeSwitcher from './theme-switcher.vue';
 
 export default {
   props: {
@@ -75,18 +68,18 @@ export default {
 
     const email = ref("");
     auth.getUser().then((e) => email.value = e.data.email);
-    
+
     const userMenuItems = [{
-        text: "Profile",
-        icon: "user",
-        onClick: onProfileClick
-      },
+      text: "Profile",
+      icon: "user",
+      onClick: onProfileClick
+    },
       {
         text: "Logout",
         icon: "runner",
         onClick: onLogoutClick
-    }];
-      
+      }];
+
     function onLogoutClick() {
       auth.logOut();
       router.push({
@@ -108,6 +101,7 @@ export default {
     };
   },
   components: {
+    ThemeSwitcher,
     DxButton,
     DxToolbar,
     DxItem,
@@ -117,8 +111,11 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
-@import "../dx-styles.scss";
+@use "../dx-styles.scss" as *;
+
+header {
+  background-color: var(--base-bg);
+}
 
 header {
   background-color: $base-bg;

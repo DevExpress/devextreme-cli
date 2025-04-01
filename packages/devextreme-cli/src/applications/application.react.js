@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const getLayoutInfo = require('../utility/prompts/layout');
 const getTemplateTypeInfo = require('../utility/prompts/typescript');
+const getTranspilerTypeInfo = require('../utility/prompts/transpiler');
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
@@ -13,13 +14,13 @@ const stringUtils = require('../utility/string');
 const typescriptUtils = require('../utility/typescript-extension');
 const removeFile = require('../utility/file-operations').remove;
 const latestVersions = require('../utility/latest-versions');
-const { extractToolingVersion } = require('../utility/extract-tooling-version');
+const { extractDepsVersionTag } = require('../utility/extract-deps-version-tag');
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css'
 ];
 
 const getExtension = (appPath) => {
-    return fs.existsSync(path.join(appPath, 'src', 'App.tsx')) ? '.tsx' : '.js';
+    return fs.existsSync(path.join(appPath, 'src', 'App.tsx')) ? '.tsx' : '.jsx';
 };
 
 const pathToPagesIndex = () => {
@@ -27,9 +28,9 @@ const pathToPagesIndex = () => {
     return path.join(process.cwd(), 'src', 'pages', `index${extension}`);
 };
 
-const preparePackageJsonForTemplate = (appPath, appName, isTypeScript) => {
+const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
-        { name: 'sass', version: '^1.34.1' },
+        { name: 'sass-embedded', version: '^1.85.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
         { name: 'react-router-dom', version: '^6.3.0' },
     ];
@@ -51,8 +52,20 @@ const updateJsonPropName = (path, name) => {
     });
 };
 
+const bumpReact = (appPath, versionTag) => {
+    const dependencies = [
+        { name: 'react', version: versionTag },
+        { name: 'react-dom', version: versionTag },
+        { name: '@types/react', version: versionTag, dev: true },
+        { name: '@types/react-dom', version: versionTag, dev: true },
+    ];
+
+    packageJsonUtils.addDependencies(appPath, dependencies);
+};
+
 const create = async(appName, options) => {
     const templateType = await getTemplateTypeInfo(options.template);
+    const transpiler = await getTranspilerTypeInfo(options.transpiler);
     const layoutType = await getLayoutInfo(options.layout);
 
     const templateOptions = Object.assign({}, options, {
@@ -60,26 +73,30 @@ const create = async(appName, options) => {
         layout: stringUtils.classify(layoutType),
         isTypeScript: typescriptUtils.isTypeScript(templateType)
     });
-    const toolingVersion = extractToolingVersion(options);
-    const commandArguments = [`-p=create-react-app${toolingVersion}`, 'create-react-app', appName];
+    const depsVersionTag = extractDepsVersionTag(options);
 
-    if(templateOptions.isTypeScript) {
-        commandArguments.push('--template typescript');
-    }
+    const commandArguments = [`-p=create-vite@${depsVersionTag || latestVersions['create-vite']}`, 'create-vite', appName];
+
+    commandArguments.push(`--template react${transpiler === 'swc' ? '-swc' : ''}${templateOptions.isTypeScript ? '-ts' : ''}`);
 
     await runCommand('npx', commandArguments);
 
     const appPath = path.join(process.cwd(), appName);
 
     modifyIndexHtml(appPath, templateOptions.project);
+
+    if(depsVersionTag) {
+        bumpReact(appPath, depsVersionTag);
+    }
+
     addTemplate(appPath, appName, templateOptions);
 };
 
 const modifyIndexHtml = (appPath, appName) => {
-    const indexHtmlPath = path.join(appPath, 'public', 'index.html');
+    const indexHtmlPath = path.join(appPath, 'index.html');
 
     let htmlContent = fs.readFileSync(indexHtmlPath).toString();
-    htmlContent = htmlContent.replace(/<title>(\w+\s*)+<\/title>/, `<title>${appName}<\/title>`);
+    htmlContent = htmlContent.replace(/<title>[^<]+<\/title>/, `<title>${appName}<\/title>`);
     htmlContent = htmlContent.replace('<body>', '<body class="dx-viewport">');
 
     fs.writeFileSync(indexHtmlPath, htmlContent);
@@ -96,24 +113,25 @@ const addTemplate = (appPath, appName, templateOptions) => {
     );
 
     const manifestPath = path.join(appPath, 'public', 'manifest.json');
-    const indexPath = path.join(appPath, 'src', templateOptions.isTypeScript ? 'index.tsx' : 'index.js');
 
     const styles = [
         './themes/generated/theme.additional.css',
+        './themes/generated/theme.additional.dark.css',
         './themes/generated/theme.base.css',
+        './themes/generated/theme.base.dark.css',
         'devextreme/dist/css/dx.common.css'
     ];
 
     templateCreator.moveTemplateFilesToProject(applicationTemplatePath, appPath, templateOptions, getCorrectPath);
-    removeFile(path.join(appPath, 'src', 'App.css'));
-    !templateOptions.isTypeScript && removeFile(path.join(appPath, 'src', 'types.js'));
+
+    !templateOptions.isTypeScript && removeFile(path.join(appPath, 'src', 'types.jsx'));
+
     if(!templateOptions.empty) {
         addSamplePages(appPath, templateOptions);
     }
 
     preparePackageJsonForTemplate(appPath, appName, templateOptions.isTypeScript);
     updateJsonPropName(manifestPath, appName);
-    addPolyfills(packageJsonUtils.getPackageJsonPath(), indexPath);
     install({}, appPath, styles);
 };
 
@@ -125,15 +143,6 @@ const install = (options, appPath, styles) => {
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
     packageManager.runInstall({ cwd: appPath });
-};
-
-const addPolyfills = (packagePath, indexPath) => {
-    const packages = [
-        { name: 'react-app-polyfill', version: '^1.0.0' }
-    ];
-
-    packageJsonUtils.addDependencies(packagePath, packages);
-    moduleUtils.insertImport(indexPath, './polyfills');
 };
 
 const addStylesToApp = (filePath, styles) => {

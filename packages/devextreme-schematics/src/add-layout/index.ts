@@ -113,7 +113,9 @@ async function addCustomThemeStyles(host: Tree, options: any, sourcePath: string
         `${sourcePath}/variables.scss`,
         `${sourcePath}/dx-styles.scss`,
         `${sourcePath}/themes/generated/theme.additional.css`,
+        `${sourcePath}/themes/generated/theme.additional.dark.css`,
         `${sourcePath}/themes/generated/theme.base.css`,
+        `${sourcePath}/themes/generated/theme.base.dark.css`,
         'node_modules/devextreme/dist/css/dx.common.css'
       ];
 
@@ -206,14 +208,16 @@ function updateAppModule(host: Tree, sourcePath: string) {
 
 function getComponentName(host: Tree, sourcePath: string) {
   let name = '';
-  const index = 1;
+  let index = 0;
 
   if (!host.exists(sourcePath + 'app.component.ts')) {
     name = 'app';
   }
 
   while (!name) {
+    index++;
     const componentName = `app${index}`;
+
     if (!host.exists(`${sourcePath}${componentName}.component.ts`)) {
       name = componentName;
     }

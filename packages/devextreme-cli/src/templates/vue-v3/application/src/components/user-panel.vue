@@ -1,114 +1,94 @@
 <template>
   <div class="user-panel">
-    <div class="user-info">
-      <div class="image-container">
-        <div class="user-image" />
-      </div>
-      <div class="user-name">{{email}}</div>
-    </div>
-
-    <dx-context-menu
-      v-if="menuMode === 'context'"
-      target=".user-button"
+    <dx-drop-down-button
+      v-if="menuMode !== 'list'"
+      stylingMode="text"
+      :icon="'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'"
+      :showArrowIcon="false"
       :items="menuItems"
-      :width="210"
-      show-event="dxclick"
-      css-class="user-menu"
-    >
-      <dx-position my="top center" at="bottom center" />
-    </dx-context-menu>
-
+      displayExpr="text"
+      keyExpr="id"
+      :elementAttr="{
+      class: 'user-button'
+    }"
+      :dropDownOptions="{
+      width: '150px'
+    }"
+    />
     <dx-list
       v-if="menuMode === 'list'"
-      class="dx-toolbar-menu-action"
       :items="menuItems"
+      displayExpr="text"
+      keyExpr="id"
+      width="130"
     />
   </div>
 </template>
 
 <script>
-import DxContextMenu, { DxPosition } from "devextreme-vue/context-menu";
-import DxList from "devextreme-vue/list";
+import { DxDropDownButton, DxList } from 'devextreme-vue';
 
 export default {
   props: {
-    menuMode: String,
     menuItems: Array,
-    email: String
+    menuMode: String,
   },
   components: {
-    DxContextMenu,
-    DxPosition,
-    DxList
+    DxDropDownButton,
+    DxList,
   }
 };
 </script>
-
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
+.app .header-toolbar .user-panel .user-button.dx-dropdownbutton img.dx-icon {
+  height: 100%;
+  width: auto;
 
-.user-info {
+  .dx-theme-generic & {
+    max-height: 32px;
+  }
+}
+
+.user-panel  {
   display: flex;
-  align-items: center;
+  flex-direction: column;
 
-  .dx-toolbar-menu-section & {
-    padding: 10px 6px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
+  .user-button.dx-dropdownbutton {
+    margin-left: 5px;
 
-  .image-container {
-    overflow: hidden;
-    border-radius: 50%;
-    height: 30px;
-    width: 30px;
-    margin: 0 4px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    img.dx-icon {
+      border-radius: 50%;
+      margin: 0;
+      width: auto;
+      aspect-ratio: 1 / 1;
+      box-sizing: border-box;
+      border: 1px solid var(--dx-color-border);
+      object-fit: cover;
+      object-position: top;
+      background: rgb(255, 255, 255);
+      background-clip: padding-box;
+    }
 
-    .user-image {
-      width: 100%;
-      height: 100%;
-      background: url("https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png")
-        no-repeat #fff;
-      background-size: cover;
+
+
+    .dx-buttongroup {
+      vertical-align: middle;
+
+      .dx-button.dx-button-has-icon:not(.dx-button-has-text) {
+        .dx-button-content {
+          padding: 0;
+        }
+
+        &.dx-state-hover,
+        &.dx-state-focused {
+          background-color: transparent;
+
+          img.dx-icon {
+            border-color: var(--dx-color-primary);
+          }
+        }
+      }
     }
   }
-
-  .user-name {
-    font-size: 14px;
-    color: $base-text-color;
-    margin: 0 9px;
-  }
-}
-
-.user-panel {
-  .dx-list-item .dx-icon {
-    vertical-align: middle;
-    color: $base-text-color;
-    margin-right: 16px;
-  }
-  .dx-rtl .dx-list-item .dx-icon {
-    margin-right: 0;
-    margin-left: 16px;
-  }
-}
-
-.dx-context-menu.user-menu.dx-menu-base {
-  &.dx-rtl {
-    .dx-submenu .dx-menu-items-container .dx-icon {
-      margin-left: 16px;
-    }
-  }
-  .dx-submenu .dx-menu-items-container .dx-icon {
-    margin-right: 16px;
-  }
-  .dx-menu-item .dx-menu-item-content {
-    padding: 3px 15px 4px;
-  }
-}
-
-.dx-theme-generic .user-menu .dx-menu-item-content .dx-menu-item-text {
-  padding-left: 4px;
-  padding-right: 4px;
 }
 </style>

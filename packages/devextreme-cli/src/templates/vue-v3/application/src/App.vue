@@ -47,7 +47,7 @@ export default {
     const title = vm.proxy.$appInfo.title;
     const screen = reactive({ getScreenSizeInfo: {} });
     screen.getScreenSizeInfo = getScreenSizeInfo();
-    
+
     function screenSizeChanged () {
       screen.getScreenSizeInfo = getScreenSizeInfo();
     }
@@ -90,10 +90,9 @@ body {
 }
 
 .app {
-  @import "./themes/generated/variables.base.scss";
-  background-color: darken($base-bg, 5);
   display: flex;
   height: 100%;
   width: 100%;
+  min-width: 320px;
 }
 </style>

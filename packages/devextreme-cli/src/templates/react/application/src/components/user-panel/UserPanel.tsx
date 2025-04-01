@@ -1,18 +1,19 @@
-import React, { useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useNavigate } from "react-router-dom";
-import ContextMenu, { Position } from 'devextreme-react/context-menu';
+import DropDownButton from 'devextreme-react/drop-down-button';
 import List from 'devextreme-react/list';
 import { useAuth } from '../../contexts/auth';
 import './UserPanel.scss';
 <%=#isTypeScript%>import type { UserPanelProps } from '../../types';<%=/isTypeScript%>
 
 export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps<%=/isTypeScript%>) {
-  const { user, signOut } = useAuth();
+  const { signOut } = useAuth();
   const navigate = useNavigate();
 
   const navigateToProfile = useCallback(() => {
     navigate("/profile");
   }, [navigate]);
+
   const menuItems = useMemo(() => ([
     {
       text: 'Profile',
@@ -25,33 +26,29 @@ export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps
       onClick: signOut
     }
   ]), [navigateToProfile, signOut]);
-  return (
-    <div className={'user-panel'}>
-      <div className={'user-info'}>
-        <div className={'image-container'}>
-          <div
-            style={{
-              background: `url(${user<%=#isTypeScript%>!<%=/isTypeScript%>.avatarUrl}) no-repeat #fff`,
-              backgroundSize: 'cover'
-            }}
-            className={'user-image'} />
-        </div>
-        <div className={'user-name'}>{user<%=#isTypeScript%>!<%=/isTypeScript%>.email}</div>
-      </div>
 
+  const dropDownButtonAttributes = {
+    class: 'user-button'
+  };
+
+  const buttonDropDownOptions = {
+    width: '150px'
+  };
+
+  return (
+    <div className='user-panel'>
       {menuMode === 'context' && (
-        <ContextMenu
-          items={menuItems}
-          target={'.user-button'}
-          showEvent={'dxclick'}
-          width={210}
-          cssClass={'user-menu'}
-        >
-          <Position my={{ x: 'center', y: 'top' }} at={{ x: 'center', y: 'bottom' }} />
-        </ContextMenu>
+        <DropDownButton
+            stylingMode='text'
+            icon='https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
+            showArrowIcon={false}
+            elementAttr={dropDownButtonAttributes}
+            dropDownOptions={buttonDropDownOptions}
+            items={menuItems}>
+        </DropDownButton>
       )}
       {menuMode === 'list' && (
-        <List className={'dx-toolbar-menu-action'} items={menuItems} />
+        <List items={menuItems} />
       )}
     </div>
   );

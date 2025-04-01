@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import "devextreme/data/odata/store";
+import "devextreme-vue/common/data";
 import DxDataGrid, {
   DxColumn,
   DxFilterRow,
@@ -132,3 +132,8 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+.dx-datagrid-filter-row {
+  background-color: transparent;
+}
+</style>

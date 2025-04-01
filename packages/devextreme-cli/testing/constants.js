@@ -1,9 +1,9 @@
 // NOTE: All puppeteer devices: https://github.com/GoogleChrome/puppeteer/blob/master/lib/DeviceDescriptors.js
+const reactConfigs = require('./env.react');
 
 exports.envs = [
     require('./env.angular'),
-    require('./env.react'),
-    require('./env.react-ts'),
+    ...Object.values(reactConfigs),
     require('./env.vue-v3'),
 ];
 
@@ -29,7 +29,8 @@ exports.viewports = {
 
 exports.themes = {
     material: 'material.blue',
-    generic: 'generic'
+    generic: 'generic',
+    fluent: 'fluent.blue'
 };
 
 exports.layouts = [

@@ -38,14 +38,3 @@
     fill:  var(--plus-icon-color);
   }
 }
-
-:host-context(.screen-x-small) .logos-container {
-  svg {
-    width: 100%;
-    display: block;
-
-    &.plus {
-      margin: 0;
-    }
-  }
-}

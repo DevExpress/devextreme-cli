@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo, useContext } from 'react';
 import { TreeView<%=#isTypeScript%>, TreeViewRef<%=/isTypeScript%> } from 'devextreme-react/tree-view';
+import * as events from 'devextreme-react/common/core/events';
 import { navigation } from '../../app-navigation';
 import { useNavigation } from '../../contexts/navigation';
 import { useScreenSize } from '../../utils/media-query';
 import './SideNavigationMenu.scss';
 <%=#isTypeScript%>import type { SideNavigationMenuProps } from '../../types';<%=/isTypeScript%>
 
-import * as events from 'devextreme/events';
+import { ThemeContext } from '../../theme';
 
 export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsWithChildren<SideNavigationMenuProps><%=/isTypeScript%>) {
   const {
@@ -17,6 +18,7 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
     onMenuReady
   } = props;
 
+  const theme = useContext(ThemeContext);
   const { isLarge } = useScreenSize();
   function normalizePath () {
     return navigation.map((item) => (
@@ -33,7 +35,7 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
   const { navigationData: { currentPath } } = useNavigation();
 
   const treeViewRef = useRef<%=#isTypeScript%><TreeViewRef><%=/isTypeScript%>(null);
-  const wrapperRef = useRef<%=#isTypeScript%><HTMLDivElement><%=/isTypeScript%>();
+  const wrapperRef = useRef<%=#isTypeScript%><HTMLDivElement><%=/isTypeScript%>(null);
   const getWrapperRef = useCallback((element<%=#isTypeScript%>: HTMLDivElement<%=/isTypeScript%>) => {
     const prevElement = wrapperRef.current;
     if (prevElement) {
@@ -64,7 +66,7 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
 
   return (
     <div
-      className={'dx-swatch-additional side-navigation-menu'}
+      className={`dx-swatch-additional${theme?.isDark() ? '-dark' : ''} side-navigation-menu`}
       ref={getWrapperRef}
     >
       {children}

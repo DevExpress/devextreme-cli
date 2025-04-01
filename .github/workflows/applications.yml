@@ -5,9 +5,9 @@ on:
   pull_request:
   workflow_call:
     inputs:
-      external-tools-version:
-        description: 'Version of external tools'
-        default: latest
+      deps-version-tag:
+        description: 'Version tag of scaffolder and framework'
+        default: ''
         required: false
         type: string
 
@@ -20,9 +20,10 @@ jobs:
           - angular
           - vue-v3
           - react
+          - react-swc
           - react-ts
+          - react-swc-ts
         NODE:
-          - 16
           - 18
         OS:
           - ubuntu-latest
@@ -31,14 +32,14 @@ jobs:
     runs-on: ${{ matrix.OS }}
     env:
       VUE_CLI_CONFIG_PATH: $GITHUB_WORKSPACE/.vuerc
-      TOOLING_VERSION_PARAM: ${{ inputs.external-tools-version != '' && format('--tooling-version {0}', inputs.external-tools-version) || '' }}
+      DEPS_VERSION_TAG_PARAM: ${{ inputs.deps-version-tag != '' && format('--deps-version-tag {0}', inputs.deps-version-tag) || '' }}
 
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}, ${{ matrix.OS }}
 
     steps:
 
     - name: Get sources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Run npm install
       env:
@@ -49,8 +50,11 @@ jobs:
       id: setup-chrome
     - run: ${{ steps.setup-chrome.outputs.chrome-path }} --version
 
+    - name: Set Legacy-peer-deps=true
+      run: npm config set legacy-peer-deps true
+
     - name: Create ${{ matrix.APPROACH }} application
-      run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
+      run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
       timeout-minutes: 30
 
     - name: Install Internal Packages
@@ -60,37 +64,50 @@ jobs:
 
     - name: Lint created application
       if: ${{ matrix.OS != 'windows-latest' }}
-      run: npm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
+      run: npm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
 
     - name: Run template tests
       if: ${{ matrix.OS != 'windows-latest' }}
       env:
         LAUNCH_BROWSER: true
         CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-      run: npm run test-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
+      run: npm run test-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
       timeout-minutes: 40
 
     - name: Archive artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: artifacts
+        name: app-tests-artifacts-${{ matrix.APPROACH }}-${{ matrix.NODE }}-${{ matrix.OS }}
         path: |
           test-results.xml
           packages/devextreme-cli/testing/__tests__/__diff_snapshots__
           packages/devextreme-cli/testing/sandbox/logs
+
+  merge-artifacts:
+    runs-on: ubuntu-latest
+    needs: application-test
+    if: ${{ failure() && !cancelled() }}
+    steps:
+    - name: Merge Artifacts
+      uses: actions/upload-artifact/merge@v4
+      continue-on-error: true
+      with:
+        name: artifacts
+        pattern: app-tests-artifacts-*
+        delete-merged: true
 
   schematics-test:
     runs-on: ubuntu-latest
     steps:
 
       - name: Get sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js and restore cache
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
 

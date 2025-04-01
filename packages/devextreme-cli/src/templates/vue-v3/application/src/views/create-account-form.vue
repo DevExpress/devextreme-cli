@@ -46,13 +46,6 @@
         >
         </dx-button-options>
       </dx-button-item>
-      <dx-item>
-        <template #default>
-          <div class="login-link">
-            Have an account? <router-link to="/login-form">Sign In</router-link>
-          </div>
-        </template>
-      </dx-item>
       <template #createAccount>
         <div>
           <span class="dx-button-text">
@@ -62,6 +55,9 @@
         </div>
       </template>
     </dx-form>
+    <div class="login-link">
+      Have an account? <router-link to="/login-form">Sign In</router-link>
+    </div>
   </form>
 </template>
 
@@ -96,7 +92,7 @@ export default {
   },
   setup() {
     const router = useRouter();
-    
+
     const loading = ref(false);
     const formData = reactive({
       email:"",
@@ -104,52 +100,51 @@ export default {
     });
 
     const onSubmit = async () => {
-    const { email, password } = formData;
-    loading.value = true;
+      const { email, password } = formData;
+      loading.value = true;
 
-    const result = await auth.createAccount(email, password);
-    loading.value = false;
+      const result = await auth.createAccount(email, password);
+      loading.value = false;
 
-    if (result.isOk) {
-      router.push("/login-form");
-    } else {
-      notify(result.message, 'error', 2000);
-    }
-  };
+      if (result.isOk) {
+        router.push("/login-form");
+      } else {
+        notify(result.message, 'error', 2000);
+      }
+    };
 
     function confirmPassword(e) {
       return e.value === formData.password;
     }
-    
+
     return {
-        formData,
-        loading,
-        onSubmit,
-        confirmPassword
+      formData,
+      loading,
+      onSubmit,
+      confirmPassword
     }
   }
 }
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
-
 .create-account-form {
   .policy-info {
-    margin: 10px 0;
-    color: rgba($base-text-color, alpha($base-text-color) * 0.7);
-    font-size: 14px;
+    color: var(--base-text-color-alpha-7);
+    font-size: 12px;
     font-style: normal;
 
     a {
-      color: rgba($base-text-color, alpha($base-text-color) * 0.7);
+      color: var(--base-text-color-alpha-7);
     }
   }
 
   .login-link {
-    color: $base-accent;
-    font-size: 16px;
+    color: var(--base-accent);
+    font-size: 12px;
     text-align: center;
+    padding: 6px 0 32px 0;
+    border-bottom: 1px solid var(--border-color);
   }
 }
 </style>

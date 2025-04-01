@@ -73,20 +73,20 @@
             />
             <g class="vue-logo-text">
               <path
-                style="fill:#35495E;"
+                style="fill:currentColor;"
                 d="M77.2,15c0-0.4,0.2-0.8,0.7-1c0.5-0.3,0.9-0.4,1.4-0.4c0.7,0,1.1,0.3,1.3,0.8l7.2,24.4L95,14.4
                 c0.2-0.5,0.6-0.8,1.2-0.8c0.5,0,1,0.1,1.4,0.4c0.4,0.3,0.7,0.6,0.7,1c0,0,0,0.1,0,0.1c0,0.1,0,0.1,0,0.2l-8.3,27.3
                 c-0.3,0.8-1,1.2-2.1,1.2s-1.8-0.4-2.1-1.2l-8.4-27.3C77.2,15.2,77.2,15.1,77.2,15z"
               />
               <path
-                style="fill:#35495E;"
+                style="fill:currentColor;"
                 d="M99.8,36V25.4c0-0.3,0.2-0.6,0.5-0.9c0.3-0.2,0.7-0.4,1.2-0.4c0.4,0,0.8,0.1,1.2,0.4
                 s0.5,0.5,0.5,0.8V36c0,1.2,0.5,2.3,1.4,3.3c0.9,1,2,1.5,3.3,1.5c1.3,0,2.4-0.5,3.3-1.5c0.9-1,1.4-2.1,1.4-3.3V25.3
                 c0-0.3,0.2-0.6,0.5-0.8c0.3-0.2,0.7-0.4,1.2-0.4c0.5,0,0.9,0.1,1.2,0.3c0.3,0.2,0.5,0.5,0.5,0.8V36c0,2.1-0.8,3.9-2.4,5.5
                 c-1.6,1.6-3.5,2.4-5.7,2.4c-2.2,0-4.1-0.8-5.7-2.4C100.6,40,99.8,38.1,99.8,36z"
               />
               <path
-                style="fill:#35495E;"
+                style="fill:currentColor;"
                 d="M119.9,35.9v-4.3c0-2.1,0.8-3.9,2.4-5.5c1.6-1.5,3.5-2.3,5.8-2.3c2.1,0,4,0.7,5.5,2.1
                 s2.3,3.2,2.3,5.4c0,0.8-0.1,1.4-0.3,1.9s-0.5,0.8-0.9,1c-0.4,0.2-0.8,0.3-1.1,0.4s-0.8,0.1-1.4,0.1h-9v1.2c0,1.5,0.5,2.7,1.6,3.6
                 c1.1,0.9,2.5,1.4,4.2,1.4c0.9,0,1.7-0.1,2.4-0.4c0.7-0.3,1.2-0.5,1.6-0.8c0.4-0.3,0.7-0.4,1-0.4c0.4,0,0.7,0.2,1,0.5
@@ -95,12 +95,12 @@
                 c-0.9,0.9-1.4,1.9-1.4,3.2V32.5z"
               />
               <path
-                style="fill:#35495E;"
+                style="fill:currentColor;"
                 d="M138.8,41.9c0-0.5,0.2-1,0.6-1.4c0.4-0.4,0.9-0.6,1.5-0.6c0.6,0,1.1,0.2,1.5,0.6
                 c0.4,0.4,0.6,0.8,0.6,1.4c0,0.5-0.2,1-0.6,1.4s-0.9,0.6-1.5,0.6c-0.6,0-1.1-0.2-1.5-0.6S138.8,42.4,138.8,41.9z"
               />
               <path
-                style="fill:#35495E;"
+                style="fill:currentColor;"
                 d="M143,51.4c0-0.5,0.1-0.8,0.4-1.1c0.3-0.3,0.6-0.4,1-0.4c1.1,0,1.8-0.4,2.1-1.2
                 c0.3-0.8,0.5-2,0.5-3.6V25.3c0-0.4,0.2-0.6,0.5-0.9c0.3-0.2,0.7-0.3,1.2-0.3c0.5,0,0.9,0.1,1.2,0.3c0.3,0.2,0.5,0.5,0.5,0.9v19.9
                 c0,2.4-0.5,4.3-1.4,5.7c-0.9,1.4-2.3,2.1-4.2,2.1C143.6,53,143,52.4,143,51.4z M147.2,18.2c-0.4-0.4-0.6-0.9-0.6-1.4
@@ -108,7 +108,7 @@
                 c-0.4,0.4-0.9,0.6-1.5,0.6C148.1,18.8,147.6,18.6,147.2,18.2z"
               />
               <path
-                style="fill:#35495E;"
+                style="fill:currentColor;"
                 d="M154.1,40.8c0-0.4,0.1-0.7,0.3-1c0.2-0.3,0.5-0.5,0.8-0.5c0.2,0,0.5,0.2,0.9,0.5s1,0.7,1.8,1
                 c0.8,0.3,1.7,0.5,2.7,0.5c1.4,0,2.4-0.2,3-0.7s0.9-1.1,0.9-1.9c0-0.9-0.3-1.6-1-2.2c-0.7-0.5-1.5-0.9-2.5-1.2c-1-0.3-2-0.6-3-0.9
                 s-1.8-0.9-2.5-1.7c-0.7-0.8-1-1.8-1-3.1c0-1.5,0.6-2.9,1.7-4c1.1-1.1,2.8-1.7,5.1-1.7c1.4,0,2.8,0.2,4,0.7c1.2,0.4,1.8,0.9,1.8,1.5
@@ -123,7 +123,7 @@
         <p>
           Thanks for using the DevExtreme Vue App Template.
         </p>
-        <p>This application was built using <a href="https://cli.vuejs.org/" target="_blank" rel="noopener noreferrer">Vue CLI</a> 
+        <p>This application was built using <a href="https://cli.vuejs.org/" target="_blank" rel="noopener noreferrer">Vue CLI</a>
           and <a href="https://js.devexpress.com/Documentation/Guide/Common/DevExtreme_CLI/" target="_blank" rel="noopener noreferrer">DevExtreme CLI</a>
           and includes the following DevExtreme components:</p>
         <ul>
@@ -157,7 +157,7 @@
           </li>
         </ul>
          <p>
-          For technical content related to DevExtreme Vue components, feel free to explore 
+          For technical content related to DevExtreme Vue components, feel free to explore
           our <a href="https://js.devexpress.com/documentation/" target="_blank" rel="noopener noreferrer">online documentation</a>
           and <a href="https://js.devexpress.com/Demos/Widgetsgallery/" target="_blank" rel="noopener noreferrer">technical demos</a>.
         </p>
@@ -209,16 +209,6 @@
 
   path {
     fill:  var(--plus-icon-color);
-  }
-}
-
-.screen-x-small .logos-container {
-  svg {
-    width: 100%;
-    display: block;
-    &.plus {
-      margin: 0;
-    }
   }
 }
 </style>

@@ -20,18 +20,19 @@ describe('layout', () => {
     routing: false,
     style: 'scss',
     skipTests: false,
-    skipPackageJson: false
+    skipPackageJson: false,
+    standalone: false
   };
 
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
-    version: '16.0.0'
+    version: '17.0.0'
   };
 
   const options: any = {
     layout: 'side-nav-outer-toolbar',
     resolveConflicts: 'override',
-    globalNgCliVersion: '^16.2.0'
+    globalNgCliVersion: '^17.2.0'
   };
 
   const angularSchematicsCollection = require.resolve('../../node_modules/@schematics/angular/collection.json');
@@ -95,8 +96,10 @@ describe('layout', () => {
     const styles = angularContent.projects.testApp.architect.build.options.styles;
 
     expect(styles[0]).toBe('node_modules/devextreme/dist/css/dx.common.css');
-    expect(styles[1]).toBe('src/themes/generated/theme.base.css');
-    expect(styles[2]).toBe('src/themes/generated/theme.additional.css');
+    expect(styles[1]).toBe('src/themes/generated/theme.base.dark.css');
+    expect(styles[2]).toBe('src/themes/generated/theme.base.css');
+    expect(styles[3]).toBe('src/themes/generated/theme.additional.dark.css');
+    expect(styles[4]).toBe('src/themes/generated/theme.additional.css');
 
     const moduleContent = tree.readContent('/src/app/app.module.ts');
     expect(moduleContent).toContain('import { DxHttpModule }');
@@ -179,7 +182,7 @@ describe('layout', () => {
     const tree = await runner.runSchematic('add-layout', options, appTree);
     const packageConfig = JSON.parse(tree.readContent('package.json'));
 
-    expect(packageConfig.dependencies['@angular/cdk']).toBe('~16.2.0');
+    expect(packageConfig.dependencies['@angular/cdk']).toBe('~17.2.0');
   });
 
   it('should update budgets if updateBudgets option is true', async () => {
@@ -229,7 +232,7 @@ describe('layout', () => {
 
     const appContent = tree.readContent('/src/app/app.component.ts');
     expect(appContent).toMatch(/templateUrl: '.\/app.component.html',/);
-    expect(appContent).toMatch(/styleUrls: \['.\/app.component.scss'\]/);
+    expect(appContent).toMatch(/styleUrl: '.\/app.component.scss'/);
 
     const newAppContent = tree.readContent('/src/app/app1.component.ts');
     expect(newAppContent).toMatch(/templateUrl: '.\/app1.component.html',/);
@@ -277,7 +280,8 @@ describe('layout', () => {
     appTree = await schematicRunner.runSchematic('application', {
       ...appOptions,
       name: 'testApp2',
-      projectRoot: 'projects/testApp2'
+      projectRoot: 'projects/testApp2',
+      standalone: false
     }, appTree);
 
     const runner = new SchematicTestRunner('schematics', collectionPath);
@@ -297,7 +301,8 @@ describe('layout', () => {
       ...appOptions,
       name: 'testApp2',
       prefix: 'app2',
-      projectRoot: 'projects/testApp2'
+      projectRoot: 'projects/testApp2',
+      standalone: false
     }, appTree);
 
     const runner = new SchematicTestRunner('schematics', collectionPath);

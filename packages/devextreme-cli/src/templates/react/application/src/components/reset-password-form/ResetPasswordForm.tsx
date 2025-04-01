@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import <%=#isTypeScript%>React, <%=/isTypeScript%>{ useState, useRef, useCallback } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Form, {
   Item,
@@ -20,7 +20,7 @@ export default function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
   const formData = useRef({ email: '', password: '' });
 
-  const onSubmit = useCallback(async (e<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
+  const onSubmit = useCallback(async (e<%=#isTypeScript%>: React.FormEvent<HTMLFormElement><%=/isTypeScript%>) => {
     e.preventDefault();
     const { email } = formData.current;
     setLoading(true);
@@ -64,12 +64,10 @@ export default function ResetPasswordForm() {
             </span>
           </ButtonOptions>
         </ButtonItem>
-        <Item>
-          <div className={'login-link'}>
-            Return to <Link to={'/login'}>Sign In</Link>
-          </div>
-        </Item>
       </Form>
+      <div className={'login-link'}>
+        Return to <Link to={'/login'}>Sign In</Link>
+      </div>
     </form>
   );
 }
