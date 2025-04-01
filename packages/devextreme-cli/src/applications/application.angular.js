@@ -125,7 +125,7 @@ const changeMainTs = (appPath) => {
     moduleWorker.insertImport(filePath, 'devextreme/ui/themes', 'themes', true);
 
     const fileContent = fs.readFileSync(filePath).toString();
-    const bootstrapPattern = /platformBrowserDynamic\(\)\.bootstrapModule\(\s*AppModule\s*(?:,\s*\{[^}]*\})?\s*\)/;
+    const bootstrapPattern = /platformBrowser(?:Dynamic)?\(\)\.bootstrapModule\(\s*AppModule\s*(?:,\s*\{[^}]*\})?\s*\)/;
     const firstChaptStr = fileContent.match(bootstrapPattern)[0];
     const lastChaptStr = '.catch(err => console.error(err));';
 
