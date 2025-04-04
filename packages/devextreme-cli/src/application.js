@@ -1,5 +1,6 @@
 const angularApplication = require('./applications/application.angular');
 const reactApplication = require('./applications/application.react');
+const nextApplication = require('./applications/application.next');
 const vueApplication = require('./applications/application.vue');
 const printHelp = require('./help').printHelp;
 
@@ -24,6 +25,9 @@ const run = async(commands, options, devextremeConfig) => {
                 return;
             case 'react-app':
                 await reactApplication.create(appName, options);
+                return;
+            case 'next-app':
+                await nextApplication.create(appName, options);
                 return;
             case 'vue-app':
                 await vueApplication.create(appName, options);
