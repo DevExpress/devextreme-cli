@@ -19,19 +19,17 @@ const defaultStyles = [
 ];
 
 const getExtension = (appPath) => {
-    return fs.existsSync(path.join(appPath, 'src', 'App.tsx')) ? '.tsx' : '.jsx';
+    return fs.existsSync(path.join(appPath, 'src/app', 'page.tsx')) ? '.tsx' : '.jsx';
 };
 
 const pathToPagesIndex = () => {
     const extension = getExtension(process.cwd());
-    return path.join(process.cwd(), 'src', 'pages', `index${extension}`);
+    return path.join(process.cwd(), 'src', 'views', `index${extension}`);
 };
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
-        { name: 'sass-embedded', version: '^1.85.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
-        { name: 'react-router-dom', version: '^6.3.0' },
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
@@ -75,13 +73,13 @@ const create = async(appName, options) => {
 
     const commandArguments = [`-p=create-next-app@${depsVersionTag || latestVersions['create-next-app']}`, 'create-next-app', appName];
 
-    commandArguments.push(`${templateOptions.isTypeScript ? '-ts' : ''}`);
+    commandArguments.push(`${templateOptions.isTypeScript ? '--typescript' : '--javascript'}`);
     commandArguments.push('--no-eslint');
     commandArguments.push('--no-tailwind');
     commandArguments.push('--src-dir');
     commandArguments.push('--app');
-    commandArguments.push('--no-turbo');
-    commandArguments.push('--import-alias ""');
+    commandArguments.push('--no-turbopack');
+    commandArguments.push('--import-alias "@/*"');
 
     await runCommand('npx', commandArguments);
 
@@ -112,23 +110,27 @@ const getCorrectPath = (extension, pathToApp, isTypeScript) => {
 
 const addTemplate = (appPath, appName, templateOptions) => {
     const applicationTemplatePath = path.join(
-        templateCreator.getTempaltePath('react'),
+        templateCreator.getTempaltePath('nextjs'),
         'application'
     );
 
     const manifestPath = path.join(appPath, 'public', 'manifest.json');
 
     const styles = [
-        './themes/generated/theme.additional.css',
-        './themes/generated/theme.additional.dark.css',
-        './themes/generated/theme.base.css',
-        './themes/generated/theme.base.dark.css',
+        '../dx-styles.scss',
+        '../themes/generated/theme.additional.css',
+        '../themes/generated/theme.additional.dark.css',
+        '../themes/generated/theme.base.css',
+        '../themes/generated/theme.base.dark.css',
         'devextreme/dist/css/dx.common.css'
     ];
 
     templateCreator.moveTemplateFilesToProject(applicationTemplatePath, appPath, templateOptions, getCorrectPath);
 
     !templateOptions.isTypeScript && removeFile(path.join(appPath, 'src', 'types.jsx'));
+    removeFile(path.join(appPath, 'src/app', 'page.js'));
+    removeFile(path.join(appPath, 'src/app', 'layout.js'));
+    removeFile(path.join(appPath, 'src/app', 'globals.scss'));
 
     if(!templateOptions.empty) {
         addSamplePages(appPath, templateOptions);
@@ -136,13 +138,13 @@ const addTemplate = (appPath, appName, templateOptions) => {
 
     preparePackageJsonForTemplate(appPath, appName, templateOptions.isTypeScript);
     updateJsonPropName(manifestPath, appName);
-    install({}, appPath, styles);
+    install({ isTypeScript: templateOptions.isTypeScript }, appPath, styles);
 };
 
 const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
 
-    const pathToMainComponent = path.join(appPath, 'src', `App${getExtension(appPath)}`);
+    const pathToMainComponent = path.join(appPath, 'src/app', `layout.${options.isTypeScript ? 'tsx' : 'jsx'}`);
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
@@ -168,7 +170,7 @@ const getNavigationData = (viewName, componentName, icon) => {
 };
 
 const createPathToPage = (pageName) => {
-    const pagesPath = path.join(process.cwd(), 'src', 'pages');
+    const pagesPath = path.join(process.cwd(), 'src', 'views');
     const newPagePath = path.join(pagesPath, pageName);
 
     if(!fs.existsSync(pagesPath)) {
@@ -185,12 +187,12 @@ const createPathToPage = (pageName) => {
 
 const addSamplePages = (appPath, templateOptions) => {
     const samplePageTemplatePath = path.join(
-        templateCreator.getTempaltePath('react'),
+        templateCreator.getTempaltePath('nextjs'),
         'sample-pages'
     );
 
-    const pagesPath = path.join(appPath, 'src', 'pages');
-    fs.mkdirSync(pagesPath);
+    const pagesPath = path.join(appPath, 'src', 'app');
+    // fs.mkdirSync(pagesPath);
     templateCreator.moveTemplateFilesToProject(samplePageTemplatePath, pagesPath, {
         isTypeScript: templateOptions.isTypeScript
     }, getCorrectPath);
@@ -198,7 +200,7 @@ const addSamplePages = (appPath, templateOptions) => {
 
 const addView = (pageName, options) => {
     const pageTemplatePath = path.join(
-        templateCreator.getTempaltePath('react'),
+        templateCreator.getTempaltePath('nextjs'),
         'page'
     );
     const extension = getExtension(process.cwd());
@@ -214,7 +216,7 @@ const addView = (pageName, options) => {
     };
     templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath, getCorrectExtension);
     moduleUtils.insertExport(pathToPagesIndex(), componentName, `./${pageName}/${pageName}`);
-    moduleUtils.insertImport(routingModulePath, './pages', componentName);
+    moduleUtils.insertImport(routingModulePath, './views', componentName);
     insertItemToArray(routingModulePath, navigationData.route);
     insertItemToArray(navigationModulePath, navigationData.navigation);
 };

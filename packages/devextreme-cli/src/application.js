@@ -1,6 +1,6 @@
 const angularApplication = require('./applications/application.angular');
 const reactApplication = require('./applications/application.react');
-const nextApplication = require('./applications/application.next');
+const nextjsApplication = require('./applications/application.nextjs');
 const vueApplication = require('./applications/application.vue');
 const printHelp = require('./help').printHelp;
 
@@ -26,8 +26,8 @@ const run = async(commands, options, devextremeConfig) => {
             case 'react-app':
                 await reactApplication.create(appName, options);
                 return;
-            case 'next-app':
-                await nextApplication.create(appName, options);
+            case 'nextjs-app':
+                await nextjsApplication.create(appName, options);
                 return;
             case 'vue-app':
                 await vueApplication.create(appName, options);
@@ -58,23 +58,16 @@ const run = async(commands, options, devextremeConfig) => {
                 return;
             }
 
-            if(devextremeConfig.applicationEngine === 'angular') {
+            const app = {
+                'angular': angularApplication,
+                'react': reactApplication,
+                'nextjs': nextjsApplication,
+                'vue': vueApplication,
+            }[devextremeConfig.applicationEngine];
+
+            if(app) {
                 if(commands[1] === 'view') {
-                    angularApplication.addView(commands[2], options);
-                } else {
-                    console.error('Invalid command');
-                    printHelp(commands[0]);
-                }
-            } else if(devextremeConfig.applicationEngine === 'react') {
-                if(commands[1] === 'view') {
-                    reactApplication.addView(commands[2], options);
-                } else {
-                    console.error('Invalid command');
-                    printHelp(commands[0]);
-                }
-            } else if(devextremeConfig.applicationEngine === 'vue') {
-                if(commands[1] === 'view') {
-                    vueApplication.addView(commands[2], options);
+                    app.addView(commands[2], options);
                 } else {
                     console.error('Invalid command');
                     printHelp(commands[0]);

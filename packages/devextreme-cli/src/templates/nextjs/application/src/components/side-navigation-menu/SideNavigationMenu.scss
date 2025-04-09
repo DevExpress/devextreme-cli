@@ -1,0 +1,76 @@
+@use "../../dx-styles" as *;
+@use  "../../utils/patches";
+
+.dx-swatch-additional, .dx-swatch-additional-dark {
+  &.side-navigation-menu {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    height: 100%;
+    width: 250px !important;
+    background-color: var(--base-bg);
+
+    .menu-container {
+      min-height: 100%;
+      display: flex;
+      flex: 1;
+
+      .dx-treeview {
+        // ## Long text positioning
+        white-space: nowrap;
+        // ##
+
+        .dx-treeview-node-container:empty {
+          display: none;
+        }
+
+        // ## Icon width customization
+        .dx-treeview-item {
+          padding-left: 0;
+          border-radius: 0;
+          flex-direction: row-reverse;
+
+          .dx-icon {
+            width: $side-panel-min-width !important;
+            margin: 0 !important;
+          }
+        }
+
+        // ##
+
+        // ## Arrow customization
+        .dx-treeview-node {
+          padding: 0 0 !important;
+        }
+
+        .dx-treeview-toggle-item-visibility {
+          right: 10px;
+          left: auto;
+        }
+
+        .dx-rtl .dx-treeview-toggle-item-visibility {
+          left: 10px;
+          right: auto;
+        }
+        // ##
+
+        // ## Item levels customization
+        .dx-treeview-node {
+          &[aria-level="1"] {
+            font-weight: bold;
+          }
+
+          &[aria-level="2"] .dx-treeview-item-content {
+            font-weight: normal;
+            padding: 0 $side-panel-min-width;
+          }
+        }
+        // ##
+      }
+    }
+  }
+}
+
+.dx-drawer-overlap.pre-init-blink-fix {
+  @include patches.menu-pre-init-patch;
+}

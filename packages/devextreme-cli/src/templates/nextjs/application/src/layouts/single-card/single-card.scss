@@ -1,0 +1,42 @@
+.single-card {
+  width: 100%;
+  height: 100%;
+
+  .dx-card {
+    width: 360px;
+    margin: auto auto;
+    padding: 24px;
+    flex-grow: 0;
+    border-radius: 8px;
+
+    .screen-x-small & {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      box-shadow: none;
+      margin: 0;
+      border: 0;
+      flex-grow: 1;
+    }
+
+    .header {
+      margin: 24px 0;
+
+      .title {
+        color: var(--base-text-color);
+        font-weight: 500;
+        font-size: 24px;
+        text-align: center;
+        line-height: 24px;
+      }
+
+      .description {
+        color: var(--base-text-color-alpha-7);
+        line-height: 16px;
+        font-size: 12px;
+        margin-top: 32px;
+        text-align: center;
+      }
+    }
+  }
+}

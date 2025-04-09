@@ -29,7 +29,7 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
         await runCommand('node', [
             path.join(process.cwd(), './index.js'),
             'new',
-            'next-app',
+            'nextjs-app',
             `--template=${template}`,
             '--layout=side-nav-outer-toolbar',
             ...additionalArguments
@@ -63,28 +63,26 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
 }
 
 
-const nextJs = {
+const nextjsJs = {
     ...getConfig({
-        engine: 'react',
+        engine: 'nextjs',
         template: 'javascript',
         templateExtension: 'jsx',
         fileExtension: 'jsx',
-        transpiler: 'babel',
     }),
 };
 
-const nextTs = {
+const nextjsTs = {
     ...getConfig({
-        engine: 'react-ts',
+        engine: 'nextjs-ts',
         template: 'typescript',
         templateExtension: 'tsx',
         fileExtension: 'ts',
-        transpiler: 'babel',
     })
 };
 
 
 module.exports = {
-    nextJs,
-    nextTs,
+    nextjsJs,
+    nextjsTs,
 };
