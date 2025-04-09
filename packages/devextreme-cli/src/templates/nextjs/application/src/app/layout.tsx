@@ -22,7 +22,7 @@ function Page({ children }) {
   if (loading) {
     return <LoadPanel visible={true} />;
   } else if (user) {
-    return <Content>{}</Content>;
+    return <Content>{children}</Content>;
   }
 
   return children;
