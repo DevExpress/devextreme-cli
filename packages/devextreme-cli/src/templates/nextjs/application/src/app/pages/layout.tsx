@@ -1,9 +1,21 @@
 'use client'
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth';
 import appInfo from '@/app-info';
 import { Footer } from '@/components';
 import { <%=layout%> as SideNavBarLayout } from '@/layouts';
 
 export default function Content({children}) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/auth/login');
+    }
+  }, [user, loading, router]);
+
   return (
     <SideNavBarLayout title={appInfo.title}>
       {children}

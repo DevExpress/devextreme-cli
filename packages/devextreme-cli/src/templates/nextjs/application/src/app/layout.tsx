@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import LoadPanel from 'devextreme-react/load-panel';
 import { AuthProvider, useAuth} from '../contexts/auth';
 import { NavigationProvider } from '../contexts/navigation';
@@ -9,14 +8,7 @@ import { useScreenSizeClass } from '../utils/media-query';
 import { ThemeContext, useThemeContext} from "../theme";
 
 function Page({ children }) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/auth/login');
-    }
-  }, [user, loading, router]);
+  const { loading } = useAuth();
 
   if (loading) {
     return <LoadPanel visible={true} />;
@@ -33,7 +25,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
     <title>NextJs Dx App</title>
-      <body class="dx-viewport">
+      <body className="dx-viewport">
         <ThemeContext.Provider value={themeContext}>
           <AuthProvider>
             <NavigationProvider>
