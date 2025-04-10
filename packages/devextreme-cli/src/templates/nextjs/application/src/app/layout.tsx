@@ -20,8 +20,6 @@ function Page({ children }) {
 
   if (loading) {
     return <LoadPanel visible={true} />;
-  } else if (user) {
-    return children;
   }
 
   return children;
@@ -30,15 +28,7 @@ function Page({ children }) {
 export default function RootLayout({ children }) {
   const screenSizeClass = useScreenSizeClass();
   const themeContext = useThemeContext();
-
   const pathname  = usePathname ();
-  const router = useRouter();
-
-  useEffect(() => {
-    if(pathname === '/') {
-      router.push('/pages/home')
-    }
-  }, [pathname]);
 
   return (
     <html lang="en">
