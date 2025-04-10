@@ -12,7 +12,7 @@ export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps
   const router = useRouter();
 
   const navigateToProfile = useCallback(() => {
-    router.push("/profile");
+    router.push("/pages/profile");
   }, [router]);
 
   const menuItems = useMemo(() => ([

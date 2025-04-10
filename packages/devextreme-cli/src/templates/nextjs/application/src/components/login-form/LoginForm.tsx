@@ -36,7 +36,7 @@ export default function LoginForm() {
   }, [signIn]);
 
   const onCreateAccountClick = useCallback(() => {
-    router.push('/create-account');
+    router.push('/auth/create-account');
   }, [router]);
 
   return (
@@ -83,7 +83,7 @@ export default function LoginForm() {
         </ButtonItem>
       </Form>
       <div className={'link'}>
-        <Link href={'/reset-password'}>Forgot password?</Link>
+        <Link href={'/auth/reset-password'}>Forgot password?</Link>
       </div>
       <Button
         text={'Create an account'}

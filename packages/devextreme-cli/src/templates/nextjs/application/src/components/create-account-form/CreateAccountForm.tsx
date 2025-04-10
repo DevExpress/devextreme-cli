@@ -96,7 +96,7 @@ export default function CreateAccountForm() {
         </ButtonItem>
       </Form>
       <div className={'login-link'}>
-        Have an account? <Link href={'/login'}>Sign In</Link>
+        Have an account? <Link href={'/auth/login'}>Sign In</Link>
       </div>
     </form>
   );

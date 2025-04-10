@@ -71,35 +71,36 @@ const create = async(appName, options) => {
     });
     const depsVersionTag = extractDepsVersionTag(options);
 
-    const commandArguments = [`-p=create-next-app@${depsVersionTag || latestVersions['create-next-app']}`, 'create-next-app', appName];
+    let commandArguments = [`-p=create-next-app@${depsVersionTag || latestVersions['create-next-app']}`, 'create-next-app', appName];
 
-    commandArguments.push(`${templateOptions.isTypeScript ? '--typescript' : '--javascript'}`);
-    commandArguments.push('--no-eslint');
-    commandArguments.push('--no-tailwind');
-    commandArguments.push('--src-dir');
-    commandArguments.push('--app');
-    commandArguments.push('--no-turbopack');
-    commandArguments.push('--import-alias "@/*"');
+    commandArguments = [
+        ...commandArguments,
+        `${templateOptions.isTypeScript ? '--typescript' : '--javascript'}`,
+        '--no-eslint',
+        '--no-tailwind',
+        '--src-dir',
+        '--app',
+        '--no-turbopack',
+        '--import-alias "@/*"'
+    ];
 
     await runCommand('npx', commandArguments);
 
     const appPath = path.join(process.cwd(), appName);
-
-    modifyIndexHtml(appPath, templateOptions.project);
 
     if(depsVersionTag) {
         bumpReact(appPath, depsVersionTag);
     }
 
     addTemplate(appPath, appName, templateOptions);
+    modifyIndexHtml(appPath, templateOptions);
 };
 
-const modifyIndexHtml = (appPath, appName) => {
-    const indexHtmlPath = path.join(appPath, 'index.html');
+const modifyIndexHtml = (appPath, { project, isTypeScript }) => {
+    const indexHtmlPath = path.join(appPath, `src/app/layout.${isTypeScript ? 'tsx' : 'jsx'}`);
 
     let htmlContent = fs.readFileSync(indexHtmlPath).toString();
-    htmlContent = htmlContent.replace(/<title>[^<]+<\/title>/, `<title>${appName}<\/title>`);
-    htmlContent = htmlContent.replace('<body>', '<body class="dx-viewport">');
+    htmlContent = htmlContent.replace(/<title>[^<]+<\/title>/, `<title>${project}<\/title>`);
 
     fs.writeFileSync(indexHtmlPath, htmlContent);
 };
@@ -164,25 +165,24 @@ const getComponentPageName = (viewName) => {
 const getNavigationData = (viewName, componentName, icon) => {
     const pagePath = stringUtils.dasherize(viewName);
     return {
-        route: `\n  {\n    path: \'/${pagePath}\',\n    element: ${componentName}\n  }`,
-        navigation: `\n  {\n    text: \'${stringUtils.humanize(viewName)}\',\n    path: \'/${pagePath}\',\n    icon: \'${icon}\'\n  }`
+        navigation: `\n  {\n    text: \'${stringUtils.humanize(viewName)}\',\n    path: \'/pages/${pagePath}\',\n    icon: \'${icon}\'\n  }`
     };
 };
 
 const createPathToPage = (pageName) => {
-    const pagesPath = path.join(process.cwd(), 'src', 'views');
-    const newPagePath = path.join(pagesPath, pageName);
+    const pagesPath = path.join(process.cwd(), 'src', 'app/pages');
+    const newPageFolderPath = path.join(pagesPath, pageName);
 
     if(!fs.existsSync(pagesPath)) {
         fs.mkdirSync(pagesPath);
         fs.writeFileSync(pathToPagesIndex(), '');
     }
 
-    if(!fs.existsSync(newPagePath)) {
-        fs.mkdirSync(newPagePath);
+    if(!fs.existsSync(newPageFolderPath)) {
+        fs.mkdirSync(newPageFolderPath);
     }
 
-    return newPagePath;
+    return newPageFolderPath;
 };
 
 const addSamplePages = (appPath, templateOptions) => {
@@ -191,7 +191,7 @@ const addSamplePages = (appPath, templateOptions) => {
         'sample-pages'
     );
 
-    const pagesPath = path.join(appPath, 'src', 'app');
+    const pagesPath = path.join(appPath, 'src', 'app/pages');
     // fs.mkdirSync(pagesPath);
     templateCreator.moveTemplateFilesToProject(samplePageTemplatePath, pagesPath, {
         isTypeScript: templateOptions.isTypeScript
@@ -207,17 +207,19 @@ const addView = (pageName, options) => {
 
     const componentName = getComponentPageName(pageName);
     const pathToPage = createPathToPage(pageName);
-    const routingModulePath = path.join(process.cwd(), 'src', `app-routes${extension}`);
     const navigationModulePath = path.join(process.cwd(), 'src', `app-navigation${extension}`);
     const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'folder');
 
     const getCorrectExtension = (fileExtension) => {
         return fileExtension === '.tsx' ? extension : fileExtension;
     };
-    templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath, getCorrectExtension);
-    moduleUtils.insertExport(pathToPagesIndex(), componentName, `./${pageName}/${pageName}`);
-    moduleUtils.insertImport(routingModulePath, './views', componentName);
-    insertItemToArray(routingModulePath, navigationData.route);
+
+    const getPageFileName = (pageName, pageItem) => {
+        return pageItem === 'page.tsx' ? 'page' : pageName;
+    };
+
+    templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath, getCorrectExtension, { getPageFileName });
+
     insertItemToArray(navigationModulePath, navigationData.navigation);
 };
 

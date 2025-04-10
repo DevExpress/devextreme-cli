@@ -1,7 +1,7 @@
 export const navigation = [<%=^empty%>
   {
     text: 'Home',
-    path: '/home',
+    path: '/pages/home',
     icon: 'home'
   },
   {
@@ -10,11 +10,11 @@ export const navigation = [<%=^empty%>
     items: [
       {
         text: 'Profile',
-        path: '/profile'
+        path: '/pages/profile'
       },
       {
         text: 'Tasks',
-        path: '/tasks'
+        path: '/pages/tasks'
       }
     ]
   }

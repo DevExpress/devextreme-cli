@@ -7,7 +7,6 @@ import { AuthProvider, useAuth} from '../contexts/auth';
 import { NavigationProvider } from '../contexts/navigation';
 import { useScreenSizeClass } from '../utils/media-query';
 import { ThemeContext, useThemeContext} from "../theme";
-import Content from "../Content";
 
 function Page({ children }) {
   const { user, loading } = useAuth();
@@ -15,14 +14,14 @@ function Page({ children }) {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/login');
+      router.push('/auth/login');
     }
   }, [user, loading, router]);
 
   if (loading) {
     return <LoadPanel visible={true} />;
   } else if (user) {
-    return <Content>{children}</Content>;
+    return children;
   }
 
   return children;
@@ -43,6 +42,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
+    <title>NextJs Dx App</title>
       <body class="dx-viewport">
         <ThemeContext.Provider value={themeContext}>
           <AuthProvider>

@@ -68,7 +68,7 @@ export default function ResetPasswordForm() {
         </ButtonItem>
       </Form>
       <div className={'login-link'}>
-        Return to <Link href={'/login'}>Sign In</Link>
+        Return to <Link href={'/auth/login'}>Sign In</Link>
       </div>
     </form>
   );

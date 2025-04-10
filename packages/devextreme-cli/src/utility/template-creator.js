@@ -12,9 +12,9 @@ const applyTemplateToFile = (filePath, templateOptions) => {
     return content;
 };
 
-const addPageToApp = (pageName, pageDir, templatePagesPath, getCorrectExtension) => {
+const addPageToApp = (pageName, pageDir, templatePagesPath, getCorrectExtension, { getPageFileName = () => pageName }) => {
     fs.readdirSync(templatePagesPath).forEach((pageItem) => {
-        const pagePath = path.join(pageDir, `${pageName}${getCorrectExtension(extname(pageItem))}`);
+        const pagePath = path.join(pageDir, `${getPageFileName(pageName, pageItem)}${getCorrectExtension(extname(pageItem))}`);
         if(fs.existsSync(pagePath)) {
             console.error('The page already exists');
             process.exit();

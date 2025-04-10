@@ -1,10 +1,12 @@
+'use client'
 import appInfo from '@/app-info';
 import { Footer } from '@/components';
+import { <%=layout%> as SideNavBarLayout } from '@/layouts';
 
 export default function Content({children}) {
   return (
     <SideNavBarLayout title={appInfo.title}>
-      {children || ''}
+      {children}
       <Footer>
         Copyright © 2011-{new Date().getFullYear()} {appInfo.title} Inc.
         <br />
