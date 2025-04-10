@@ -6,7 +6,7 @@
   padding-bottom: 24px;
   margin: 0 40px;
 
-  .screen-x-small & {
+  @media (max-width: 599.99px) {
     margin: 0 20px;
   }
 }

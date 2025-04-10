@@ -19,24 +19,6 @@ export const useScreenSize = () => {
   return screenSize;
 };
 
-export const useScreenSizeClass = () => {
-  const screenSize = useScreenSize();
-
-  if (screenSize.isLarge) {
-    return 'screen-large';
-  }
-
-  if (screenSize.isMedium) {
-    return 'screen-medium';
-  }
-
-  if (screenSize.isSmall) {
-    return 'screen-small';
-  }
-
-  return 'screen-x-small';
-}
-
 let handlers<%=#isTypeScript%>: Handle[]<%=/isTypeScript%> = [];
 let xSmallMedia = false;
 let smallMedia = false;

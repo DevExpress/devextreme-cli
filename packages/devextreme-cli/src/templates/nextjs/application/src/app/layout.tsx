@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation';
 import LoadPanel from 'devextreme-react/load-panel';
 import { AuthProvider, useAuth} from '../contexts/auth';
 import { NavigationProvider } from '../contexts/navigation';
-import { useScreenSizeClass } from '../utils/media-query';
 import { ThemeContext, useThemeContext} from "../theme";
 
 function Page({ children }) {
@@ -18,7 +17,6 @@ function Page({ children }) {
 }
 
 export default function RootLayout({ children }) {
-  const screenSizeClass = useScreenSizeClass();
   const themeContext = useThemeContext();
   const pathname  = usePathname ();
 
@@ -29,7 +27,7 @@ export default function RootLayout({ children }) {
         <ThemeContext.Provider value={themeContext}>
           <AuthProvider>
             <NavigationProvider>
-              <div className={`app ${screenSizeClass}`}>
+              <div className='app'>
                 <Page key={pathname}>{children}</Page>
               </div>
             </NavigationProvider>

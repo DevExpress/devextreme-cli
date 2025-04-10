@@ -13,7 +13,7 @@ header {
 .dx-toolbar.header-toolbar .dx-toolbar-items-container .dx-toolbar-after {
   padding: 0 40px;
 
-  .screen-x-small & {
+  @media (max-width: 599.99px) {
     padding: 0 20px;
   }
 }

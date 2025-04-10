@@ -42,8 +42,10 @@ body {
     }
   }
 
-  .screen-x-small :not(.dx-card).content {
-    padding: 20px;
+  @media (max-width: 599.99px) {
+    :not(.dx-card).content {
+      padding: 20px;
+    }
   }
 
   .container {
@@ -68,7 +70,7 @@ body {
   .responsive-paddings {
     padding: 20px;
 
-    .screen-large & {
+    @media (min-width: 1280px) {
       padding: 40px;
     }
   }
