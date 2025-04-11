@@ -2,9 +2,9 @@
 
 import { usePathname } from 'next/navigation';
 import LoadPanel from 'devextreme-react/load-panel';
-import { AuthProvider, useAuth} from '../contexts/auth';
-import { NavigationProvider } from '../contexts/navigation';
-import { ThemeContext, useThemeContext} from "../theme";
+import { AuthProvider, useAuth} from '@/contexts/auth';
+import { NavigationProvider } from '@/contexts/navigation';
+import { ThemeContext, useThemeContext} from "@/theme";
 
 function Page({ children }) {
   const { loading } = useAuth();

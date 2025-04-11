@@ -32,6 +32,8 @@ export default function LoginForm() {
     if (!result.isOk) {
       setLoading(false);
       notify(result.message, 'error', 2000);
+    } else {
+      router.push('/');
     }
   }, [signIn]);
 

@@ -12,7 +12,7 @@ export default function Content({children}) {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/auth/login');
+      router.push('/login');
     }
   }, [user, loading, router]);
 

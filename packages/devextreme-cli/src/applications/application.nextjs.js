@@ -93,16 +93,16 @@ const create = async(appName, options) => {
     }
 
     addTemplate(appPath, appName, templateOptions);
-    modifyIndexHtml(appPath, templateOptions);
+    modifyAppFiles(appPath, templateOptions);
 };
 
-const modifyIndexHtml = (appPath, { project, isTypeScript }) => {
-    const indexHtmlPath = path.join(appPath, `src/app/layout.${isTypeScript ? 'tsx' : 'jsx'}`);
+const modifyAppFiles = (appPath, { project, isTypeScript }) => {
+    const entryFilePath = path.join(appPath, `src/app/layout.${isTypeScript ? 'tsx' : 'jsx'}`);
 
-    let htmlContent = fs.readFileSync(indexHtmlPath).toString();
-    htmlContent = htmlContent.replace(/<title>[^<]+<\/title>/, `<title>${project}<\/title>`);
+    let content = fs.readFileSync(entryFilePath).toString();
+    content = content.replace(/<title>[^<]+<\/title>/, `<title>${project}<\/title>`);
 
-    fs.writeFileSync(indexHtmlPath, htmlContent);
+    fs.writeFileSync(entryFilePath, content);
 };
 
 const getCorrectPath = (extension, pathToApp, isTypeScript) => {
@@ -192,7 +192,7 @@ const addSamplePages = (appPath, templateOptions) => {
     );
 
     const pagesPath = path.join(appPath, 'src', 'app/pages');
-    // fs.mkdirSync(pagesPath);
+
     templateCreator.moveTemplateFilesToProject(samplePageTemplatePath, pagesPath, {
         isTypeScript: templateOptions.isTypeScript
     }, getCorrectPath);
