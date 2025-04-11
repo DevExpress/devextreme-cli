@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useLayoutEffect } from 'react';
 
 const themes = ['light', 'dark'];
 const themeClassNamePrefix = 'dx-swatch-';
@@ -44,9 +44,11 @@ export function useThemeContext() {
     return currentTheme === 'dark';
   }, []);
 
-  if (typeof window !== 'undefined' && !document.body.className.includes(themeClassNamePrefix)) {
-    document.body.classList.add(themeClassNamePrefix + theme);
-  }
+  useLayoutEffect(() => {
+    if (typeof window !== 'undefined' && !document.body.className.includes(themeClassNamePrefix)) {
+      document.body.classList.add(themeClassNamePrefix + theme);
+    }
+  }, []);
 
   return useMemo(()=> ({ theme, switchTheme, isDark }), [theme, switchTheme, isDark]);
 }
