@@ -3,7 +3,6 @@
 import { usePathname } from 'next/navigation';
 import LoadPanel from 'devextreme-react/load-panel';
 import { AuthProvider, useAuth} from '@/contexts/auth';
-import { NavigationProvider } from '@/contexts/navigation';
 import { ThemeContext, useThemeContext} from "@/theme";
 
 function Page({ children }) {
@@ -26,11 +25,9 @@ export default function RootLayout({ children }) {
       <body className="dx-viewport">
         <ThemeContext.Provider value={themeContext}>
           <AuthProvider>
-            <NavigationProvider>
-              <div className='app'>
-                <Page key={pathname}>{children}</Page>
-              </div>
-            </NavigationProvider>
+            <div className='app'>
+              <Page key={pathname}>{children}</Page>
+            </div>
           </AuthProvider>
         </ThemeContext.Provider>
         </body>

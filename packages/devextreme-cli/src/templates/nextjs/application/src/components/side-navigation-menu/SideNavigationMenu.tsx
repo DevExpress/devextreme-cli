@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useCallback, useMemo, useContext } from 'reac
 import { TreeView<%=#isTypeScript%>, TreeViewRef<%=/isTypeScript%> } from 'devextreme-react/tree-view';
 import * as events from 'devextreme-react/common/core/events';
 import { navigation } from '../../app-navigation';
-import { useNavigation } from '../../contexts/navigation';
+import { usePathname } from 'next/navigation';
 import { useScreenSize } from '../../utils/media-query';
 import './SideNavigationMenu.scss';
 <%=#isTypeScript%>import type { SideNavigationMenuProps } from '../../types';<%=/isTypeScript%>
@@ -33,7 +33,7 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
     []
   );
 
-  const { navigationData: { currentPath } } = useNavigation();
+  const pathname = usePathname();
 
   const treeViewRef = useRef<%=#isTypeScript%><TreeViewRef><%=/isTypeScript%>(null);
   const wrapperRef = useRef<%=#isTypeScript%><HTMLDivElement><%=/isTypeScript%>(null);
@@ -55,15 +55,15 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
       return;
     }
 
-    if (currentPath !== undefined) {
-      treeView.selectItem(currentPath);
-      treeView.expandItem(currentPath);
+    if (pathname !== undefined) {
+      treeView.selectItem(pathname);
+      treeView.expandItem(pathname);
     }
 
     if (compactMode) {
       treeView.collapseAll();
     }
-  }, [currentPath, compactMode]);
+  }, [pathname, compactMode]);
 
   return (
     <div
