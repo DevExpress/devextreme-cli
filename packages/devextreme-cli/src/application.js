@@ -44,7 +44,12 @@ const run = async(commands, options, devextremeConfig) => {
             }
 
             if(commands[1] === 'devextreme-react') {
-                reactApplication.install(options);
+                if(nextjsApplication.isNextJsApp()) {
+                    nextjsApplication.install(options);
+                } else {
+                    reactApplication.install(options);
+                }
+
                 return;
             }
 

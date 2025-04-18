@@ -6,17 +6,34 @@ const getTemplateTypeInfo = require('../utility/prompts/typescript');
 const templateCreator = require('../utility/template-creator');
 const packageManager = require('../utility/package-manager');
 const packageJsonUtils = require('../utility/package-json-utils');
-const modifyJson = require('../utility/modify-json-file');
 const insertItemToArray = require('../utility/file-content').insertItemToArray;
-const moduleUtils = require('../utility/module');
 const stringUtils = require('../utility/string');
 const typescriptUtils = require('../utility/typescript-extension');
 const removeFile = require('../utility/file-operations').remove;
 const latestVersions = require('../utility/latest-versions');
 const { extractDepsVersionTag } = require('../utility/extract-deps-version-tag');
+const {
+    updateJsonPropName,
+    bumpReact,
+    getCorrectPath,
+    addStylesToApp,
+    getComponentPageName,
+} = require('./application.react');
+
 const defaultStyles = [
     'devextreme/dist/css/dx.light.css'
 ];
+
+const isNextJsApp = () => {
+    const appPath = process.cwd();
+
+    return fs.existsSync(path.join(appPath, 'next.config.ts')) || fs.existsSync(path.join(appPath, 'next.config.mjs'));
+};
+
+const isTsApp = () => {
+    const appPath = process.cwd();
+    return fs.existsSync(path.join(appPath, 'next.config.ts'));
+};
 
 const getExtension = (appPath) => {
     return fs.existsSync(path.join(appPath, 'src/app', 'page.tsx')) ? '.tsx' : '.jsx';
@@ -39,25 +56,6 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     packageJsonUtils.addDependencies(appPath, dependencies);
     packageJsonUtils.updateScripts(appPath, scripts);
     packageJsonUtils.updateName(appPath, appName);
-};
-
-const updateJsonPropName = (path, name) => {
-    modifyJson(path, content => {
-        content.name = name;
-
-        return content;
-    });
-};
-
-const bumpReact = (appPath, versionTag) => {
-    const dependencies = [
-        { name: 'react', version: versionTag },
-        { name: 'react-dom', version: versionTag },
-        { name: '@types/react', version: versionTag, dev: true },
-        { name: '@types/react-dom', version: versionTag, dev: true },
-    ];
-
-    packageJsonUtils.addDependencies(appPath, dependencies);
 };
 
 const create = async(appName, options) => {
@@ -105,10 +103,6 @@ const modifyAppFiles = (appPath, { project, isTypeScript }) => {
     fs.writeFileSync(entryFilePath, content);
 };
 
-const getCorrectPath = (extension, pathToApp, isTypeScript) => {
-    return extension === '.ts' || extension === '.tsx' ? typescriptUtils.setFileExtension(pathToApp, isTypeScript) : pathToApp;
-};
-
 const addTemplate = (appPath, appName, templateOptions) => {
     const applicationTemplatePath = path.join(
         templateCreator.getTempaltePath('nextjs'),
@@ -144,22 +138,22 @@ const addTemplate = (appPath, appName, templateOptions) => {
 
 const install = (options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
+    const extension = options.isTypeScript || isTsApp() ? 'ts' : 'js';
+    const srcFolder = fs.existsSync(path.join(appPath, 'src')) ? 'src' : '';
+    const isAppRouterApp = fs.existsSync(path.join(appPath, srcFolder, 'app')) && fs.lstatSync(appPath).isDirectory();
 
-    const pathToMainComponent = path.join(appPath, 'src/app', `layout.${options.isTypeScript ? 'tsx' : 'jsx'}`);
+    const entryFilePath = isAppRouterApp
+        ? path.join('app', `layout.${extension}`)
+        : path.join('pages', `_app.${extension}`);
+
+    const jsx = fs.existsSync(path.join(appPath, srcFolder, entryFilePath + 'x')) ? 'x' : '';
+
+    const pathToMainComponent = path.join(appPath, srcFolder, entryFilePath + jsx);
+
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
     packageManager.runInstall({ cwd: appPath });
-};
-
-const addStylesToApp = (filePath, styles) => {
-    styles.forEach(style => {
-        moduleUtils.insertImport(filePath, style);
-    });
-};
-
-const getComponentPageName = (viewName) => {
-    return `${stringUtils.classify(viewName)}Page`;
 };
 
 const getNavigationData = (viewName, componentName, icon) => {
@@ -224,6 +218,7 @@ const addView = (pageName, options) => {
 };
 
 module.exports = {
+    isNextJsApp,
     install,
     create,
     addTemplate,

@@ -219,5 +219,10 @@ module.exports = {
     install,
     create,
     addTemplate,
-    addView
+    addView,
+    updateJsonPropName,
+    bumpReact,
+    getCorrectPath,
+    addStylesToApp,
+    getComponentPageName,
 };
