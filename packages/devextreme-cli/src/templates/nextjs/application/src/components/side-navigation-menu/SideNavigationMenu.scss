@@ -1,5 +1,4 @@
 @use "../../dx-styles" as *;
-@use  "../../utils/patches";
 
 .dx-swatch-additional, .dx-swatch-additional-dark {
   &.side-navigation-menu {
@@ -69,8 +68,4 @@
       }
     }
   }
-}
-
-.dx-drawer-overlap.pre-init-blink-fix {
-  @include patches.menu-pre-init-patch;
 }

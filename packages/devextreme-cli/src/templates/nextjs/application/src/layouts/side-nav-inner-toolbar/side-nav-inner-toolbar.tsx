@@ -9,7 +9,6 @@ import { Header, SideNavigationMenu, Footer } from '../../components';
 import './side-nav-inner-toolbar.scss';
 import { useScreenSize } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
-import { useMenuPatch } from '../../utils/patches';
 <%=#isTypeScript%>import { TreeViewTypes } from 'devextreme-react/tree-view';<%=/isTypeScript%>
 <%=#isTypeScript%>import type { SideNavToolbarProps } from '../../types';<%=/isTypeScript%>
 <%=#isTypeScript%>import { ButtonTypes } from 'devextreme-react/button';<%=/isTypeScript%>
@@ -18,7 +17,6 @@ export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%
   const scrollViewRef = useRef<%=#isTypeScript%><ScrollViewRef><%=/isTypeScript%>(null);
   const router = useRouter();
   const { isXSmall, isLarge } = useScreenSize();
-  const [patchCssClass, onMenuReady] = useMenuPatch();
   const [menuStatus, setMenuStatus] = useState(
     isLarge ? MenuStatus.Opened : MenuStatus.Closed
   );
@@ -67,7 +65,7 @@ export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%
   return (
     <div className={'side-nav-inner-toolbar'}>
       <Drawer
-        className={['drawer', patchCssClass].join(' ')}
+        className={'drawer'}
         position={'before'}
         closeOnOutsideClick={onOutsideClick}
         openedStateMode={isLarge ? 'shrink' : 'overlap'}
@@ -107,7 +105,6 @@ export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%
             compactMode={menuStatus === MenuStatus.Closed}
             selectedItemChanged={onNavigationChanged}
             openMenu={temporaryOpenMenu}
-            onMenuReady={onMenuReady}
           >
             <Toolbar id={'navigation-header'}>
               {
