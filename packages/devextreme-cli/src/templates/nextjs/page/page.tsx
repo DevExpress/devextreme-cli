@@ -1,8 +1,8 @@
 import React from 'react';
 import './<%=pageName%>.scss';
 
-export default () => (
-  <React.Fragment>
+export default function Page() {
+  return <React.Fragment>
     <h2><%=title%></h2>
     <div className={'content-block'}>
       <div className={'dx-card responsive-paddings'}>
@@ -10,4 +10,4 @@ export default () => (
       </div>
     </div>
   </React.Fragment>
-);
+};
