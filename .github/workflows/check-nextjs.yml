@@ -44,8 +44,8 @@ jobs:
           --typescript=${{ matrix.TYPESCRIPT }} \
           --src-dir=${{ matrix.SRC_DIR }} \
           --app=${{ matrix.APP_ROUTER }} \
-          --eslint=true \
-          --tailwind=true \
+          --eslint \
+          --no-tailwind \
           --import-alias="@/*" \
           --no-git \
           --use-npm
