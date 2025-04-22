@@ -48,8 +48,8 @@ jobs:
         run: |
           cd test-nextjs-app
           npm add devextreme-cli
-          rm -r .\node_modules\devextreme-cli\src\
-          cp -r ..\packages\devextreme-cli\src\ .\node_modules\devextreme-cli\
+          rm -r ./node_modules/devextreme-cli/src/
+          cp -r ../packages/devextreme-cli/src/ ./node_modules\devextreme-cli/
         shell: bash
         timeout-minutes: 15
 
