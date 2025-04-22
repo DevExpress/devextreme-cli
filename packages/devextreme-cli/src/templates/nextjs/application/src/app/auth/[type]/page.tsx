@@ -17,7 +17,7 @@ const formText = {
   }
 }
 
-function AuthForm({name}<%=#isTypeScript%>: Record<string, any><%=/isTypeScript%>) {
+function AuthForm({name}<%=#isTypeScript%>: {name: string}<%=/isTypeScript%>) {
   switch (name) {
     case 'login': return <LoginForm />;
     case 'create-account': return <CreateAccountForm />;
