@@ -31,9 +31,16 @@ jobs:
           node-version: ${{ matrix.NODE }}
           cache: 'npm'
 
+      - name: Extract create-next-app version
+        run: |
+          NEXT_APP_VERSION=$(node -e "const versions = require('./packages/devextreme-cli/src/utility/latest-versions.js'); console.log(versions['create-next-app'])")
+          echo "Using create-next-app version: $NEXT_APP_VERSION"
+          echo "NEXT_APP_VERSION=$NEXT_APP_VERSION" >> $GITHUB_ENV
+        shell: bash
+
       - name: Create Next.js application
         run: |
-          npx create-next-app@latest test-nextjs-app \
+          npx create-next-app@{{ env.NEXT_APP_VERSION }} test-nextjs-app \
           --typescript=${{ matrix.TYPESCRIPT }} \
           --src-dir=${{ matrix.SRC_DIR }} \
           --app=${{ matrix.APP_ROUTER }} \
