@@ -49,7 +49,7 @@ module.exports = class WebServer {
                         setResponse(content, contentType, 200);
                     }
                 });
-            }).listen(8081, resolve);
+            }).listen(8080, resolve);
         });
     }
 
