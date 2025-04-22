@@ -50,6 +50,8 @@ jobs:
           npm add devextreme-cli
           rm -r ./node_modules/devextreme-cli/src/
           cp -r ../packages/devextreme-cli/src/ ./node_modules\devextreme-cli/
+          ls ./node_modules/devextreme-cli
+          ls ./node_modules/devextreme-cli/src
         shell: bash
         timeout-minutes: 15
 
