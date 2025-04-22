@@ -16,7 +16,7 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
     const config = {
         engine: engine,
         appPath: appPath,
-        deployPath: path.join(appPath, 'dist'),
+        deployPath: path.join(appPath, '.next'),
         npmArgs: ['run', 'build'],
         fileExtension,
     };
