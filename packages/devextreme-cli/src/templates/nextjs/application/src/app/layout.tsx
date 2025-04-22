@@ -1,9 +1,8 @@
 'use client'
 
-import { usePathname } from 'next/navigation';
 import LoadPanel from 'devextreme-react/load-panel';
-import { AuthProvider, useAuth} from '@/contexts/auth';
-import { ThemeContext, useThemeContext} from "@/theme";
+import { AuthProvider, useAuth } from '@/contexts/auth';
+import { ThemeProvider } from "@/theme";
 
 function Page({ children }) {
   const { loading } = useAuth();
@@ -16,21 +15,18 @@ function Page({ children }) {
 }
 
 export default function RootLayout({ children }) {
-  const themeContext = useThemeContext();
-  const pathname  = usePathname ();
-
   return (
     <html lang="en">
     <title>NextJs Dx App</title>
       <body className="dx-viewport">
-        <ThemeContext.Provider value={themeContext}>
+        <ThemeProvider>
           <AuthProvider>
             <div className='app'>
-              <Page key={pathname}>{children}</Page>
+              <Page>{children}</Page>
             </div>
           </AuthProvider>
-        </ThemeContext.Provider>
-        </body>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
