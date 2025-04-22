@@ -54,3 +54,13 @@ export function useThemeContext() {
 }
 
 export const ThemeContext = React.createContext<%=#isTypeScript%><ReturnType<typeof useThemeContext> | null><%=/isTypeScript%>(null);
+
+export const ThemeProvider = ({ children }<%=#isTypeScript%>: React.PropsWithChildren<%=/isTypeScript%>) => {
+  const themeContext = useThemeContext();
+
+  return (
+    <ThemeContext.Provider value={themeContext}>
+      { children }
+    </ThemeContext.Provider>
+  );
+};
