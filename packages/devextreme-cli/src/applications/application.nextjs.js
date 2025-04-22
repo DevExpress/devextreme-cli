@@ -74,7 +74,7 @@ const create = async(appName, options) => {
     commandArguments = [
         ...commandArguments,
         `${templateOptions.isTypeScript ? '--typescript' : '--javascript'}`,
-        '--no-eslint',
+        '--eslint',
         '--no-tailwind',
         '--src-dir',
         '--app',
@@ -136,8 +136,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
     install({ isTypeScript: templateOptions.isTypeScript }, appPath, styles);
 };
 
-const install = (options, appPath, styles) => {
-    appPath = appPath ? appPath : process.cwd();
+const getEntryFilePath = (options, appPath) => {
     const extension = options.isTypeScript || isTsApp() ? 'ts' : 'js';
     const srcFolder = fs.existsSync(path.join(appPath, 'src')) ? 'src' : '';
     const isAppRouterApp = fs.existsSync(path.join(appPath, srcFolder, 'app')) && fs.lstatSync(appPath).isDirectory();
@@ -148,7 +147,13 @@ const install = (options, appPath, styles) => {
 
     const jsx = fs.existsSync(path.join(appPath, srcFolder, entryFilePath + 'x')) ? 'x' : '';
 
-    const pathToMainComponent = path.join(appPath, srcFolder, entryFilePath + jsx);
+    return path.join(srcFolder, entryFilePath + jsx);
+};
+
+const install = (options, appPath, styles) => {
+    appPath = appPath ? appPath : process.cwd();
+
+    const pathToMainComponent = path.join(appPath, getEntryFilePath(options, appPath));
 
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
