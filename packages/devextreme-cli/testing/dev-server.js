@@ -5,6 +5,7 @@ const WebServer = require('./web-server');
 const webServer = new WebServer();
 const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
+let startedPromise = null;
 
 module.exports = class DevServer {
     constructor(env) {
@@ -12,11 +13,23 @@ module.exports = class DevServer {
     }
 
     async start() {
-        await webServer.start(this.env.deployPath);
+        if(this.env.engine.indexOf('nextjs') === 0) {
+            startedPromise = runCommand('npm', ['run', 'start'], {
+                cwd: this.env.appPath,
+                // https://github.com/facebook/create-react-app/issues/3657
+                env: Object.assign(process.env, { CI: false })
+            });
+        } else {
+            await webServer.start(this.env.deployPath);
+        }
     }
 
     async stop() {
-        await webServer.stop();
+        if(this.env.engine.indexOf('nextjs') === 0) {
+            await startedPromise.kill();
+        } else {
+            await webServer.stop();
+        }
     }
 
     async build() {

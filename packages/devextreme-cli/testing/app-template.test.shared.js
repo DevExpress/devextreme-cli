@@ -7,8 +7,8 @@ const DevServer = require('./dev-server');
 
 const defaultLayout = 'side-nav-outer-toolbar';
 
-module.exports = (env) => {
-    const appUrl = `http://${ip.address()}:8080/`;
+module.exports = (env, { port } = { port: '8080' }) => {
+    const appUrl = `http://${ip.address()}:${port}/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
 
     const pageUrls = {
@@ -17,7 +17,7 @@ module.exports = (env) => {
         page: `${(env.engine === 'angular' ? 'pages/' : '')}new-page`,
     };
 
-    const getPageURL = (name) => `${appUrl}${(!env.engine.includes('nextjs') ? '#/' : '')}${pageUrls[name]}`;
+    const getPageURL = (name) => `${appUrl}${(env.engine.indexOf('nextjs') !== 0 ? '#/' : '')}${pageUrls[name]}`;
 
     describe(`${env.engine} app-template`, () => {
         let browser;

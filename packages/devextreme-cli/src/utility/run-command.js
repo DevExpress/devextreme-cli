@@ -17,8 +17,18 @@ module.exports = function(commandName, args = [], customConfig = {}) {
 
     console.log(`> ${command} ${args.join(' ')}`);
 
-    return new Promise((resolve, reject) => {
-        spawn(command, args, config)
-            .on('exit', (code) => code ? reject(code) : resolve());
+    const proc = spawn(command, args, config);
+
+    const promise = new Promise((resolve, reject) => {
+        proc.on('exit', (code) => code ? reject(code) : resolve());
     });
+
+    promise.kill = (signal = 'SIGTERM') => {
+        return new Promise((resolve, reject) => {
+            proc.kill(signal);
+            resolve();
+        });
+    };
+
+    return promise;
 };
