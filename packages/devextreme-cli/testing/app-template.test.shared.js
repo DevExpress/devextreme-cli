@@ -11,6 +11,14 @@ module.exports = (env) => {
     const appUrl = `http://${ip.address()}:8080/`;
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
 
+    const pageUrls = {
+        profile: 'profile',
+        tasks: 'tasks',
+        page: `${(env.engine === 'angular' ? 'pages/' : '')}new-page`,
+    };
+
+    const getPageURL = (name) => `${appUrl}${(!env.engine.includes('nextjs') ? '#/' : '')}${pageUrls[name]}`;
+
     describe(`${env.engine} app-template`, () => {
         let browser;
         let page;
@@ -172,7 +180,7 @@ module.exports = (env) => {
                                 });
 
                                 it('Profile view', async() => {
-                                    await openPage(`${appUrl}#/profile`);
+                                    await openPage(getPageURL('profile'));
 
                                     await page.waitForTimeout(3000);
 
@@ -189,7 +197,7 @@ module.exports = (env) => {
                                 });
 
                                 it('Tasks view', async() => {
-                                    await openPage(`${appUrl}#/tasks`);
+                                    await openPage(getPageURL('tasks'));
                                     // NOTE: Wait for the DataGrid is loaded
                                     await page.waitForSelector('.dx-row-focused');
                                     await page.waitForTimeout(3000);
@@ -199,11 +207,8 @@ module.exports = (env) => {
                                 });
 
                                 it('Add view', async() => {
-                                    let pageUrl = 'new-page';
-                                    if(env.engine === 'angular') {
-                                        pageUrl = 'pages/' + pageUrl;
-                                    }
-                                    await openPage(`${appUrl}#/${pageUrl}`);
+
+                                    await openPage(getPageURL('page'));
                                     await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
@@ -212,7 +217,7 @@ module.exports = (env) => {
 
                                 it('Menu toggle', async() => {
                                     const menuButtonSelector = '.menu-button .dx-button';
-                                    await openPage(`${appUrl}#/profile`);
+                                    await openPage(getPageURL('profile'));
                                     await page.waitForSelector(menuButtonSelector);
                                     await page.click(menuButtonSelector);
 
@@ -224,7 +229,7 @@ module.exports = (env) => {
                                 });
 
                                 it('User panel', async() => {
-                                    await openPage(`${appUrl}#/profile`);
+                                    await openPage(getPageURL('profile'));
                                     const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                     await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
                                     // NOTE: Wait for animation complete
