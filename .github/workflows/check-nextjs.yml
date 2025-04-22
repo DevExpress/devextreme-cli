@@ -1,0 +1,85 @@
+name: Check "add devextreme-react" for NextJS app
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  nextjs-devextreme-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        TYPESCRIPT: [true, false]
+        SRC_DIR: [true, false]
+        APP_ROUTER: [true, false]
+        NODE:
+          - 18
+        OS:
+          - ubuntu-latest
+
+    runs-on: ${{ matrix.OS }}
+    name: Next.js + DevExtreme (TS:${{ matrix.TYPESCRIPT }}, src:${{ matrix.SRC_DIR }}, app-router:${{ matrix.APP_ROUTER }}), node ${{ matrix.NODE }}, ${{ matrix.OS }}
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.NODE }}
+          cache: 'npm'
+
+      - name: Create Next.js application
+        run: |
+          npx create-next-app@latest test-nextjs-app \
+          --typescript=${{ matrix.TYPESCRIPT }} \
+          --src-dir=${{ matrix.SRC_DIR }} \
+          --app=${{ matrix.APP_ROUTER }} \
+          --eslint=true \
+          --tailwind=true \
+          --import-alias="@/*" \
+          --no-git \
+          --use-npm
+        shell: bash
+
+      - name: Add actual devExtreme-cli
+        run: |
+          cd test-nextjs-app
+          npm add devextreme-cli
+          rm -r .\node_modules\devextreme-cli\src\
+          cp -r ..\packages\devextreme-cli\src\ .\node_modules\devextreme-cli\
+        shell: bash
+        timeout-minutes: 15
+
+      - name: Add DevExtreme to Next.js application
+        run: |
+          cd test-nextjs-app
+          npx devextreme-cli add devextreme-react
+        shell: bash
+        timeout-minutes: 15
+
+      - name: Verify DevExtreme dependencies in package.json
+        run: |
+          cd test-nextjs-app
+
+          if ! grep -q '"devextreme":' package.json; then
+            echo "Error: devextreme dependency not found in package.json"
+            exit 1
+          fi
+
+          if ! grep -q '"devextreme-react":' package.json; then
+            echo "Error: devextreme-react dependency not found in package.json"
+            exit 1
+          fi
+
+          echo "DevExtreme dependencies successfully installed"
+        shell: bash
+
+      - name: Build Next.js application
+        run: |
+          cd test-nextjs-app
+          npm run build
+        shell: bash
+        timeout-minutes: 15
