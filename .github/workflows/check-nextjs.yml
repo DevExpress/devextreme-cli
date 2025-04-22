@@ -40,7 +40,7 @@ jobs:
 
       - name: Create Next.js application
         run: |
-          npx create-next-app@{{ env.NEXT_APP_VERSION }} test-nextjs-app \
+          npx create-next-app@${{ env.NEXT_APP_VERSION }} test-nextjs-app \
           --typescript=${{ matrix.TYPESCRIPT }} \
           --src-dir=${{ matrix.SRC_DIR }} \
           --app=${{ matrix.APP_ROUTER }} \
