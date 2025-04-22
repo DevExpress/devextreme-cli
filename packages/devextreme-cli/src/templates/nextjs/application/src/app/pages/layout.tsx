@@ -1,12 +1,12 @@
 'use client'
-import { useEffect } from 'react';
+import {<%=#isTypeScript%> PropsWithChildren,<%=/isTypeScript%> useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth';
 import appInfo from '@/app-info';
 import { Footer } from '@/components';
 import { <%=layout%> as SideNavBarLayout } from '@/layouts';
 
-export default function Content({children}) {
+export default function Content({children}<%=#isTypeScript%>: PropsWithChildren<object><%=/isTypeScript%>) {
   const { user, loading } = useAuth();
   const router = useRouter();
 

@@ -20,10 +20,10 @@ export const useScreenSize = () => {
 };
 
 let handlers<%=#isTypeScript%>: Handle[]<%=/isTypeScript%> = [];
-let xSmallMedia = false;
-let smallMedia = false;
-let mediumMedia = false;
-let largeMedia = false;
+let xSmallMedia<%=#isTypeScript%>:  MediaQueryList<%=/isTypeScript%>;
+let smallMedia<%=#isTypeScript%>:  MediaQueryList<%=/isTypeScript%>;
+let mediumMedia<%=#isTypeScript%>:  MediaQueryList<%=/isTypeScript%>;
+let largeMedia<%=#isTypeScript%>:  MediaQueryList<%=/isTypeScript%>;
 
 if (typeof window !== 'undefined') {
   xSmallMedia = window.matchMedia('(max-width: 599.99px)');

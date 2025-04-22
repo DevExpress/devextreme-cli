@@ -11,7 +11,7 @@ export interface SideNavigationMenuProps {
     selectedItemChanged: (e: TreeViewTypes.ItemClickEvent) => void;
     openMenu: (e: React.PointerEvent) => void;
     compactMode: boolean;
-    onMenuReady: (e: TreeViewTypes.ContentReadyEvent) => void;
+    onMenuReady?: (e: TreeViewTypes.ContentReadyEvent) => void;
 }
 
 export interface UserPanelProps {

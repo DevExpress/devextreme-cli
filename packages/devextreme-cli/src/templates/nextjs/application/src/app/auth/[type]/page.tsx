@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { SingleCard } from '@/layouts';
 import { LoginForm, CreateAccountForm, ResetPasswordForm } from '@/components'
 
-const formText = {
+const formText<%=#isTypeScript%>: Record<string, Record<string, string>><%=/isTypeScript%> = {
   'login': {
     title: 'Sign In'
   },
@@ -25,7 +25,7 @@ function AuthForm({name}<%=#isTypeScript%>: {name: string}<%=/isTypeScript%>) {
   }
 }
 
-export default function AuthPage({ params }) {
+export default function AuthPage({ params }<%=#isTypeScript%>: {params: Promise<{type: string}>}<%=/isTypeScript%>) {
   const { type } = use(params)
 
   if (!formText[type]) {
