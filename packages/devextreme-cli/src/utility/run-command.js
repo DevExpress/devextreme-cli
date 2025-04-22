@@ -19,16 +19,13 @@ module.exports = function(commandName, args = [], customConfig = {}) {
 
     const proc = spawn(command, args, config);
 
-    const promise = new Promise((resolve, reject) => {
-        proc.on('exit', (code) => code ? reject(code) : resolve());
-    });
-
-    promise.kill = (signal = 'SIGTERM') => {
-        return new Promise((resolve, reject) => {
-            proc.kill(signal);
-            resolve();
+    return new Promise((resolve, reject) => {
+        proc.on('exit', (code) => {
+            code ? reject(code) : resolve({ proc });
         });
-    };
 
-    return promise;
+        if(config.detached) {
+            resolve({ proc });
+        }
+    });
 };

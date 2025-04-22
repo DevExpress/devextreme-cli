@@ -47,9 +47,14 @@ module.exports = (env, { port } = { port: '8080' }) => {
                                 await devServer.setTheme(theme);
                                 await devServer.build();
                                 await devServer.start();
+                                /* console.log('-----waiting----->');
+                                await waitOn({
+                                    resources: [appUrl],
+                                    timeout: 30000,
+                                    interval: 100
+                                }); */
                             } catch(e) {
                                 // NOTE jest@27 will fail test, but jest@26 - not
-                                console.log('----throw new Error------>', e);
                                 throw new Error(e);
                             }
                         });
@@ -157,7 +162,7 @@ module.exports = (env, { port } = { port: '8080' }) => {
                             }
 
                             describe(`${viewportName}`, () => {
-                                it('Home view', async() => {
+                                fit('Home view', async() => {
                                     await openPage(appUrl, { timeout: 5000 });
                                     await page.reload([{
                                         waitUntil: {

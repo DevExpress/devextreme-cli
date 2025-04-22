@@ -1,42 +1,29 @@
 const fs = require('fs');
 const path = require('path');
 const WebServer = require('./web-server');
+const NextJsServer = require('./nextjs-server');
 
-const webServer = new WebServer();
 const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
-let startedPromise = null;
 
 module.exports = class DevServer {
+    isNextJs() {
+        return this.env.engine.indexOf('nextjs') === 0;
+    }
+
     constructor(env) {
         this.env = env;
+        this.server = this.isNextJs()
+            ? new NextJsServer(this.env)
+            : new WebServer();
     }
 
     async start() {
-        if(this.env.engine.indexOf('nextjs') === 0) {
-            if(startedPromise) {
-                startedPromise.kill();
-                startedPromise = null;
-            }
-            startedPromise = runCommand('npm', ['run', 'start'], {
-                cwd: this.env.appPath,
-                // https://github.com/facebook/create-react-app/issues/3657
-                env: Object.assign(process.env, { CI: false })
-            });
-        } else {
-            await webServer.start(this.env.deployPath);
-        }
+        await this.server.start(this.env.deployPath);
     }
 
     async stop() {
-        if(this.env.engine.indexOf('nextjs') === 0) {
-            if(startedPromise) {
-                await startedPromise.kill();
-                startedPromise = null;
-            }
-        } else {
-            await webServer.stop();
-        }
+        await this.server.stop();
     }
 
     async build() {

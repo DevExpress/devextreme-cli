@@ -14,7 +14,7 @@ exports.viewports = {
         width: 1280,
         height: 1024,
     },
-    small: {
+/*    small: {
         width: 667,
         height: 375,
         isMobile: true,
@@ -26,18 +26,18 @@ exports.viewports = {
         height: 568,
         isMobile: true,
         hasTouch: true,
-    }
+    }*/
 };
 
 exports.themes = {
     material: 'material.blue',
-    generic: 'generic',
-    fluent: 'fluent.blue'
+/*    generic: 'generic',
+    fluent: 'fluent.blue'*/
 };
 
 exports.layouts = [
     'side-nav-outer-toolbar',
-    'side-nav-inner-toolbar'
+/*    'side-nav-inner-toolbar'*/
 ];
 
 exports.swatchModes = {

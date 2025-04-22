@@ -17,7 +17,8 @@ jobs:
       fail-fast: false
       matrix:
         APPROACH:
-          - nextjs
+          - react
+          - nextjs-ts
         NODE:
           - 18
         OS:
