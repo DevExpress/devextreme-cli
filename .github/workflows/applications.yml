@@ -23,6 +23,8 @@ jobs:
           - react-swc
           - react-ts
           - react-swc-ts
+          - nextjs
+          - nextjs-ts
         NODE:
           - 18
         OS:
