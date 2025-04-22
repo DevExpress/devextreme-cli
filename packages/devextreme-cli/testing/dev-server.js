@@ -14,6 +14,10 @@ module.exports = class DevServer {
 
     async start() {
         if(this.env.engine.indexOf('nextjs') === 0) {
+            if(startedPromise) {
+                startedPromise.kill();
+                startedPromise = null;
+            }
             startedPromise = runCommand('npm', ['run', 'start'], {
                 cwd: this.env.appPath,
                 // https://github.com/facebook/create-react-app/issues/3657
@@ -26,7 +30,10 @@ module.exports = class DevServer {
 
     async stop() {
         if(this.env.engine.indexOf('nextjs') === 0) {
-            await startedPromise.kill();
+            if(startedPromise) {
+                await startedPromise.kill();
+                startedPromise = null;
+            }
         } else {
             await webServer.stop();
         }
