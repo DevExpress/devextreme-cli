@@ -49,6 +49,7 @@ module.exports = (env, { port } = { port: '8080' }) => {
                                 await devServer.start();
                             } catch(e) {
                                 // NOTE jest@27 will fail test, but jest@26 - not
+                                console.log('----throw new Error------>', e);
                                 throw new Error(e);
                             }
                         });
