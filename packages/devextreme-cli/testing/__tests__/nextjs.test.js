@@ -6,5 +6,6 @@ testAppTemplate(nextjsJs, {
         profile: 'pages/profile',
         tasks: 'pages/tasks',
         page: 'pages/new-page',
+        'change-password': 'auth/change-password',
     },
 });

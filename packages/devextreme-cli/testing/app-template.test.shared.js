@@ -16,6 +16,7 @@ module.exports = (env, { port, urls } = { port: '8080', urls: {} }) => {
         profile: 'profile',
         tasks: 'tasks',
         page: `${(env.engine === 'angular' ? 'pages/' : '')}new-page`,
+        'change-password': 'change-password/123',
         ...urls,
     };
 
@@ -322,7 +323,7 @@ module.exports = (env, { port, urls } = { port: '8080', urls: {} }) => {
                                     await openPage(appUrl);
                                     await logOut();
                                     await page.evaluate(
-                                        'const a = document.createElement("a");a.href="#/change-password/123";a.click()'
+                                        `const a = document.createElement("a");a.href="${getPageURL('change-password')}";a.click()`
                                     );
                                     await page.waitForSelector('form');
 
