@@ -17,8 +17,10 @@ jobs:
       fail-fast: false
       matrix:
         APPROACH:
+          - angular
           - react
           - nextjs-ts
+          - vue-v3
         NODE:
           - 18
         OS:
