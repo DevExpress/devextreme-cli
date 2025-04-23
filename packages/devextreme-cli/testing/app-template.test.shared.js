@@ -162,7 +162,7 @@ module.exports = (env, { port } = { port: '8080' }) => {
                             }
 
                             describe(`${viewportName}`, () => {
-                                fit('Home view', async() => {
+                                it('Home view', async() => {
                                     await openPage(appUrl, { timeout: 5000 });
                                     await page.reload([{
                                         waitUntil: {
