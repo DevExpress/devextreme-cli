@@ -18,9 +18,13 @@ jobs:
       matrix:
         APPROACH:
           - angular
-          - react
-          - nextjs-ts
           - vue-v3
+          - react
+          - react-ts
+          - react-swc
+          - react-swc-ts
+          - nextjs
+          - nextjs-ts
         NODE:
           - 18
         OS:
