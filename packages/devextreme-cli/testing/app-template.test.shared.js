@@ -186,7 +186,7 @@ module.exports = (env, { port, urls } = { port: '8080', urls: {} }) => {
                                     compareSnapshot(image, 'home');
                                 });
 
-                                fit('Profile view', async() => {
+                                it('Profile view', async() => {
                                     await openPage(getPageURL('profile'));
 
                                     await page.waitForTimeout(3000);
