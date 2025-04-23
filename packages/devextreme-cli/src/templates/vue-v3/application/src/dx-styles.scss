@@ -40,12 +40,13 @@ $side-panel-min-width: 60px;
     margin-top: 20px;
   }
 
+
   .responsive-paddings {
     padding: 20px;
+  }
 
-    .screen-large & {
-      padding: 40px;
-    }
+  .screen-large .responsive-paddings {
+    padding: 40px;
   }
 
   .dx-card.wide-card {
