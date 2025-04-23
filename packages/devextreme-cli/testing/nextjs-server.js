@@ -14,7 +14,7 @@ module.exports = class NextJsServer {
             env: Object.assign(process.env, { CI: false })
         }));
 
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        // await new Promise(resolve => setTimeout(resolve, 5000));
     }
 
     stop() {

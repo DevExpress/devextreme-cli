@@ -1,4 +1,5 @@
 const path = require('path');
+const waitOn = require('wait-on');
 const ip = require('ip');
 const getBrowser = require('./utils/puppeteer').getBrowser;
 
@@ -47,12 +48,11 @@ module.exports = (env, { port } = { port: '8080' }) => {
                                 await devServer.setTheme(theme);
                                 await devServer.build();
                                 await devServer.start();
-                                /* console.log('-----waiting----->');
                                 await waitOn({
                                     resources: [appUrl],
                                     timeout: 30000,
                                     interval: 100
-                                }); */
+                                });
                             } catch(e) {
                                 // NOTE jest@27 will fail test, but jest@26 - not
                                 throw new Error(e);
