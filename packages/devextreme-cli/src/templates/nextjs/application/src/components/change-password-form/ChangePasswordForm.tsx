@@ -28,7 +28,7 @@ export default function ChangePasswordForm() {
   setLoading(false);
 
   if (result.isOk) {
-    router('/login');
+    router.push('/login');
   } else {
     notify(result.message, 'error', 2000);
   }
