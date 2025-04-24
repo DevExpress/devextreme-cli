@@ -63,6 +63,13 @@ module.exports = (env, { port, urls } = { port: '8080', urls: {} }) => {
 
                         afterAll(async() => {
                             await devServer.stop();
+                            await waitOn({
+                                resources: [appUrl],
+                                reverse: true,
+                                timeout: 10000,
+                                interval: 100,
+                                validateStatus: false
+                            });
                         });
 
                         Object.keys(viewports).forEach((viewportName) => {
