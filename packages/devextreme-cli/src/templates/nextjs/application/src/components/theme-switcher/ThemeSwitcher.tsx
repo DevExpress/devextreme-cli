@@ -1,6 +1,7 @@
+'use client'
 import { useCallback, useContext } from 'react';
 import Button from 'devextreme-react/button';
-import { ThemeContext } from '../../theme';
+import { ThemeContext } from '@/theme';
 
 export const ThemeSwitcher = () => {
   const themeContext = useContext(ThemeContext);

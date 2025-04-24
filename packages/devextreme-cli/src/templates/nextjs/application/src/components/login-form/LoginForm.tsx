@@ -13,13 +13,12 @@ import Form, {
 import LoadIndicator from 'devextreme-react/load-indicator';
 import Button from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
-import { useAuth } from '../../contexts/auth';
+import { signIn } from '@/app/actions/auth';
 
 import './LoginForm.scss';
 
 export default function LoginForm() {
   const router = useRouter();
-  const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const formData = useRef({ email: '', password: '' });
 

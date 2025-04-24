@@ -1,18 +1,5 @@
-'use client'
-<%=#isTypeScript%>import { PropsWithChildren } from 'react';<%=/isTypeScript%>
-import LoadPanel from 'devextreme-react/load-panel';
-import { AuthProvider, useAuth } from '@/contexts/auth';
-import { ThemeProvider } from "@/theme";
-
-function Page({ children }<%=#isTypeScript%>: PropsWithChildren<object><%=/isTypeScript%>) {
-  const { loading } = useAuth();
-
-  if (loading) {
-    return <LoadPanel visible={true} />;
-  }
-
-  return children;
-}
+<%=#isTypeScript%>import type { PropsWithChildren } from 'react';
+<%=/isTypeScript%>import { ThemeProvider } from "@/theme";
 
 export default function RootLayout({ children }<%=#isTypeScript%>: PropsWithChildren<object><%=/isTypeScript%>) {
   return (
@@ -20,11 +7,9 @@ export default function RootLayout({ children }<%=#isTypeScript%>: PropsWithChil
     <title>NextJs Dx App</title>
       <body className="dx-viewport">
         <ThemeProvider>
-          <AuthProvider>
-            <div className='app'>
-              <Page>{children}</Page>
-            </div>
-          </AuthProvider>
+          <div className='app'>
+            {children}
+          </div>
         </ThemeProvider>
       </body>
     </html>

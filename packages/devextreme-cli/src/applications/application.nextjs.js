@@ -36,7 +36,7 @@ const isTsApp = () => {
 };
 
 const getExtension = (appPath) => {
-    return fs.existsSync(path.join(appPath, 'src/app', 'page.tsx')) ? '.tsx' : '.jsx';
+    return fs.existsSync(path.join(appPath, 'src/app', 'layout.tsx')) ? '.tsx' : '.jsx';
 };
 
 const pathToPagesIndex = () => {
@@ -47,6 +47,7 @@ const pathToPagesIndex = () => {
 const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
+        { name: 'jose', version: latestVersions['jose'] },
     ];
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
@@ -74,12 +75,7 @@ const create = async(appName, options) => {
     commandArguments = [
         ...commandArguments,
         `${templateOptions.isTypeScript ? '--typescript' : '--javascript'}`,
-        '--eslint',
-        '--no-tailwind',
-        '--src-dir',
-        '--app',
-        '--no-turbopack',
-        '--import-alias "@/*"'
+        '--yes',
     ];
 
     await runCommand('npx', commandArguments);
@@ -87,7 +83,7 @@ const create = async(appName, options) => {
     const appPath = path.join(process.cwd(), appName);
 
     if(depsVersionTag) {
-        bumpReact(appPath, depsVersionTag);
+        bumpReact(appPath, depsVersionTag, templateOptions.isTypeScript);
     }
 
     addTemplate(appPath, appName, templateOptions);

@@ -13,7 +13,7 @@ import Form, {
 } from 'devextreme-react/form';
 import notify from 'devextreme/ui/notify';
 import LoadIndicator from 'devextreme-react/load-indicator';
-import { createAccount } from '../../api/auth';
+import { signUp } from '@/app/actions/auth';
 <%=#isTypeScript%>import { ValidationCallbackData } from 'devextreme-react/common';<%=/isTypeScript%>
 import './CreateAccountForm.scss';
 
@@ -27,7 +27,7 @@ export default function CreateAccountForm() {
     const { email, password } = formData.current;
     setLoading(true);
 
-    const result = await createAccount(email, password);
+    const result = await signUp(email, password);
     setLoading(false);
 
     if (result.isOk) {

@@ -3,12 +3,11 @@ import { useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import DropDownButton from 'devextreme-react/drop-down-button';
 import List from 'devextreme-react/list';
-import { useAuth } from '../../contexts/auth';
+import { signOut } from '@/app/actions/auth';
 import './UserPanel.scss';
-<%=#isTypeScript%>import type { UserPanelProps } from '../../types';<%=/isTypeScript%>
+<%=#isTypeScript%>import type { UserPanelProps } from '@/types';<%=/isTypeScript%>
 
 export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps<%=/isTypeScript%>) {
-  const { signOut } = useAuth();
   const router = useRouter();
 
   const navigateToProfile = useCallback(() => {

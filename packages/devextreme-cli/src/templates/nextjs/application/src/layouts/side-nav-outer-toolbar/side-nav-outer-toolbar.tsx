@@ -3,14 +3,14 @@ import Drawer from 'devextreme-react/drawer';
 import { ScrollView<%=#isTypeScript%>, ScrollViewRef<%=/isTypeScript%> } from 'devextreme-react/scroll-view';
 import React, { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Header, SideNavigationMenu, Footer } from '../../components';
+import { Header, SideNavigationMenu, Footer } from '@/components';
 import './side-nav-outer-toolbar.scss';
-import { useScreenSize } from '../../utils/media-query';
+import { useScreenSize } from '@/utils/media-query';
 import { Template } from 'devextreme-react/core/template';
-<%=#isTypeScript%>import { ButtonTypes } from 'devextreme-react/button';<%=/isTypeScript%>
-<%=#isTypeScript%>import { TreeViewTypes } from 'devextreme-react/tree-view';<%=/isTypeScript%>
-<%=#isTypeScript%>import type { SideNavToolbarProps } from '../../types';<%=/isTypeScript%>
-
+<%=#isTypeScript%>import type { ButtonTypes } from 'devextreme-react/button';
+import type { TreeViewTypes } from 'devextreme-react/tree-view';
+import type { SideNavToolbarProps } from '@/types';
+<%=/isTypeScript%>
 export default function SideNavOuterToolbar({ title, children }<%=#isTypeScript%>: React.PropsWithChildren<SideNavToolbarProps><%=/isTypeScript%>) {
   const scrollViewRef = useRef<%=#isTypeScript%><ScrollViewRef><%=/isTypeScript%>(null);
 const router = useRouter();

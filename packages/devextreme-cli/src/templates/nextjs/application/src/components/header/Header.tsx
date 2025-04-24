@@ -1,10 +1,10 @@
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import Button from 'devextreme-react/button';
-import UserPanel from '../user-panel/UserPanel';
+import UserPanel from '@/components/user-panel/UserPanel';
 import './Header.scss';
 import { Template } from 'devextreme-react/core/template';
-import { ThemeSwitcher } from '../theme-switcher/ThemeSwitcher';
-<%=#isTypeScript%>import type { HeaderProps } from '../../types';<%=/isTypeScript%>
+import { ThemeSwitcher } from '@/components/theme-switcher/ThemeSwitcher';
+<%=#isTypeScript%>import type { HeaderProps } from '@/types';<%=/isTypeScript%>
 
 export default function Header({ menuToggleEnabled, title, toggleMenu }<%=#isTypeScript%>: HeaderProps<%=/isTypeScript%>) {
   return (

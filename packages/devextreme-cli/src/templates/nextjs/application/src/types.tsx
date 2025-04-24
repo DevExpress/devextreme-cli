@@ -18,6 +18,11 @@ export interface UserPanelProps {
     menuMode: 'context' | 'list';
 }
 
+export type SessionPayload = {
+    userId: string;
+    expiresAt: Date;
+}
+
 export interface User {
     email: string;
     avatarUrl: string;

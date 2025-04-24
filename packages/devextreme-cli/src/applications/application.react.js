@@ -52,13 +52,18 @@ const updateJsonPropName = (path, name) => {
     });
 };
 
-const bumpReact = (appPath, versionTag) => {
+const bumpReact = (appPath, versionTag, isTypeScript) => {
     const dependencies = [
         { name: 'react', version: versionTag },
         { name: 'react-dom', version: versionTag },
-        { name: '@types/react', version: versionTag, dev: true },
-        { name: '@types/react-dom', version: versionTag, dev: true },
     ];
+
+    if(isTypeScript) {
+        dependencies.push(
+            { name: '@types/react', version: versionTag, dev: true },
+            { name: '@types/react-dom', version: versionTag, dev: true },
+        );
+    }
 
     packageJsonUtils.addDependencies(appPath, dependencies);
 };
@@ -86,7 +91,7 @@ const create = async(appName, options) => {
     modifyIndexHtml(appPath, templateOptions.project);
 
     if(depsVersionTag) {
-        bumpReact(appPath, depsVersionTag);
+        bumpReact(appPath, depsVersionTag, templateOptions.isTypeScript);
     }
 
     addTemplate(appPath, appName, templateOptions);
