@@ -25,6 +25,7 @@ module.exports = function(commandName, args = [], customConfig = {}) {
         });
 
         if(config.detached) {
+            proc.unref();
             resolve({ proc });
         }
     });

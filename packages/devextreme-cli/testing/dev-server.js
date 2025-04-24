@@ -11,10 +11,10 @@ module.exports = class DevServer {
         return this.env.engine.indexOf('nextjs') === 0;
     }
 
-    constructor(env) {
+    constructor(env, { port }) {
         this.env = env;
         this.server = this.isNextJs()
-            ? new NextJsServer(this.env)
+            ? new NextJsServer(this.env, { port })
             : new WebServer();
     }
 
@@ -28,6 +28,7 @@ module.exports = class DevServer {
 
     async build() {
         try {
+            fs.rmSync(this.env.deployPath, { recursive: true, force: true });
             fs.mkdirSync(this.env.deployPath, { recursive: true });
 
             await runCommand('npm', this.env.npmArgs, {

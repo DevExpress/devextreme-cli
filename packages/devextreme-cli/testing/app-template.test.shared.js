@@ -1,17 +1,15 @@
 const path = require('path');
 const waitOn = require('wait-on');
 const ip = require('ip');
-const getBrowser = require('./utils/puppeteer').getBrowser;
 
+const getBrowser = require('./utils/puppeteer').getBrowser;
 const { viewports, themes, layouts } = require('./constants');
 const DevServer = require('./dev-server');
 
 const defaultLayout = 'side-nav-outer-toolbar';
 
-module.exports = (env, { port, urls } = { port: '8080', urls: {} }) => {
-    const appUrl = `http://${ip.address()}:${port}/`;
+module.exports = (env, { port = 8080, urls = {} } = {}) => {
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
-
     const pageUrls = {
         profile: 'profile',
         tasks: 'tasks',
@@ -20,31 +18,25 @@ module.exports = (env, { port, urls } = { port: '8080', urls: {} }) => {
         ...urls,
     };
 
-    const getPageURL = (name) => `${appUrl}${(env.engine.indexOf('nextjs') !== 0 ? '#/' : '')}${pageUrls[name]}`;
-
     describe(`${env.engine} app-template`, () => {
-        let browser;
-        let page;
-
-        beforeAll(async() => {
-            browser = await getBrowser();
-            page = await browser.newPage();
-        });
-
-        afterAll(async() => {
-            await (Boolean(process.env.LAUNCH_BROWSER) ? browser : page).close();
-        });
-
         Object.keys(themes).forEach((theme) => {
-
             describe(theme, () => {
                 layouts.forEach((layout) => {
                     const isDefaultLayout = layout === defaultLayout;
 
                     describe(layout, () => {
-                        const devServer = new DevServer(env);
+                        let browser;
+                        let page;
+                        let devServer;
+                        let appUrl;
+                        const getPageURL = (name) => `${appUrl}${(env.engine.indexOf('nextjs') !== 0 ? '#/' : '')}${pageUrls[name]}`;
 
                         beforeAll(async() => {
+                            browser = await getBrowser();
+                            page = await browser.newPage();
+                            appUrl = `http://${ip.address()}:${port}/`;
+                            devServer = new DevServer(env, { port });
+
                             try {
                                 await devServer.setLayout(layout);
                                 await devServer.setTheme(theme);
@@ -63,13 +55,7 @@ module.exports = (env, { port, urls } = { port: '8080', urls: {} }) => {
 
                         afterAll(async() => {
                             await devServer.stop();
-                            await waitOn({
-                                resources: [appUrl],
-                                reverse: true,
-                                timeout: 10000,
-                                interval: 100,
-                                validateStatus: false
-                            });
+                            await (Boolean(process.env.LAUNCH_BROWSER) ? browser : page).close();
                         });
 
                         Object.keys(viewports).forEach((viewportName) => {
@@ -333,7 +319,7 @@ module.exports = (env, { port, urls } = { port: '8080', urls: {} }) => {
                                         `const a = document.createElement("a");a.href="${getPageURL('change-password')}";a.click()`
                                     );
                                     await page.waitForSelector('form');
-
+                                    await page.mouse.move(0, 0);
                                     await hideScroll();
                                     await page.waitForTimeout(3000);
 

@@ -11,7 +11,7 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
     const appName = 'my-app';
     const sandboxPath = path.join(process.cwd(), `./testing/sandbox/${engine}`);
     const appPath = path.join(sandboxPath, appName);
-    const appLayoutPath = path.join(sandboxPath, appName, `src/app/layout.${templateExtension}`);
+    const appLayoutPath = path.join(sandboxPath, appName, `src/app/pages/layout.${templateExtension}`);
 
     const config = {
         engine: engine,
