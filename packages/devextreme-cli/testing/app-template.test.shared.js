@@ -25,17 +25,17 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                     const isDefaultLayout = layout === defaultLayout;
 
                     describe(layout, () => {
+                        const devServer = new DevServer(env, { port });
+                        const appUrl = `http://${ip.address()}:${port}/`;
+
                         let browser;
                         let page;
-                        let devServer;
-                        let appUrl;
+
                         const getPageURL = (name) => `${appUrl}${(env.engine.indexOf('nextjs') !== 0 ? '#/' : '')}${pageUrls[name]}`;
 
                         beforeAll(async() => {
                             browser = await getBrowser();
                             page = await browser.newPage();
-                            appUrl = `http://${ip.address()}:${port}/`;
-                            devServer = new DevServer(env, { port });
 
                             try {
                                 await devServer.setLayout(layout);
