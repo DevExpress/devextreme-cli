@@ -7,13 +7,9 @@ const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
 
 module.exports = class DevServer {
-    isNextJs() {
-        return this.env.engine.indexOf('nextjs') === 0;
-    }
-
     constructor(env, { port }) {
         this.env = env;
-        this.server = this.isNextJs()
+        this.server = this.env.engine.startsWith('nextjs')
             ? new NextJsServer(this.env, { port })
             : new WebServer();
     }
