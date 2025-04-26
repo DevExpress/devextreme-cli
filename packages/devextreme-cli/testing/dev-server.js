@@ -28,7 +28,6 @@ module.exports = class DevServer {
 
     async build() {
         try {
-            fs.rmSync(this.env.deployPath, { recursive: true, force: true });
             fs.mkdirSync(this.env.deployPath, { recursive: true });
 
             await runCommand('npm', this.env.npmArgs, {
