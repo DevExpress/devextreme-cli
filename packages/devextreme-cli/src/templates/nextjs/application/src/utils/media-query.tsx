@@ -48,9 +48,9 @@ const unsubscribe = (handler<%=#isTypeScript%>: Handle<%=/isTypeScript%>) => {
 
 function getScreenSize() {
   return {
-    isXSmall: xSmallMedia.matches,
-    isSmall: smallMedia.matches,
-    isMedium: mediumMedia.matches,
-    isLarge: largeMedia.matches
+    isXSmall: xSmallMedia?.matches,
+    isSmall: smallMedia?.matches,
+    isMedium: mediumMedia?.matches,
+    isLarge: largeMedia?.matches
   };
 }

@@ -48,7 +48,14 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
             forceNoCmd: true
         });
 
-        fs.writeFileSync(path.join(appPath, '.env'), 'SKIP_PREFLIGHT_CHECK=true' + EOL + 'BROWSER=none');
+        const envFilePath = path.join(appPath, '.env');
+        let envContent = 'SKIP_PREFLIGHT_CHECK=true' + EOL + 'BROWSER=none';
+
+        if(fs.existsSync(envFilePath)) {
+            envContent += EOL + fs.readFileSync(envFilePath).toString();
+        }
+
+        fs.writeFileSync(envFilePath, envContent);
     };
 
     config.setLayout = (layoutName) => {
