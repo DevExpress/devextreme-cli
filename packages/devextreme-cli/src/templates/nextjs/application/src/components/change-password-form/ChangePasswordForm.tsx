@@ -12,7 +12,7 @@ import Form, {
 import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
 <%=#isTypeScript%>import { ValidationCallbackData } from 'devextreme-react/common';<%=/isTypeScript%>
-import { changePassword } from '../../api/auth';
+import { changePassword } from '@/app/actions/auth';
 
 export default function ChangePasswordForm() {
   const router = useRouter();
