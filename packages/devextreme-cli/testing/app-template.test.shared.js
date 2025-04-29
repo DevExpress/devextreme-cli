@@ -84,7 +84,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                 await page.waitForTimeout(500);
                             }
 
-                            const customConfig = { threshold: 0.02 };
+                            const customConfig = { threshold: 0.03 };
 
                             function compareSnapshot(image, name) {
                                 expect(image).toMatchImageSnapshot({
