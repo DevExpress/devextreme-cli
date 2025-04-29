@@ -22,7 +22,7 @@ export async function signOut() {
   redirect('/login');
 }
 
-export async function changePassword(email<%=#isTypeScript%>: string<%=/isTypeScript%>, recoveryCode?<%=#isTypeScript%>: string<%=/isTypeScript%>) {
+export async function changePassword(email<%=#isTypeScript%>: string<%=/isTypeScript%>, recoveryCode<%=#isTypeScript%>?: string<%=/isTypeScript%>) {
   // Verify the recovery code
   console.log(email, recoveryCode);
 }
