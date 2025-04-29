@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './profile.scss';
 import Form from 'devextreme-react/form';
+import Image from 'next/image';
 
 export default function Page() {
   const [notes, setNotes] = useState(
@@ -26,7 +27,7 @@ export default function Page() {
 
       <div className={'content-block dx-card responsive-paddings'}>
         <div className={'form-avatar'}>
-          <img
+          <Image
             alt={''}
             src={`https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/${
               employee.Picture

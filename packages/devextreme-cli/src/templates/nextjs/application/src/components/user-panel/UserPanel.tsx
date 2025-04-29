@@ -25,7 +25,7 @@ export default function UserPanel({ menuMode }<%=#isTypeScript%>: UserPanelProps
       icon: 'runner',
       onClick: signOut
     }
-  ]), [navigateToProfile, signOut]);
+  ]), [navigateToProfile]);
 
   const dropDownButtonAttributes = {
     class: 'user-button'
