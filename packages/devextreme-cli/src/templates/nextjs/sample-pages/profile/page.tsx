@@ -28,10 +28,12 @@ export default function Page() {
       <div className={'content-block dx-card responsive-paddings'}>
         <div className={'form-avatar'}>
           <Image
-            alt={''}
+            alt={'Employee avatar'}
             src={`https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/${
               employee.Picture
             }`}
+            width={93.5}
+            height={120}
           />
         </div>
         <span>{notes}</span>

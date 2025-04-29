@@ -24,6 +24,9 @@ const nextConfig = {
       },
     ]
   },
+  images: {
+    remotePatterns: [new URL('https://js.devexpress.com/**')]
+  },
 }
 
 export default nextConfig;
