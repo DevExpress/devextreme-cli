@@ -34,7 +34,7 @@ export default function LoginForm() {
     } else {
       router.push('/');
     }
-  }, [signIn]);
+  }, [router]);
 
   const onCreateAccountClick = useCallback(() => {
     router.push('/auth/create-account');

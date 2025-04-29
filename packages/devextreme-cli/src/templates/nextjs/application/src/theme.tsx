@@ -48,7 +48,7 @@ export function useThemeContext() {
     if (typeof window !== 'undefined' && !document.body.className.includes(themeClassNamePrefix)) {
       document.body.classList.add(themeClassNamePrefix + theme);
     }
-  }, []);
+  }, [theme]);
 
   return useMemo(()=> ({ theme, switchTheme, isDark }), [theme, switchTheme, isDark]);
 }

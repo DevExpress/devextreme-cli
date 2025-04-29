@@ -22,7 +22,7 @@ export async function decrypt(session<%=#isTypeScript%>: string | undefined = ''
     });
 
     return payload;
-  } catch (error) {
+  } catch {
     console.log('Failed to verify session');
   }
 }
