@@ -30,8 +30,7 @@ const isNextJsApp = () => {
     return fs.existsSync(path.join(appPath, 'next.config.ts')) || fs.existsSync(path.join(appPath, 'next.config.mjs'));
 };
 
-const isTsApp = () => {
-    const appPath = process.cwd();
+const isTsApp = (appPath) => {
     return fs.existsSync(path.join(appPath, 'next.config.ts'));
 };
 
@@ -133,7 +132,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
 };
 
 const getEntryFilePath = (options, appPath) => {
-    const extension = options.isTypeScript || isTsApp() ? 'ts' : 'js';
+    const extension = options.isTypeScript || isTsApp(appPath) ? 'ts' : 'js';
     const srcFolder = fs.existsSync(path.join(appPath, 'src')) ? 'src' : '';
     const isAppRouterApp = fs.existsSync(path.join(appPath, srcFolder, 'app')) && fs.lstatSync(appPath).isDirectory();
 
