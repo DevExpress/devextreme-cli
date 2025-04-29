@@ -14,7 +14,7 @@ export async function encrypt(payload<%=#isTypeScript%>: SessionPayload<%=/isTyp
     .setExpirationTime('7d')
     .sign(encodedKey);
 }
- 
+
 export async function decrypt(session<%=#isTypeScript%>: string | undefined = ''<%=/isTypeScript%>) {
   try {
     const { payload } = await jwtVerify(session, encodedKey, {
@@ -22,7 +22,7 @@ export async function decrypt(session<%=#isTypeScript%>: string | undefined = ''
     });
 
     return payload;
-  } catch (error) {
+  } catch {
     console.log('Failed to verify session');
   }
 }
@@ -31,7 +31,7 @@ export async function createSession(userId<%=#isTypeScript%>: string<%=/isTypeSc
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const session = await encrypt({ userId, expiresAt });
   const cookieStore = await cookies();
- 
+
   cookieStore.set('session', session, {
     httpOnly: true,
     secure: true,

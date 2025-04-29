@@ -74,7 +74,12 @@ const create = async(appName, options) => {
     commandArguments = [
         ...commandArguments,
         `${templateOptions.isTypeScript ? '--typescript' : '--javascript'}`,
-        '--yes',
+        '--eslint',
+        '--no-tailwind',
+        '--src-dir',
+        '--app',
+        '--no-turbopack',
+        '--import-alias "@/*"',
     ];
 
     await runCommand('npx', commandArguments);
