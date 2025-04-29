@@ -84,11 +84,11 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                 await page.waitForTimeout(500);
                             }
 
-                            const customConfig = { threshold: 0.03 };
+                            const customConfig = { threshold: 0.012 };
 
-                            function compareSnapshot(image, name) {
+                            function compareSnapshot(image, name, overrideConfig = {}) {
                                 expect(image).toMatchImageSnapshot({
-                                    customDiffConfig: customConfig,
+                                    customDiffConfig: { ...customConfig, ...overrideConfig },
                                     customSnapshotIdentifier: `${layout}-${theme}-${viewportName}-${name}-snap`,
                                     customDiffDir: diffSnapshotsDir,
                                     storeReceivedOnFailure: true,
@@ -187,7 +187,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
 
                                     const image = await takeScreenshot();
 
-                                    compareSnapshot(image, 'profile');
+                                    compareSnapshot(image, 'profile', { threshold: 0.03 });
 
                                     // TODO: fix false positive screenshot failure and uncomment
                                     // await switchTheme();
@@ -226,7 +226,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
-                                    compareSnapshot(image, 'toggle');
+                                    compareSnapshot(image, 'toggle', { threshold: 0.03 });
                                 });
 
                                 it('User panel', async() => {
@@ -244,7 +244,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                         }
                                     });
 
-                                    compareSnapshot(image, 'user-panel');
+                                    compareSnapshot(image, 'user-panel', { threshold: 0.03 });
                                 });
 
                                 it('Login page', async() => {
