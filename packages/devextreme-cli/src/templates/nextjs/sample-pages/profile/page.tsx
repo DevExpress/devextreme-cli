@@ -32,8 +32,8 @@ export default function Page() {
             src={`https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/${
               employee.Picture
             }`}
-            width={93.5}
-            height={120}
+            width={374}
+            height={480}
           />
         </div>
         <span>{notes}</span>
