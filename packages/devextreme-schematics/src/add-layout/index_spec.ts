@@ -243,7 +243,7 @@ describe('layout', () => {
     const routesContent = tree.readContent('/src/app/app.routes.ts');
 
     expect(routesContent)
-      .toContain(`{\r\n    path: 'login-form',\r\n    component: LoginFormComponent,\r\n    canActivate: [ AuthGuardService ]\r\n  },`);
+      .toContain(`{\n    path: 'login-form',\n    component: LoginFormComponent,\n    canActivate: [ AuthGuardService ]\n  },`);
   });
 
   it('should use selected layout', async () => {
