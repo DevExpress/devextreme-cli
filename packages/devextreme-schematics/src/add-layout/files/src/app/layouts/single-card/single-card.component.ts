@@ -6,7 +6,8 @@ import { DxScrollViewModule }  from 'devextreme-angular/ui/scroll-view';
   selector: 'app-single-card',
   templateUrl: './single-card.component.html',
   styleUrls: ['./single-card.component.scss'],
-  standalone: false
+  standalone: true,
+  imports: [ CommonModule, DxScrollViewModule ],
 })
 export class SingleCardComponent {
   @Input()
@@ -16,13 +17,4 @@ export class SingleCardComponent {
   description!: string;
 
   constructor() { }
-}
-
-@NgModule({
-  imports: [ CommonModule, DxScrollViewModule ],
-  exports: [ SingleCardComponent ],
-  declarations: [ SingleCardComponent ]
-})
-export class SingleCardModule {
-  
 }

@@ -169,7 +169,7 @@ function modifyFileRule(path: string, callback: (source: SourceFile) => Change[]
 }
 
 function updateAppModule(host: Tree, sourcePath: string) {
-  const appModulePath = sourcePath + 'app.module.ts';
+  const appModulePath = sourcePath + 'app.component.ts';
 
   const importSetter = (importName: string, path: string) => {
     return (source: SourceFile) => {
@@ -177,30 +177,18 @@ function updateAppModule(host: Tree, sourcePath: string) {
     };
   };
 
-  const providerSetter = (importName: string, path: string) => {
+  /*const providerSetter = (importName: string, path: string) => {
     return (source: SourceFile) => {
       return addProviderToModule(source, appModulePath, importName, path);
     };
-  };
+  };*/
 
   const rules = [
     modifyFileRule(appModulePath, importSetter('DxHttpModule', 'devextreme-angular/http')),
-    modifyFileRule(appModulePath, importSetter('SideNavOuterToolbarModule', './layouts')),
-    modifyFileRule(appModulePath, importSetter('SideNavInnerToolbarModule', './layouts')),
-    modifyFileRule(appModulePath, importSetter('SingleCardModule', './layouts')),
-    modifyFileRule(appModulePath, importSetter('FooterModule', './shared/components')),
-    modifyFileRule(appModulePath, importSetter('ResetPasswordFormModule', './shared/components')),
-    modifyFileRule(appModulePath, importSetter('CreateAccountFormModule', './shared/components')),
-    modifyFileRule(appModulePath, importSetter('ChangePasswordFormModule', './shared/components')),
-    modifyFileRule(appModulePath, importSetter('LoginFormModule', './shared/components')),
-    modifyFileRule(appModulePath, providerSetter('AuthService', './shared/services')),
-    modifyFileRule(appModulePath, providerSetter('ScreenService', './shared/services')),
-    modifyFileRule(appModulePath, providerSetter('AppInfoService', './shared/services')),
-    modifyFileRule(appModulePath, importSetter('UnauthenticatedContentModule', './unauthenticated-content')),
   ];
 
   if (!hasRoutingModule(host, sourcePath)) {
-    rules.push(modifyFileRule(appModulePath, importSetter('AppRoutingModule', './app-routing.module')));
+    rules.push(modifyFileRule(appModulePath, importSetter('routes', './app.routes')));
   }
 
   return chain(rules);
@@ -227,7 +215,7 @@ function getComponentName(host: Tree, sourcePath: string) {
 }
 
 function hasRoutingModule(host: Tree, sourcePath: string) {
-  return host.exists(sourcePath + 'app-routing.module.ts');
+  return host.exists(sourcePath + 'app.routes.ts');
 }
 
 function addPackagesToDependency(globalNgCliVersion: string) {
@@ -348,7 +336,7 @@ export default function(options: any): Rule {
         return `${currentContent}\n${templateContent}`;
       }
 
-      if (basename(filePath) === 'app-routing.module.ts' && hasRoutingModule(host, appPath)) {
+      if (basename(filePath) === 'app.routes.ts' && hasRoutingModule(host, appPath)) {
         modifyRoutingModule(host, filePath);
         return currentContent;
       }

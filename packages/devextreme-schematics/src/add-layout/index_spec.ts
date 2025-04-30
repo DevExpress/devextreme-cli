@@ -104,16 +104,16 @@ describe('layout', () => {
     const moduleContent = tree.readContent('/src/app/app.module.ts');
     expect(moduleContent).toContain('import { DxHttpModule }');
     expect(moduleContent)
-      .toContain('import { SideNavOuterToolbarModule, SideNavInnerToolbarModule, SingleCardModule }');
+      .toContain('import { SideNavOuterToolbarComponent, SideNavInnerToolbarComponent, SingleCardComponent }');
     expect(moduleContent)
       .toContain(`import { AuthService, ScreenService, AppInfoService } from './shared/services';`);
     expect(moduleContent).toContain('import { AppRoutingModule }');
     expect(moduleContent)
-      .toContain('import { FooterModule, ' +
-      'ResetPasswordFormModule, ' +
-      'CreateAccountFormModule, ' +
-      'ChangePasswordFormModule, ' +
-      'LoginFormModule }');
+      .toContain('import { FooterComponent, ' +
+      'ResetPasswordFormComponent, ' +
+      'CreateAccountFormComponent, ' +
+      'ChangePasswordFormComponent, ' +
+      'LoginFormComponent }');
 
     const appContent = tree.readContent('/src/app/app.component.ts');
     expect(appContent).toContain('templateUrl: \'./app.component.html\',');
@@ -253,8 +253,8 @@ describe('layout', () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner.runSchematic('add-layout', options, appTree);
 
-    expect(tree.files).toContain('/src/app/app-routing.module.ts');
-    const moduleContent = tree.readContent('/src/app/app-routing.module.ts');
+    expect(tree.files).toContain('/src/app/app.routes.ts');
+    const moduleContent = tree.readContent('/src/app/app.routes.ts');
     expect(moduleContent)
       .toMatch(/imports:\s\[RouterModule\.forRoot\(routes, { useHash: true }\)\],/);
 

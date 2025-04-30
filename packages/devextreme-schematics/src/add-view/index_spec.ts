@@ -71,7 +71,7 @@ describe('view', () => {
     let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
     tree = await runner.runSchematic('add-view', options, tree);
     tree = await runner.runSchematic('add-view', { ...options, name: 'test2' }, tree);
-    const moduleContent = tree.readContent('/src/app/app-routing.module.ts');
+    const moduleContent = tree.readContent('/src/app/app.routes.ts');
 
     expect(moduleContent).toContain(`const routes: Routes = [
   {
