@@ -7,14 +7,18 @@ const Mustache = require('mustache');
 const applyTemplateToFile = (filePath, templateOptions) => {
     const tags = ['<%=', '%>'];
     const fileContent = fs.readFileSync(filePath);
-    const content = Mustache.render(fileContent.toString(), templateOptions, {}, tags);
 
-    return content;
+    if(fileContent.includes(tags[0])) {
+        return Mustache.render(fileContent.toString(), templateOptions, {}, tags);
+    }
+
+    return fileContent;
 };
 
-const addPageToApp = (pageName, pageDir, templatePagesPath, getCorrectExtension) => {
+const addPageToApp = (pageName, pageDir, templatePagesPath, getCorrectExtension, { getPageFileName = () => pageName } = {}) => {
     fs.readdirSync(templatePagesPath).forEach((pageItem) => {
-        const pagePath = path.join(pageDir, `${pageName}${getCorrectExtension(extname(pageItem))}`);
+        const pagePath = path.join(pageDir, `${getPageFileName(pageName, pageItem)}${getCorrectExtension(extname(pageItem))}`);
+
         if(fs.existsSync(pagePath)) {
             console.error('The page already exists');
             process.exit();

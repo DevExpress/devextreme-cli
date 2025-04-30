@@ -1,22 +1,25 @@
 const fs = require('fs');
 const path = require('path');
 const WebServer = require('./web-server');
+const NextJsServer = require('./nextjs-server');
 
-const webServer = new WebServer();
 const runCommand = require('../src/utility/run-command');
 const { themes, swatchModes, baseFontFamily } = require('./constants');
 
 module.exports = class DevServer {
-    constructor(env) {
+    constructor(env, { port }) {
         this.env = env;
+        this.server = this.env.engine.startsWith('nextjs')
+            ? new NextJsServer(this.env, { port })
+            : new WebServer();
     }
 
     async start() {
-        await webServer.start(this.env.deployPath);
+        await this.server.start(this.env.deployPath);
     }
 
     async stop() {
-        await webServer.stop();
+        await this.server.stop();
     }
 
     async build() {

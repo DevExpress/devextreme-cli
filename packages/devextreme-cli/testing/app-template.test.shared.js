@@ -1,50 +1,52 @@
 const path = require('path');
+const waitOn = require('wait-on');
 const ip = require('ip');
-const getBrowser = require('./utils/puppeteer').getBrowser;
 
+const getBrowser = require('./utils/puppeteer').getBrowser;
 const { viewports, themes, layouts } = require('./constants');
 const DevServer = require('./dev-server');
 
 const defaultLayout = 'side-nav-outer-toolbar';
 
-module.exports = (env) => {
-    const appUrl = `http://${ip.address()}:8080/`;
+module.exports = (env, { port = 8080, urls = {} } = {}) => {
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
     const pageUrls = {
         profile: 'profile',
         tasks: 'tasks',
         page: `${(env.engine === 'angular' ? 'pages/' : '')}new-page`,
         'change-password': 'change-password/123',
+        ...urls,
     };
 
     describe(`${env.engine} app-template`, () => {
-        let browser;
-        let page;
-
-        beforeAll(async() => {
-            browser = await getBrowser();
-            page = await browser.newPage();
-        });
-
-        afterAll(async() => {
-            await (Boolean(process.env.LAUNCH_BROWSER) ? browser : page).close();
-        });
-
         Object.keys(themes).forEach((theme) => {
-
             describe(theme, () => {
                 layouts.forEach((layout) => {
                     const isDefaultLayout = layout === defaultLayout;
 
                     describe(layout, () => {
-                        const devServer = new DevServer(env);
-                        const getPageURL = (name) => `${appUrl}${(env.engine.indexOf('angular') !== 0 ? '#/' : '')}${pageUrls[name]}`;
+                        const devServer = new DevServer(env, { port });
+                        const appUrl = `http://${ip.address()}:${port}/`;
+
+                        let browser;
+                        let page;
+
+                        const getPageURL = (name) => `${appUrl}${(env.engine.indexOf('nextjs') !== 0 ? '#/' : '')}${pageUrls[name]}`;
+
                         beforeAll(async() => {
+                            browser = await getBrowser();
+                            page = await browser.newPage();
+
                             try {
                                 await devServer.setLayout(layout);
                                 await devServer.setTheme(theme);
                                 await devServer.build();
                                 await devServer.start();
+                                await waitOn({
+                                    resources: [appUrl],
+                                    timeout: 30000,
+                                    interval: 100
+                                });
                             } catch(e) {
                                 // NOTE jest@27 will fail test, but jest@26 - not
                                 throw new Error(e);
@@ -53,6 +55,7 @@ module.exports = (env) => {
 
                         afterAll(async() => {
                             await devServer.stop();
+                            await (Boolean(process.env.LAUNCH_BROWSER) ? browser : page).close();
                         });
 
                         Object.keys(viewports).forEach((viewportName) => {
@@ -83,9 +86,9 @@ module.exports = (env) => {
 
                             const customConfig = { threshold: 0.012 };
 
-                            function compareSnapshot(image, name) {
+                            function compareSnapshot(image, name, overrideConfig = {}) {
                                 expect(image).toMatchImageSnapshot({
-                                    customDiffConfig: customConfig,
+                                    customDiffConfig: { ...customConfig, ...overrideConfig },
                                     customSnapshotIdentifier: `${layout}-${theme}-${viewportName}-${name}-snap`,
                                     customDiffDir: diffSnapshotsDir,
                                     storeReceivedOnFailure: true,
@@ -205,7 +208,8 @@ module.exports = (env) => {
                                 });
 
                                 it('Add view', async() => {
-                                    await openPage(getPageURL('new-page'));
+
+                                    await openPage(getPageURL('page'));
                                     await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
@@ -315,7 +319,7 @@ module.exports = (env) => {
                                         `const a = document.createElement("a");a.href="${getPageURL('change-password')}";a.click()`
                                     );
                                     await page.waitForSelector('form');
-
+                                    await page.mouse.move(0, 0);
                                     await hideScroll();
                                     await page.waitForTimeout(3000);
 
