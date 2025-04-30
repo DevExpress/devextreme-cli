@@ -10,7 +10,7 @@ jobs:
     name: Run CLI tests
     uses: ./.github/workflows/applications.yml
     with:
-      external-tools-version-tag: next
+      deps-version-tag: next
 
   teams_notification_on_failure:
     name: Send Teams notification
