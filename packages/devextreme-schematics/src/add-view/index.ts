@@ -104,14 +104,9 @@ export function addViewToRouting(options: any) {
       const route = getRoute(options.name);
       insertItemToArray(host, routingModulePath, routes, route);
 
-      let fileName;
-      let folderName;
-
-      [ folderName, fileName ] = options.name.split('/');
-      fileName = fileName || folderName;
-
-      const componentName = getRouteComponentName(fileName);
-      const importChanges = insertImport(source, routingModulePath, componentName, `./pages/${fileName}/${fileName}.component`);
+      const name = options.name.replace(/^pages\//, '');
+      const componentName = getRouteComponentName(name);
+      const importChanges = insertImport(source, routingModulePath, componentName, `./pages/${name}/${name}.component`);
       applyChanges(host, [importChanges], routingModulePath);
     }
     return host;
