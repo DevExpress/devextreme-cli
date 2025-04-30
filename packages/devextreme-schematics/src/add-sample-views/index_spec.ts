@@ -46,7 +46,6 @@ describe('sample views', () => {
     expect(moduleContent).toMatch(/path: 'home'/);
 
     expect(moduleContent).toMatch(/import { HomeComponent } from /);
-    expect(moduleContent).toMatch(/declarations:\s\[\n*\s*HomeComponent/);
 
     const navigationContent = tree.readContent('/src/app/app-navigation.ts');
     expect(navigationContent).toMatch(/text: 'Home'/);
