@@ -2,6 +2,7 @@ const angularApplication = require('./applications/application.angular');
 const reactApplication = require('./applications/application.react');
 const nextjsApplication = require('./applications/application.nextjs');
 const vueApplication = require('./applications/application.vue');
+const getReactScaffoldToolInfo = require('./utility/prompts/react-tool');
 const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
@@ -16,8 +17,16 @@ const run = async(commands, options, devextremeConfig) => {
     }
 
     if(commands[0] === 'new') {
-        const app = commands[1];
+        let app = commands[1];
         const appName = commands[2] || 'my-app';
+
+        if(app === 'react-app') {
+            const reactAppType = await getReactScaffoldToolInfo(options['scaffold-tool']);
+
+            if(reactAppType === 'nextjs') {
+                app = 'nextjs-app';
+            }
+        }
 
         switch(app) {
             case 'angular-app':
