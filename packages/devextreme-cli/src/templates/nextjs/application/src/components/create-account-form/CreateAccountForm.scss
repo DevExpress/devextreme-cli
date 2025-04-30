@@ -1,0 +1,19 @@
+.create-account-form {
+  .policy-info {
+    color: var(--base-text-color-alpha-7);
+    font-size: 12px;
+    font-style: normal;
+
+    a {
+      color: var(--base-text-color-alpha-7);
+    }
+  }
+
+  .login-link {
+    color: var(--base-accent);
+    font-size: 12px;
+    text-align: center;
+    padding: 6px 0 32px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+}

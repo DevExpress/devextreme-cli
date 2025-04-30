@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import 'devextreme-angular/common/data';
 
 @Component({
   templateUrl: 'tasks.component.html',

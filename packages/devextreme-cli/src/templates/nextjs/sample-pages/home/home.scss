@@ -1,0 +1,37 @@
+.logos-container {
+  margin: 0 0 40px 0;
+
+  svg {
+    display: inline-block;
+  }
+}
+
+.devextreme-logo {
+  width: 255px;
+  height: 60px;
+
+  > path {
+    fill: var(--devextreme-logo-color);
+  }
+
+  .by-devexpress {
+    path {
+      fill: var(--devextreme-logo-color);
+    }
+  }
+}
+
+.react-logo {
+  width: 184px;
+  height: 60px;
+}
+
+.plus {
+  margin: 20px;
+  width: 22px;
+  height: 22px;
+
+  path {
+    fill:  var(--plus-icon-color);
+  }
+}
