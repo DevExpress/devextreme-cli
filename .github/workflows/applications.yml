@@ -20,14 +20,15 @@ jobs:
           - angular
           - vue-v3
           - react
-          - react-swc
           - react-ts
+          - react-swc
           - react-swc-ts
+          - nextjs
+          - nextjs-ts
         NODE:
           - 18
         OS:
           - ubuntu-latest
-          - windows-latest
 
     runs-on: ${{ matrix.OS }}
     env:

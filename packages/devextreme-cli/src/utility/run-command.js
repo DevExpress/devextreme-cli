@@ -17,8 +17,16 @@ module.exports = function(commandName, args = [], customConfig = {}) {
 
     console.log(`> ${command} ${args.join(' ')}`);
 
+    const proc = spawn(command, args, config);
+
     return new Promise((resolve, reject) => {
-        spawn(command, args, config)
-            .on('exit', (code) => code ? reject(code) : resolve());
+        proc.on('exit', (code) => {
+            code ? reject(code) : resolve({ proc });
+        });
+
+        if(config.detached) {
+            proc.unref();
+            resolve({ proc });
+        }
     });
 };
