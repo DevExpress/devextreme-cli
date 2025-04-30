@@ -31,7 +31,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                         let browser;
                         let page;
 
-                        const getPageURL = (name) => `${appUrl}${(env.engine.startsWith('react') || env.engine.startsWith('vue') ? '#/' : '')}${pageUrls[name]}`;
+                        const getPageURL = (name) => `${appUrl}${(!env.engine.startsWith('nextjs') ? '#/' : '')}${pageUrls[name]}`;
 
                         beforeAll(async() => {
                             browser = await getBrowser();

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService, ScreenService, AppInfoService } from './shared/services';
 import { DxHttpModule } from 'devextreme-angular/http';
-import { SideNavOuterToolbarComponent, SideNavInnerToolbarComponent } from './layouts';
 import { FooterComponent } from './shared/components';
 import { UnauthenticatedContentComponent } from './unauthenticated-content';
 
@@ -18,8 +17,7 @@ import { UnauthenticatedContentComponent } from './unauthenticated-content';
     RouterOutlet,
     CommonModule,
     DxHttpModule,
-    SideNavOuterToolbarComponent,
-    SideNavInnerToolbarComponent,
+    SideNavToolbarComponent,
     FooterComponent,
     UnauthenticatedContentComponent,
   ],

@@ -104,7 +104,7 @@ describe('layout', () => {
     const appContent = tree.readContent('/src/app/app.component.ts');
     expect(appContent).toContain('import { DxHttpModule }');
     expect(appContent)
-      .toContain('import { SideNavOuterToolbarComponent, SideNavInnerToolbarComponent }');
+      .toContain('import { SideNavOuterToolbarComponent as SideNavToolbarComponent }');
     expect(appContent)
       .toContain(`import { AuthService, ScreenService, AppInfoService } from './shared/services';`);
     expect(appContent)

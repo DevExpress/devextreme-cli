@@ -60,9 +60,7 @@ import {
   findRoutesInSource
 } from '../utility/routing';
 
-import {
-  addImportToModule, addProviderToModule, insertImport
-} from '@schematics/angular/utility/ast-utils';
+import { insertImport } from '@schematics/angular/utility/ast-utils';
 
 import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { Change } from '@schematics/angular/utility/change';
@@ -168,28 +166,24 @@ function modifyFileRule(path: string, callback: (source: SourceFile) => Change[]
   };
 }
 
-function updateAppModule(host: Tree, sourcePath: string) {
-  const appModulePath = sourcePath + 'app.component.ts';
+function updateAppComponent(sourcePath: string, templateOptions: any = {}) {
+  const appMComponentPath = sourcePath + 'app.component.ts';
 
-  const importSetter = (importName: string, path: string) => {
+  const importSetter = (importName: string, path: string, alias: string) => {
     return (source: SourceFile) => {
-      return addImportToModule(source, appModulePath, importName, path);
+      return [insertImport(source, appMComponentPath, importName, path, false, alias)];
     };
   };
 
-  /*const providerSetter = (importName: string, path: string) => {
-    return (source: SourceFile) => {
-      return addProviderToModule(source, appModulePath, importName, path);
-    };
-  };*/
-
   const rules = [
-    modifyFileRule(appModulePath, importSetter('DxHttpModule', 'devextreme-angular/http')),
+    modifyFileRule(appMComponentPath, importSetter(
+      templateOptions.layout === 'side-nav-outer-toolbar'
+        ? 'SideNavOuterToolbarComponent'
+        : 'SideNavInnerToolbarComponent',
+      './layouts',
+      'SideNavToolbarComponent',
+      )),
   ];
-
-  if (!hasRoutingModule(host, sourcePath)) {
-    rules.push(modifyFileRule(appModulePath, importSetter('routes', './app.routes')));
-  }
 
   return chain(rules);
 }
@@ -214,7 +208,7 @@ function getComponentName(host: Tree, sourcePath: string) {
   return name;
 }
 
-function hasRoutingModule(host: Tree, sourcePath: string) {
+function hasRouting(host: Tree, sourcePath: string) {
   return host.exists(sourcePath + 'app.routes.ts');
 }
 
@@ -294,18 +288,17 @@ function updateDevextremeConfig(sourcePath: string = '') {
   return modifyContentByTemplate('./', workspaceFilesSource, devextremeConfigPath, templateOptions, modifyConfig);
 }
 
-const modifyRoutingModule = (host: Tree, routingModulePath: string) => {
+const modifyRouting = (host: Tree, routingFilePath: string) => {
   // TODO: Try to use the isolated host to generate the result string
-  let source = getSourceFile(host, routingModulePath)!;
-  const importChange = insertImport(source, routingModulePath, 'LoginFormComponent', './shared/components');
-  const providerChanges = addProviderToModule(source, routingModulePath, 'AuthGuardService', './shared/services');
-  applyChanges(host, [ importChange, ...providerChanges], routingModulePath);
+  let source = getSourceFile(host, routingFilePath)!;
+  const importChange = insertImport(source, routingFilePath, 'LoginFormComponent', './shared/components');
+  applyChanges(host, [ importChange ], routingFilePath);
 
-  source = getSourceFile(host, routingModulePath)!;
+  source = getSourceFile(host, routingFilePath)!;
   const routes = findRoutesInSource(source)!;
   if (!hasComponentInRoutes(routes, 'login-form')) {
     const loginFormRoute = getRoute('login-form');
-    insertItemToArray(host, routingModulePath, routes, loginFormRoute);
+    insertItemToArray(host, routingFilePath, routes, loginFormRoute);
   }
 };
 
@@ -336,8 +329,8 @@ export default function(options: any): Rule {
         return `${currentContent}\n${templateContent}`;
       }
 
-      if (basename(filePath) === 'app.routes.ts' && hasRoutingModule(host, appPath)) {
-        modifyRoutingModule(host, filePath);
+      if (basename(filePath) === 'app.routes.ts' && hasRouting(host, appPath)) {
+        modifyRouting(host, filePath);
         return currentContent;
       }
 
@@ -347,7 +340,7 @@ export default function(options: any): Rule {
     const rules = [
       modifyContentByTemplate(sourcePath, projectFilesSource, null, templateOptions, modifyContent),
       updateDevextremeConfig(sourcePath),
-      updateAppModule(host, appPath),
+      updateAppComponent(appPath, templateOptions),
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),
