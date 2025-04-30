@@ -34,6 +34,7 @@ export default function Page() {
             }`}
             width={374}
             height={480}
+            unoptimized={true}
           />
         </div>
         <span>{notes}</span>

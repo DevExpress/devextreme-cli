@@ -187,7 +187,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
 
                                     const image = await takeScreenshot();
 
-                                    compareSnapshot(image, 'profile', { threshold: 0.05 });
+                                    compareSnapshot(image, 'profile');
 
                                     // TODO: fix false positive screenshot failure and uncomment
                                     // await switchTheme();
@@ -226,7 +226,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
-                                    compareSnapshot(image, 'toggle', { threshold: 0.05 });
+                                    compareSnapshot(image, 'toggle');
                                 });
 
                                 it('User panel', async() => {
@@ -244,7 +244,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                         }
                                     });
 
-                                    compareSnapshot(image, 'user-panel', { threshold: 0.05 });
+                                    compareSnapshot(image, 'user-panel');
                                 });
 
                                 it('Login page', async() => {
