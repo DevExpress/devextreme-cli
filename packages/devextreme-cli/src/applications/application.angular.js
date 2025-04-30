@@ -40,13 +40,12 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
 async function runNgCommand(commandArguments, commandOptions, commandConfig) {
     const hasNg = await hasSutableNgCli();
     const depsVersionTag = extractDepsVersionTag(commandOptions);
-    console.log('----hasNg && !depsVersionTag------>', [hasNg, !depsVersionTag]);
     const npmCommandName = hasNg && !depsVersionTag ? 'ng' : 'npx';
     const [minCliLtsVersion] = minNgCliVersion.version.split('.');
 
     const ngCommandArguments = hasNg && !depsVersionTag
         ? []
-        : ['-p', `@angular/cli@${depsVersionTag || `v${minCliLtsVersion}-lts`}`];
+        : ['-p', `@angular/cli@${depsVersionTag || `v${minCliLtsVersion}-lts`}`, 'ng'];
 
     ngCommandArguments.push(...commandArguments);
     return runCommand(npmCommandName, ngCommandArguments, commandConfig);
@@ -64,7 +63,7 @@ function localPackageExists(packageName) {
 
 const hasSutableNgCli = async() => {
     const localVersion = ngVersion.getLocalNgVersion();
-    console.log('----localNgVersion------>', localVersion);
+
     if(!localVersion) {
         return false;
     }
