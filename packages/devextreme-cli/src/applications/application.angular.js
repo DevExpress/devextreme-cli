@@ -46,7 +46,7 @@ async function runNgCommand(commandArguments, commandOptions, commandConfig) {
 
     const ngCommandArguments = hasNg && !depsVersionTag
         ? []
-        : ['-p', `@angular/cli@${depsVersionTag || `v${minCliLtsVersion}-lts`}`];
+        : ['-p', `@angular/cli@${depsVersionTag || `v${minCliLtsVersion}-lts`}`, 'ng'];
 
     ngCommandArguments.push(...commandArguments);
     return runCommand(npmCommandName, ngCommandArguments, commandConfig);
