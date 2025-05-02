@@ -1,12 +1,12 @@
 const prompts = require('./prompts');
 
 const choices = [
-    { value: 'vite', title: 'Vite' },
-    { value: 'nextjs', title: 'Next.js' }
+    { value: 'vite', title: 'React+Vite' },
+    { value: 'nextjs', title: 'Next.js-based' }
 ];
 
 const question = {
-    message: 'How would you like to scaffold your React application?',
+    message: 'Specify the desired application type:',
     choices: choices
 };
 
