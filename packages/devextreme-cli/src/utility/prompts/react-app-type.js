@@ -6,12 +6,12 @@ const choices = [
 ];
 
 const question = {
-    message: 'Specify the desired application type:',
+    message: 'Specify the desired React application type:',
     choices: choices
 };
 
-const getScaffoldToolInfo = async(defaultValue) => {
+const getReactAppType = async(defaultValue) => {
     return await prompts(question, choices, defaultValue);
 };
 
-module.exports = getScaffoldToolInfo;
+module.exports = getReactAppType;
