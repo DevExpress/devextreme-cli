@@ -33,6 +33,7 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
             '--layout=side-nav-outer-toolbar',
             `--template=${template}`,
             `--transpiler=${transpiler}`,
+            '--scaffold-tool=vite',
             ...additionalArguments
         ], {
             cwd: sandboxPath,
