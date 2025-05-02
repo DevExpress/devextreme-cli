@@ -2,7 +2,7 @@ const angularApplication = require('./applications/application.angular');
 const reactApplication = require('./applications/application.react');
 const nextjsApplication = require('./applications/application.nextjs');
 const vueApplication = require('./applications/application.vue');
-const getReactScaffoldToolInfo = require('./utility/prompts/react-tool');
+const getReactAppType = require('./utility/prompts/react-app-type');
 const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
@@ -21,18 +21,14 @@ const run = async(commands, options, devextremeConfig) => {
         const appName = commands[2] || 'my-app';
 
         if(app === 'react-app') {
-            const reactAppType = await getReactScaffoldToolInfo(options['scaffold-tool']);
-
-            if(reactAppType === 'nextjs') {
-                app = 'nextjs-app';
-            }
+            app = await getReactAppType(options['react-app-type']);
         }
 
         switch(app) {
             case 'angular-app':
                 await angularApplication.create(appName, options);
                 return;
-            case 'react-app':
+            case 'vite-app':
                 await reactApplication.create(appName, options);
                 return;
             case 'nextjs-app':

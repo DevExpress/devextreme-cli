@@ -29,11 +29,10 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
         await runCommand('node', [
             path.join(process.cwd(), './index.js'),
             'new',
-            'react-app',
+            'vite-app',
             '--layout=side-nav-outer-toolbar',
             `--template=${template}`,
             `--transpiler=${transpiler}`,
-            '--scaffold-tool=vite',
             ...additionalArguments
         ], {
             cwd: sandboxPath,
