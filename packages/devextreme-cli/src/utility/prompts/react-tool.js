@@ -6,7 +6,7 @@ const choices = [
 ];
 
 const question = {
-    message: 'How would you like to scaffold your React application',
+    message: 'How would you like to scaffold your React application?',
     choices: choices
 };
 
