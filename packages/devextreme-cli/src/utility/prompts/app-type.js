@@ -1,8 +1,8 @@
 const prompts = require('./prompts');
 
 const choices = [
-    { value: 'vite-app', title: 'React+Vite' },
-    { value: 'nextjs-app', title: 'Next.js-based' }
+    { value: 'vite', title: 'React+Vite' },
+    { value: 'nextjs', title: 'Next.js-based' }
 ];
 
 const question = {

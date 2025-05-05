@@ -2,7 +2,7 @@ const angularApplication = require('./applications/application.angular');
 const reactApplication = require('./applications/application.react');
 const nextjsApplication = require('./applications/application.nextjs');
 const vueApplication = require('./applications/application.vue');
-const getReactAppType = require('./utility/prompts/react-app-type');
+const getReactAppType = require('./utility/prompts/app-type');
 const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
@@ -17,30 +17,40 @@ const run = async(commands, options, devextremeConfig) => {
     }
 
     if(commands[0] === 'new') {
-        let app = commands[1];
+        const app = commands[1];
         const appName = commands[2] || 'my-app';
 
-        if(app === 'react-app') {
-            app = await getReactAppType(options['react-app-type']);
-        }
+        const handleWrongAppType = (input) => {
+            console.error(`The '${input}' application type is not valid`);
+            printHelp(commands[0]);
+        };
 
         switch(app) {
             case 'angular-app':
                 await angularApplication.create(appName, options);
                 return;
-            case 'vite-app':
-                await reactApplication.create(appName, options);
-                return;
-            case 'nextjs-app':
-                await nextjsApplication.create(appName, options);
+            case 'react-app':
+                const appType = await getReactAppType(options['app-type']);
+
+                switch(appType) {
+                    case 'vite':
+                        await reactApplication.create(appName, options);
+                        return;
+                    case 'nextjs':
+                        await nextjsApplication.create(appName, options);
+                        return;
+                    default:
+                        handleWrongAppType(appType);
+                }
+
                 return;
             case 'vue-app':
                 await vueApplication.create(appName, options);
                 return;
             default:
-                console.error(`The '${app}' application type is not valid`);
-                printHelp(commands[0]);
+                handleWrongAppType(app);
         }
+
     } else {
         if(commands[0] === 'add') {
             if(commands[1] === 'devextreme-angular') {
