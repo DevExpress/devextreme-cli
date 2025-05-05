@@ -29,7 +29,8 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
         await runCommand('node', [
             path.join(process.cwd(), './index.js'),
             'new',
-            'vite-app',
+            'react-app',
+            '--app-type=vite',
             '--layout=side-nav-outer-toolbar',
             `--template=${template}`,
             `--transpiler=${transpiler}`,
