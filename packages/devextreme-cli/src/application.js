@@ -2,22 +2,22 @@ const angularApplication = require('./applications/application.angular');
 const reactApplication = require('./applications/application.react');
 const nextjsApplication = require('./applications/application.nextjs');
 const vueApplication = require('./applications/application.vue');
-const getReactAppType = require('./utility/prompts/app-type');
+const getReactAppType = require('./utility/prompts/react-app-type');
 const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
     return [ 'new', 'add' ].includes(command);
 };
 
-const handleWrongAppType = (input, command) => {
-    console.error(`The '${input}' application type is not valid`);
+const handleWrongAppType = (appType, command) => {
+    console.error(`The '${appType}' application type is not valid`);
     printHelp(command);
 };
 
 const createReact = async(appName, options, command) => {
-    const appType = await getReactAppType(options['app-type']);
+    const reactAppType = await getReactAppType(options['app-type']);
 
-    switch(appType) {
+    switch(reactAppType) {
         case 'vite':
             await reactApplication.create(appName, options);
             return;
@@ -25,7 +25,7 @@ const createReact = async(appName, options, command) => {
             await nextjsApplication.create(appName, options);
             return;
         default:
-            handleWrongAppType(appType, command);
+            handleWrongAppType(reactAppType, command);
     }
 };
 
