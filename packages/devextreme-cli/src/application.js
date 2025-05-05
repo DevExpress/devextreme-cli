@@ -9,6 +9,26 @@ const isApplicationCommand = (command) => {
     return [ 'new', 'add' ].includes(command);
 };
 
+const handleWrongAppType = (input, command) => {
+    console.error(`The '${input}' application type is not valid`);
+    printHelp(command);
+};
+
+const createReact = async(appName, options, command) => {
+    const appType = await getReactAppType(options['app-type']);
+
+    switch(appType) {
+        case 'vite':
+            await reactApplication.create(appName, options);
+            return;
+        case 'nextjs':
+            await nextjsApplication.create(appName, options);
+            return;
+        default:
+            handleWrongAppType(appType, command);
+    }
+};
+
 const run = async(commands, options, devextremeConfig) => {
     if(!commands[1]) {
         console.error('Command is incomplete. Please specify parameters.');
@@ -20,35 +40,18 @@ const run = async(commands, options, devextremeConfig) => {
         const app = commands[1];
         const appName = commands[2] || 'my-app';
 
-        const handleWrongAppType = (input) => {
-            console.error(`The '${input}' application type is not valid`);
-            printHelp(commands[0]);
-        };
-
         switch(app) {
             case 'angular-app':
                 await angularApplication.create(appName, options);
                 return;
             case 'react-app':
-                const appType = await getReactAppType(options['app-type']);
-
-                switch(appType) {
-                    case 'vite':
-                        await reactApplication.create(appName, options);
-                        return;
-                    case 'nextjs':
-                        await nextjsApplication.create(appName, options);
-                        return;
-                    default:
-                        handleWrongAppType(appType);
-                }
-
+                await createReact(appName, options, commands[0]);
                 return;
             case 'vue-app':
                 await vueApplication.create(appName, options);
                 return;
             default:
-                handleWrongAppType(app);
+                handleWrongAppType(app, commands[0]);
         }
 
     } else {
