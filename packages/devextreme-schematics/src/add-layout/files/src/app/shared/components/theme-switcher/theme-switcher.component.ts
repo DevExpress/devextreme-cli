@@ -1,6 +1,4 @@
-import {
-  Component, NgModule,
-} from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxButtonModule } from 'devextreme-angular';
 import { ThemeService } from '../../services/theme.service';
