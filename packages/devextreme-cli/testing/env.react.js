@@ -30,6 +30,7 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
             path.join(process.cwd(), './index.js'),
             'new',
             'react-app',
+            '--app-type=vite',
             '--layout=side-nav-outer-toolbar',
             `--template=${template}`,
             `--transpiler=${transpiler}`,
