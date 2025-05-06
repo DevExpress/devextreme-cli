@@ -69,7 +69,7 @@ export default function Page() {
           <p>Thanks for using the  DevExtreme React App Template.</p>
           <p>
             <span>This application was built using </span>
-            <a href={'https://vite.dev/guide/'} target={'_blank'} rel={'noopener noreferrer'}>create-vite</a>
+            <a href={'https://nextjs.org/'} target={'_blank'} rel={'noopener noreferrer'}>NextJs</a>
             <span> and </span>
             <a href={'https://js.devexpress.com/Documentation/Guide/Common/DevExtreme_CLI/'} target={'_blank'} rel={'noopener noreferrer'}>DevExtreme CLI</a>
             <span> and includes the following DevExtreme components:</span>

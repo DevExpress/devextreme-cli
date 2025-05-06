@@ -29,7 +29,8 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
         await runCommand('node', [
             path.join(process.cwd(), './index.js'),
             'new',
-            'nextjs-app',
+            'react-app',
+            '--app-type=nextjs',
             `--template=${template}`,
             '--layout=side-nav-outer-toolbar',
             ...additionalArguments
