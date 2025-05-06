@@ -2,10 +2,31 @@ const angularApplication = require('./applications/application.angular');
 const reactApplication = require('./applications/application.react');
 const nextjsApplication = require('./applications/application.nextjs');
 const vueApplication = require('./applications/application.vue');
+const getReactAppType = require('./utility/prompts/react-app-type');
 const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
     return [ 'new', 'add' ].includes(command);
+};
+
+const handleWrongAppType = (appType, command) => {
+    console.error(`The '${appType}' application type is not valid`);
+    printHelp(command);
+};
+
+const createReact = async(appName, options, command) => {
+    const reactAppType = await getReactAppType(options['app-type']);
+
+    switch(reactAppType) {
+        case 'vite':
+            await reactApplication.create(appName, options);
+            return;
+        case 'nextjs':
+            await nextjsApplication.create(appName, options);
+            return;
+        default:
+            handleWrongAppType(reactAppType, command);
+    }
 };
 
 const run = async(commands, options, devextremeConfig) => {
@@ -24,18 +45,15 @@ const run = async(commands, options, devextremeConfig) => {
                 await angularApplication.create(appName, options);
                 return;
             case 'react-app':
-                await reactApplication.create(appName, options);
-                return;
-            case 'nextjs-app':
-                await nextjsApplication.create(appName, options);
+                await createReact(appName, options, commands[0]);
                 return;
             case 'vue-app':
                 await vueApplication.create(appName, options);
                 return;
             default:
-                console.error(`The '${app}' application type is not valid`);
-                printHelp(commands[0]);
+                handleWrongAppType(app, commands[0]);
         }
+
     } else {
         if(commands[0] === 'add') {
             if(commands[1] === 'devextreme-angular') {
