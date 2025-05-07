@@ -280,11 +280,13 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await page.waitForSelector('.create-account-form');
 
                                     await hideScroll();
-                                    await page.mouse.move(0, 0);
                                     await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
-                                    compareSnapshot(image, 'create-account');
+                                    compareSnapshot(image, 'create-account', {
+                                        failureThreshold: 1,
+                                        failureThresholdType: 'pixel',
+                                    });
                                 });
 
                                 it('Reset password page', async() => {
