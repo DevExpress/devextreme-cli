@@ -5,7 +5,7 @@ import { ScrollView<%=#isTypeScript%>, ScrollViewRef<%=/isTypeScript%> } from 'd
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import React, { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Header, SideNavigationMenu, Footer } from '@/components';
+import { Header, SideNavigationMenu } from '@/components';
 import './side-nav-inner-toolbar.scss';
 import { useScreenSize } from '@/utils/media-query';
 import { Template } from 'devextreme-react/core/template';
