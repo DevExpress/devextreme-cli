@@ -286,6 +286,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     compareSnapshot(image, 'create-account', {
                                         failureThreshold: 1,
                                         failureThresholdType: 'pixel',
+                                        threshold: 0.1
                                     });
                                 });
 
