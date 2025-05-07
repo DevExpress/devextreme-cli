@@ -267,8 +267,8 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
 
                                 it('Create account page', async() => {
                                     // NOTE: Test only once
-                                    // TODO: investigate failure in material.blue
-                                    if(!isDefaultLayout || theme === 'material.blue') {
+                                    // TODO: investigate failure in material
+                                    if(!isDefaultLayout || theme === 'material') {
                                         return;
                                     }
 
