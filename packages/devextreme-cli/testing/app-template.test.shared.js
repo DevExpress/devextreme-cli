@@ -284,8 +284,6 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'create-account', {
-                                        failureThreshold: 1,
-                                        failureThresholdType: 'pixel',
                                         threshold: 0.1
                                     });
                                 });
