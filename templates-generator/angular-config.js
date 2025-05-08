@@ -127,19 +127,15 @@ module.exports = {
     ],
     removeRules: [
         {
-            glob: 'src/app/app-routing.module.ts',
+            glob: 'src/app/routes.ts',
             definitions: [
                 /import { HomeComponent } [^\n]*?\n/,
                 /import { ProfileComponent } [^\n]*?\n/,
                 /import { TasksComponent } [^\n]*?\n/,
-                /import { DxDataGridModule, DxFormModule } [^\n]*?\n/,
                 /{[^}]*?path: 'tasks'[^}]*?},\s+/,
                 /{[^}]*?path: 'profile'[^}]*?},\s+/,
                 /{[^}]*?path: 'home'[^}]*?},\s+/,
                 /},[^}]*?path: '\*\*'[^}]*/,
-                /, {\s?useHash: true\s?}/,
-                ', DxDataGridModule, DxFormModule',
-                /,\s+declarations: [^\]]*?]/,
                 /{[^}]*?path: 'pages\/new-page'[^}]*?},\s+/,
                 /import { NewPageComponent } [^\n]*?\n/
             ]

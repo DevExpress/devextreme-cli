@@ -63,6 +63,7 @@ function localPackageExists(packageName) {
 
 const hasSutableNgCli = async() => {
     const localVersion = ngVersion.getLocalNgVersion();
+
     if(!localVersion) {
         return false;
     }
@@ -105,7 +106,7 @@ const create = async(appName, options) => {
         '--routing=false',
         '--skip-tests=true',
         '--skip-install=true',
-        '--standalone=false',
+        '--standalone=true',
         '--ssr=false'
     ];
 
@@ -150,9 +151,9 @@ const changeMainTs = (appPath) => {
     moduleWorker.insertImport(filePath, 'devextreme/ui/themes', 'themes', true);
 
     const fileContent = fs.readFileSync(filePath).toString();
-    const bootstrapPattern = /platformBrowser(?:Dynamic)?\(\)\.bootstrapModule\(\s*AppModule\s*(?:,\s*\{[^}]*\})?\s*\)/;
+    const bootstrapPattern = /bootstrapApplication\([^)]+\)/;
     const firstChaptStr = fileContent.match(bootstrapPattern)[0];
-    const lastChaptStr = '.catch(err => console.error(err));';
+    const lastChaptStr = '.catch((err) => console.error(err));';
 
     fs.writeFileSync(
         filePath,

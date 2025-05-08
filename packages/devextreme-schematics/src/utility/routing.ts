@@ -10,7 +10,7 @@ import {
   normalize
 } from '@angular-devkit/core';
 
-function getRouteComponentName(pageName: string) {
+export function getRouteComponentName(pageName: string) {
   return `${strings.classify(basename(normalize(pageName)))}Component`;
 }
 

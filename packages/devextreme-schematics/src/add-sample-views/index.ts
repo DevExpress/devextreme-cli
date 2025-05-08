@@ -9,11 +9,6 @@ import {
   mergeWith
 } from '@angular-devkit/schematics';
 
-import {
-  addDeclarationToModule,
-  addImportToModule
-} from '@schematics/angular/utility/ast-utils';
-
 import { addViewToRouting } from '../add-view';
 
 import {
@@ -24,7 +19,6 @@ import {
 import { humanize } from '../utility/string';
 
 import {
-   applyChanges,
    insertItemToArray
  } from '../utility/change';
 
@@ -43,15 +37,6 @@ const sampleViewOptions = [
     name: 'tasks',
     componentName: 'TasksComponent',
     relativePath: './pages/tasks/tasks.component'
-}];
-
-const devextremeOptions = [
-  {
-    componentName: 'DxDataGridModule',
-    relativePath: 'devextreme-angular'
-  }, {
-    componentName: 'DxFormModule',
-    relativePath: 'devextreme-angular'
 }];
 
 const navigations = [
@@ -76,26 +61,6 @@ const navigations = [
   }`
 ];
 
-function addImportsToRoutingModule(isView: boolean, routingPath: string, options: any) {
-  return (host: Tree) => {
-    const source = getSourceFile(host, routingPath);
-
-    if (!source) {
-      return host;
-    }
-
-    let changes;
-
-    if (isView) {
-      changes = addDeclarationToModule(source, routingPath, options.componentName, options.relativePath);
-    } else {
-      changes = addImportToModule(source, routingPath, options.componentName, options.relativePath);
-    }
-
-    return applyChanges(host, changes, routingPath);
-  };
-}
-
 function addDefaultNavigation(rootPath: string) {
   return (host: Tree) => {
     const navigationPath = rootPath + 'app-navigation.ts';
@@ -113,7 +78,6 @@ export default function(options: any): Rule {
   return async (host: Tree) => {
     const project = await getProjectName(host, options.project);
     const rootPath = await getApplicationPath(host, project);
-    const routingPath = rootPath + 'app-routing.module.ts';
     const rules: any[] = [];
 
     const templateSource = apply(url('./files'), [
@@ -126,12 +90,7 @@ export default function(options: any): Rule {
     rules.push(mergeWith(templateSource));
 
     sampleViewOptions.forEach((viewOptions) => {
-      rules.push(addViewToRouting({ name: viewOptions.name, project, module: 'app-routing' }));
-      rules.push(addImportsToRoutingModule(true, routingPath, viewOptions));
-    });
-
-    devextremeOptions.forEach((moduleOptions) => {
-      rules.push(addImportsToRoutingModule(false, routingPath, moduleOptions));
+      rules.push(addViewToRouting({ name: viewOptions.name, project, module: 'app.routes' }));
     });
 
     rules.push(addDefaultNavigation(rootPath));

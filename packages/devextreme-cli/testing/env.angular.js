@@ -11,8 +11,8 @@ const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
 const appPath = path.join(sandboxPath, appName);
 const schematicsDirectory = '../../../../devextreme-schematics';
 const schematicsPath = path.join(sandboxPath, schematicsDirectory);
-const routingFilePath = path.join(appPath, 'src/app/app-routing.module.ts');
-const appComponentPath = path.join(appPath, 'src/app/app.component.html');
+const appComponentTemplatePath = path.join(appPath, 'src/app/app.component.html');
+const appComponentPath = path.join(appPath, 'src/app/app.component.ts');
 
 async function prepareSchematics() {
     await packageManager.runInstall({
@@ -60,16 +60,28 @@ exports.createApp = async(depsVersionTag) => {
         cwd: appPath,
         forceNoCmd: true
     });
-
-    const data = fs.readFileSync(routingFilePath, 'utf8');
-    const result = data.replace('RouterModule.forRoot(routes)', 'RouterModule.forRoot(routes, {useHash: true})');
-    fs.writeFileSync(routingFilePath, result, 'utf8');
 };
 
 exports.setLayout = (layoutName) => {
-    const regexToFind = /app-side-nav-\w+-toolbar/g;
-    const newSubStr = `app-${layoutName}`;
-    const data = fs.readFileSync(appComponentPath, 'utf8');
-    const result = data.replace(regexToFind, newSubStr);
-    fs.writeFileSync(appComponentPath, result, 'utf8');
+    const layoutClassName = layoutName === 'side-nav-outer-toolbar'
+        ? 'SideNavOuterToolbarComponent'
+        : 'SideNavInnerToolbarComponent';
+
+    [
+        {
+            filePath: appComponentTemplatePath,
+            regexp: /app-side-nav-\w+-toolbar/g,
+            replacement: `app-${layoutName}`,
+        },
+        {
+            filePath: appComponentPath,
+            regexp: /SideNav\w+ToolbarComponent/,
+            replacement: layoutClassName,
+        }
+    ].forEach(({ filePath, regexp, replacement }) => {
+        const data = fs.readFileSync(filePath, 'utf8');
+        const result = data.replace(regexp, replacement);
+        fs.writeFileSync(filePath, result, 'utf8');
+    });
+
 };
