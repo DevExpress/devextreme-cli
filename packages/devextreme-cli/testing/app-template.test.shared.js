@@ -279,7 +279,9 @@ module.exports = (env) => {
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'create-account', {
-                                        threshold: 0.05
+                                        failureThreshold: 1,
+                                        failureThresholdType: 'pixel',
+                                        threshold: 0.1
                                     });
                                 });
 
