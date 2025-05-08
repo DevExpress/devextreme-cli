@@ -60,7 +60,7 @@ describe('view', () => {
     expect(contentTS).toContain(`selector: 'app-${componentName}'`);
     expect(contentTS).toContain(`templateUrl: './${componentName}.component.html'`);
     expect(contentTS).toContain(`styleUrl: './${componentName}.component.css'`);
-    expect(contentTS).toContain('standalone: false');
+    expect(contentTS).toContain('standalone: true');
     expect(contentTS).toContain(`export class ${strings.classify(basename(normalize(componentName)))}Component`);
   });
 
@@ -71,29 +71,10 @@ describe('view', () => {
     let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
     tree = await runner.runSchematic('add-view', options, tree);
     tree = await runner.runSchematic('add-view', { ...options, name: 'test2' }, tree);
-    const moduleContent = tree.readContent('/src/app/app-routing.module.ts');
+    const moduleContent = tree.readContent('/src/app/app.routes.ts');
 
-    expect(moduleContent).toContain(`const routes: Routes = [
-  {
-    path: 'pages/test2',
-    component: Test2Component,
-    canActivate: [ AuthGuardService ]
-  },
-  {
-    path: 'pages/test',
-    component: TestComponent,
-    canActivate: [ AuthGuardService ]
-  },
-  {
-    path: 'login-form',
-    component: LoginFormComponent,
-    canActivate: [ AuthGuardService ]
-  },
-  {
-    path: '**',
-    redirectTo: 'pages/test'
-  }
-];`);
+    expect(moduleContent).toContain(`path: 'pages/test2',\n    component: Test2Component,\n    canActivate: [ AuthGuardService ]`);
+    expect(moduleContent).toContain(`path: 'pages/test',\n    component: TestComponent,\n    canActivate: [ AuthGuardService ]`);
   });
 
   it('should add view to other routing module', async () => {

@@ -5,19 +5,21 @@ import {
   SchematicsException,
   externalSchematic
 } from '@angular-devkit/schematics';
-
+import { insertImport } from '@schematics/angular/utility/ast-utils';
 import {
   findModuleFromOptions
 } from '@schematics/angular/utility/find-module';
 
 import {
+  applyChanges,
   insertItemToArray
 } from '../utility/change';
 
 import {
   hasComponentInRoutes,
   getRoute,
-  findRoutesInSource
+  findRoutesInSource,
+  getRouteComponentName,
 } from '../utility/routing';
 
 import { getSourceFile } from '../utility/source';
@@ -101,6 +103,11 @@ export function addViewToRouting(options: any) {
     if (!hasComponentInRoutes(routes, options.name)) {
       const route = getRoute(options.name);
       insertItemToArray(host, routingModulePath, routes, route);
+
+      const name = options.name.replace(/^pages\//, '');
+      const componentName = getRouteComponentName(name);
+      const importChanges = insertImport(source, routingModulePath, componentName, `./pages/${name}/${name}.component`);
+      applyChanges(host, [importChanges], routingModulePath);
     }
     return host;
   };
@@ -115,7 +122,7 @@ function getPathForView(name: string) {
 
 function getModuleName(addRoute: boolean, moduleName: string) {
   if (!moduleName && addRoute) {
-    return 'app-routing';
+    return 'app.routes';
   }
   return moduleName;
 }
@@ -154,7 +161,7 @@ async function addContentToTS(options: any) {
   selector: 'app-${name}',
   templateUrl: './${name}.component.html',
   styleUrl: './${name}.component.css',
-  standalone: false
+  standalone: true
 })
 export class ${strings.classify(basename(normalize(name)))}Component {
 
@@ -178,7 +185,7 @@ export default function(options: any): Rule {
         skipTests: options.skipTests,
         inlineStyle: options.inlineStyle,
         prefix: options.prefix,
-        standalone: false
+        standalone: true
       }),
       addContentToView({ name, project }) as any,
       addContentToTS({ name, project }) as any

@@ -31,7 +31,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                         let browser;
                         let page;
 
-                        const getPageURL = (name) => `${appUrl}${(env.engine.indexOf('nextjs') !== 0 ? '#/' : '')}${pageUrls[name]}`;
+                        const getPageURL = (name) => `${appUrl}${(!env.engine.startsWith('nextjs') ? '#/' : '')}${pageUrls[name]}`;
 
                         beforeAll(async() => {
                             browser = await getBrowser();
@@ -281,7 +281,6 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await page.waitForSelector('.create-account-form');
 
                                     await hideScroll();
-
                                     await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
