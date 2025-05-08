@@ -5,10 +5,9 @@ import { createSession, deleteSession } from '@/app/lib/session'
 
 export async function signUp(email<%=#isTypeScript%>: string<%=/isTypeScript%>, password<%=#isTypeScript%>: string<%=/isTypeScript%>) {
   try {
-    // Create a user in the database
+    // 1. Check if the user exists in the database and return isOk: false if so;
+    // 2. Otherwise, add the user to the database.
     console.log(email, password);
-
-    await signIn(email, password);
 
     return {
       isOk: true,
