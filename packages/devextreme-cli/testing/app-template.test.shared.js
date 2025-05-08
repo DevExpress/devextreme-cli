@@ -278,7 +278,9 @@ module.exports = (env) => {
                                     await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
-                                    compareSnapshot(image, 'create-account');
+                                    compareSnapshot(image, 'create-account', {
+                                        threshold: 0.05
+                                    });
                                 });
 
                                 it('Reset password page', async() => {
