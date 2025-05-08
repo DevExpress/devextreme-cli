@@ -3,7 +3,7 @@ import Drawer from 'devextreme-react/drawer';
 import { ScrollView<%=#isTypeScript%>, ScrollViewRef<%=/isTypeScript%> } from 'devextreme-react/scroll-view';
 import React, { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Header, SideNavigationMenu, Footer } from '@/components';
+import { Header, SideNavigationMenu } from '@/components';
 import './side-nav-outer-toolbar.scss';
 import { useScreenSize } from '@/utils/media-query';
 import { Template } from 'devextreme-react/core/template';
@@ -83,7 +83,7 @@ router.push(itemData.path);
           <ScrollView ref={scrollViewRef} className={'with-footer'}>
             <div className={'content'}>
               {React.Children.map(children, (item) => {
-                if (<%=#isTypeScript%>React.isValidElement(item) && <%=/isTypeScript%>item.type !== Footer) {
+                if (<%=#isTypeScript%>React.isValidElement(item) && <%=/isTypeScript%>item.type !== "footer") {
                   return item;
                 }
                 return null;
@@ -91,7 +91,7 @@ router.push(itemData.path);
             </div>
             <div className={'content-block'}>
               {React.Children.map(children, (item) => {
-                if (<%=#isTypeScript%>React.isValidElement(item) && <%=/isTypeScript%>item.type === Footer) {
+                if (<%=#isTypeScript%>React.isValidElement(item) && <%=/isTypeScript%>item.type === "footer") {
                   return item;
                 }
                 return null;
