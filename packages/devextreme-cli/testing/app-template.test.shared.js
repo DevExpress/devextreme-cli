@@ -267,8 +267,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
 
                                 it('Create account page', async() => {
                                     // NOTE: Test only once
-                                    // TODO: investigate failure in material
-                                    if(!isDefaultLayout || theme === 'material') {
+                                    if(!isDefaultLayout) {
                                         return;
                                     }
 
@@ -284,8 +283,13 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
+                                    const isProblemTest = env.engine.startsWith('nextjs')
+                                      && theme === 'material'
+                                      && viewportName === 'large'
+                                      && layout === 'side-nav-outer-toolbar';
+
                                     compareSnapshot(image, 'create-account', {
-                                        threshold: 0.05
+                                        threshold: isProblemTest ? 0.025 : customConfig.threshold
                                     });
                                 });
 
