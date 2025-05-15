@@ -67,6 +67,25 @@ import { Change } from '@schematics/angular/utility/change';
 
 import { PatchNodePackageInstallTask } from '../utility/patch';
 
+const routes = [
+  {
+    name: 'LoginFormComponent',
+    path: 'login-form'
+  },
+  {
+    name: 'ResetPasswordFormComponent',
+    path: 'reset-password'
+  },
+  {
+    name: 'CreateAccountFormComponent',
+    path: 'create-account'
+  },
+  {
+    name: 'ChangePasswordFormComponent',
+    path: 'change-password'
+  }
+];
+
 const projectFilesSource = './files/src';
 const workspaceFilesSource = './files';
 
@@ -291,15 +310,23 @@ function updateDevextremeConfig(sourcePath: string = '') {
 const modifyRouting = (host: Tree, routingFilePath: string) => {
   // TODO: Try to use the isolated host to generate the result string
   let source = getSourceFile(host, routingFilePath)!;
-  const importChange = insertImport(source, routingFilePath, 'LoginFormComponent', './shared/components');
-  applyChanges(host, [ importChange ], routingFilePath);
+  const importChanges = [];
+  importChanges.push(insertImport(source, routingFilePath, 'AuthGuardService', './shared/services'));
 
-  source = getSourceFile(host, routingFilePath)!;
-  const routes = findRoutesInSource(source)!;
-  if (!hasComponentInRoutes(routes, 'login-form')) {
-    const loginFormRoute = getRoute('login-form');
-    insertItemToArray(host, routingFilePath, routes, loginFormRoute);
+  for (const route of routes) {
+    importChanges.push(insertImport(source, routingFilePath, route.name, './shared/components'));
   }
+
+  applyChanges(host, importChanges, routingFilePath);
+  for (const route of routes) {
+    source = getSourceFile(host, routingFilePath)!;
+    const routeInSource = findRoutesInSource(source)!;
+    if (!hasComponentInRoutes(routeInSource, route.path)) {
+      const routeToAdd = getRoute(route.path, route.name);
+      insertItemToArray(host, routingFilePath, routeInSource, routeToAdd);
+    }
+  }
+
 };
 
 export default function(options: any): Rule {
