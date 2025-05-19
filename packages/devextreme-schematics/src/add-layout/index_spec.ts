@@ -241,10 +241,27 @@ describe('layout', () => {
 
     expect(tree.files).toContain('/src/app/app.routes.ts');
     const routesContent = tree.readContent('/src/app/app.routes.ts');
+    
+    expect(routesContent)
+      .toContain(`import { AuthGuardService } from './shared/services';`);
+    expect(routesContent)
+      .toContain(`import { LoginFormComponent } from './shared/components';`);
+    expect(routesContent)
+      .toContain(`import { ResetPasswordFormComponent } from './shared/components';`);
+    expect(routesContent)
+      .toContain(`import { CreateAccountFormComponent } from './shared/components';`);
+    expect(routesContent)
+      .toContain(`import { ChangePasswordFormComponent } from './shared/components';`);
 
     expect(routesContent)
       .toContain(`{\n    path: 'login-form',\n    component: LoginFormComponent,\n    canActivate: [ AuthGuardService ]\n  },`);
-  });
+    expect(routesContent)
+      .toContain(`{\n    path: 'reset-password',\n    component: ResetPasswordFormComponent,\n    canActivate: [ AuthGuardService ]\n  },`);
+    expect(routesContent)
+      .toContain(`{\n    path: 'create-account',\n    component: CreateAccountFormComponent,\n    canActivate: [ AuthGuardService ]\n  },`);
+    expect(routesContent)
+      .toContain(`{\n    path: 'change-password',\n    component: ChangePasswordFormComponent,\n    canActivate: [ AuthGuardService ]\n  },`);
+    });
 
   it('should use selected layout', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
