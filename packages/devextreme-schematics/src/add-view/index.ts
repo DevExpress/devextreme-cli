@@ -23,7 +23,6 @@ import {
 } from '../utility/routing';
 
 import { getSourceFile } from '../utility/source';
-import { isAngularVersionHigherThan } from '../utility/angular-version';
 
 import { strings, basename, normalize, dirname, Path } from '@angular-devkit/core';
 
@@ -140,18 +139,9 @@ function overwriteModuleContent(options: any, path: string, content: string) {
   };
 }
 
-function getComponentFileNames(name: string, host: Tree) {
+function getComponentFileNames(name: string) {
   const baseName = strings.dasherize(basename(normalize(name)));
   const path = `${dirname(name as Path)}/${baseName}`;
-
-  if (isAngularVersionHigherThan(host, 20)) {
-    return {
-      path,
-      ts: `${path}/${baseName}.ts` as Path,
-      html: `${path}/${baseName}.html` as Path,
-      style: `${path}/${baseName}.scss` as Path
-    };
-  }
 
   return {
     path,
@@ -161,8 +151,8 @@ function getComponentFileNames(name: string, host: Tree) {
   };
 }
 
-function addContentToView(options: any, host: Tree) {
-  const { html } = getComponentFileNames(options.name, host);
+function addContentToView(options: any) {
+  const { html } = getComponentFileNames(options.name);
   const title = humanize(strings.dasherize(basename(normalize(options.name))));
   const content = `<h2>${title}</h2>
 <div class="content-block">
@@ -173,8 +163,8 @@ function addContentToView(options: any, host: Tree) {
   return overwriteModuleContent(options, html, content);
 }
 
-async function addContentToTS(options: any, host: Tree) {
-  const { ts, html, style } = getComponentFileNames(options.name, host);
+async function addContentToTS(options: any) {
+  const { ts, html, style } = getComponentFileNames(options.name);
   const name = strings.dasherize(basename(normalize(options.name)));
   const componentName = strings.classify(basename(normalize(name)));
   const content = `import { Component } from '@angular/core';
@@ -209,8 +199,8 @@ export default function(options: any): Rule {
         prefix: options.prefix,
         standalone: true
       }),
-      addContentToView({ name, project }, host) as any,
-      addContentToTS({ name, project }, host) as any
+      addContentToView({ name, project }) as any,
+      addContentToTS({ name, project }) as any
     ];
 
     if (addRoute) {
