@@ -147,7 +147,7 @@ function getComponentFileNames(name: string) {
     path,
     ts: `${path}/${baseName}.component.ts` as Path,
     html: `${path}/${baseName}.component.html` as Path,
-    style: `${path}/${baseName}.component.scss` as Path
+    style: `${path}/${baseName}.component.css` as Path
   };
 }
 
