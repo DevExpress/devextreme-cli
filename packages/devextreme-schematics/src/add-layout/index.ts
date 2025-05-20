@@ -273,12 +273,10 @@ function modifyContentByTemplate(
   };
 }
 
-function updateDevextremeConfig(host: Tree, sourcePath: string = '') {
+function updateDevextremeConfig(sourcePath: string = '') {
   const devextremeConfigPath = '/devextreme.json';
-  const postfix = isAngularVersionHigherThan(host, 20) ? 'test' : 'component';
   const templateOptions = {
     sourcePath,
-    postfix
   };
 
   const modifyConfig = (templateContent: string, currentContent: string) => {
@@ -349,7 +347,7 @@ export default function(options: any): Rule {
 
     const rules = [
       modifyContentByTemplate(sourcePath, projectFilesSource, null, templateOptions, modifyContent),
-      updateDevextremeConfig(host, sourcePath),
+      updateDevextremeConfig(sourcePath),
       updateAppComponent(host, appPath, templateOptions),
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
