@@ -23,8 +23,9 @@ import {
 } from '../utility/routing';
 
 import { getSourceFile } from '../utility/source';
+import { getAngularVersion, isAngularVersionHigherThan } from '../utility/angular-version';
 
-import { strings, basename, normalize, dirname } from '@angular-devkit/core';
+import { strings, basename, normalize, dirname, Path } from '@angular-devkit/core';
 
 import {
   getProjectName,
@@ -106,7 +107,8 @@ export function addViewToRouting(options: any) {
 
       const name = options.name.replace(/^pages\//, '');
       const componentName = getRouteComponentName(name);
-      const importChanges = insertImport(source, routingModulePath, componentName, `./pages/${name}/${name}.component`);
+      const path = isAngularVersionHigherThan(host, 20) ? `./pages/${name}/${name}.ts` : `./pages/${name}/${name}.component.ts`;
+      const importChanges = insertImport(source, routingModulePath, componentName, path);
       applyChanges(host, [importChanges], routingModulePath);
     }
     return host;
@@ -137,38 +139,57 @@ function overwriteModuleContent(options: any, path: string, content: string) {
   };
 }
 
-function addContentToView(options: any) {
-  const name = strings.dasherize(basename(normalize(options.name)));
-  const path = `${dirname(options.name)}/${name}`;
-  const title = humanize(name);
-  const componentPath = `${path}/${name}.component.html`;
+function getComponentFileNames(name: string, angularVersion: number) {
+  const baseName = strings.dasherize(basename(normalize(name)));
+  const path = `${dirname(name as Path)}/${baseName}`;
+
+  if (angularVersion >= 20) {
+    return {
+      path,
+      ts: `${path}/${baseName}.ts` as Path,
+      html: `${path}/${baseName}.html` as Path,
+      style: `${path}/${baseName}.scss` as Path
+    };
+  }
+
+  return {
+    path,
+    ts: `${path}/${baseName}.component.ts` as Path,
+    html: `${path}/${baseName}.component.html` as Path,
+    style: `${path}/${baseName}.component.scss` as Path
+  };
+}
+
+function addContentToView(options: any, angularVersion: number) {
+  const { html } = getComponentFileNames(options.name, angularVersion);
+  const title = humanize(strings.dasherize(basename(normalize(options.name))));
   const content = `<h2>${title}</h2>
 <div class="content-block">
     <div class="dx-card responsive-paddings">Put your content here</div>
 </div>
 `;
 
-  return overwriteModuleContent(options, componentPath, content);
+  return overwriteModuleContent(options, html, content);
 }
 
-async function addContentToTS(options: any) {
+async function addContentToTS(options: any, angularVersion: number) {
+  const { ts, html, style } = getComponentFileNames(options.name, angularVersion);
   const name = strings.dasherize(basename(normalize(options.name)));
-  const path = `${dirname(options.name)}/${name}`;
-  const componentPath = `${path}/${name}.component.ts`;
+  const componentName = strings.classify(basename(normalize(name)));
   const content = `import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-${name}',
-  templateUrl: './${name}.component.html',
-  styleUrl: './${name}.component.css',
+  templateUrl: './${basename(html)}',
+  styleUrl: './${basename(style)}',
   standalone: true
 })
-export class ${strings.classify(basename(normalize(name)))}Component {
+export class ${componentName}Component {
 
 }
 `;
 
-  return overwriteModuleContent(options, componentPath, content);
+  return overwriteModuleContent(options, ts, content);
 }
 
 export default function(options: any): Rule {
@@ -177,6 +198,7 @@ export default function(options: any): Rule {
     const project = await getProjectName(host, options.project);
     const module = getModuleName(addRoute, options.module);
     const name = getPathForView(options.name);
+    const angularVersion = getAngularVersion(host);
 
     const rules = [externalSchematic('../node_modules/@schematics/angular', 'component', {
         name,
@@ -187,8 +209,8 @@ export default function(options: any): Rule {
         prefix: options.prefix,
         standalone: true
       }),
-      addContentToView({ name, project }) as any,
-      addContentToTS({ name, project }) as any
+      addContentToView({ name, project }, angularVersion) as any,
+      addContentToTS({ name, project }, angularVersion) as any
     ];
 
     if (addRoute) {

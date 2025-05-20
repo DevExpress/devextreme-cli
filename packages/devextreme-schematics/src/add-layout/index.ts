@@ -9,9 +9,9 @@ import {
   filter,
   forEach,
   mergeWith,
-  callRule,
   FileEntry,
-  template
+  template,
+  callRule
 } from '@angular-devkit/schematics';
 
 import {
@@ -66,6 +66,7 @@ import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { Change } from '@schematics/angular/utility/change';
 
 import { PatchNodePackageInstallTask } from '../utility/patch';
+import { isAngularVersionHigherThan } from '../utility/angular-version';
 
 const projectFilesSource = './files/src';
 const workspaceFilesSource = './files';
@@ -161,13 +162,13 @@ function modifyFileRule(path: string, callback: (source: SourceFile) => Change[]
     }
 
     const changes = callback(source);
-
     return applyChanges(host, changes, path);
   };
 }
 
-function updateAppComponent(sourcePath: string, templateOptions: any = {}) {
-  const appMComponentPath = sourcePath + 'app.component.ts';
+// need here fix ?
+function updateAppComponent(host: Tree, sourcePath: string, templateOptions: any = {}) {
+  const appMComponentPath = sourcePath + (isAngularVersionHigherThan(host, 20) ? 'app.ts' : 'app.component.ts');
 
   const importSetter = (importName: string, path: string, alias: string) => {
     return (source: SourceFile) => {
@@ -188,11 +189,12 @@ function updateAppComponent(sourcePath: string, templateOptions: any = {}) {
   return chain(rules);
 }
 
+// need here fix ?
 function getComponentName(host: Tree, sourcePath: string) {
   let name = '';
   let index = 0;
 
-  if (!host.exists(sourcePath + 'app.component.ts')) {
+  if (!host.exists(sourcePath + 'app.component.ts') && !host.exists(sourcePath + 'app.ts')) {
     name = 'app';
   }
 
@@ -200,7 +202,10 @@ function getComponentName(host: Tree, sourcePath: string) {
     index++;
     const componentName = `app${index}`;
 
-    if (!host.exists(`${sourcePath}${componentName}.component.ts`)) {
+    if (
+      !host.exists(`${sourcePath}${componentName}.component.ts`)
+      && !host.exists(`${sourcePath}${componentName}.ts`)
+    ) {
       name = componentName;
     }
   }
@@ -270,10 +275,12 @@ function modifyContentByTemplate(
   };
 }
 
-function updateDevextremeConfig(sourcePath: string = '') {
+function updateDevextremeConfig(host: Tree, sourcePath: string = '') {
   const devextremeConfigPath = '/devextreme.json';
+  const postfix = isAngularVersionHigherThan(host, 20) ? 'test' : 'component';
   const templateOptions = {
-    sourcePath
+    sourcePath,
+    postfix
   };
 
   const modifyConfig = (templateContent: string, currentContent: string) => {
@@ -302,6 +309,10 @@ const modifyRouting = (host: Tree, routingFilePath: string) => {
   }
 };
 
+function setPostfix(host: Tree, name: string) {
+  return name + (isAngularVersionHigherThan(host, 20) ? '' : '.component');
+}
+
 export default function(options: any): Rule {
   return async (host: Tree) => {
     const project = await getProjectName(host, options.project);
@@ -315,13 +326,14 @@ export default function(options: any): Rule {
     const override = options.resolveConflicts === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath?.replace(/\/?(\w)+\/?/g, '../');
+
     const templateOptions = {
-      name: componentName,
+      name: setPostfix(host, componentName),
       layout,
       title,
       strings,
       path: pathToCss,
-      prefix
+      prefix,
     };
 
     const modifyContent = (templateContent: string, currentContent: string, filePath: string) => {
@@ -339,8 +351,8 @@ export default function(options: any): Rule {
 
     const rules = [
       modifyContentByTemplate(sourcePath, projectFilesSource, null, templateOptions, modifyContent),
-      updateDevextremeConfig(sourcePath),
-      updateAppComponent(appPath, templateOptions),
+      updateDevextremeConfig(host, sourcePath),
+      updateAppComponent(host, appPath, templateOptions),
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),

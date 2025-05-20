@@ -9,8 +9,8 @@ import { UnauthenticatedContentComponent } from './unauthenticated-content';
 
 @Component({
   selector: '<%= prefix %>-root',
-  templateUrl: './<%= name %>.component.html',
-  styleUrls: ['./<%= name %>.component.scss'],
+  templateUrl: './<%= name %>.html',
+  styleUrls: ['./<%= name %>.scss'],
   standalone: true,
   imports: [
     RouterModule,

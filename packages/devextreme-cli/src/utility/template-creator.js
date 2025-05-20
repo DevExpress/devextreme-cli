@@ -15,6 +15,7 @@ const applyTemplateToFile = (filePath, templateOptions) => {
     return fileContent;
 };
 
+// here add page to app
 const addPageToApp = (pageName, pageDir, templatePagesPath, getCorrectExtension, { getPageFileName = () => pageName } = {}) => {
     fs.readdirSync(templatePagesPath).forEach((pageItem) => {
         const pagePath = path.join(pageDir, `${getPageFileName(pageName, pageItem)}${getCorrectExtension(extname(pageItem))}`);
@@ -29,6 +30,7 @@ const addPageToApp = (pageName, pageDir, templatePagesPath, getCorrectExtension,
     });
 };
 
+// here move template files to project
 const moveTemplateFilesToProject = (templateFolder, appPath, templateOptions, getCorrectPath, pathToFileRelativelyRoot) => {
     const relativePath = pathToFileRelativelyRoot || '';
     const pathToFiles = path.join(templateFolder, relativePath);
