@@ -107,7 +107,7 @@ export function addViewToRouting(options: any) {
 
       const name = options.name.replace(/^pages\//, '');
       const componentName = getRouteComponentName(name);
-      const path = isAngularVersionHigherThan(host, 20) ? `./pages/${name}/${name}.component` : `./pages/${name}/${name}.component.ts`;
+      const path = `./pages/${name}/${name}.component`;
 
       const importChanges = insertImport(source, routingModulePath, componentName, path);
       applyChanges(host, [importChanges], routingModulePath);
