@@ -19,7 +19,6 @@ const getPublicNgVersion = () => {
     return new semver(version);
 };
 
-// here ng version
 const getNgCliVersion = () => {
     let ngCliVersion = getLocalNgVersion();
     if(!ngCliVersion) {

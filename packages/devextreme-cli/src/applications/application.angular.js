@@ -82,11 +82,8 @@ const bumpAngular = (appPath, versionTag) => {
     modifyJson(getPackageJsonPath(appPath), ({ dependencies, devDependencies, ...rest }) => {
         const bump = (section) => {
             for(const depName in section) {
-                if(depName.startsWith('@angular')) {
-                    section[depName] = versionTag;
-                }
+                section[depName] = depName.startsWith('@angular') ? versionTag : section[depName];
             }
-            return section;
         };
 
         return {

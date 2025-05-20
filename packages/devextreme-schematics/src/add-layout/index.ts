@@ -166,7 +166,6 @@ function modifyFileRule(path: string, callback: (source: SourceFile) => Change[]
   };
 }
 
-// need here fix ?
 function updateAppComponent(host: Tree, sourcePath: string, templateOptions: any = {}) {
   const appMComponentPath = sourcePath + (isAngularVersionHigherThan(host, 20) ? 'app.ts' : 'app.component.ts');
 
@@ -189,7 +188,6 @@ function updateAppComponent(host: Tree, sourcePath: string, templateOptions: any
   return chain(rules);
 }
 
-// need here fix ?
 function getComponentName(host: Tree, sourcePath: string) {
   let name = '';
   let index = 0;
