@@ -9,9 +9,9 @@ import {
   filter,
   forEach,
   mergeWith,
+  callRule,
   FileEntry,
-  template,
-  callRule
+  template
 } from '@angular-devkit/schematics';
 
 import {
@@ -276,7 +276,7 @@ function modifyContentByTemplate(
 function updateDevextremeConfig(sourcePath: string = '') {
   const devextremeConfigPath = '/devextreme.json';
   const templateOptions = {
-    sourcePath,
+    sourcePath
   };
 
   const modifyConfig = (templateContent: string, currentContent: string) => {
@@ -329,7 +329,7 @@ export default function(options: any): Rule {
       title,
       strings,
       path: pathToCss,
-      prefix,
+      prefix
     };
 
     const modifyContent = (templateContent: string, currentContent: string, filePath: string) => {

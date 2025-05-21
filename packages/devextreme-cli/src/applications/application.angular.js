@@ -84,7 +84,6 @@ const bumpAngular = (appPath, versionTag) => {
             for(const depName in section) {
                 section[depName] = depName.startsWith('@angular') ? versionTag : section[depName];
             }
-
             return section;
         };
 
