@@ -19,6 +19,7 @@ import { getProjectName } from '../utility/project';
 import { PatchNodePackageInstallTask } from '../utility/patch';
 
 export default function(options: any): Rule {
+
   return chain([
     (host: Tree) => addDevExtremeDependency(host, { dxversion: options.dxversion }),
     (host: Tree) => addDevExtremeCSS(host, { project: options.project }),
