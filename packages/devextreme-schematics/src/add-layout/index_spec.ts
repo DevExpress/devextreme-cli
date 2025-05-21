@@ -243,9 +243,25 @@ describe('layout', () => {
     const routesContent = tree.readContent('/src/app/app.routes.ts');
 
     expect(routesContent)
-      .toContain(`{\n    path: 'login-form',\n    component: LoginFormComponent,\n    canActivate: [ AuthGuardService ]\n  },`);
-  });
+      .toContain(`import { AuthGuardService } from './shared/services';`);
+    const loginFormComponentMatch = routesContent.match(/\bLoginFormComponent\b/g);
+    const resetPasswordFormComponentMatch = routesContent.match(/\bResetPasswordFormComponent\b/g);
+    const createAccountFormComponentMatch = routesContent.match(/\bCreateAccountFormComponent\b/g);
+    const changePasswordFormComponentMatch = routesContent.match(/\bChangePasswordFormComponent\b/g);
+    expect(loginFormComponentMatch?.length).toBe(2);
+    expect(resetPasswordFormComponentMatch?.length).toBe(2);
+    expect(createAccountFormComponentMatch?.length).toBe(2);
+    expect(changePasswordFormComponentMatch?.length).toBe(2);
 
+    expect(routesContent)
+      .toContain(`path: 'login-form'`);
+    expect(routesContent)
+      .toContain(`path: 'reset-password'`);
+    expect(routesContent)
+      .toContain(`path: 'create-account'`);
+    expect(routesContent)
+      .toContain(`path: 'change-password/:recoveryCode'`);
+  });
   it('should use selected layout', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     options.layout = 'side-nav-inner-toolbar';
