@@ -283,14 +283,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await page.waitForTimeout(3000);
                                     const image = await takeScreenshot();
 
-                                    const isProblemTest = env.engine.startsWith('nextjs')
-                                      && theme === 'material'
-                                      && viewportName === 'large'
-                                      && layout === 'side-nav-outer-toolbar';
-
-                                    compareSnapshot(image, 'create-account', {
-                                        threshold: isProblemTest ? 0.025 : customConfig.threshold
-                                    });
+                                    compareSnapshot(image, 'create-account');
                                 });
 
                                 it('Reset password page', async() => {

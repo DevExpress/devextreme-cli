@@ -16,16 +16,25 @@ async function _DEMO_logIn() {
   return await _DEMO_logIn();
 
   // In production, you will need to redirect unauthorized users
-  // return NextResponse.redirect(new URL('/login', req.nextUrl))
+  // return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
 }
 
 export default async function middleware(req<%=#isTypeScript%>: NextRequest<%=/isTypeScript%>) {
   const path = req.nextUrl.pathname;
- 
+
+  if (!isProtectedRoute(path)) {
+    return NextResponse.next();
+  }
+
   const cookie = (await cookies()).get('session')?.value;
+
+  if (!cookie) {
+    return await redirectUnauthorized(req);
+  }
+
   const session = await decrypt(cookie);
- 
-  if (isProtectedRoute(path) && !session?.userId) {
+
+  if (!session?.userId) {
     return await redirectUnauthorized(req);
   }
  
