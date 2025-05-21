@@ -322,7 +322,7 @@ const modifyRouting = (host: Tree, routingFilePath: string) => {
     source = getSourceFile(host, routingFilePath)!;
     const routeInSource = findRoutesInSource(source)!;
     if (!hasComponentInRoutes(routeInSource, route.path)) {
-      const routeToAdd = getRoute(route.path, route.name);
+      const routeToAdd = getRoute(route.name, route.name, route.path);
       insertItemToArray(host, routingFilePath, routeInSource, routeToAdd);
     }
   }
