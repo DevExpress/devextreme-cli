@@ -160,7 +160,6 @@ function modifyFileRule(path: string, callback: (source: SourceFile) => Change[]
     if (!source) {
       return host;
     }
-
     const changes = callback(source);
     return applyChanges(host, changes, path);
   };
