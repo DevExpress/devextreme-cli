@@ -82,7 +82,7 @@ const routes = [
   },
   {
     name: 'ChangePasswordFormComponent',
-    path: 'change-password'
+    path: 'change-password/:recoveryCode'
   }
 ];
 

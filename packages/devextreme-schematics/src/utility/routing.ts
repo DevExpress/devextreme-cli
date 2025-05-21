@@ -22,7 +22,7 @@ export function hasComponentInRoutes(routes: Node, name: string) {
 
 export function getRoute(name: string, componentName?: string) {
   return `  {
-    path: '${strings.dasherize(name)}',
+    path: '${componentName ? name : strings.dasherize(name)}',
     component: ${componentName || getRouteComponentName(name)},
     canActivate: [ AuthGuardService ]
   }`;

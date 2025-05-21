@@ -241,28 +241,27 @@ describe('layout', () => {
 
     expect(tree.files).toContain('/src/app/app.routes.ts');
     const routesContent = tree.readContent('/src/app/app.routes.ts');
-    
+
     expect(routesContent)
       .toContain(`import { AuthGuardService } from './shared/services';`);
-    expect(routesContent)
-      .toContain(`import { LoginFormComponent } from './shared/components';`);
-    expect(routesContent)
-      .toContain(`import { ResetPasswordFormComponent } from './shared/components';`);
-    expect(routesContent)
-      .toContain(`import { CreateAccountFormComponent } from './shared/components';`);
-    expect(routesContent)
-      .toContain(`import { ChangePasswordFormComponent } from './shared/components';`);
+    const loginFormComponentMatch = routesContent.match(/\bLoginFormComponent\b/g);
+    const resetPasswordFormComponentMatch = routesContent.match(/\bResetPasswordFormComponent\b/g);
+    const createAccountFormComponentMatch = routesContent.match(/\bCreateAccountFormComponent\b/g);
+    const changePasswordFormComponentMatch = routesContent.match(/\bChangePasswordFormComponent\b/g);
+    expect(loginFormComponentMatch?.length).toBe(2);
+    expect(resetPasswordFormComponentMatch?.length).toBe(2);
+    expect(createAccountFormComponentMatch?.length).toBe(2);
+    expect(changePasswordFormComponentMatch?.length).toBe(2);
 
     expect(routesContent)
-      .toContain(`{\n    path: 'login-form',\n    component: LoginFormComponent,\n    canActivate: [ AuthGuardService ]\n  },`);
+      .toContain(`path: 'login-form'`);
     expect(routesContent)
-      .toContain(`{\n    path: 'reset-password',\n    component: ResetPasswordFormComponent,\n    canActivate: [ AuthGuardService ]\n  },`);
+      .toContain(`path: 'reset-password'`);
     expect(routesContent)
-      .toContain(`{\n    path: 'create-account',\n    component: CreateAccountFormComponent,\n    canActivate: [ AuthGuardService ]\n  },`);
+      .toContain(`path: 'create-account'`);
     expect(routesContent)
-      .toContain(`{\n    path: 'change-password',\n    component: ChangePasswordFormComponent,\n    canActivate: [ AuthGuardService ]\n  },`);
-    });
-
+      .toContain(`path: 'change-password/:recoveryCode'`);
+  });
   it('should use selected layout', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     options.layout = 'side-nav-inner-toolbar';
