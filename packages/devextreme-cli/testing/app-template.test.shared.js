@@ -271,13 +271,6 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                         return;
                                     }
 
-                                    // TODO: investigate the failure that we worked around here
-                                    if(theme === 'material'
-                                      && viewportName === 'large'
-                                      && layout === 'side-nav-outer-toolbar') {
-                                        return;
-                                    }
-
                                     await openPage(appUrl);
                                     await logOut();
                                     await page.waitForSelector('.dx-button-normal');
