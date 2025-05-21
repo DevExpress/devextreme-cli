@@ -20,9 +20,9 @@ export function hasComponentInRoutes(routes: Node, name: string) {
   return routesText.indexOf(componentName) !== -1;
 }
 
-export function getRoute(name: string, componentName?: string) {
+export function getRoute(name: string, componentName?: string, componentPath?: string) {
   return `  {
-    path: '${componentName ? name : strings.dasherize(name)}',
+    path: '${componentPath || strings.dasherize(name)}',
     component: ${componentName || getRouteComponentName(name)},
     canActivate: [ AuthGuardService ]
   }`;
