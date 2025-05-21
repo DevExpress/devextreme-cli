@@ -272,8 +272,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     }
 
                                     // TODO: investigate the failure that we worked around here
-                                    if(env.engine.startsWith('nextjs')
-                                      && theme === 'material'
+                                    if(theme === 'material'
                                       && viewportName === 'large'
                                       && layout === 'side-nav-outer-toolbar') {
                                         return;
