@@ -24,7 +24,7 @@ import {
 
 import { getSourceFile } from '../utility/source';
 
-import { strings, basename, normalize, dirname, Path } from '@angular-devkit/core';
+import { strings, basename, normalize, dirname } from '@angular-devkit/core';
 
 import {
   getProjectName,
@@ -106,9 +106,7 @@ export function addViewToRouting(options: any) {
 
       const name = options.name.replace(/^pages\//, '');
       const componentName = getRouteComponentName(name);
-      const path = `./pages/${name}/${name}.component`;
-
-      const importChanges = insertImport(source, routingModulePath, componentName, path);
+      const importChanges = insertImport(source, routingModulePath, componentName, `./pages/${name}/${name}.component`);
       applyChanges(host, [importChanges], routingModulePath);
     }
     return host;
@@ -139,48 +137,38 @@ function overwriteModuleContent(options: any, path: string, content: string) {
   };
 }
 
-function getComponentFileNames(name: string) {
-  const baseName = strings.dasherize(basename(normalize(name)));
-  const path = `${dirname(name as Path)}/${baseName}`;
-
-  return {
-    path,
-    ts: `${path}/${baseName}.component.ts` as Path,
-    html: `${path}/${baseName}.component.html` as Path,
-    style: `${path}/${baseName}.component.css` as Path
-  };
-}
-
 function addContentToView(options: any) {
-  const { html } = getComponentFileNames(options.name);
-  const title = humanize(strings.dasherize(basename(normalize(options.name))));
+  const name = strings.dasherize(basename(normalize(options.name)));
+  const path = `${dirname(options.name)}/${name}`;
+  const title = humanize(name);
+  const componentPath = `${path}/${name}.component.html`;
   const content = `<h2>${title}</h2>
 <div class="content-block">
     <div class="dx-card responsive-paddings">Put your content here</div>
 </div>
 `;
 
-  return overwriteModuleContent(options, html, content);
+  return overwriteModuleContent(options, componentPath, content);
 }
 
 async function addContentToTS(options: any) {
-  const { ts, html, style } = getComponentFileNames(options.name);
   const name = strings.dasherize(basename(normalize(options.name)));
-  const componentName = strings.classify(basename(normalize(name)));
+  const path = `${dirname(options.name)}/${name}`;
+  const componentPath = `${path}/${name}.component.ts`;
   const content = `import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-${name}',
-  templateUrl: './${basename(html)}',
-  styleUrl: './${basename(style)}',
+  templateUrl: './${name}.component.html',
+  styleUrl: './${name}.component.css',
   standalone: true
 })
-export class ${componentName}Component {
+export class ${strings.classify(basename(normalize(name)))}Component {
 
 }
 `;
 
-  return overwriteModuleContent(options, ts, content);
+  return overwriteModuleContent(options, componentPath, content);
 }
 
 export default function(options: any): Rule {
