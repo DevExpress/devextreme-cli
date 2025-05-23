@@ -1,7 +1,7 @@
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 export class PatchNodePackageInstallTask extends NodePackageInstallTask {
-    toConfiguration(): any {
+    toConfiguration = (): any => {
         const rootConfigurations = super.toConfiguration();
         const customOptions = Object.assign({}, rootConfigurations.options, { allowScripts: true });
 
