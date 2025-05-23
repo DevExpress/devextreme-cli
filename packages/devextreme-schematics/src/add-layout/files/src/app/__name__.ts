@@ -9,8 +9,8 @@ import { UnauthenticatedContentComponent } from './unauthenticated-content';
 
 @Component({
   selector: '<%= prefix %>-root',
-  templateUrl: './<%= name %>.component.html',
-  styleUrls: ['./<%= name %>.component.scss'],
+  templateUrl: './<%= name %>.html',
+  styleUrls: ['./<%= name %>.scss'],
   standalone: true,
   imports: [
     RouterModule,
@@ -23,7 +23,7 @@ import { UnauthenticatedContentComponent } from './unauthenticated-content';
   ],
   providers: []
 })
-export class <%= strings.classify(name) %>Component  {
+export class <%= strings.classify(name) %> {
   @HostBinding('class') get getClass() {
     const sizeClassName = Object.keys(this.screen.sizes).filter(cl => this.screen.sizes[cl]).join(' ');
     return `${sizeClassName} app` ;
