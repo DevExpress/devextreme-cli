@@ -69,20 +69,33 @@ import { PatchNodePackageInstallTask } from '../utility/patch';
 
 const routes = [
   {
+    name: 'AuthGuardService',
+    type: 'service',
+    location: './shared/services'
+  },
+  {
     name: 'LoginFormComponent',
-    path: 'login-form'
+    path: 'login-form',
+    type: 'component',
+    location: './shared/components'
   },
   {
     name: 'ResetPasswordFormComponent',
-    path: 'reset-password'
+    path: 'reset-password',
+    type: 'component',
+    location: './shared/components'
   },
   {
     name: 'CreateAccountFormComponent',
-    path: 'create-account'
+    path: 'create-account',
+    type: 'component',
+    location: './shared/components'
   },
   {
     name: 'ChangePasswordFormComponent',
-    path: 'change-password/:recoveryCode'
+    path: 'change-password/:recoveryCode',
+    type: 'component',
+    location: './shared/components'
   }
 ];
 
@@ -311,19 +324,19 @@ const modifyRouting = (host: Tree, routingFilePath: string) => {
   // TODO: Try to use the isolated host to generate the result string
   let source = getSourceFile(host, routingFilePath)!;
   const importChanges = [];
-  importChanges.push(insertImport(source, routingFilePath, 'AuthGuardService', './shared/services'));
-
   for (const route of routes) {
-    importChanges.push(insertImport(source, routingFilePath, route.name, './shared/components'));
+    importChanges.push(insertImport(source, routingFilePath, route.name, route.location));
   }
 
   applyChanges(host, importChanges, routingFilePath);
   for (const route of routes) {
-    source = getSourceFile(host, routingFilePath)!;
-    const routeInSource = findRoutesInSource(source)!;
-    if (!hasComponentInRoutes(routeInSource, route.path)) {
-      const routeToAdd = getRoute(route.name, route.name, route.path);
-      insertItemToArray(host, routingFilePath, routeInSource, routeToAdd);
+    if (route.type === 'component' && route.path) {
+      source = getSourceFile(host, routingFilePath)!;
+      const routeInSource = findRoutesInSource(source)!;
+      if (!hasComponentInRoutes(routeInSource, route.path)) {
+        const routeToAdd = getRoute(route.name, route.name, route.path);
+        insertItemToArray(host, routingFilePath, routeInSource, routeToAdd);
+      }
     }
   }
 
