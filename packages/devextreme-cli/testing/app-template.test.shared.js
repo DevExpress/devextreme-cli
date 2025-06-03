@@ -193,6 +193,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     // await switchTheme();
                                     // await compareThemeModeSnapshot('profile', 'dark');
                                     // await switchTheme();
+                                    // test
 
                                     await compareThemeModeSnapshot('profile', 'light');
                                 });
