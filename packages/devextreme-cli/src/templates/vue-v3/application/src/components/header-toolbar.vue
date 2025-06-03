@@ -143,7 +143,7 @@ header {
 }
 
 .dx-theme-generic {
-  .dx-toolbar {
+  .header-toolbar {
     padding: 10px 0;
   }
 
