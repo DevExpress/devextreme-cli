@@ -149,7 +149,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                             }
 
                             async function takeScreenshot(options) {
-                                await hideFooter();
+                                // await hideFooter();
                                 return await page.screenshot({
                                     ...(options || {}),
                                     captureBeyondViewport: false
@@ -190,9 +190,9 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     compareSnapshot(image, 'profile');
 
                                     // TODO: fix false positive screenshot failure and uncomment
-                                    // await switchTheme();
-                                    // await compareThemeModeSnapshot('profile', 'dark');
-                                    // await switchTheme();
+                                    await switchTheme();
+                                    await compareThemeModeSnapshot('profile', 'dark');
+                                    await switchTheme();
                                     // test
 
                                     await compareThemeModeSnapshot('profile', 'light');
