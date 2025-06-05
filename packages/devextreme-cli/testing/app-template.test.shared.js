@@ -104,6 +104,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     diffPath,
                                     threshold: overrideConfig.threshold ?? customConfig.threshold,
                                 }).then(({ equal, created }) => {
+                                    expect(equal).toBe(true);
                                     if (!equal) {
                                         throw new Error(`Image mismatch for "${snapshotName}". See diff at: ${diffPath}`);
                                     }

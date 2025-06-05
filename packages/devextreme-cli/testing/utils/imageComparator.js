@@ -4,7 +4,7 @@ const path = require('path');
 const looksSame = require('looks-same');
 
 function ensureDirSync(dir) {
-    if (!fs.existsSync(dir)) {
+    if(!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
     }
 }
@@ -14,19 +14,19 @@ async function compareImages({ imageBuffer, snapshotPath, diffPath, threshold = 
     ensureDirSync(path.dirname(diffPath));
 
     // If no snapshot exists, create it
-    if (!fs.existsSync(snapshotPath)) {
+    if(!fs.existsSync(snapshotPath)) {
         fs.writeFileSync(snapshotPath, imageBuffer);
         return { equal: true, created: true };
     }
 
     return new Promise((resolve, reject) => {
         looksSame(imageBuffer, fs.readFileSync(snapshotPath), {
-            strict: false,
+            strict: true,
             tolerance: threshold,
         }, (err, { equal }) => {
-            if (err) return reject(err);
+            if(err) return reject(err);
 
-            if (!equal) {
+            if(!equal) {
                 looksSame.createDiff({
                     reference: snapshotPath,
                     current: imageBuffer,
