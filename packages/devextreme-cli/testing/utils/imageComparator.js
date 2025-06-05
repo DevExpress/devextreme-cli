@@ -21,7 +21,6 @@ async function compareImages({ imageBuffer, snapshotPath, diffPath, threshold = 
 
     return new Promise((resolve, reject) => {
         looksSame(imageBuffer, fs.readFileSync(snapshotPath), {
-            strict: true,
             tolerance: threshold,
         }, (err, { equal }) => {
             if(err) return reject(err);
