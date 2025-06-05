@@ -1,7 +1,7 @@
 const path = require('path');
 const waitOn = require('wait-on');
 const ip = require('ip');
-
+const { compareImages } = require('./utils/imageComparator');
 const getBrowser = require('./utils/puppeteer').getBrowser;
 const { viewports, themes, layouts } = require('./constants');
 const DevServer = require('./dev-server');
@@ -94,12 +94,19 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                             const customConfig = { threshold: 0.012, includeAA: true };
 
                             function compareSnapshot(image, name, overrideConfig = {}) {
-                                expect(image).toMatchImageSnapshot({
-                                    customDiffConfig: { ...customConfig, ...overrideConfig },
-                                    customSnapshotIdentifier: `${layout}-${theme}-${viewportName}-${name}-snap`,
-                                    customDiffDir: diffSnapshotsDir,
-                                    storeReceivedOnFailure: true,
-                                    customReceivedDir: diffSnapshotsDir
+                                const snapshotName = `${layout}-${theme}-${viewportName}-${name}`;
+                                const snapshotPath = path.join(diffSnapshotsDir, `${snapshotName}.png`);
+                                const diffPath = path.join(diffSnapshotsDir, `${snapshotName}.diff.png`);
+
+                                return compareImages({
+                                    imageBuffer: image,
+                                    snapshotPath,
+                                    diffPath,
+                                    threshold: overrideConfig.threshold ?? customConfig.threshold,
+                                }).then(({ equal, created }) => {
+                                    if (!equal) {
+                                        throw new Error(`Image mismatch for "${snapshotName}". See diff at: ${diffPath}`);
+                                    }
                                 });
                             }
 
@@ -155,11 +162,11 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                             //     await page.waitForTimeout(3000);
                             // }
 
-                            async function takeScreenshot(options) {
-                                // await hideFooter();
+                           async function takeScreenshot(options) {
                                 return await page.screenshot({
                                     ...(options || {}),
-                                    captureBeyondViewport: false
+                                    captureBeyondViewport: false,
+                                    encoding: 'binary'
                                 });
                             }
 
