@@ -191,7 +191,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
 
                                     // TODO: fix false positive screenshot failure and uncomment
                                     await switchTheme();
-                                    await page.waitForLoadState('networkidle');
+                                    await page.waitForFunction(() => document.fonts.ready);
                                     await compareThemeModeSnapshot('profile', 'dark');
                                     await switchTheme();
                                     // test
