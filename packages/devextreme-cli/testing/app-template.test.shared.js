@@ -18,18 +18,6 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
         ...urls,
     };
 
-    beforeEach(async () => {
-        await page.addStyleTag({
-            content: `
-            * {
-                -webkit-font-smoothing: auto !important;
-                -moz-osx-font-smoothing: auto !important;
-                text-rendering: optimizeSpeed !important;
-            }
-            `
-        });
-    });
-
     describe(`${env.engine} app-template`, () => {
         Object.keys(themes).forEach((theme) => {
             describe(theme, () => {
@@ -58,6 +46,15 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     resources: [appUrl],
                                     timeout: 30000,
                                     interval: 100
+                                });
+                                await page.addStyleTag({
+                                    content: `
+                                    * {
+                                        -webkit-font-smoothing: auto !important;
+                                        -moz-osx-font-smoothing: auto !important;
+                                        text-rendering: optimizeSpeed !important;
+                                    }
+                                    `
                                 });
                             } catch(e) {
                                 // NOTE jest@27 will fail test, but jest@26 - not
