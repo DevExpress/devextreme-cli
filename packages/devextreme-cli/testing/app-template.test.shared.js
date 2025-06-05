@@ -50,9 +50,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                 await page.addStyleTag({
                                     content: `
                                     * {
-                                        -webkit-font-smoothing: subpixel-antialiased !important;
-                                        -moz-osx-font-smoothing: subpixel-antialiased !important;
-                                        text-rendering: geometricPrecision !important;
+                                        -moz-osx-font-smoothing: grayscale !important;
                                     }
                                     `
                                 });
