@@ -199,10 +199,9 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     // TODO: fix false positive screenshot failure and uncomment
                                     await switchTheme();
                                     // eslint-disable-next-line no-undef
-                                    await page.waitForFunction(() => document.fonts.ready);
+                                    await page.waitForTimeout(3000);
                                     await compareThemeModeSnapshot('profile', 'dark');
                                     await switchTheme();
-                                    // test
 
                                     await compareThemeModeSnapshot('profile', 'light');
                                 });
