@@ -94,7 +94,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                             const customConfig = { threshold: 0.012, includeAA: true };
 
                             function compareSnapshot(image, name, overrideConfig = {}) {
-                                const snapshotName = `${layout}-${theme}-${viewportName}-${name}`;
+                                const snapshotName = `${layout}-${theme}-${viewportName}-${name}-snap`;
                                 const snapshotPath = path.join(diffSnapshotsDir, `${snapshotName}.png`);
                                 const diffPath = path.join(diffSnapshotsDir, `${snapshotName}.diff.png`);
 
