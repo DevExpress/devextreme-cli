@@ -32,10 +32,10 @@ async function compareImages({ imageBuffer, snapshotPath, diffPath, threshold = 
                     diff: diffPath,
                     highlightColor: '#ff00ff', // pink
                 }, () => {
-                    resolve({ equal: false });
+                    resolve({ equal: false, created: false  });
                 });
             } else {
-                resolve({ equal: true });
+                resolve({ equal: true, created: false });
             }
         });
     });

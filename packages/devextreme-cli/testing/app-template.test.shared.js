@@ -97,17 +97,20 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                 const snapshotName = `${layout}-${theme}-${viewportName}-${name}-snap`;
                                 const snapshotPath = path.join(diffSnapshotsDir, `${snapshotName}.png`);
                                 const diffPath = path.join(diffSnapshotsDir, `${snapshotName}.diff.png`);
-
+                                let compareResult = false;
                                 return compareImages({
                                     imageBuffer: image,
                                     snapshotPath,
                                     diffPath,
                                     threshold: overrideConfig.threshold ?? customConfig.threshold,
                                 }).then(({ equal, created }) => {
-                                    expect(equal).toBe(true);
+                                    expect(created).toBe(false);
+                                    compareResult = equal;
                                     if (!equal) {
                                         throw new Error(`Image mismatch for "${snapshotName}". See diff at: ${diffPath}`);
                                     }
+                                }).finally(() => {
+                                    expect(compareResult).toBe(true);
                                 });
                             }
 
