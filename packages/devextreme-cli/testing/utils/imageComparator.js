@@ -13,13 +13,11 @@ async function compareImages({ imageBuffer, snapshotPath, diffPath, threshold = 
     ensureDirSync(path.dirname(snapshotPath));
     ensureDirSync(path.dirname(diffPath));
 
-    // If no snapshot exists, save one and return
     if (!fs.existsSync(snapshotPath)) {
         fs.writeFileSync(snapshotPath, imageBuffer);
         return { equal: true, created: true };
     }
-
-    // Write current image to temp file for diffing
+    
     const tempPath = path.join(os.tmpdir(), `current-${Date.now()}.png`);
     fs.writeFileSync(tempPath, imageBuffer);
 
@@ -34,8 +32,18 @@ async function compareImages({ imageBuffer, snapshotPath, diffPath, threshold = 
                     diff: diffPath,
                     highlightColor: '#ff00ff'
                 }, (diffErr) => {
-                    fs.unlinkSync(tempPath); // Clean up temp file
-                    if (diffErr) return reject(diffErr);
+                    fs.unlinkSync(tempPath);
+
+                    if (diffErr) {
+                        console.error('Error creating diff:', diffErr);
+                        return reject(diffErr);
+                    }
+
+                    if (!fs.existsSync(diffPath)) {
+                        console.error('Diff file was not created at:', diffPath);
+                        return reject(new Error('Diff file not created'));
+                    }
+
                     resolve({ equal: false, created: false });
                 });
             } else {
