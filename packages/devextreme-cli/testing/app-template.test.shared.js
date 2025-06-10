@@ -1,16 +1,16 @@
 const path = require('path');
 const waitOn = require('wait-on');
 const ip = require('ip');
-const { compareImages } = require('./utils/imageComparator');
+
 const getBrowser = require('./utils/puppeteer').getBrowser;
 const { viewports, themes, layouts } = require('./constants');
 const DevServer = require('./dev-server');
+const { compareWithDXSC } = require('./utils/compareWithDXSC');
 
 const defaultLayout = 'side-nav-outer-toolbar';
 
 module.exports = (env, { port = 8080, urls = {} } = {}) => {
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
-    const snapshotsDir = path.join('testing/__tests__/__image_snapshots__', env.engine);
     const pageUrls = {
         profile: 'profile',
         tasks: 'tasks',
@@ -47,13 +47,6 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     resources: [appUrl],
                                     timeout: 30000,
                                     interval: 100
-                                });
-                                await page.addStyleTag({
-                                    content: `
-                                    * {
-                                        -moz-osx-font-smoothing: grayscale !important;
-                                    }
-                                    `
                                 });
                             } catch(e) {
                                 // NOTE jest@27 will fail test, but jest@26 - not
@@ -94,25 +87,8 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
 
                             const customConfig = { threshold: 0.012 };
 
-                            function compareSnapshot(image, name, overrideConfig = {}) {
-                                const snapshotName = `${layout}-${theme}-${viewportName}-${name}-snap`;
-                                const snapshotPath = path.join(snapshotsDir, `${snapshotName}.png`);
-                                const diffPath = path.join(diffSnapshotsDir, `${snapshotName}.diff.png`);
-                                let compareResult = false;
-                                return compareImages({
-                                    imageBuffer: image,
-                                    snapshotPath,
-                                    diffPath,
-                                    threshold: overrideConfig.threshold ?? customConfig.threshold,
-                                }).then(({ equal, created }) => {
-                                    expect(created).toBe(false);
-                                    compareResult = equal;
-                                    if (!equal) {
-                                        throw new Error(`Image mismatch for "${snapshotName}". See diff at: ${diffPath}`);
-                                    }
-                                }).finally(() => {
-                                    expect(compareResult).toBe(true);
-                                });
+                            function compareSnapshot(imageBuffer, name, overrideConfig = {}) {
+                                return compareWithDXSC(imageBuffer, name, env.engine, overrideConfig);
                             }
 
                             /* eslint-disable-next-line no-unused-vars */
@@ -167,11 +143,11 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                             //     await page.waitForTimeout(3000);
                             // }
 
-                           async function takeScreenshot(options) {
+                            async function takeScreenshot(options) {
+                                // await hideFooter();
                                 return await page.screenshot({
                                     ...(options || {}),
-                                    captureBeyondViewport: false,
-                                    encoding: 'binary'
+                                    captureBeyondViewport: false
                                 });
                             }
 
@@ -210,8 +186,6 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
 
                                     // TODO: fix false positive screenshot failure and uncomment
                                     await switchTheme();
-                                    // eslint-disable-next-line no-undef
-                                    await page.waitForTimeout(3000);
                                     await compareThemeModeSnapshot('profile', 'dark');
                                     await switchTheme();
 

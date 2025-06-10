@@ -1,57 +1,48 @@
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
-const looksSame = require('looks-same');
+const { compareScreenshot } = require('devextreme-screenshot-comparer');
 
-function ensureDirSync(dir) {
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-    }
-}
+const BASELINE_DIR = path.resolve(__dirname, '../testing/__tests__/__diff_snapshots__/baseline');
+const ACTUAL_DIR = path.resolve(__dirname, '../testing/__tests__/__diff_snapshots__/actual');
+const DIFF_DIR = path.resolve(__dirname, '../testing/__tests__/__diff_snapshots__/diff');
 
-async function compareImages({ imageBuffer, snapshotPath, diffPath, threshold = 0.01 }) {
-    ensureDirSync(path.dirname(snapshotPath));
-    ensureDirSync(path.dirname(diffPath));
-
-    if (!fs.existsSync(snapshotPath)) {
-        fs.writeFileSync(snapshotPath, imageBuffer);
-        return { equal: true, created: true };
-    }
-    
-    const tempPath = path.join(os.tmpdir(), `current-${Date.now()}.png`);
-    fs.writeFileSync(tempPath, imageBuffer);
-
-    return new Promise((resolve, reject) => {
-        looksSame(tempPath, snapshotPath, { tolerance: threshold }, (err, { equal }) => {
-            if (err) return reject(err);
-
-            if (!equal) {
-                looksSame.createDiff({
-                    reference: snapshotPath,
-                    current: tempPath,
-                    diff: diffPath,
-                    highlightColor: '#ff00ff'
-                }, (diffErr) => {
-                    fs.unlinkSync(tempPath);
-
-                    if (diffErr) {
-                        console.error('Error creating diff:', diffErr);
-                        return reject(diffErr);
-                    }
-
-                    if (!fs.existsSync(diffPath)) {
-                        console.error('Diff file was not created at:', diffPath);
-                        return reject(new Error('Diff file not created'));
-                    }
-
-                    resolve({ equal: false, created: false });
-                });
-            } else {
-                fs.unlinkSync(tempPath);
-                resolve({ equal: true, created: false });
-            }
-        });
+function ensureDirs() {
+    [BASELINE_DIR, ACTUAL_DIR, DIFF_DIR].forEach((dir) => {
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     });
 }
 
-module.exports = { compareImages };
+async function compareWithDXSC(imageBuffer, snapshotName, envEngine, options = {}) {
+    ensureDirs();
+
+    const filename = `${snapshotName}.png`;
+
+    const engineDir = path.join('testing/__tests__/__diff_snapshots__', envEngine);
+    const baselinePath = path.join(BASELINE_DIR, engineDir, filename);
+    const actualPath = path.join(ACTUAL_DIR, engineDir, filename);
+    const diffPath = path.join(DIFF_DIR, engineDir, filename);
+
+    fs.writeFileSync(actualPath, imageBuffer);
+
+    if (!fs.existsSync(baselinePath)) {
+        // First-time snapshot creation
+        fs.writeFileSync(baselinePath, imageBuffer);
+        console.warn(`[devextreme-screenshot-comparer] Created new baseline: ${baselinePath}`);
+        return true;
+    }
+
+    const result = await compareScreenshot({
+        actual: actualPath,
+        expected: baselinePath,
+        diff: diffPath,
+        ...options,
+    });
+
+    if (result.errorCount > 0) {
+        throw new Error(`[Screenshot mismatch] ${snapshotName}: ${result.errorCount} errors, ${result.misMatchPercentage}% mismatch`);
+    }
+
+    return true;
+}
+
+module.exports = { compareWithDXSC };
