@@ -129,27 +129,27 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                             // so we are hiding the footer before taking screenshots to prevent
                             // false failures. Moving forward, we need to investigate the cause
                             // of this effect.
-                            async function hideFooter() {
-                                await page.evaluate(() => {
-                                    /* eslint-disable no-undef */
-                                    const footer = document.getElementsByTagName('app-footer')[0]
-                                        || document.getElementsByTagName('footer')[0];
+                            // async function hideFooter() {
+                            //     await page.evaluate(() => {
+                            //         /* eslint-disable no-undef */
+                            //         const footer = document.getElementsByTagName('app-footer')[0]
+                            //             || document.getElementsByTagName('footer')[0];
 
-                                    if(footer) {
-                                        footer.style = {
-                                            ...(footer.style || {}),
-                                            transition: 'none',
-                                            display: 'none'
-                                        };
-                                        footer.className += ' dx-state-invisible';
-                                    }
-                                    /* eslint-enable no-undef */
-                                });
-                                await page.waitForTimeout(3000);
-                            }
+                            //         if(footer) {
+                            //             footer.style = {
+                            //                 ...(footer.style || {}),
+                            //                 transition: 'none',
+                            //                 display: 'none'
+                            //             };
+                            //             footer.className += ' dx-state-invisible';
+                            //         }
+                            //         /* eslint-enable no-undef */
+                            //     });
+                            //     await page.waitForTimeout(3000);
+                            // }
 
                             async function takeScreenshot(options) {
-                                await hideFooter();
+                                // await hideFooter();
                                 return await page.screenshot({
                                     ...(options || {}),
                                     captureBeyondViewport: false
@@ -190,9 +190,9 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     compareSnapshot(image, 'profile');
 
                                     // TODO: fix false positive screenshot failure and uncomment
-                                    // await switchTheme();
-                                    // await compareThemeModeSnapshot('profile', 'dark');
-                                    // await switchTheme();
+                                    await switchTheme();
+                                    await compareThemeModeSnapshot('profile', 'dark');
+                                    await switchTheme();
 
                                     await compareThemeModeSnapshot('profile', 'light');
                                 });
