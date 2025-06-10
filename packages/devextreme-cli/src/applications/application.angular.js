@@ -101,7 +101,6 @@ const create = async(appName, options) => {
     const layout = await getLayoutInfo(options.layout);
     const currentNgVersion = ngVersion.getNgCliVersion().version;
     const depsVersionTag = extractDepsVersionTag(options);
-    const currentNgVersion = ngVersion.getNgCliVersion().version;
 
     const commandArguments = [
         'new',
