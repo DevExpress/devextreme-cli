@@ -1,6 +1,6 @@
 import Button from 'devextreme-react/button';
 import Drawer from 'devextreme-react/drawer';
-import { ScrollView<%=#isTypeScript%>, ScrollViewRef<%=/isTypeScript%> } from 'devextreme-react/scroll-view';
+import { ScrollView<%=#isTypeScript%>, type ScrollViewRef<%=/isTypeScript%> } from 'devextreme-react/scroll-view';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import React, { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,9 +9,9 @@ import './side-nav-inner-toolbar.scss';
 import { useScreenSize } from '../../utils/media-query';
 import { Template } from 'devextreme-react/core/template';
 import { useMenuPatch } from '../../utils/patches';
-<%=#isTypeScript%>import { TreeViewTypes } from 'devextreme-react/tree-view';<%=/isTypeScript%>
+<%=#isTypeScript%>import type { TreeViewTypes } from 'devextreme-react/tree-view';<%=/isTypeScript%>
 <%=#isTypeScript%>import type { SideNavToolbarProps } from '../../types';<%=/isTypeScript%>
-<%=#isTypeScript%>import { ButtonTypes } from 'devextreme-react/button';<%=/isTypeScript%>
+<%=#isTypeScript%>import type { ButtonTypes } from 'devextreme-react/button';<%=/isTypeScript%>
 
 export default function SideNavInnerToolbar({ title, children }<%=#isTypeScript%>: React.PropsWithChildren<SideNavToolbarProps><%=/isTypeScript%>) {
   const scrollViewRef = useRef<%=#isTypeScript%><ScrollViewRef><%=/isTypeScript%>(null);

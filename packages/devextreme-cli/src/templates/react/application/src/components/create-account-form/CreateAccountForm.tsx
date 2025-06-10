@@ -12,7 +12,7 @@ import Form, {
 import notify from 'devextreme/ui/notify';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import { createAccount } from '../../api/auth';
-<%=#isTypeScript%>import { ValidationCallbackData } from 'devextreme-react/common';<%=/isTypeScript%>
+<%=#isTypeScript%>import type { ValidationCallbackData } from 'devextreme-react/common';<%=/isTypeScript%>
 import './CreateAccountForm.scss';
 
 export default function CreateAccountForm() {

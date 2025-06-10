@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback, useMemo, useContext } from 'react';
-import { TreeView<%=#isTypeScript%>, TreeViewRef<%=/isTypeScript%> } from 'devextreme-react/tree-view';
+import { TreeView<%=#isTypeScript%>, type TreeViewRef<%=/isTypeScript%> } from 'devextreme-react/tree-view';
 import * as events from 'devextreme-react/common/core/events';
 import { navigation } from '../../app-navigation';
 import { useNavigation } from '../../contexts/navigation';
