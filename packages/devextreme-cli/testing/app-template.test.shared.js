@@ -10,6 +10,7 @@ const defaultLayout = 'side-nav-outer-toolbar';
 
 module.exports = (env, { port = 8080, urls = {} } = {}) => {
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
+    const snapshotsDir = path.join('testing/__tests__/__image_snapshots__', env.engine);
     const pageUrls = {
         profile: 'profile',
         tasks: 'tasks',
@@ -95,7 +96,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
 
                             function compareSnapshot(image, name, overrideConfig = {}) {
                                 const snapshotName = `${layout}-${theme}-${viewportName}-${name}-snap`;
-                                const snapshotPath = path.join(diffSnapshotsDir, `${snapshotName}.png`);
+                                const snapshotPath = path.join(snapshotsDir, `${snapshotName}.png`);
                                 const diffPath = path.join(diffSnapshotsDir, `${snapshotName}.diff.png`);
                                 let compareResult = false;
                                 return compareImages({
