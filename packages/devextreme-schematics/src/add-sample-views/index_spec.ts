@@ -40,13 +40,12 @@ describe('sample views', () => {
     let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
     tree = await runner.runSchematic('add-sample-views', sampleViewsOptions, tree);
 
-    const moduleContent = tree.readContent('/src/app/app-routing.module.ts');
+    const moduleContent = tree.readContent('/src/app/app.routes.ts');
 
     expect(moduleContent).toMatch(/component: HomeComponent/);
     expect(moduleContent).toMatch(/path: 'home'/);
 
     expect(moduleContent).toMatch(/import { HomeComponent } from /);
-    expect(moduleContent).toMatch(/declarations:\s\[\n*\s*HomeComponent/);
 
     const navigationContent = tree.readContent('/src/app/app-navigation.ts');
     expect(navigationContent).toMatch(/text: 'Home'/);

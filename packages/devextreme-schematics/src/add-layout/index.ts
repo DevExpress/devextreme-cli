@@ -60,14 +60,45 @@ import {
   findRoutesInSource
 } from '../utility/routing';
 
-import {
-  addImportToModule, addProviderToModule, insertImport
-} from '@schematics/angular/utility/ast-utils';
+import { insertImport } from '@schematics/angular/utility/ast-utils';
 
 import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { Change } from '@schematics/angular/utility/change';
 
 import { PatchNodePackageInstallTask } from '../utility/patch';
+import { isAngularVersionHigherThan } from '../utility/angular-version';
+
+const routes = [
+  {
+    name: 'AuthGuardService',
+    type: 'service',
+    location: './shared/services'
+  },
+  {
+    name: 'LoginFormComponent',
+    path: 'login-form',
+    type: 'component',
+    location: './shared/components'
+  },
+  {
+    name: 'ResetPasswordFormComponent',
+    path: 'reset-password',
+    type: 'component',
+    location: './shared/components'
+  },
+  {
+    name: 'CreateAccountFormComponent',
+    path: 'create-account',
+    type: 'component',
+    location: './shared/components'
+  },
+  {
+    name: 'ChangePasswordFormComponent',
+    path: 'change-password/:recoveryCode',
+    type: 'component',
+    location: './shared/components'
+  }
+];
 
 const projectFilesSource = './files/src';
 const workspaceFilesSource = './files';
@@ -168,40 +199,24 @@ function modifyFileRule(path: string, callback: (source: SourceFile) => Change[]
   };
 }
 
-function updateAppModule(host: Tree, sourcePath: string) {
-  const appModulePath = sourcePath + 'app.module.ts';
+function updateAppComponent(host: Tree, sourcePath: string, templateOptions: any = {}) {
+  const appMComponentPath = sourcePath + (isAngularVersionHigherThan(host, 20) ? 'app.ts' : 'app.component.ts');
 
-  const importSetter = (importName: string, path: string) => {
+  const importSetter = (importName: string, path: string, alias: string) => {
     return (source: SourceFile) => {
-      return addImportToModule(source, appModulePath, importName, path);
-    };
-  };
-
-  const providerSetter = (importName: string, path: string) => {
-    return (source: SourceFile) => {
-      return addProviderToModule(source, appModulePath, importName, path);
+      return [insertImport(source, appMComponentPath, importName, path, false, alias)];
     };
   };
 
   const rules = [
-    modifyFileRule(appModulePath, importSetter('DxHttpModule', 'devextreme-angular/http')),
-    modifyFileRule(appModulePath, importSetter('SideNavOuterToolbarModule', './layouts')),
-    modifyFileRule(appModulePath, importSetter('SideNavInnerToolbarModule', './layouts')),
-    modifyFileRule(appModulePath, importSetter('SingleCardModule', './layouts')),
-    modifyFileRule(appModulePath, importSetter('FooterModule', './shared/components')),
-    modifyFileRule(appModulePath, importSetter('ResetPasswordFormModule', './shared/components')),
-    modifyFileRule(appModulePath, importSetter('CreateAccountFormModule', './shared/components')),
-    modifyFileRule(appModulePath, importSetter('ChangePasswordFormModule', './shared/components')),
-    modifyFileRule(appModulePath, importSetter('LoginFormModule', './shared/components')),
-    modifyFileRule(appModulePath, providerSetter('AuthService', './shared/services')),
-    modifyFileRule(appModulePath, providerSetter('ScreenService', './shared/services')),
-    modifyFileRule(appModulePath, providerSetter('AppInfoService', './shared/services')),
-    modifyFileRule(appModulePath, importSetter('UnauthenticatedContentModule', './unauthenticated-content')),
+    modifyFileRule(appMComponentPath, importSetter(
+      templateOptions.layout === 'side-nav-outer-toolbar'
+        ? 'SideNavOuterToolbarComponent'
+        : 'SideNavInnerToolbarComponent',
+      './layouts',
+      'SideNavToolbarComponent',
+      )),
   ];
-
-  if (!hasRoutingModule(host, sourcePath)) {
-    rules.push(modifyFileRule(appModulePath, importSetter('AppRoutingModule', './app-routing.module')));
-  }
 
   return chain(rules);
 }
@@ -210,7 +225,7 @@ function getComponentName(host: Tree, sourcePath: string) {
   let name = '';
   let index = 0;
 
-  if (!host.exists(sourcePath + 'app.component.ts')) {
+  if (!host.exists(sourcePath + 'app.component.ts') && !host.exists(sourcePath + 'app.ts')) {
     name = 'app';
   }
 
@@ -218,7 +233,10 @@ function getComponentName(host: Tree, sourcePath: string) {
     index++;
     const componentName = `app${index}`;
 
-    if (!host.exists(`${sourcePath}${componentName}.component.ts`)) {
+    if (
+      !host.exists(`${sourcePath}${componentName}.component.ts`)
+      && !host.exists(`${sourcePath}${componentName}.ts`)
+    ) {
       name = componentName;
     }
   }
@@ -226,8 +244,8 @@ function getComponentName(host: Tree, sourcePath: string) {
   return name;
 }
 
-function hasRoutingModule(host: Tree, sourcePath: string) {
-  return host.exists(sourcePath + 'app-routing.module.ts');
+function hasRouting(host: Tree, sourcePath: string) {
+  return host.exists(sourcePath + 'app.routes.ts');
 }
 
 function addPackagesToDependency(globalNgCliVersion: string) {
@@ -306,20 +324,31 @@ function updateDevextremeConfig(sourcePath: string = '') {
   return modifyContentByTemplate('./', workspaceFilesSource, devextremeConfigPath, templateOptions, modifyConfig);
 }
 
-const modifyRoutingModule = (host: Tree, routingModulePath: string) => {
+const modifyRouting = (host: Tree, routingFilePath: string) => {
   // TODO: Try to use the isolated host to generate the result string
-  let source = getSourceFile(host, routingModulePath)!;
-  const importChange = insertImport(source, routingModulePath, 'LoginFormComponent', './shared/components');
-  const providerChanges = addProviderToModule(source, routingModulePath, 'AuthGuardService', './shared/services');
-  applyChanges(host, [ importChange, ...providerChanges], routingModulePath);
-
-  source = getSourceFile(host, routingModulePath)!;
-  const routes = findRoutesInSource(source)!;
-  if (!hasComponentInRoutes(routes, 'login-form')) {
-    const loginFormRoute = getRoute('login-form');
-    insertItemToArray(host, routingModulePath, routes, loginFormRoute);
+  let source = getSourceFile(host, routingFilePath)!;
+  const importChanges = [];
+  for (const route of routes) {
+    importChanges.push(insertImport(source, routingFilePath, route.name, route.location));
   }
+
+  applyChanges(host, importChanges, routingFilePath);
+  for (const route of routes) {
+    if (route.type === 'component' && route.path) {
+      source = getSourceFile(host, routingFilePath)!;
+      const routeInSource = findRoutesInSource(source)!;
+      if (!hasComponentInRoutes(routeInSource, route.path)) {
+        const routeToAdd = getRoute(route.name, route.name, route.path);
+        insertItemToArray(host, routingFilePath, routeInSource, routeToAdd);
+      }
+    }
+  }
+
 };
+
+function setPostfix(host: Tree, name: string) {
+  return name + (isAngularVersionHigherThan(host, 20) ? '' : '.component');
+}
 
 export default function(options: any): Rule {
   return async (host: Tree) => {
@@ -334,8 +363,9 @@ export default function(options: any): Rule {
     const override = options.resolveConflicts === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath?.replace(/\/?(\w)+\/?/g, '../');
+
     const templateOptions = {
-      name: componentName,
+      name: setPostfix(host, componentName),
       layout,
       title,
       strings,
@@ -348,8 +378,8 @@ export default function(options: any): Rule {
         return `${currentContent}\n${templateContent}`;
       }
 
-      if (basename(filePath) === 'app-routing.module.ts' && hasRoutingModule(host, appPath)) {
-        modifyRoutingModule(host, filePath);
+      if (basename(filePath) === 'app.routes.ts' && hasRouting(host, appPath)) {
+        modifyRouting(host, filePath);
         return currentContent;
       }
 
@@ -359,7 +389,7 @@ export default function(options: any): Rule {
     const rules = [
       modifyContentByTemplate(sourcePath, projectFilesSource, null, templateOptions, modifyContent),
       updateDevextremeConfig(sourcePath),
-      updateAppModule(host, appPath),
+      updateAppComponent(host, appPath, templateOptions),
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),

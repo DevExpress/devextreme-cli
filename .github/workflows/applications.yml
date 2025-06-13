@@ -5,9 +5,9 @@ on:
   pull_request:
   workflow_call:
     inputs:
-      external-tools-version:
-        description: 'Version of external tools'
-        default: latest
+      deps-version-tag:
+        description: 'Version tag of scaffolder and framework'
+        default: ''
         required: false
         type: string
 
@@ -21,16 +21,19 @@ jobs:
           - vue-v3
           - react
           - react-ts
+          - react-swc
+          - react-swc-ts
+          - nextjs
+          - nextjs-ts
         NODE:
           - 18
         OS:
           - ubuntu-latest
-          - windows-latest
 
     runs-on: ${{ matrix.OS }}
     env:
       VUE_CLI_CONFIG_PATH: $GITHUB_WORKSPACE/.vuerc
-      TOOLING_VERSION_PARAM: ${{ inputs.external-tools-version != '' && format('--tooling-version {0}', inputs.external-tools-version) || '' }}
+      DEPS_VERSION_TAG_PARAM: ${{ inputs.deps-version-tag != '' && format('--deps-version-tag {0}', inputs.deps-version-tag) || '' }}
 
     name: ${{ matrix.APPROACH }}, node ${{ matrix.NODE }}, ${{ matrix.OS }}
 
@@ -52,7 +55,7 @@ jobs:
       run: npm config set legacy-peer-deps true
 
     - name: Create ${{ matrix.APPROACH }} application
-      run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
+      run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
       timeout-minutes: 30
 
     - name: Install Internal Packages
@@ -62,14 +65,14 @@ jobs:
 
     - name: Lint created application
       if: ${{ matrix.OS != 'windows-latest' }}
-      run: npm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
+      run: npm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
 
     - name: Run template tests
       if: ${{ matrix.OS != 'windows-latest' }}
       env:
         LAUNCH_BROWSER: true
         CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-      run: npm run test-template -- -- -e ${{ matrix.APPROACH }} ${{ env.TOOLING_VERSION_PARAM }}
+      run: npm run test-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
       timeout-minutes: 40
 
     - name: Archive artifacts

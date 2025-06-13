@@ -3,7 +3,7 @@ const path = require('path');
 
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
-const { toolingVersionOptionName } = require('../src/utility/extract-tooling-version');
+const { depsVersionTagOptionName } = require('../src/utility/extract-deps-version-tag');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/vue-v3');
@@ -14,13 +14,13 @@ exports.engine = 'vue-v3';
 exports.appPath = path.join(sandboxPath, appName);
 exports.deployPath = path.join(appPath, 'dist');
 exports.npmArgs = ['run', 'build'];
-exports.fileExtention = 'js';
+exports.fileExtension = 'js';
 
-exports.createApp = async(toolingVersion) => {
+exports.createApp = async(depsVersionTag) => {
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 
-    const additionalArguments = toolingVersion && [`--${toolingVersionOptionName} ${toolingVersion}`] || [];
+    const additionalArguments = depsVersionTag && [`--${depsVersionTagOptionName} ${depsVersionTag}`] || [];
     await runCommand('node', [
         path.join(process.cwd(), './index.js'),
         'new',

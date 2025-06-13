@@ -1,9 +1,11 @@
 // NOTE: All puppeteer devices: https://github.com/GoogleChrome/puppeteer/blob/master/lib/DeviceDescriptors.js
+const reactConfigs = require('./env.react');
+const nextjsConfigs = require('./env.nextjs');
 
 exports.envs = [
     require('./env.angular'),
-    require('./env.react'),
-    require('./env.react-ts'),
+    ...Object.values(reactConfigs),
+    ...Object.values(nextjsConfigs),
     require('./env.vue-v3'),
 ];
 

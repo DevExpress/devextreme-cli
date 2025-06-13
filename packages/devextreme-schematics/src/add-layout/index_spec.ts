@@ -101,25 +101,17 @@ describe('layout', () => {
     expect(styles[3]).toBe('src/themes/generated/theme.additional.dark.css');
     expect(styles[4]).toBe('src/themes/generated/theme.additional.css');
 
-    const moduleContent = tree.readContent('/src/app/app.module.ts');
-    expect(moduleContent).toContain('import { DxHttpModule }');
-    expect(moduleContent)
-      .toContain('import { SideNavOuterToolbarModule, SideNavInnerToolbarModule, SingleCardModule }');
-    expect(moduleContent)
-      .toContain(`import { AuthService, ScreenService, AppInfoService } from './shared/services';`);
-    expect(moduleContent).toContain('import { AppRoutingModule }');
-    expect(moduleContent)
-      .toContain('import { FooterModule, ' +
-      'ResetPasswordFormModule, ' +
-      'CreateAccountFormModule, ' +
-      'ChangePasswordFormModule, ' +
-      'LoginFormModule }');
-
     const appContent = tree.readContent('/src/app/app.component.ts');
+    expect(appContent).toContain('import { DxHttpModule }');
+    expect(appContent)
+      .toContain('import { SideNavOuterToolbarComponent as SideNavToolbarComponent }');
+    expect(appContent)
+      .toContain(`import { AuthService, ScreenService, AppInfoService } from './shared/services';`);
+    expect(appContent)
+      .toContain('import { FooterComponent }');
     expect(appContent).toContain('templateUrl: \'./app.component.html\',');
     expect(appContent).toContain('styleUrls: [\'./app.component.scss\']');
     expect(appContent).toContain('selector: \'app-root\',');
-    expect(appContent).toContain(`import { AuthService, ScreenService, AppInfoService } from './shared/services';`);
 
     const navigationMenu = tree.readContent(
       '/src/app/shared/components/side-navigation-menu/side-navigation-menu.component.ts');
@@ -244,28 +236,32 @@ describe('layout', () => {
   });
 
   it('should add routing to layout', async () => {
-    let newAppTree = await schematicRunner.runSchematic('workspace', workspaceOptions);
-
-    appOptions.routing = false;
-    newAppTree = await schematicRunner.runSchematic(
-      'application', appOptions, newAppTree);
-
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner.runSchematic('add-layout', options, appTree);
 
-    expect(tree.files).toContain('/src/app/app-routing.module.ts');
-    const moduleContent = tree.readContent('/src/app/app-routing.module.ts');
-    expect(moduleContent)
-      .toMatch(/imports:\s\[RouterModule\.forRoot\(routes, { useHash: true }\)\],/);
+    expect(tree.files).toContain('/src/app/app.routes.ts');
+    const routesContent = tree.readContent('/src/app/app.routes.ts');
 
-    expect(moduleContent)
-      .toContain(`{
-    path: 'login-form',
-    component: LoginFormComponent,
-    canActivate: [ AuthGuardService ]
-  }`);
+    expect(routesContent)
+      .toContain(`import { AuthGuardService } from './shared/services';`);
+    const loginFormComponentMatch = routesContent.match(/\bLoginFormComponent\b/g);
+    const resetPasswordFormComponentMatch = routesContent.match(/\bResetPasswordFormComponent\b/g);
+    const createAccountFormComponentMatch = routesContent.match(/\bCreateAccountFormComponent\b/g);
+    const changePasswordFormComponentMatch = routesContent.match(/\bChangePasswordFormComponent\b/g);
+    expect(loginFormComponentMatch?.length).toBe(2);
+    expect(resetPasswordFormComponentMatch?.length).toBe(2);
+    expect(createAccountFormComponentMatch?.length).toBe(2);
+    expect(changePasswordFormComponentMatch?.length).toBe(2);
+
+    expect(routesContent)
+      .toContain(`path: 'login-form'`);
+    expect(routesContent)
+      .toContain(`path: 'reset-password'`);
+    expect(routesContent)
+      .toContain(`path: 'create-account'`);
+    expect(routesContent)
+      .toContain(`path: 'change-password/:recoveryCode'`);
   });
-
   it('should use selected layout', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     options.layout = 'side-nav-inner-toolbar';

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import <%=#isTypeScript%>React, <%=/isTypeScript%>{ useState, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Form, {
   Item,
@@ -10,7 +10,7 @@ import Form, {
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
-<%=#isTypeScript%>import { ValidationCallbackData } from 'devextreme-react/common';<%=/isTypeScript%>
+<%=#isTypeScript%>import type { ValidationCallbackData } from 'devextreme-react/common';<%=/isTypeScript%>
 import { changePassword } from '../../api/auth';
 
 export default function ChangePasswordForm() {
@@ -19,7 +19,7 @@ export default function ChangePasswordForm() {
   const formData = useRef({ password: '' });
   const { recoveryCode } = useParams();
 
-  const onSubmit = useCallback(async (e<%=#isTypeScript%>: any<%=/isTypeScript%>) => {
+  const onSubmit = useCallback(async (e<%=#isTypeScript%>: React.FormEvent<HTMLFormElement><%=/isTypeScript%>) => {
     e.preventDefault();
     const { password } = formData.current;
     setLoading(true);

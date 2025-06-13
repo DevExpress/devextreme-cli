@@ -4,15 +4,15 @@ const path = require('path');
 const packageManager = require('../src/utility/package-manager');
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
-const { toolingVersionOptionName } = require('../src/utility/extract-tooling-version');
+const { depsVersionTagOptionName } = require('../src/utility/extract-deps-version-tag');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
 const appPath = path.join(sandboxPath, appName);
 const schematicsDirectory = '../../../../devextreme-schematics';
 const schematicsPath = path.join(sandboxPath, schematicsDirectory);
-const routingFilePath = path.join(appPath, 'src/app/app-routing.module.ts');
-const appComponentPath = path.join(appPath, 'src/app/app.component.html');
+const appComponentTemplatePath = path.join(appPath, 'src/app/app.component.html');
+const appComponentPath = path.join(appPath, 'src/app/app.component.ts');
 
 async function prepareSchematics() {
     await packageManager.runInstall({
@@ -29,14 +29,14 @@ exports.appPath = appPath;
 exports.deployPath = path.join(appPath, 'dist', 'my-app', 'browser');
 // disable optimization due to https://github.com/angular/angular-cli/issues/20760
 exports.npmArgs = ['run', 'build', '--', '--configuration', 'development'];
-exports.fileExtention = 'ts';
+exports.fileExtension = 'ts';
 
-exports.createApp = async(toolingVersion) => {
+exports.createApp = async(depsVersionTag) => {
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
 
     await prepareSchematics();
-    const additionalArguments = toolingVersion && [`--${toolingVersionOptionName} ${toolingVersion}`] || [];
+    const additionalArguments = depsVersionTag && [`--${depsVersionTagOptionName} ${depsVersionTag}`] || [];
     await runCommand('node', [
         path.join(process.cwd(), './index.js'),
         'new',
@@ -60,16 +60,28 @@ exports.createApp = async(toolingVersion) => {
         cwd: appPath,
         forceNoCmd: true
     });
-
-    const data = fs.readFileSync(routingFilePath, 'utf8');
-    const result = data.replace('RouterModule.forRoot(routes)', 'RouterModule.forRoot(routes, {useHash: true})');
-    fs.writeFileSync(routingFilePath, result, 'utf8');
 };
 
 exports.setLayout = (layoutName) => {
-    const regexToFind = /app-side-nav-\w+-toolbar/g;
-    const newSubStr = `app-${layoutName}`;
-    const data = fs.readFileSync(appComponentPath, 'utf8');
-    const result = data.replace(regexToFind, newSubStr);
-    fs.writeFileSync(appComponentPath, result, 'utf8');
+    const layoutClassName = layoutName === 'side-nav-outer-toolbar'
+        ? 'SideNavOuterToolbarComponent'
+        : 'SideNavInnerToolbarComponent';
+
+    [
+        {
+            filePath: appComponentTemplatePath,
+            regexp: /app-side-nav-\w+-toolbar/g,
+            replacement: `app-${layoutName}`,
+        },
+        {
+            filePath: appComponentPath,
+            regexp: /SideNav\w+ToolbarComponent/,
+            replacement: layoutClassName,
+        }
+    ].forEach(({ filePath, regexp, replacement }) => {
+        const data = fs.readFileSync(filePath, 'utf8');
+        const result = data.replace(regexp, replacement);
+        fs.writeFileSync(filePath, result, 'utf8');
+    });
+
 };

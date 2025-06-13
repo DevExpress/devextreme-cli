@@ -7,7 +7,9 @@ const fs = require('fs');
 const dasherize = require('../utility/string').dasherize;
 const ngVersion = require('../utility/ng-version');
 const latestVersions = require('../utility/latest-versions');
-const { extractToolingVersion, toolingVersionOptionName } = require('../utility/extract-tooling-version');
+const { extractDepsVersionTag, depsVersionTagOptionName } = require('../utility/extract-deps-version-tag');
+const { getPackageJsonPath } = require('../utility/package-json-utils');
+const modifyJson = require('../utility/modify-json-file');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
 const minNgCliVersion = new semver('17.0.0');
@@ -28,7 +30,7 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
 
     const commandArguments = ['g', `${collectionName}:${schematicCommand}`];
 
-    const { [toolingVersionOptionName]: _, ...optionsToArguments } = options; // eslint-disable-line no-unused-vars
+    const { [depsVersionTagOptionName]: _, ...optionsToArguments } = options; // eslint-disable-line no-unused-vars
     for(let option in optionsToArguments) {
         commandArguments.push(`--${dasherize(option)}=${options[option]}`);
     }
@@ -38,12 +40,13 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
 
 async function runNgCommand(commandArguments, commandOptions, commandConfig) {
     const hasNg = await hasSutableNgCli();
-    const toolingVersion = extractToolingVersion(commandOptions);
-    const npmCommandName = hasNg && !toolingVersion ? 'ng' : 'npx';
+    const depsVersionTag = extractDepsVersionTag(commandOptions);
+    const npmCommandName = hasNg && !depsVersionTag ? 'ng' : 'npx';
     const [minCliLtsVersion] = minNgCliVersion.version.split('.');
-    const ngCommandArguments = hasNg && !toolingVersion
+
+    const ngCommandArguments = hasNg && !depsVersionTag
         ? []
-        : ['-p', `@angular/cli@v${minCliLtsVersion}-lts`, 'ng'];
+        : ['-p', `@angular/cli@${depsVersionTag || `v${minCliLtsVersion}-lts`}`, 'ng'];
 
     ngCommandArguments.push(...commandArguments);
     return runCommand(npmCommandName, ngCommandArguments, commandConfig);
@@ -61,6 +64,7 @@ function localPackageExists(packageName) {
 
 const hasSutableNgCli = async() => {
     const localVersion = ngVersion.getLocalNgVersion();
+
     if(!localVersion) {
         return false;
     }
@@ -75,9 +79,28 @@ const install = async(options) => {
     });
 };
 
+const bumpAngular = (appPath, versionTag) => {
+    modifyJson(getPackageJsonPath(appPath), ({ dependencies, devDependencies, ...rest }) => {
+        const bump = (section) => {
+            for(const depName in section) {
+                section[depName] = depName.startsWith('@angular') ? versionTag : section[depName];
+            }
+            return section;
+        };
+
+        return {
+            dependencies: bump(dependencies),
+            devDependencies: bump(devDependencies),
+            ...rest,
+        };
+    });
+
+};
+
 const create = async(appName, options) => {
     const layout = await getLayoutInfo(options.layout);
     const currentNgVersion = ngVersion.getNgCliVersion().version;
+    const depsVersionTag = extractDepsVersionTag(options);
 
     const commandArguments = [
         'new',
@@ -86,7 +109,7 @@ const create = async(appName, options) => {
         '--routing=false',
         '--skip-tests=true',
         '--skip-install=true',
-        '--standalone=false',
+        '--standalone=true',
         '--ssr=false'
     ];
 
@@ -97,6 +120,10 @@ const create = async(appName, options) => {
     await runNgCommand(commandArguments, options);
 
     const appPath = path.join(process.cwd(), appName);
+
+    if(depsVersionTag) {
+        bumpAngular(appPath, depsVersionTag);
+    }
 
     options.resolveConflicts = 'override';
     options.updateBudgets = true;
@@ -131,9 +158,9 @@ const changeMainTs = (appPath) => {
     moduleWorker.insertImport(filePath, 'devextreme/ui/themes', 'themes', true);
 
     const fileContent = fs.readFileSync(filePath).toString();
-    const bootstrapPattern = /platformBrowser(?:Dynamic)?\(\)\.bootstrapModule\(\s*AppModule\s*(?:,\s*\{[^}]*\})?\s*\)/;
+    const bootstrapPattern = /bootstrapApplication\([^)]+\)/;
     const firstChaptStr = fileContent.match(bootstrapPattern)[0];
-    const lastChaptStr = '.catch(err => console.error(err));';
+    const lastChaptStr = '.catch((err) => console.error(err));';
 
     fs.writeFileSync(
         filePath,

@@ -1,10 +1,32 @@
 const angularApplication = require('./applications/application.angular');
 const reactApplication = require('./applications/application.react');
+const nextjsApplication = require('./applications/application.nextjs');
 const vueApplication = require('./applications/application.vue');
+const getReactAppType = require('./utility/prompts/react-app-type');
 const printHelp = require('./help').printHelp;
 
 const isApplicationCommand = (command) => {
     return [ 'new', 'add' ].includes(command);
+};
+
+const handleWrongAppType = (appType, command) => {
+    console.error(`The '${appType}' application type is not valid`);
+    printHelp(command);
+};
+
+const createReact = async(appName, options, command) => {
+    const reactAppType = await getReactAppType(options['app-type']);
+
+    switch(reactAppType) {
+        case 'vite':
+            await reactApplication.create(appName, options);
+            return;
+        case 'nextjs':
+            await nextjsApplication.create(appName, options);
+            return;
+        default:
+            handleWrongAppType(reactAppType, command);
+    }
 };
 
 const run = async(commands, options, devextremeConfig) => {
@@ -23,15 +45,15 @@ const run = async(commands, options, devextremeConfig) => {
                 await angularApplication.create(appName, options);
                 return;
             case 'react-app':
-                await reactApplication.create(appName, options);
+                await createReact(appName, options, commands[0]);
                 return;
             case 'vue-app':
                 await vueApplication.create(appName, options);
                 return;
             default:
-                console.error(`The '${app}' application type is not valid`);
-                printHelp(commands[0]);
+                handleWrongAppType(app, commands[0]);
         }
+
     } else {
         if(commands[0] === 'add') {
             if(commands[1] === 'devextreme-angular') {
@@ -40,7 +62,12 @@ const run = async(commands, options, devextremeConfig) => {
             }
 
             if(commands[1] === 'devextreme-react') {
-                reactApplication.install(options);
+                if(nextjsApplication.isNextJsApp()) {
+                    nextjsApplication.install(options);
+                } else {
+                    reactApplication.install(options);
+                }
+
                 return;
             }
 
@@ -54,23 +81,16 @@ const run = async(commands, options, devextremeConfig) => {
                 return;
             }
 
-            if(devextremeConfig.applicationEngine === 'angular') {
+            const app = {
+                'angular': angularApplication,
+                'react': reactApplication,
+                'nextjs': nextjsApplication,
+                'vue': vueApplication,
+            }[devextremeConfig.applicationEngine];
+
+            if(app) {
                 if(commands[1] === 'view') {
-                    angularApplication.addView(commands[2], options);
-                } else {
-                    console.error('Invalid command');
-                    printHelp(commands[0]);
-                }
-            } else if(devextremeConfig.applicationEngine === 'react') {
-                if(commands[1] === 'view') {
-                    reactApplication.addView(commands[2], options);
-                } else {
-                    console.error('Invalid command');
-                    printHelp(commands[0]);
-                }
-            } else if(devextremeConfig.applicationEngine === 'vue') {
-                if(commands[1] === 'view') {
-                    vueApplication.addView(commands[2], options);
+                    app.addView(commands[2], options);
                 } else {
                     console.error('Invalid command');
                     printHelp(commands[0]);
