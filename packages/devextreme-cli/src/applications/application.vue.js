@@ -45,9 +45,6 @@ const bumpVue = (appPath, versionTag) => {
     const dependencies = [
         { name: 'vue', version: versionTag },
         { name: 'vue-router', version: versionTag },
-        { name: '@vue/cli-plugin-babel', version: versionTag, dev: true },
-        { name: '@vue/cli-plugin-eslint', version: versionTag, dev: true },
-        { name: '@vue/cli-service', version: versionTag, dev: true },
     ];
 
     packageJsonUtils.addDependencies(appPath, dependencies);
