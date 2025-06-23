@@ -18,8 +18,7 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
         { name: 'sass', version: '^1.34.1' },
         { name: 'vue-router', version: '^3.0.1' },
-        { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true },
-        { name: 'sass-loader', version: '^10', dev: true }
+        { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true }
     ];
 
     const nameDepends = dependencies.map(d => d.name);
@@ -38,8 +37,8 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
 };
 
 async function createVueApp(name, depsVersionTag) {
-    const argList = ['-p', `@vue/cli@${depsVersionTag}`, 'vue', 'create', name, '--registry', 'https://registry.npmjs.org/', '-p "Default (Vue 3)"'];
-
+    const argList = ['create', `vue${depsVersionTag ? `@${depsVersionTag}` : ''}`, name, '--registry', 'https://registry.npmjs.org/', '--', '--default'];
+    
     return runCommand('npx', argList);
 }
 
@@ -78,7 +77,7 @@ const create = async(appName, options) => {
 };
 
 const modifyIndexHtml = (appPath, appName) => {
-    const indexHtmlPath = path.join(appPath, 'public', 'index.html');
+    const indexHtmlPath = path.join(appPath, 'index.html');
     let htmlContent = fs.readFileSync(indexHtmlPath).toString();
 
     htmlContent = htmlContent.replace(/<title>(\w+\s*)+<\/title>/, `<title>${appName}<\/title>`);
