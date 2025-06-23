@@ -174,7 +174,7 @@ const addView = (pageName, options) => {
     const navigationData = getNavigationData(pageName, componentName, options && options.icon || 'folder');
     const getCorrectExtension = (fileExtension) => fileExtension;
     templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath, getCorrectExtension);
-    moduleUtils.insertImport(routingModulePath, `./views/${pageName}`, componentName, true);
+    moduleUtils.insertImport(routingModulePath, `./views/${pageName}.vue`, componentName, true);
     insertItemToArray(routingModulePath, navigationData.route);
     insertItemToArray(navigationModulePath, navigationData.navigation);
 };
