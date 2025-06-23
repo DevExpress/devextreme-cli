@@ -39,7 +39,7 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
 async function createVueApp(name, depsVersionTag) {
     const argList = ['create', `vue${depsVersionTag ? `@${depsVersionTag}` : ''}`, name, '--registry', 'https://registry.npmjs.org/', '--', '--default'];
     
-    return runCommand('npx', argList);
+    return runCommand('npm', argList);
 }
 
 const bumpVue = (appPath, versionTag) => {
