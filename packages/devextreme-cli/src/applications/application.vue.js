@@ -18,6 +18,8 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
         { name: 'sass-embedded', version: '^1.85.1' },
         { name: 'vue-router', version: '^3.0.1' },
+        { name: 'vite', version: '^6.2.4', dev: true },
+        { name: '@vitejs/plugin-vue', version: '^5.2.3', dev: true },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true }
     ];
 
