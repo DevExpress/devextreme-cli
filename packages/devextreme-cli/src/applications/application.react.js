@@ -214,7 +214,7 @@ const addView = (pageName, options) => {
         return fileExtension === '.tsx' ? extension : fileExtension;
     };
     templateCreator.addPageToApp(pageName, pathToPage, pageTemplatePath, getCorrectExtension);
-    moduleUtils.insertExport(pathToPagesIndex(), componentName, `./${pageName}/${pageName}`);
+    moduleUtils.insertExport(pathToPagesIndex(), componentName, `./${pageName}/${pageName}`, 'Page');
     moduleUtils.insertImport(routingModulePath, './pages', componentName);
     insertItemToArray(routingModulePath, navigationData.route);
     insertItemToArray(navigationModulePath, navigationData.navigation);

@@ -1,7 +1,7 @@
 import { HomePage, TasksPage, ProfilePage } from './pages';
-import { withNavigationWatcher } from './contexts/navigation';
+import { withNavigationWatcher } from './contexts/navigation-helpers';
 
-const routes = [<%=^empty%>
+const routeData = [<%=^empty%>
     {
         path: '/tasks',
         element: TasksPage
@@ -16,7 +16,7 @@ const routes = [<%=^empty%>
     }
 <%=/empty%>];
 
-export default routes.map(route => {
+export const routes = routeData.map(route => {
     return {
         ...route,
         element: withNavigationWatcher(route.element, route.path)

@@ -9,7 +9,7 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import './tasks.scss';
 
-export default function Task() {
+export function Tasks() {
   return (
     <React.Fragment>
       <h2>Tasks</h2>

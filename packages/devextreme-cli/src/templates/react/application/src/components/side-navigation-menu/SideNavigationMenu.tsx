@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useCallback, useMemo, useContext } from 'reac
 import { TreeView<%=#isTypeScript%>, type TreeViewRef<%=/isTypeScript%> } from 'devextreme-react/tree-view';
 import * as events from 'devextreme-react/common/core/events';
 import { navigation } from '../../app-navigation';
-import { useNavigation } from '../../contexts/navigation';
+import { useNavigation } from '../../contexts/navigation-helpers';
 import { useScreenSize } from '../../utils/media-query';
 import './SideNavigationMenu.scss';
 <%=#isTypeScript%>import type { SideNavigationMenuProps } from '../../types';<%=/isTypeScript%>
