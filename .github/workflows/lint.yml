@@ -22,7 +22,7 @@ jobs:
         node-version: '20'
 
     - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Run tests
       run: npm run lint
