@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        NODE: [ 18 ]
+        NODE: [ 20 ]
 
     runs-on: ubuntu-latest
     name: ThemeBuilder
