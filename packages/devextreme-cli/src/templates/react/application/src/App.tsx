@@ -3,7 +3,7 @@ import './dx-styles.scss';
 import LoadPanel from 'devextreme-react/load-panel';
 import { NavigationProvider } from './contexts/navigation';
 import { AuthProvider } from './contexts/auth';
-import { useAuth } from './contexts/auth-helpers';
+import { useAuth } from './contexts/auth-hooks';
 import { useScreenSizeClass } from './utils/media-query';
 import Content from './Content';
 import UnauthenticatedContent from './UnauthenticatedContent';

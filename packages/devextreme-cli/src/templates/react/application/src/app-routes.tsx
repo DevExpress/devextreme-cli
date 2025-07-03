@@ -1,5 +1,5 @@
 import { HomePage, TasksPage, ProfilePage } from './pages';
-import { withNavigationWatcher } from './contexts/navigation-helpers';
+import { withNavigationWatcher } from './contexts/navigation-hooks';
 
 const routeData = [<%=^empty%>
     {

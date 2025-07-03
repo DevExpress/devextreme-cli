@@ -11,7 +11,7 @@ import Form, {
 import LoadIndicator from 'devextreme-react/load-indicator';
 import Button from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
-import { useAuth } from '../../contexts/auth-helpers';
+import { useAuth } from '../../contexts/auth-hooks';
 
 import './LoginForm.scss';
 
