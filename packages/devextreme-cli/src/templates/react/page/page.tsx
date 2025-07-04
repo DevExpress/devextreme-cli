@@ -1,7 +1,7 @@
 import React from 'react';
 import './<%=pageName%>.scss';
 
-export default () => (
+export const Page = () => (
   <React.Fragment>
     <h2><%=title%></h2>
     <div className={'content-block'}>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './profile.scss';
 import Form from 'devextreme-react/form';
 
-export default function Profile() {
+export function Profile() {
   const [notes, setNotes] = useState(
     'Sandra is a CPA and has been our controller since 2008. She loves to interact with staff so if you`ve not met her, be certain to say hi.\r\n\r\nSandra has 2 daughters both of whom are accomplished gymnasts.'
   );

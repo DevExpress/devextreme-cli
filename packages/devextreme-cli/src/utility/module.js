@@ -32,10 +32,10 @@ const insertImport = (filePath, moduleName, importName, isDefault) => {
     }
 };
 
-const insertExport = (filePath, exportName, modulePath) => {
+const insertExport = (filePath, exportName, modulePath, importName = 'default') => {
     const fileContent = fs.readFileSync(filePath).toString();
 
-    fs.writeFileSync(filePath, `${fileContent}export { default as ${exportName} } from \'${modulePath}\';\n`);
+    fs.writeFileSync(filePath, `${fileContent}export { ${importName} as ${exportName} } from \'${modulePath}\';\n`);
 };
 
 module.exports = {
