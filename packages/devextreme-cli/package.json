@@ -55,7 +55,7 @@
     "cross-env": "^5.2.1",
     "eslint": "^7.32.0",
     "eslint-config-angular": "^0.5.0",
-    "eslint-config-prettier": "^8.10.0",
+    "eslint-config-prettier": "^8.10.2",
     "eslint-plugin-angular": "^4.1.0",
     "eslint-plugin-jest": "^22.21.0",
     "eslint-plugin-prettier": "^4.2.1",
