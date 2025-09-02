@@ -123,7 +123,7 @@
         <p>
           Thanks for using the DevExtreme Vue App Template.
         </p>
-        <p>This application was built using <a href="https://cli.vuejs.org/" target="_blank" rel="noopener noreferrer">Vue CLI</a>
+        <p>This application was built using <a href="https://vite.dev/guide/" target="_blank" rel="noopener noreferrer">Vite</a>
           and <a href="https://js.devexpress.com/Documentation/Guide/Common/DevExtreme_CLI/" target="_blank" rel="noopener noreferrer">DevExtreme CLI</a>
           and includes the following DevExtreme components:</p>
         <ul>
