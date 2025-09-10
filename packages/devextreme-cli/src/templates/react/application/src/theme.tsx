@@ -16,7 +16,7 @@ function toggleTheme(prevTheme<%=#isTypeScript%>: string<%=/isTypeScript%>) {
   const isCurrentThemeDark = prevTheme === 'dark';
   const newTheme = getNextTheme(prevTheme);
 
-  document.body.classList.replace(
+  document.getElementById('root')?.classList.replace(
     themeClassNamePrefix + prevTheme,
     themeClassNamePrefix + newTheme
   );
@@ -25,8 +25,7 @@ function toggleTheme(prevTheme<%=#isTypeScript%>: string<%=/isTypeScript%>) {
   const additionalClassNamePostfix = isCurrentThemeDark ? '-' + prevTheme : '';
   const additionalClassName = `${additionalClassNamePrefix}${additionalClassNamePostfix}`
 
-  document.body
-    .querySelector(`.${additionalClassName}`)?.classList
+  document.getElementById('root')?.querySelector(`.${additionalClassName}`)?.classList
     .replace(additionalClassName, additionalClassNamePrefix + (isCurrentThemeDark ? '' : '-dark'));
 
   currentTheme = newTheme;
@@ -41,8 +40,8 @@ export function useThemeContext() {
     return currentTheme === 'dark';
   }, []);
 
-  if (!document.body.className.includes(themeClassNamePrefix)) {
-    document.body.classList.add(themeClassNamePrefix + theme);
+  if (!document.getElementById('root')?.className.includes(themeClassNamePrefix)) {
+    document.getElementById('root')?.classList.add(themeClassNamePrefix + theme);
   }
 
   return useMemo(()=> ({ theme, switchTheme, isDark }), [theme, switchTheme, isDark]);

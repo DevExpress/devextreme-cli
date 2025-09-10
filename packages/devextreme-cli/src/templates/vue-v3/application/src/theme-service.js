@@ -7,10 +7,10 @@ class ThemeService {
   isDark = ref(false);
 
   constructor() {
-    if (!document.body.className.includes(this.themeClassNamePrefix)) {
+    if (!document.getElementById('app').className.includes(this.themeClassNamePrefix)) {
       this.currentTheme.value = this.themes[0];
 
-      document.body.classList.add(this.themeClassNamePrefix + this.currentTheme.value);
+      document.getElementById('app').classList.add(this.themeClassNamePrefix + this.currentTheme.value);
     }
   }
 
@@ -20,7 +20,7 @@ class ThemeService {
 
     this.currentTheme.value =  this.themes[prevTheme === this.themes[0] ? 1 : 0];
 
-    document.body.classList.replace(
+    document.getElementById('app').classList.replace(
       this.themeClassNamePrefix + prevTheme,
       this.themeClassNamePrefix + this.currentTheme.value
     );
@@ -29,7 +29,7 @@ class ThemeService {
     const additionalClassNamePostfix = isCurrentThemeDark ? '-' + prevTheme : '';
     const additionalClassName = `${additionalClassNamePrefix}${additionalClassNamePostfix}`
 
-    document.body
+    document.getElementById('app')
       .querySelector(`.${additionalClassName}`)?.classList
       .replace(additionalClassName, additionalClassNamePrefix + (isCurrentThemeDark ? '' : '-dark'));
 
