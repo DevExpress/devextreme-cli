@@ -18,7 +18,7 @@ function toggleTheme(prevTheme<%=#isTypeScript%>: string<%=/isTypeScript%>) {
   const newTheme = getNextTheme(prevTheme);
 
   if (typeof window !== 'undefined') {
-    document.body.classList.replace(
+    document.querySelector('.app')?.classList.replace(
       themeClassNamePrefix + prevTheme,
       themeClassNamePrefix + newTheme
     );
@@ -27,8 +27,7 @@ function toggleTheme(prevTheme<%=#isTypeScript%>: string<%=/isTypeScript%>) {
     const additionalClassNamePostfix = isCurrentThemeDark ? '-' + prevTheme : '';
     const additionalClassName = `${additionalClassNamePrefix}${additionalClassNamePostfix}`
 
-    document.body
-      .querySelector(`.${additionalClassName}`)?.classList
+    document.querySelector('.app')?.querySelector(`.${additionalClassName}`)?.classList
       .replace(additionalClassName, additionalClassNamePrefix + (isCurrentThemeDark ? '' : '-dark'));
 
     currentTheme = newTheme;
@@ -45,8 +44,8 @@ export function useThemeContext() {
   }, []);
 
   useLayoutEffect(() => {
-    if (typeof window !== 'undefined' && !document.body.className.includes(themeClassNamePrefix)) {
-      document.body.classList.add(themeClassNamePrefix + theme);
+    if (typeof window !== 'undefined' && !document.querySelector('.app')?.className.includes(themeClassNamePrefix)) {
+      document.querySelector('.app')?.classList.add(themeClassNamePrefix + theme);
     }
   }, [theme]);
 

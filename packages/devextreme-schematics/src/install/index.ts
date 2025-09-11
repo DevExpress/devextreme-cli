@@ -22,6 +22,7 @@ export default function(options: any): Rule {
 
   return chain([
     (host: Tree) => addDevExtremeDependency(host, { dxversion: options.dxversion }),
+    (host: Tree) => addSassEmbeddedDependency(host),
     (host: Tree) => addDevExtremeCSS(host, { project: options.project }),
     (host: Tree) => reqisterJSZip(host),
     (_, context: SchematicContext) => {
@@ -52,6 +53,15 @@ function addDevExtremeDependency(host: Tree, options: any) {
     version: options.dxversion || latestVersions['devextreme']
   });
 
+  return host;
+}
+
+function addSassEmbeddedDependency(host: Tree) {
+  addPackageJsonDependency(host, {
+    type: NodeDependencyType.Dev,
+    name: 'sass-embedded',
+    version: latestVersions['sass-embedded']
+  });
   return host;
 }
 
