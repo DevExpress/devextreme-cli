@@ -280,7 +280,8 @@ function flattenTemplateExpression(
 }
 
 function escapeBackticks(text: string): string {
-  return text.replace(/`/g, '\\`');
+  // First escape backslashes, then escape backticks
+  return text.replace(/\\/g, '\\\\').replace(/`/g, '\\`');
 }
 
 // Utilities
