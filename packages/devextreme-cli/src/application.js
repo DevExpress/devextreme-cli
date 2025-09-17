@@ -9,6 +9,10 @@ const isApplicationCommand = (command) => {
     return [ 'new', 'add' ].includes(command);
 };
 
+const isMigrationCommand = (command) => {
+    return command === 'migrate-nested-components';
+};
+
 const handleWrongAppType = (appType, command) => {
     console.error(`The '${appType}' application type is not valid`);
     printHelp(command);
@@ -30,6 +34,11 @@ const createReact = async(appName, options, command) => {
 };
 
 const run = async(commands, options, devextremeConfig) => {
+    if(commands[0] === 'migrate-nested-components') {
+        await angularApplication.migrateNestedComponents(options);
+        return;
+    }
+
     if(!commands[1]) {
         console.error('Command is incomplete. Please specify parameters.');
         printHelp(commands[0]);
@@ -104,5 +113,6 @@ const run = async(commands, options, devextremeConfig) => {
 
 module.exports = {
     isApplicationCommand,
+    isMigrationCommand,
     run
 };

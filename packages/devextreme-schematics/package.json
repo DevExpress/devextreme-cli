@@ -24,7 +24,9 @@
   "dependencies": {
     "@angular-devkit/core": "^17.3.17",
     "@angular-devkit/schematics": "^17.3.17",
-    "@schematics/angular": "^17.3.17"
+    "@schematics/angular": "^17.3.17",
+    "parse5": "^7.1.2",
+    "picomatch": "^4.0.2"
   },
   "devDependencies": {
     "@types/jasmine": "~3.10.18",

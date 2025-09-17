@@ -53,13 +53,24 @@ async function runNgCommand(commandArguments, commandOptions, commandConfig) {
 }
 
 function localPackageExists(packageName) {
+    // Check local node_modules first
     const nodeModulesPath = path.join(process.cwd(), 'node_modules');
-    if(!fs.existsSync(nodeModulesPath)) {
-        return;
+    if(fs.existsSync(nodeModulesPath)) {
+        const packageJsonPath = path.join(nodeModulesPath, packageName, 'package.json');
+        if(fs.existsSync(packageJsonPath)) {
+            return true;
+        }
     }
 
-    const packageJsonPath = path.join(nodeModulesPath, packageName, 'package.json');
-    return fs.existsSync(packageJsonPath);
+    // Check if globally installed by trying to resolve the package
+    try {
+        require.resolve(`${packageName}/package.json`);
+        return true;
+    } catch(e) {
+        // Package not found globally
+    }
+
+    return false;
 }
 
 const hasSutableNgCli = async() => {
@@ -152,6 +163,70 @@ const addView = (viewName, options) => {
     runSchematicCommand('add-view', schematicOptions);
 };
 
+const migrateNestedComponents = async(options = {}) => {
+    const collectionName = 'devextreme-schematics';
+
+    // Check if devextreme-schematics is installed
+    if(!localPackageExists(collectionName)) {
+        const prompts = require('prompts');
+
+        console.log(`\nThe '${collectionName}' package is required to run this command.`);
+
+        const response = await prompts({
+            type: 'confirm',
+            name: 'install',
+            message: `Would you like to install '${collectionName}' now?`,
+            initial: true
+        });
+
+        if(!response.install) {
+            console.log('Migration cancelled. Please install devextreme-schematics manually:');
+            console.log(`npm install -g ${collectionName}@${schematicsVersion}`);
+            process.exit(1);
+        }
+
+        console.log(`Installing ${collectionName}@${schematicsVersion}...`);
+        try {
+            await runCommand('npm', ['install', '-g', `${collectionName}@${schematicsVersion}`], { stdio: 'inherit' });
+            console.log('Installation completed successfully.');
+        } catch(error) {
+            console.error('Failed to install devextreme-schematics. Please install it manually:');
+            console.error(`npm install -g ${collectionName}@${schematicsVersion}`);
+            process.exit(1);
+        }
+    }
+
+    const schematicOptions = {
+        ...options
+    };
+
+    if(schematicOptions.include && typeof schematicOptions.include === 'string') {
+        schematicOptions.include = schematicOptions.include.split(',').map(s => s.trim());
+    }
+    if(schematicOptions.scriptInclude && typeof schematicOptions.scriptInclude === 'string') {
+        schematicOptions.scriptInclude = schematicOptions.scriptInclude.split(',').map(s => s.trim());
+    }
+
+    const commandArguments = ['schematics', `${collectionName}:migrate-nested-components`];
+
+    const { [depsVersionTagOptionName]: _, ...optionsToArguments } = schematicOptions; // eslint-disable-line no-unused-vars
+    for(let option in optionsToArguments) {
+        const value = optionsToArguments[option];
+        if(value !== undefined && value !== null && value !== '') {
+            if(Array.isArray(value)) {
+                if(value.length > 0) {
+                    commandArguments.push(`--${dasherize(option)}=${value.join(',')}`);
+                }
+            } else {
+                commandArguments.push(`--${dasherize(option)}=${value}`);
+            }
+        }
+    }
+
+    // Use runCommand directly with npx to work outside Angular workspace
+    return runCommand('npx', commandArguments, { stdio: 'inherit' });
+};
+
 const changeMainTs = (appPath) => {
     const filePath = path.join(appPath, 'src', 'main.ts');
 
@@ -174,5 +249,6 @@ module.exports = {
     install,
     create,
     addTemplate,
-    addView
+    addView,
+    migrateNestedComponents
 };
