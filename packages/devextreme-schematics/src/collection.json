@@ -24,6 +24,11 @@
       "description": "Add a new view to app-template.",
       "factory": "./add-view/index",
       "schema": "./add-view/schema.json"
+    },
+    "migrate-nested-components": {
+      "description": "Migrate nested DevExtreme components to the latest version.",
+      "factory": "./migrate-nested-components/index#migrateNestedComponents",
+      "schema": "./migrate-nested-components/schema.json"
     }
   }
 }
