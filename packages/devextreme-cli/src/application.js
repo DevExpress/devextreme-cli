@@ -10,11 +10,16 @@ const isApplicationCommand = (command) => {
 };
 
 const isMigrationCommand = (command) => {
-    return command === 'migrate-nested-components';
+    return [ 'migrate' ].includes(command);
 };
 
 const handleWrongAppType = (appType, command) => {
     console.error(`The '${appType}' application type is not valid`);
+    printHelp(command);
+};
+
+const handleWrongChangeName = (changeName, command) => {
+    console.error(`The '${changeName}' change name is not valid`);
     printHelp(command);
 };
 
@@ -34,15 +39,23 @@ const createReact = async(appName, options, command) => {
 };
 
 const run = async(commands, options, devextremeConfig) => {
-    if(commands[0] === 'migrate-nested-components') {
-        await angularApplication.migrateNestedComponents(options);
-        return;
-    }
 
     if(!commands[1]) {
         console.error('Command is incomplete. Please specify parameters.');
         printHelp(commands[0]);
         return;
+    }
+
+    if(commands[0] === 'migrate') {
+        const changeName = commands[1];
+        switch(changeName) {
+            case 'angular-config-components':
+                await angularApplication.migrateConfigComponents(options);
+                return;
+            default:
+                handleWrongChangeName(changeName, commands[0]);
+                return;
+        }
     }
 
     if(commands[0] === 'new') {

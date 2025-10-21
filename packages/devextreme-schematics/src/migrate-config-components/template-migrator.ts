@@ -1,18 +1,34 @@
 import { Tree } from '@angular-devkit/schematics';
 import * as parse5 from 'parse5';
+import * as path from 'path';
+import picomatch from 'picomatch';
 
 // Dynamically require TypeScript if available; skip inline template migration if not.
-let ts: any;
-try {
-  // tslint:disable-next-line:no-var-requires
-  ts = require('typescript');
-} catch {
-  ts = null; // Will be checked before inline processing
+// Dynamically require TypeScript if available; skip inline template migration if not.
+let ts: any = null;
+const tsResolutionErrors: string[] = [];
+const tsResolutionPaths = [
+  __dirname,
+  process.cwd(),
+  path.dirname(require.main?.filename || ''),
+];
+for (const p of tsResolutionPaths) {
+  try {
+    // tslint:disable-next-line:no-var-requires
+    ts = require(require.resolve('typescript', { paths: [p] }));
+    break;
+  } catch (err) {
+    tsResolutionErrors.push(`Failed to resolve TypeScript from ${p}: ${err?.message || err}`);
+  }
 }
-
-// Ensure picomatch is loaded as a callable matcher factory in all module systems
-// tslint:disable-next-line:no-var-requires
-const picomatch: any = require('picomatch');
+if (!ts) {
+  try {
+    // tslint:disable-next-line:no-var-requires
+    ts = require('typescript');
+  } catch (err) {
+    tsResolutionErrors.push(`Failed to require global TypeScript: ${err?.message || err}`);
+  }
+}
 
 // Minimal parse5 types for our usage
 interface P5Node { [k: string]: any; }
@@ -23,7 +39,7 @@ interface P5Document extends P5Node {
 
 export interface HostRule {
   hostSelector: string;
-  nestedMap: Record<string, string>;
+  configMap: Record<string, string>;
 }
 
 export interface RunnerOptions {
@@ -82,10 +98,17 @@ export async function applyInlineComponentTemplateMigrations(
     return;
   }
   if (!ts) {
-    exec.logger.warn(
-      '[nested-migrator] Skipping inline template migration (TypeScript not available). ' +
-      'Install "typescript" if you want inline template support.');
-    return;
+      exec.logger.warn(
+        '[config-migrator] Skipping inline template migration (TypeScript not available).\n' +
+        'Resolution attempts and errors:\n' +
+        tsResolutionErrors.map(e => '  - ' + e).join('\n') + '\n' +
+        'How to fix:\n' +
+        '  1. Install "typescript" in your project root: `npm install typescript --save-dev`\n' +
+        '  2. If using the CLI globally, run: `npm install -g typescript`\n' +
+        '  3. If you use npx, add typescript to your workspace or global node_modules.\n' +
+        '  4. See README for troubleshooting global CLI usage and npm linking issues.'
+      );
+      return;
   }
   const matcher = picomatch(scriptGlobs);
   tree.visit(filePath => {
@@ -223,7 +246,7 @@ export function transformTemplate(
         if (!oldName) {
           return;
         }
-        const newName = rule.nestedMap[oldName];
+        const newName = rule.configMap[oldName];
         if (!newName) {
           return;
         }

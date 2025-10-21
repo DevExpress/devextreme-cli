@@ -163,7 +163,7 @@ const addView = (viewName, options) => {
     runSchematicCommand('add-view', schematicOptions);
 };
 
-const migrateNestedComponents = async(options = {}) => {
+const migrateConfigComponents = async(options = {}) => {
     const collectionName = 'devextreme-schematics';
 
     // Check if devextreme-schematics is installed
@@ -207,7 +207,7 @@ const migrateNestedComponents = async(options = {}) => {
         schematicOptions.scriptInclude = schematicOptions.scriptInclude.split(',').map(s => s.trim());
     }
 
-    const commandArguments = ['schematics', `${collectionName}:migrate-nested-components`];
+    const commandArguments = ['schematics', `${collectionName}:migrate-config-components`];
 
     const { [depsVersionTagOptionName]: _, ...optionsToArguments } = schematicOptions; // eslint-disable-line no-unused-vars
     for(let option in optionsToArguments) {
@@ -250,5 +250,5 @@ module.exports = {
     create,
     addTemplate,
     addView,
-    migrateNestedComponents
+    migrateConfigComponents
 };

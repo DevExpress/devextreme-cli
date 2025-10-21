@@ -25,10 +25,10 @@
       "factory": "./add-view/index",
       "schema": "./add-view/schema.json"
     },
-    "migrate-nested-components": {
-      "description": "Migrate nested DevExtreme components to the latest version.",
-      "factory": "./migrate-nested-components/index#migrateNestedComponents",
-      "schema": "./migrate-nested-components/schema.json"
+    "migrate-config-components": {
+      "description": "Migrate DevExtreme configurationcomponents to the latest version.",
+  "factory": "./migrate-config-components/index#migrateConfigComponents",
+  "schema": "./migrate-config-components/schema.json"
     }
   }
 }
