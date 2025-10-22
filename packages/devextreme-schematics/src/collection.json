@@ -27,8 +27,8 @@
     },
     "migrate-config-components": {
       "description": "Migrate DevExtreme configuration components to the latest version.",
-  "factory": "./migrate-config-components/index#migrateConfigComponents",
-  "schema": "./migrate-config-components/schema.json"
+      "factory": "./migrate-config-components/index#migrateConfigComponents",
+      "schema": "./migrate-config-components/schema.json"
     }
   }
 }
