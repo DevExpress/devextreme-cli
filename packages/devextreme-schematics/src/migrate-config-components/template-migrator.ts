@@ -4,7 +4,6 @@ import * as path from 'path';
 import picomatch from 'picomatch';
 
 // Dynamically require TypeScript if available; skip inline template migration if not.
-// Dynamically require TypeScript if available; skip inline template migration if not.
 let ts: any = null;
 const tsResolutionErrors: string[] = [];
 const tsResolutionPaths = [
