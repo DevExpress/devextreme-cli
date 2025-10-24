@@ -25,7 +25,7 @@
     "@angular-devkit/core": "^17.3.17",
     "@angular-devkit/schematics": "^17.3.17",
     "@schematics/angular": "^17.3.17",
-    "parse5": "^7.1.2",
+    "parse5": "^7.3.0",
     "picomatch": "^4.0.2"
   },
   "devDependencies": {
