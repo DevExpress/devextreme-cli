@@ -1,4 +1,5 @@
 import { Rule, Tree, SchematicContext } from '@angular-devkit/schematics';
+import type { HostRule } from './template-migrator';
 import { applyHostAwareTemplateMigrations, applyInlineComponentTemplateMigrations } from './template-migrator';
 import mapping from './mappings/deprecated-config-map.json';
 
@@ -55,7 +56,7 @@ export function migrateConfigComponents(options: Options = {}): Rule {
         Object.entries(map).filter(([k]) => k !== '_hostSelector')
       );
       return { hostSelector, configMap };
-    }) as import('./template-migrator').HostRule[];
+    }) as HostRule[];
 
     // External HTML templates
     await applyHostAwareTemplateMigrations(tree, {
