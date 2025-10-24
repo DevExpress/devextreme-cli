@@ -9,8 +9,17 @@ const isApplicationCommand = (command) => {
     return [ 'new', 'add' ].includes(command);
 };
 
+const isMigrationCommand = (command) => {
+    return [ 'migrate' ].includes(command);
+};
+
 const handleWrongAppType = (appType, command) => {
     console.error(`The '${appType}' application type is not valid`);
+    printHelp(command);
+};
+
+const handleWrongChangeName = (changeName, command) => {
+    console.error(`The '${changeName}' change name is not valid`);
     printHelp(command);
 };
 
@@ -30,10 +39,23 @@ const createReact = async(appName, options, command) => {
 };
 
 const run = async(commands, options, devextremeConfig) => {
+
     if(!commands[1]) {
         console.error('Command is incomplete. Please specify parameters.');
         printHelp(commands[0]);
         return;
+    }
+
+    if(commands[0] === 'migrate') {
+        const changeName = commands[1];
+        switch(changeName) {
+            case 'angular-config-components':
+                await angularApplication.migrateConfigComponents(options);
+                return;
+            default:
+                handleWrongChangeName(changeName, commands[0]);
+                return;
+        }
     }
 
     if(commands[0] === 'new') {
@@ -104,5 +126,6 @@ const run = async(commands, options, devextremeConfig) => {
 
 module.exports = {
     isApplicationCommand,
+    isMigrationCommand,
     run
 };

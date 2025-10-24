@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "SchematicsDevextremeMigrateConfigComponents",
+  "title": "Migrate to the latest DevExtreme configuration components.",
+  "type": "object",
+  "properties": {
+    "include": {
+      "oneOf": [
+        { "type": "array", "items": { "type": "string" } },
+        { "type": "string" }
+      ],
+      "description": "Glob(s) of template files to include (default: **/*.html)"
+    },
+    "scriptInclude": {
+      "oneOf": [
+        { "type": "array", "items": { "type": "string" } },
+        { "type": "string" }
+      ],
+      "description": "Glob(s) of TS/JS files to scan for inline templates (default: ['**/*.ts','**/*.js']; set empty ('' or []) to disable)"
+    },
+    "dry": {
+      "oneOf": [
+        { "type": "boolean", "default": false },
+        { "type": "string", "enum": ["true", "false"], "default": "false" }
+      ]
+    }
+  }
+}

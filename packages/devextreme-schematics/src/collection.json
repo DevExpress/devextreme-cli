@@ -24,6 +24,11 @@
       "description": "Add a new view to app-template.",
       "factory": "./add-view/index",
       "schema": "./add-view/schema.json"
+    },
+    "migrate-config-components": {
+      "description": "Migrate to the latest DevExtreme configuration components.",
+      "factory": "./migrate-config-components/index#migrateConfigComponents",
+      "schema": "./migrate-config-components/schema.json"
     }
   }
 }

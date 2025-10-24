@@ -39,6 +39,14 @@ if(args.help) {
 const run = async(commands, options) => {
     if(application.isApplicationCommand(commands[0])) {
         await application.run(commands, options, devextremeConfig.read());
+    } else if(application.isMigrationCommand(commands[0])) {
+        if(!commands[1]) {
+            console.error('Please specify a change name for migration.');
+            printHelp('migrate');
+            return;
+        }
+        await application.run(['migrate', commands[1], ...commands.slice(2)], options, { applicationEngine: 'angular' });
+        return;
     } else if(themeBuilder.isThemeBuilderCommand(commands[0])) {
         options.command = commands[0];
         themeBuilder.run(options);
