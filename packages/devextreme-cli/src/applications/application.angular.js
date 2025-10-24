@@ -190,7 +190,7 @@ const migrateConfigComponents = async(options = {}) => {
             await runCommand('npm', ['install', '-g', `${collectionName}@${schematicsVersion}`], { stdio: 'inherit' });
             console.log('Installation completed successfully.');
         } catch(error) {
-            console.error('Failed to install devextreme-schematics. Please install it manually:');
+            console.error('Failed to install devextreme-schematics. Please install manually:');
             console.error(`npm install -g ${collectionName}@${schematicsVersion}`);
             process.exit(1);
         }

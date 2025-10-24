@@ -1,7 +1,7 @@
 {
   "_generated": true,
   "_description": "Mapping: host component -> { _hostSelector?: string, generic config selector : component-specific selector }",
-  "_note": "Do not edit manually; run scripts/generate-deprecated-config-map.mjs",
+  "_note": "Do not edit manually. Run scripts/generate-deprecated-config-map.mjs to generate a new map.",
   "DxAccordionComponent": {
     "_hostSelector": "dx-accordion",
     "dxi-item": "dxi-accordion-item"

@@ -26,7 +26,7 @@
       "schema": "./add-view/schema.json"
     },
     "migrate-config-components": {
-      "description": "Migrate DevExtreme configuration components to the latest version.",
+      "description": "Migrate to the latest DevExtreme configuration components.",
       "factory": "./migrate-config-components/index#migrateConfigComponents",
       "schema": "./migrate-config-components/schema.json"
     }

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
   "$id": "SchematicsDevextremeMigrateConfigComponents",
-  "title": "Migrate deprecated config components to new ones",
+  "title": "Migrate to the latest DevExtreme configuration components.",
   "type": "object",
   "properties": {
     "include": {
@@ -16,7 +16,7 @@
         { "type": "array", "items": { "type": "string" } },
         { "type": "string" }
       ],
-      "description": "Glob(s) for TS/JS files to scan for inline @Component({ template }) (default: ['**/*.ts','**/*.js']; set to [] to disable)"
+      "description": "Glob(s) of TS/JS files to scan for inline templates (default: ['**/*.ts','**/*.js']; set empty ('' or []) to disable)"
     },
     "dry": {
       "oneOf": [

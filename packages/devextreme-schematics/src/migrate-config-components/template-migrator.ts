@@ -17,7 +17,7 @@ for (const p of tsResolutionPaths) {
     ts = require(require.resolve('typescript', { paths: [p] }));
     break;
   } catch (err) {
-    tsResolutionErrors.push(`Failed to resolve TypeScript from ${p}: ${err?.message || err}`);
+    tsResolutionErrors.push(`Failed to import TypeScript from ${p}: ${err?.message || err}`);
   }
 }
 if (!ts) {
@@ -25,7 +25,7 @@ if (!ts) {
     // tslint:disable-next-line:no-var-requires
     ts = require('typescript');
   } catch (err) {
-    tsResolutionErrors.push(`Failed to require global TypeScript: ${err?.message || err}`);
+    tsResolutionErrors.push(`Failed to import TypeScript: ${err?.message || err}`);
   }
 }
 
@@ -98,14 +98,13 @@ export async function applyInlineComponentTemplateMigrations(
   }
   if (!ts) {
       exec.logger.warn(
-        '[config-migrator] Skipping inline template migration (TypeScript not available).\n' +
+        '[config-migrator] Failed to import TypeScript. Skipping inline template migration.\n' +
         'Resolution attempts and errors:\n' +
         tsResolutionErrors.map(e => '  - ' + e).join('\n') + '\n' +
-        'How to fix:\n' +
-        '  1. Install "typescript" in your project root: `npm install typescript --save-dev`\n' +
-        '  2. If using the CLI globally, run: `npm install -g typescript`\n' +
-        '  3. If you use npx, add typescript to your workspace or global node_modules.\n' +
-        '  4. See README for troubleshooting global CLI usage and npm linking issues.'
+        'To resolve this issue, perform one of the following steps:\n' +
+        '  1. Install the "typescript" package in your project root: `npm install typescript --save-dev`\n' +
+        '  2. Install the "typescript" package globally on your machine: `npm install -g typescript`\n' +
+        'Refer to the README for further troubleshooting information.'
       );
       return;
   }
