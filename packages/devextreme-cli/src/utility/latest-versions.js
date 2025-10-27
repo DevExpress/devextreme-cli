@@ -1,8 +1,8 @@
 const packageJson = require('../../package.json');
 module.exports = {
-    'devextreme': '25.1.5',
-    'devextreme-react': '25.1.5',
-    'devextreme-vue': '25.1.5',
+    'devextreme': '25.1.6',
+    'devextreme-react': '25.1.6',
+    'devextreme-vue': '25.1.6',
     'create-vite': '7.0.0',
     'create-vue': '3.17.0',
     'create-next-app': '15.3.4',
