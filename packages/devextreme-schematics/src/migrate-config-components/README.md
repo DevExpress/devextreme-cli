@@ -1,10 +1,10 @@
 # migrate-config-components
 
-A schematic that migrates deprecated nested DevExtreme components to the new config-based structure.
+A schematic that migrates deprecated DevExtreme configuration components.
 
 ## Description
 
-This schematic automatically migrates your Angular application to use the latest DevExtreme component structure by replacing deprecated nested components (such as `<dxi-column>`) with their new config-based equivalents (such as `<dxi-data-grid-column>`). The migration command is available as a top-level DevExtreme CLI command and can be run from any directory.
+This schematic automatically migrates deprecated DevExtreme Angular configuration components. The migration command is available as a top-level DevExtreme CLI command that you can run from any directory.
 
 ## Usage
 
