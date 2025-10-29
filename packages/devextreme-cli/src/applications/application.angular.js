@@ -21,7 +21,7 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
     let isLocalCollection = false;
 
     if(options['c']) {
-        collectionPath = `${path.join(process.cwd(), options['c'])}`;
+        collectionPath = path.resolve(options['c']);
         isLocalCollection = true;
         delete options['c'];
     }
