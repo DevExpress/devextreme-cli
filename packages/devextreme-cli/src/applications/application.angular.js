@@ -207,7 +207,8 @@ const migrateConfigComponents = async(options = {}) => {
         schematicOptions.scriptInclude = schematicOptions.scriptInclude.split(',').map(s => s.trim());
     }
 
-    const commandArguments = ['schematics', `${collectionName}:migrate-config-components`];
+    const schematicsBinPath = require.resolve('@angular-devkit/schematics-cli/bin/schematics.js');
+    const commandArguments = [schematicsBinPath, `${collectionName}:migrate-config-components`];
 
     const { [depsVersionTagOptionName]: _, ...optionsToArguments } = schematicOptions; // eslint-disable-line no-unused-vars
     for(let option in optionsToArguments) {
@@ -223,8 +224,7 @@ const migrateConfigComponents = async(options = {}) => {
         }
     }
 
-    // Use runCommand directly with npx to work outside Angular workspace
-    return runCommand('npx', commandArguments, { stdio: 'inherit' });
+    return runCommand('node', commandArguments, { stdio: 'inherit', forceNoCmd: true });
 };
 
 const changeMainTs = (appPath) => {

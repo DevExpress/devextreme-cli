@@ -37,7 +37,9 @@
   "repository": "https://github.com/DevExpress/devextreme-cli",
   "license": "MIT",
   "dependencies": {
+    "@angular-devkit/schematics-cli": "^19.0.6",
     "@yarnpkg/lockfile": "^1.1.0",
+    "devextreme-schematics": "^1.12",
     "import-cwd": "^3.0.0",
     "less": "3.13.1",
     "minimist": "^1.2.8",
