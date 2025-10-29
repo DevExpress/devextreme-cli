@@ -18,17 +18,20 @@ const ngCliWithZoneless = new semver('20.0.0');
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
     let collectionPath = `${collectionName}@${schematicsVersion}`;
+    let isLocalCollection = false;
 
     if(options['c']) {
         collectionPath = `${path.join(process.cwd(), options['c'])}`;
+        isLocalCollection = true;
         delete options['c'];
     }
 
-    if(!localPackageExists(collectionName)) {
+    if(!isLocalCollection && !localPackageExists(collectionName)) {
         await runNgCommand(['add', collectionPath, '--skip-confirmation=true'], options, evaluatingOptions);
     }
 
-    const commandArguments = ['g', `${collectionName}:${schematicCommand}`];
+    const collectionToUse = isLocalCollection ? collectionPath : collectionName;
+    const commandArguments = ['g', `${collectionToUse}:${schematicCommand}`];
 
     const { [depsVersionTagOptionName]: _, ...optionsToArguments } = options; // eslint-disable-line no-unused-vars
     for(let option in optionsToArguments) {
@@ -165,36 +168,6 @@ const addView = (viewName, options) => {
 
 const migrateConfigComponents = async(options = {}) => {
     const collectionName = 'devextreme-schematics';
-
-    // Check if devextreme-schematics is installed
-    if(!localPackageExists(collectionName)) {
-        const prompts = require('prompts');
-
-        console.log(`\nThe '${collectionName}' package is required to run this command.`);
-
-        const response = await prompts({
-            type: 'confirm',
-            name: 'install',
-            message: `Would you like to install '${collectionName}' now?`,
-            initial: true
-        });
-
-        if(!response.install) {
-            console.log('Migration cancelled. Please install devextreme-schematics manually:');
-            console.log(`npm install -g ${collectionName}@${schematicsVersion}`);
-            process.exit(1);
-        }
-
-        console.log(`Installing ${collectionName}@${schematicsVersion}...`);
-        try {
-            await runCommand('npm', ['install', '-g', `${collectionName}@${schematicsVersion}`], { stdio: 'inherit' });
-            console.log('Installation completed successfully.');
-        } catch(error) {
-            console.error('Failed to install devextreme-schematics. Please install manually:');
-            console.error(`npm install -g ${collectionName}@${schematicsVersion}`);
-            process.exit(1);
-        }
-    }
 
     const schematicOptions = {
         ...options
