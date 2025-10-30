@@ -69,6 +69,6 @@ ng g devextreme-schematics:migrate-config-components
 
 ## Requirements
 
-- Node.js and npm or yarn
-- Angular application with DevExtreme components
-- DevExtreme Angular version that supports new configuration components structure
+- Node.js and npm or yarn.
+- Angular application with DevExtreme components.
+- DevExtreme Angular version that supports named configuration components.
