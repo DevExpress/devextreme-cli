@@ -1,10 +1,10 @@
 # migrate-config-components
 
-A schematic that migrates old DevExtreme configuration components.
+A schematic that migrates generic DevExtreme configuration components.
 
 ## Description
 
-This schematic automatically migrates old DevExtreme Angular configuration components. The migration command is available as a top-level DevExtreme CLI command that you can run from any directory.
+This schematic automatically migrates generic configuration components to named configuration components in your DevExtreme-powered Angular app. The migration command is available as a top-level DevExtreme CLI command that you can run from any directory.
 
 ## Usage
 
@@ -51,7 +51,7 @@ ng g devextreme-schematics:migrate-config-components
 
 ## Sample results
 
-**Old configuration components:**
+**Generic configuration components:**
 ```html
 <dx-data-grid>
   <dxi-column field="name"></dxi-column>
@@ -59,7 +59,7 @@ ng g devextreme-schematics:migrate-config-components
 </dx-data-grid>
 ```
 
-**New configuration components:**
+**Named configuration components:**
 ```html
 <dx-data-grid>
   <dxi-data-grid-column field="name"></dxi-data-grid-column>
