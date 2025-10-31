@@ -16,10 +16,10 @@ You can run the migration command from any directory, including both inside and 
 devextreme migrate angular-config-components
 ```
 
-### Options (All Optional)
+### Parameters (All Optional)
 
 - `--include`: Glob patterns of template files to include (default: `**/*.html`). Separate multiple patterns with commas.
-- `--script-include`: Glob patterns for TypeScript/JavaScript files to scan for inline templates (default: `**/*.ts,**/*.js`). Set empty ('' or []) to disable.
+- `--script-include`: Glob patterns for TypeScript/JavaScript files to scan for inline templates (default: `**/*.ts,**/*.js`). Pass an empty value ('' or []) to disable.
 - `--dry`: Run in dry mode to preview changes without applying them (default: `false`).
 
 ### Examples
