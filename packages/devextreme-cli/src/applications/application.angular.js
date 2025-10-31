@@ -199,12 +199,12 @@ const migrateConfigComponents = async(options = {}) => {
         const response = await prompts({
             type: 'confirm',
             name: 'install',
-            message: `Download '${collectionName}@${schematicsVersion}' temporarily to run the migration?`,
+            message: `Would you like to install '${collectionName}@${schematicsVersion}' in the npm cache?`,
             initial: true
         });
 
         if(!response.install) {
-            console.log('Migration cancelled. You can install devextreme-schematics locally or globally and rerun the command.');
+            console.log('Migration cancelled. Install devextreme-schematics manually and rerun the command.');
             process.exit(1);
         }
     }

@@ -83,7 +83,7 @@ export async function applyInlineComponentTemplateMigrations(
       exec.logger.warn(
         '[config-migrator] Failed to import TypeScript. Skipping inline template migration.\n' +
         (tsResolutionError ? `Error: ${tsResolutionError}\n` : '') +
-        'Ensure the "typescript" package is installed in your project or reinstall DevExtreme Schematics.'
+        'Ensure the "typescript" package is installed in your project. Try to reinstall DevExtreme Schematics if the issue persists.'
       );
       return;
   }
