@@ -46,4 +46,4 @@ If the CLI fails to find TypeScript, it skips inline template migration and disp
    - Some npm global installs may not link dependencies as expected. If you experience repeated TypeScript resolution errors, try running CLI commands from a project where TypeScript is installed locally.
    - You can also manually link TypeScript to your global node_modules if needed.
 
-If you continue to see errors, review the warning output for resolution attempts and check your npm/node installation paths.
+If errors persist, review resolution attempt information in the warning output and check your npm/node installation paths.
