@@ -26,7 +26,8 @@
     "@angular-devkit/schematics": "^17.3.17",
     "@schematics/angular": "^17.3.17",
     "parse5": "^7.3.0",
-    "picomatch": "^4.0.3"
+    "picomatch": "^4.0.3",
+    "typescript": "~5.2.1"
   },
   "devDependencies": {
     "@types/jasmine": "~3.10.18",
@@ -35,7 +36,6 @@
     "@types/semver": "^7.7.1",
     "jasmine": "^2.99.0",
     "rxjs": "^6.6.7",
-    "tslint": "^5.20.1",
-    "typescript": "~5.2.1"
+    "tslint": "^5.20.1"
   }
 }
