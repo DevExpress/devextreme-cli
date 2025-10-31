@@ -1,32 +1,15 @@
 import { Tree } from '@angular-devkit/schematics';
 import * as parse5 from 'parse5';
-import * as path from 'path';
 import picomatch from 'picomatch';
 
 // Dynamically require TypeScript if available; skip inline template migration if not.
 let ts: any = null;
-const tsResolutionErrors: string[] = [];
-const tsResolutionPaths = [
-  __dirname,
-  process.cwd(),
-  path.dirname(require.main?.filename || ''),
-];
-for (const p of tsResolutionPaths) {
-  try {
-    // tslint:disable-next-line:no-var-requires
-    ts = require(require.resolve('typescript', { paths: [p] }));
-    break;
-  } catch (err) {
-    tsResolutionErrors.push(`Failed to import TypeScript from ${p}: ${err?.message || err}`);
-  }
-}
-if (!ts) {
-  try {
-    // tslint:disable-next-line:no-var-requires
-    ts = require('typescript');
-  } catch (err) {
-    tsResolutionErrors.push(`Failed to import TypeScript: ${err?.message || err}`);
-  }
+let tsResolutionError: string | null = null;
+try {
+  // tslint:disable-next-line:no-var-requires
+  ts = require('typescript');
+} catch (err) {
+  tsResolutionError = err?.message || String(err);
 }
 
 // Minimal parse5 types for our usage
@@ -99,12 +82,8 @@ export async function applyInlineComponentTemplateMigrations(
   if (!ts) {
       exec.logger.warn(
         '[config-migrator] Failed to import TypeScript. Skipping inline template migration.\n' +
-        'Resolution attempts and errors:\n' +
-        tsResolutionErrors.map(e => '  - ' + e).join('\n') + '\n' +
-        'To resolve this issue, perform one of the following steps:\n' +
-        '  1. Install the "typescript" package in your project root: `npm install typescript --save-dev`\n' +
-        '  2. Install the "typescript" package globally on your machine: `npm install -g typescript`\n' +
-        'Refer to the README for further troubleshooting information.'
+        (tsResolutionError ? `Error: ${tsResolutionError}\n` : '') +
+        'Ensure the "typescript" package is installed in your project or reinstall DevExtreme Schematics.'
       );
       return;
   }
