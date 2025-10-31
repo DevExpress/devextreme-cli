@@ -25,7 +25,7 @@ devextreme migrate angular-config-components
 ### Examples
 
 ```bash
-# Migrate all HTML templates and inline templates (using defaults)
+# Migrate all HTML templates and inline templates (default configuration)
 devextreme migrate angular-config-components
 
 # Migrate only specific files
