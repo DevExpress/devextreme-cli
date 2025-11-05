@@ -1,16 +1,13 @@
 import { Tree } from '@angular-devkit/schematics';
 import * as parse5 from 'parse5';
 import picomatch from 'picomatch';
+import { resolveTypeScript } from '../utility/typescript-resolver';
 
 // Dynamically require TypeScript if available; skip inline template migration if not.
-let ts: any = null;
-let tsResolutionError: string | null = null;
-try {
-  // tslint:disable-next-line:no-var-requires
-  ts = require('typescript');
-} catch (err) {
-  tsResolutionError = err?.message || String(err);
-}
+// Uses a 3-level fallback: project search -> global search -> temporary install
+const tsResolution = resolveTypeScript();
+const ts: any = tsResolution.ts;
+const tsResolutionErrors: string[] = tsResolution.errors;
 
 // Minimal parse5 types for our usage
 interface P5Node { [k: string]: any; }
@@ -80,10 +77,18 @@ export async function applyInlineComponentTemplateMigrations(
     return;
   }
   if (!ts) {
+      const errorDetails = tsResolutionErrors.length
+        ? `Resolution attempts:\n${tsResolutionErrors.map(e => '  - ' + e).join('\n')}\n`
+        : '';
       exec.logger.warn(
         '[config-migrator] Failed to import TypeScript. Skipping inline template migration.\n' +
-        (tsResolutionError ? `Error: ${tsResolutionError}\n` : '') +
-        'Ensure the "typescript" package is installed in your project. Try to reinstall DevExtreme Schematics if the issue persists.'
+        errorDetails +
+        'The schematic attempted to find TypeScript using a 3-level fallback:\n' +
+        '  1. Project search (your project\'s node_modules)\n' +
+        '  2. Global search (global node_modules)\n' +
+        '  3. Temporary install (automatic download)\n\n' +
+        'To resolve this issue, install TypeScript in your project:\n' +
+        '  npm install typescript --save-dev\n\n'
       );
       return;
   }
