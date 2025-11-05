@@ -83,12 +83,15 @@ export async function applyInlineComponentTemplateMigrations(
       exec.logger.warn(
         '[config-migrator] Failed to import TypeScript. Skipping inline template migration.\n' +
         errorDetails +
-        'The schematic attempted to find TypeScript using a 3-level fallback:\n' +
-        '  1. Project search (your project\'s node_modules)\n' +
-        '  2. Global search (global node_modules)\n' +
-        '  3. Temporary install (automatic download)\n\n' +
-        'To resolve this issue, install TypeScript in your project:\n' +
-        '  npm install typescript --save-dev\n\n'
+        'The schematic attempted to import TypeScript from the following locations:\n' +
+        '  1. Project node_modules\n' +
+        '  2. Global node_modules\n' +
+        '  3. Temporary installation (npm cache)\n\n' +
+        'To resolve this issue, install TypeScript.\n\n' +
+        'Project install:\n' +
+        '  npm install typescript --save-dev\n\n' +
+        'Global install:\n' +
+        '  npm install -g typescript\n\n'
       );
       return;
   }
