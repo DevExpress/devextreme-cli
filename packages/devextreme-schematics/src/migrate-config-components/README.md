@@ -1,31 +1,31 @@
 # migrate-config-components
 
-A schematic that migrates deprecated nested DevExtreme components to the new config-based structure.
+A schematic that migrates generic DevExtreme configuration components.
 
 ## Description
 
-This schematic automatically migrates your Angular application to use the latest DevExtreme component structure by replacing deprecated nested components (such as `<dxi-column>`) with their new config-based equivalents (such as `<dxi-data-grid-column>`). The migration command is available as a top-level DevExtreme CLI command and can be run from any directory.
+This schematic automatically migrates generic configuration components to named configuration components in your DevExtreme-powered Angular app. The migration command is available as a top-level DevExtreme CLI command that you can run from any directory.
 
 ## Usage
 
 ### Via DevExtreme CLI (Recommended)
 
-The migration command can be run from any directory and will work both inside and outside Angular workspaces:
+You can run the migration command from any directory, including both inside and outside Angular workspaces:
 
 ```bash
 devextreme migrate angular-config-components
 ```
 
-### Options (All Optional)
+### Parameters (All Optional)
 
 - `--include`: Glob patterns of template files to include (default: `**/*.html`). Separate multiple patterns with commas.
-- `--script-include`: Glob patterns for TypeScript/JavaScript files to scan for inline `@Component({ template })` (default: `**/*.ts,**/*.js`). Set to empty to disable.
-- `--dry`: Run in dry mode to preview changes without applying them (default: `false`)
+- `--script-include`: Glob patterns for TypeScript/JavaScript files to scan for inline templates (default: `**/*.ts,**/*.js`). Pass an empty value ('' or []) to disable.
+- `--dry`: Run in dry mode to preview changes without applying them (default: `false`).
 
 ### Examples
 
 ```bash
-# Migrate all HTML templates and inline templates (using defaults)
+# Migrate all HTML templates and inline templates (default configuration)
 devextreme migrate angular-config-components
 
 # Migrate only specific files
@@ -43,17 +43,15 @@ devextreme migrate angular-config-components --include="*.html,*.ts" --dry
 
 ### Via Angular CLI
 
-Alternatively, you can run the schematic directly with Angular CLI:
+You can also use the Angular CLI to run the schematic:
 
 ```bash
 ng g devextreme-schematics:migrate-config-components
 ```
 
-## What it does
+## Sample results
 
-This schematic automatically updates your templates to replace deprecated nested components with the new config-based component structure. For example:
-
-**Before (deprecated nested):**
+**Generic configuration components:**
 ```html
 <dx-data-grid>
   <dxi-column field="name"></dxi-column>
@@ -61,7 +59,7 @@ This schematic automatically updates your templates to replace deprecated nested
 </dx-data-grid>
 ```
 
-**After (config-based):**
+**Named configuration components:**
 ```html
 <dx-data-grid>
   <dxi-data-grid-column field="name"></dxi-data-grid-column>
@@ -69,19 +67,8 @@ This schematic automatically updates your templates to replace deprecated nested
 </dx-data-grid>
 ```
 
-### Why migrate?
-
-DevExtreme Angular components are moving from a nested structure (e.g., `<dxi-column>`) to a config-based structure (e.g., `<dxi-data-grid-column>`) for improved clarity, maintainability, and future compatibility. This schematic automates the migration process to help you keep your codebase up to date with the latest DevExtreme standards.
-
 ## Requirements
 
-- Node.js and npm/yarn installed
-- Angular application with DevExtreme components (when running inside a workspace)
-- DevExtreme Angular version that supports the new component structure
-
-## Notes
-
-- The command can be run from any directory, not just Angular workspaces
-- When run outside an Angular workspace, the underlying Angular CLI will show appropriate error messages
-- All options are optional and have sensible defaults
-- The command uses the latest version of `devextreme-schematics` automatically
+- Node.js and npm or yarn.
+- Angular application with DevExtreme components.
+- DevExtreme Angular version that supports named configuration components.
