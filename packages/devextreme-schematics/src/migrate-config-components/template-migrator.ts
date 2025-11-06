@@ -1,33 +1,13 @@
 import { Tree } from '@angular-devkit/schematics';
 import * as parse5 from 'parse5';
-import * as path from 'path';
 import picomatch from 'picomatch';
+import { resolveTypeScript } from '../utility/typescript-resolver';
 
 // Dynamically require TypeScript if available; skip inline template migration if not.
-let ts: any = null;
-const tsResolutionErrors: string[] = [];
-const tsResolutionPaths = [
-  __dirname,
-  process.cwd(),
-  path.dirname(require.main?.filename || ''),
-];
-for (const p of tsResolutionPaths) {
-  try {
-    // tslint:disable-next-line:no-var-requires
-    ts = require(require.resolve('typescript', { paths: [p] }));
-    break;
-  } catch (err) {
-    tsResolutionErrors.push(`Failed to import TypeScript from ${p}: ${err?.message || err}`);
-  }
-}
-if (!ts) {
-  try {
-    // tslint:disable-next-line:no-var-requires
-    ts = require('typescript');
-  } catch (err) {
-    tsResolutionErrors.push(`Failed to import TypeScript: ${err?.message || err}`);
-  }
-}
+// Uses a 3-level fallback: project search -> global search -> temporary install
+const tsResolution = resolveTypeScript();
+const ts: any = tsResolution.ts;
+const tsResolutionErrors: string[] = tsResolution.errors;
 
 // Minimal parse5 types for our usage
 interface P5Node { [k: string]: any; }
@@ -97,14 +77,21 @@ export async function applyInlineComponentTemplateMigrations(
     return;
   }
   if (!ts) {
+      const errorDetails = tsResolutionErrors.length
+        ? `Resolution attempts:\n${tsResolutionErrors.map(e => '  - ' + e).join('\n')}\n`
+        : '';
       exec.logger.warn(
         '[config-migrator] Failed to import TypeScript. Skipping inline template migration.\n' +
-        'Resolution attempts and errors:\n' +
-        tsResolutionErrors.map(e => '  - ' + e).join('\n') + '\n' +
-        'To resolve this issue, perform one of the following steps:\n' +
-        '  1. Install the "typescript" package in your project root: `npm install typescript --save-dev`\n' +
-        '  2. Install the "typescript" package globally on your machine: `npm install -g typescript`\n' +
-        'Refer to the README for further troubleshooting information.'
+        errorDetails +
+        'The schematic attempted to import TypeScript from the following locations:\n' +
+        '  1. Project node_modules\n' +
+        '  2. Global node_modules\n' +
+        '  3. Temporary installation (npm cache)\n\n' +
+        'To resolve this issue, install TypeScript.\n\n' +
+        'Project install:\n' +
+        '  npm install typescript --save-dev\n\n' +
+        'Global install:\n' +
+        '  npm install -g typescript\n\n'
       );
       return;
   }
