@@ -1,6 +1,6 @@
 {
   "name": "devextreme-schematics",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "description": "DevExtreme schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json",
