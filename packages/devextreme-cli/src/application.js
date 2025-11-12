@@ -19,7 +19,7 @@ const handleWrongAppType = (appType, command) => {
 };
 
 const handleWrongChangeName = (changeName, command) => {
-    console.error(`The '${changeName}' change name is not valid`);
+    console.error(`Invalid migration command: ${changeName}`);
     printHelp(command);
 };
 

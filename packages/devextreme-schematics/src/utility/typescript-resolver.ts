@@ -27,7 +27,7 @@ export function resolveTypeScript(): TypeScriptResolutionResult {
       };
     }
   } catch (err) {
-    errors.push(`Project resolution failed: ${err?.message || err}`);
+    errors.push(`Failed to import TypeScript from project: ${err?.message || err}`);
   }
 
   try {
@@ -40,7 +40,7 @@ export function resolveTypeScript(): TypeScriptResolutionResult {
       };
     }
   } catch (err) {
-    errors.push(`Global resolution failed: ${err?.message || err}`);
+    errors.push(`Failed to import TypeScript from global node_modules: ${err?.message || err}`);
   }
 
   try {
@@ -53,7 +53,7 @@ export function resolveTypeScript(): TypeScriptResolutionResult {
       };
     }
   } catch (err) {
-    errors.push(`Temporary install failed: ${err?.message || err}`);
+    errors.push(`Failed to import TypeScript from temporary installation (npm cache): ${err?.message || err}`);
   }
 
   return {

@@ -81,16 +81,16 @@ export async function applyInlineComponentTemplateMigrations(
         ? `Resolution attempts:\n${tsResolutionErrors.map(e => '  - ' + e).join('\n')}\n`
         : '';
       exec.logger.warn(
-        '[config-migrator] Failed to import TypeScript. Skipping inline template migration.\n' +
+        '[config-migrator] Skipping inline template migration.\n' +
         errorDetails +
-        'The schematic attempted to import TypeScript from the following locations:\n' +
+        'Failed to import TypeScript from the following locations:\n' +
         '  1. Project node_modules\n' +
         '  2. Global node_modules\n' +
         '  3. Temporary installation (npm cache)\n\n' +
-        'To resolve this issue, install TypeScript.\n\n' +
-        'Project install:\n' +
+        'To resolve this issue, install TypeScript manually.\n\n' +
+        'Project installation:\n' +
         '  npm install typescript --save-dev\n\n' +
-        'Global install:\n' +
+        'Global installation:\n' +
         '  npm install -g typescript\n\n'
       );
       return;
