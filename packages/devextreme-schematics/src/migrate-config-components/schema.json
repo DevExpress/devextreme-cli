@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
   "$id": "SchematicsDevextremeMigrateConfigComponents",
-  "title": "Migrate to the latest DevExtreme configuration components.",
+  "title": "Migrates DevExtreme Angular applications to named configuration components.",
   "type": "object",
   "properties": {
     "include": {
@@ -16,13 +16,14 @@
         { "type": "array", "items": { "type": "string" } },
         { "type": "string" }
       ],
-      "description": "Glob(s) of TS/JS files to scan for inline templates (default: ['**/*.ts','**/*.js']; set empty ('' or []) to disable)"
+      "description": "Glob(s) of TS/JS files to scan for inline templates (default: ['**/*.ts','**/*.js']). To disable, set to '' or []."
     },
     "dry": {
       "oneOf": [
         { "type": "boolean", "default": false },
         { "type": "string", "enum": ["true", "false"], "default": "false" }
-      ]
+      ],
+      "description": "Run in dry mode to preview changes."
     }
   }
 }

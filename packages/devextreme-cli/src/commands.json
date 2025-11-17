@@ -51,19 +51,19 @@
     }, {
         "name": "migrate",
         "description": "Migration commands for DevExtreme applications",
-        "usage": "devextreme migrate <change name> [options]",
+        "usage": "devextreme migrate <migration command> [options]",
         "arguments": [{
             "name": "angular-config-components",
-            "description": "Migrate to the latest DevExtreme configuration components.",
+            "description": "Migrates DevExtreme Angular applications to named configuration components.",
             "options": [{
                 "name": "--include",
-                "description": "Template file glob patterns to include (default: **/*.html). You can pass multiple patterns as a comma-separated string (e.g. \"**/a.html,**/b.html\") or as an array (e.g. [\"**/a.html\",\"**/b.html\"])."
+                "description": "Template file glob patterns to include (default: **/*.html). You can pass multiple patterns as a comma-separated string (\"**/a.html,**/b.html\") or as an array ([\"**/a.html\",\"**/b.html\"])."
             }, {
                 "name": "--script-include",
-                "description": "TypeScript/JavaScript file glob patterns to scan for inline templates (default: **/*.ts,**/*.js). You can pass multiple patterns as a comma-separated string or as an array. Pass an empty value ('' or []) to disable."
+                "description": "TypeScript/JavaScript file glob patterns to scan for inline templates (default: **/*.ts,**/*.js). You can pass multiple patterns as a comma-separated string or as an array. Pass an empty value to disable ('' or [])."
             }, {
                 "name": "--dry",
-                "description": "Run in dry mode to preview changes without applying them (default: false)."
+                "description": "Run in dry mode to preview changes."
             }]
         }]
     }, {

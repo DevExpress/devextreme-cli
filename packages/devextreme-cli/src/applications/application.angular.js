@@ -194,7 +194,7 @@ const migrateConfigComponents = async(options = {}) => {
     if(!collectionPath) {
         const prompts = require('prompts');
 
-        console.log(`\nThe '${collectionName}' package is required to run this command.`);
+        console.log(`\nRequired package is missing: '${collectionName}'`);
 
         const response = await prompts({
             type: 'confirm',
@@ -204,7 +204,7 @@ const migrateConfigComponents = async(options = {}) => {
         });
 
         if(!response.install) {
-            console.log('Migration cancelled. Install devextreme-schematics manually and rerun the command.');
+            console.log('Migration was canceled.');
             process.exit(1);
         }
     }

@@ -41,7 +41,7 @@ const run = async(commands, options) => {
         await application.run(commands, options, devextremeConfig.read());
     } else if(application.isMigrationCommand(commands[0])) {
         if(!commands[1]) {
-            console.error('Please specify a change name for migration.');
+            console.error('Please specify a migration command.');
             printHelp('migrate');
             return;
         }

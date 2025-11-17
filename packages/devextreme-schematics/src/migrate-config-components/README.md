@@ -10,7 +10,7 @@ This schematic automatically migrates generic configuration components to named 
 
 ### Via DevExtreme CLI (Recommended)
 
-You can run the migration command from any directory, including both inside and outside Angular workspaces:
+You can run the migration command from any directory, both inside and outside Angular workspaces:
 
 ```bash
 devextreme migrate angular-config-components
