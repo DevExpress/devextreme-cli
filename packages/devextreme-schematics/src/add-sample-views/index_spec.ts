@@ -49,7 +49,7 @@ describe('sample views', () => {
 
     const navigationContent = tree.readContent('/src/app/app-navigation.ts');
     expect(navigationContent).toMatch(/text: 'Home'/);
-    expect(navigationContent).toContain(`export const navigation = [
+    expect(navigationContent).toContain(`export const navigation: { path?: string, text: string, icon: string, items?: any[] }[] = [
   {
     text: 'Home',
     path: '/home',
