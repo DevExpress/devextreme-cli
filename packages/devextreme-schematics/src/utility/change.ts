@@ -43,7 +43,7 @@ export function insertItemToArray(
 
   item = newLine + item;
 
-  const isNodeEmpty =!(
+  const isNodeEmpty = !(
     nodeContent.includes('=')
       ? /=\s*\[[\s\S]*\S+[\s\S]*\]/m
       : /\[[\s\S]*\S+[\s\S]*\]/m

@@ -188,7 +188,7 @@ async function addPolyfills(host: Tree, project: string, polyfills: string[]) {
       if (!buildOptions.polyfills.includes(polyfill)) {
         buildOptions.polyfills.push(polyfill);
       }
-    })
+    });
 
     return config;
   });
