@@ -44,7 +44,8 @@ import {
 
 import {
   NodeDependencyType,
-  addPackageJsonDependency
+  addPackageJsonDependency,
+  getPackageJsonDependency,
 } from '@schematics/angular/utility/dependencies';
 
 import { getSourceFile } from '../utility/source';
@@ -173,6 +174,28 @@ async function updateBudgets(host: Tree, options: any) {
   return host;
 }
 
+async function addPolyfills(host: Tree, project: string, polyfills: string[]) {
+  const projectName = await getProjectName(host, project);
+
+  modifyJSONFile(host, './angular.json', config => {
+    const buildOptions: Record<string, any> = config.projects[projectName]['architect']['build']['options'];
+
+    if (!buildOptions.polyfills) {
+      buildOptions.polyfills = [];
+    }
+
+    polyfills.forEach((polyfill) => {
+      if (!buildOptions.polyfills.includes(polyfill)) {
+        buildOptions.polyfills.push(polyfill);
+      }
+    })
+
+    return config;
+  });
+
+  return host;
+}
+
 function addViewportToBody(sourcePath: string = '') {
   return (host: Tree) => {
     const indexPath =  join(sourcePath, 'index.html');
@@ -200,7 +223,7 @@ function modifyFileRule(path: string, callback: (source: SourceFile) => Change[]
 }
 
 function updateAppComponent(host: Tree, sourcePath: string, templateOptions: any = {}) {
-  const appMComponentPath = sourcePath + (isAngularVersionHigherThan(host, 20) ? 'app.ts' : 'app.component.ts');
+  const appMComponentPath = sourcePath + templateOptions.name + '.ts';
 
   const importSetter = (importName: string, path: string, alias: string) => {
     return (source: SourceFile) => {
@@ -250,12 +273,24 @@ function hasRouting(host: Tree, sourcePath: string) {
 
 function addPackagesToDependency(globalNgCliVersion: string) {
   const version = new SemVer(globalNgCliVersion.replace(/\^|\~/g, ''));
+
   return (host: Tree) => {
+    const zonejs = getPackageJsonDependency(host, 'zone.js');
+
     addPackageJsonDependency(host, {
       type: NodeDependencyType.Default,
       name: '@angular/cdk',
-      version: `~${version.major}.${version.minor}.0`
+      version: version.raw.includes('next') || version.raw.includes('-rc')
+        ? 'next' : `^${version.major}.${version.minor > 1 ? version.minor - 1 : 0}.0`
     });
+
+    if (!zonejs) {
+      addPackageJsonDependency(host, {
+        type: NodeDependencyType.Default,
+        name: 'zone.js',
+        version: version.major > 18 ? '~0.15.0' : '~0.14.0'
+      });
+    }
 
     return host;
   };
@@ -393,7 +428,8 @@ export default function(options: any): Rule {
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),
-      addPackagesToDependency(options.globalNgCliVersion)
+      addPackagesToDependency(options.globalNgCliVersion),
+      () => addPolyfills(host, options.project, ['zone.js'])
     ];
 
     if (options.updateBudgets) {
