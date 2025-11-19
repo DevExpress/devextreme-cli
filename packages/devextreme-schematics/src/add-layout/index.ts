@@ -222,7 +222,7 @@ function modifyFileRule(path: string, callback: (source: SourceFile) => Change[]
   };
 }
 
-function updateAppComponent(host: Tree, sourcePath: string, templateOptions: any = {}) {
+function updateAppComponent(sourcePath: string, templateOptions: any = {}) {
   const appMComponentPath = sourcePath + templateOptions.name + '.ts';
 
   const importSetter = (importName: string, path: string, alias: string) => {
@@ -424,7 +424,7 @@ export default function(options: any): Rule {
     const rules = [
       modifyContentByTemplate(sourcePath, projectFilesSource, null, templateOptions, modifyContent),
       updateDevextremeConfig(sourcePath),
-      updateAppComponent(host, appPath, templateOptions),
+      updateAppComponent(appPath, templateOptions),
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),
