@@ -49,7 +49,9 @@ describe('sample views', () => {
 
     const navigationContent = tree.readContent('/src/app/app-navigation.ts');
     expect(navigationContent).toMatch(/text: 'Home'/);
-    expect(navigationContent).toContain(`export const navigation: { path?: string, text: string, icon: string, items?: any[] }[] = [
+    expect(navigationContent).toContain(
+      `type NavigationItem = { path?: string, text: string, icon?: string, items?: NavigationItem[] };
+export const navigation: NavigationItem[] = [
   {
     text: 'Home',
     path: '/home',

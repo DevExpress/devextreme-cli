@@ -36,7 +36,7 @@ export function insertItemToArray(
 
   const nodeContent = node.getText();
   const nodePosition = node.getStart();
-  const leftBracketPosition = nodePosition + nodeContent.indexOf('[', nodeContent.indexOf('=') || 0);
+  const leftBracketPosition = nodePosition + nodeContent.indexOf('[', nodeContent.lastIndexOf('=') || 0);
   const rightBracketPosition = nodePosition + nodeContent.lastIndexOf(']');
   let itemPosition = leftBracketPosition + 1;
   let fileRecorder = host.beginUpdate(filePath);
