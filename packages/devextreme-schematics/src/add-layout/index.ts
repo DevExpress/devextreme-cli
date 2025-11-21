@@ -281,7 +281,7 @@ function addPackagesToDependency(globalNgCliVersion: string) {
       type: NodeDependencyType.Default,
       name: '@angular/cdk',
       version: version.raw.includes('next') || version.raw.includes('-rc')
-        ? 'next' : `^${version.major}.${version.minor > 1 ? version.minor - 1 : 0}.0`
+        ? 'next' : `^${version.major}.0.0`
     });
 
     if (!zonejs) {
