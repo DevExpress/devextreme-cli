@@ -2,12 +2,12 @@ const semver = require('semver').SemVer;
 const execSync = require('child_process').execSync;
 
 function parseNgCliVersion(stdout) {
-    return /angular.cli:\s*(\S+)/ig.exec(stdout)[1];
+    return stdout.trim();
 }
 
 const getLocalNgVersion = () => {
     try {
-        const version = parseNgCliVersion(execSync('ng v').toString());
+        const version = parseNgCliVersion(execSync('ng --version').toString());
         return new semver(version);
     } catch(e) {
         return '';

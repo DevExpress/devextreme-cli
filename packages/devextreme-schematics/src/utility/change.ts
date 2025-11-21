@@ -36,14 +36,19 @@ export function insertItemToArray(
 
   const nodeContent = node.getText();
   const nodePosition = node.getStart();
-  const leftBracketPosition = nodePosition + nodeContent.indexOf('[');
+  const leftBracketPosition = nodePosition + nodeContent.indexOf('[', nodeContent.lastIndexOf('=') || 0);
   const rightBracketPosition = nodePosition + nodeContent.lastIndexOf(']');
   let itemPosition = leftBracketPosition + 1;
   let fileRecorder = host.beginUpdate(filePath);
 
   item = newLine + item;
 
-  const isNodeEmpty = !/\[[\s\S]*\S+[\s\S]*\]/m.test(nodeContent);
+  const isNodeEmpty = !(
+    nodeContent.includes('=')
+      ? /=\s*\[[\s\S]*\S+[\s\S]*\]/m
+      : /\[[\s\S]*\S+[\s\S]*\]/m
+    ).test(nodeContent);
+
   if (isNodeEmpty) {
     const formattedArray = `[${newLine}]`;
     fileRecorder.remove(leftBracketPosition, rightBracketPosition - leftBracketPosition + 1);
