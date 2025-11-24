@@ -117,7 +117,9 @@ describe('view', () => {
     expect(moduleContent).toMatch(/text: 'Test'/);
     expect(moduleContent).toMatch(/icon: 'folder'/);
 
-    expect(moduleContent).toContain(`navigation = [
+    expect(moduleContent).toContain(
+      `type NavigationItem = { path?: string, text: string, icon?: string, items?: NavigationItem[] };
+export const navigation: NavigationItem[] = [
   {
     text: 'Test',
     path: '/pages/test',
