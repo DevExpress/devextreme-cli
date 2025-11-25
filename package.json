@@ -18,5 +18,8 @@
     "pre-commit": "^1.2.2",
     "puppeteer": "^21.11.0"
   },
-  "pre-commit": "lint"
+  "pre-commit": "lint",
+  "overrides": {
+    "form-data@>=4.0.0 <4.0.4": ">=4.0.4"
+  }
 }
