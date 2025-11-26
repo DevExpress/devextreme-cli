@@ -63,6 +63,7 @@
     "eslint-plugin-unused-imports": "^1.1.5",
     "eslint-plugin-vue": "^7.20.0",
     "eslint-stylish": "^0.2.0",
+    "ip": "^1.1.9",
     "jest": "^29.7.0",
     "jest-image-snapshot": "^6.5.1",
     "prettier": "^2.8.8",
