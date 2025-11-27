@@ -1,12 +1,12 @@
 const path = require('path');
 const waitOn = require('wait-on');
-const ip = require('ip');
 
 const getBrowser = require('./utils/puppeteer').getBrowser;
 const { viewports, themes, layouts } = require('./constants');
 const DevServer = require('./dev-server');
 
 const defaultLayout = 'side-nav-outer-toolbar';
+const defaultHost = process.env.APP_TEMPLATE_HOST || process.env.HOST || '127.0.0.1';
 
 module.exports = (env, { port = 8080, urls = {} } = {}) => {
     const diffSnapshotsDir = path.join('testing/__tests__/__diff_snapshots__', env.engine);
@@ -26,7 +26,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
 
                     describe(layout, () => {
                         const devServer = new DevServer(env, { port });
-                        const appUrl = `http://${ip.address()}:${port}/`;
+                        const appUrl = `http://${defaultHost}:${port}/`;
 
                         let browser;
                         let page;
