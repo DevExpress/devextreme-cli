@@ -42,27 +42,20 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.NODE }}
-        cache: 'pnpm'
-        cache-dependency-path: pnpm-lock.yaml
-
-    - name: Enable Corepack
-      run: corepack enable
-
-    - name: Install dependencies
+    - name: Run npm install
       env:
         PUPPETEER_SKIP_DOWNLOAD: true
-      run: pnpm install --frozen-lockfile
+      run: npm install --no-audit --no-fund
 
     - uses: browser-actions/setup-chrome@v1
       id: setup-chrome
     - run: ${{ steps.setup-chrome.outputs.chrome-path }} --version
 
+    - name: Set Legacy-peer-deps=true
+      run: npm config set legacy-peer-deps true
+
     - name: Create ${{ matrix.APPROACH }} application
-      run: pnpm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
+      run: npm run create-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
       timeout-minutes: 30
 
     - name: Install Internal Packages
@@ -72,14 +65,14 @@ jobs:
 
     - name: Lint created application
       if: ${{ matrix.OS != 'windows-latest' }}
-      run: pnpm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
+      run: npm run lint-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
 
     - name: Run template tests
       if: ${{ matrix.OS != 'windows-latest' }}
       env:
         LAUNCH_BROWSER: true
         CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-      run: pnpm run test-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
+      run: npm run test-template -- -- -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
       timeout-minutes: 40
 
     - name: Archive artifacts
@@ -112,20 +105,17 @@ jobs:
       - name: Get sources
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js and restore cache
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
-          cache-dependency-path: pnpm-lock.yaml
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Run pnpm install
+      - name: Run npm install
         env:
           PUPPETEER_SKIP_DOWNLOAD: true
-        run: pnpm install --frozen-lockfile
+        run: npm install --no-package-lock --no-audit --no-fund
 
       - name: Run schematics tests
-        run: pnpm --filter devextreme-schematics test
+        run: cd packages/devextreme-schematics && npm run test

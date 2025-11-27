@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "tslint -c tslint.json 'src/*/*.ts' -e '**/*.d.ts'",
-    "test": "pnpm run lint && pnpm run build && jasmine **/*_spec.js"
+    "test": "npm run lint && npm run build && jasmine **/*_spec.js"
   },
   "author": "Developer Express Inc.",
   "license": "MIT",

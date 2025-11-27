@@ -22,16 +22,20 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.NODE }}
-        cache: 'pnpm'
-        cache-dependency-path: pnpm-lock.yaml
 
-    - name: Enable Corepack
-      run: corepack enable
+    - name: Restore npm cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: themebuilder-${{ runner.os }}-node-${{ matrix.NODE }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          themebuilder-${{ runner.os }}-node-${{ matrix.NODE }}
+          themebuilder-${{ runner.os }}-node-
 
-    - name: Install dependencies
+    - name: Run npm install
       env:
         PUPPETEER_SKIP_DOWNLOAD: true
-      run: pnpm install --frozen-lockfile
+      run: npm install --no-package-lock --no-audit --no-fund
 
     - name: Run tests
-      run: pnpm run test-themebuilder
+      run: npm run test-themebuilder

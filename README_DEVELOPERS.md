@@ -1,22 +1,13 @@
-# Setup
-
-Use [Corepack](https://nodejs.org/api/corepack.html) (bundled with Node.js 20+) to activate pnpm and install workspace dependencies:
-
-```sh
-corepack enable
-pnpm install
-```
-
 # Testing
 
 ## Build docker image 
 ```sh
-pnpm --filter devextreme-cli docker:build
+$ lerna run docker:build
 ```
 
 ## Run docker image with browser
 ```sh
-pnpm --filter devextreme-cli docker:run
+$ lerna run docker:run
 ```
 
 ## Run tests 
@@ -24,7 +15,7 @@ pnpm --filter devextreme-cli docker:run
 To run tests for all target frameworks, use the following command:
 
 ```sh
-$ pnpm run test
+$ npm run test
 ```
 
 This script creates test applications in the `testing/sandbox` folder, starts a web server for each framework, and runs the snapshot tests.
@@ -38,61 +29,61 @@ You can find test results in the following folders:
 ## Generate Applications
 
 ```sh
-pnpm run create-template
+npm run create-template
 ```
 
 ## Generate Applications for an Individual Framework
 
 ```sh
-pnpm run create-template -- -- -e angular
-pnpm run create-template -- -- -e react
-pnpm run create-template -- -- -e react-ts
-pnpm run create-template -- -- -e vue-v3
+npm run create-template -- -- -e angular
+npm run create-template -- -- -e react
+npm run create-template -- -- -e react-ts
+npm run create-template -- -- -e vue-v3
 ```
 
 ## Lint Applications
 
 ```sh
-pnpm run lint-template
+npm run lint-template
 ```
 
 ## Lint Applications for an Individual Framework
 
 ```sh
-pnpm run lint-template -- -- -e angular
-pnpm run lint-template -- -- -e react
-pnpm run lint-template -- -- -e react-ts
-pnpm run lint-template -- -- -e vue-v3
+npm run lint-template -- -- -e angular
+npm run lint-template -- -- -e react
+npm run lint-template -- -- -e react-ts
+npm run lint-template -- -- -e vue-v3
 ```
 
 ## Test Applications
 
 ```sh
-pnpm run test-template
+npm run test-template
 ```
 
 ## Test Applications for an Individual Framework
 
 ```sh
-pnpm run test-template -- -- -e angular
-pnpm run test-template -- -- -e react
-pnpm run test-template -- -- -e react-ts
-pnpm run test-template -- -- -e vue-v3
+npm run test-template -- -- -e angular
+npm run test-template -- -- -e react
+npm run test-template -- -- -e react-ts
+npm run test-template -- -- -e vue-v3
 ```
 
 ## Run Tests for Existing Test Applications
 
 ```sh
-pnpm run test-dev
+npm run test-dev
 ```
 
 ## Run Tests for an Individual Framework
 
 ```sh
-pnpm run test -- -- -t angular
-pnpm run test -- -- -t react
-pnpm run test -- -- -t react-ts
-pnpm run test -- -- -t vue-v3
+npm run test -- -- -t angular
+npm run test -- -- -t react
+npm run test -- -- -t react-ts
+npm run test -- -- -t vue-v3
 ```
 
 ## Replace etalon
@@ -108,13 +99,13 @@ Modifying an application template directly is not recommended. Instead, generate
 3. Run a script that updates templates for all frameworks:
 
     ```sh
-    pnpm run update-template
+    npm run update-template
     ```
     
     ... or a script that updates the template for an individual framework:
 
     ```sh
-    pnpm run update-template -- -p angular
-    pnpm run update-template -- -p react-ts
-    pnpm run update-template -- -p vue-v3
+    npm run update-template -- -p angular
+    npm run update-template -- -p react-ts
+    npm run update-template -- -p vue-v3
     ```

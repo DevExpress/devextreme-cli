@@ -14,8 +14,9 @@
     "devextreme": "index.js"
   },
   "engines": {
-    "node": ">=20.19.0",
-    "pnpm": ">=9.12.0"
+    "node": ">20.19.0",
+    "npm": ">9.6.0",
+    "yarn": ">1.21"
   },
   "files": [
     "src/**/*",
@@ -23,7 +24,7 @@
   ],
   "scripts": {
     "lint": "eslint ./",
-  "test": "pnpm run create-template && pnpm run lint-template && pnpm run test-template && pnpm run test-themebuilder",
+    "test": "npm run create-template && npm run lint-template && npm run test-template && npm run test-themebuilder",
     "create-template": "node ./testing/creating.js",
     "lint-template": "node ./testing/linting.js",
     "test-template": "node ./testing/testing.js",
