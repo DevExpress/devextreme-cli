@@ -24,11 +24,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run npm install - root
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Run npm install - devextreme-schematics
         working-directory: packages/devextreme-schematics
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Test devextreme-schematics
         working-directory: packages/devextreme-schematics
