@@ -30,11 +30,8 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.12.0
-          run_install: false
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Install dependencies
         env:
