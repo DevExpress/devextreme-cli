@@ -52,7 +52,7 @@ jobs:
     - name: Install pnpm
       run: |
         corepack enable
-        corepack use pnpm@9.12.0
+        corepack prepare pnpm@9.12.0 --activate
 
     - name: Install dependencies
       env:
@@ -124,7 +124,7 @@ jobs:
       - name: Install pnpm
         run: |
           corepack enable
-          corepack use pnpm@9.12.0
+          corepack prepare pnpm@9.12.0 --activate
 
       - name: Run pnpm install
         env:
