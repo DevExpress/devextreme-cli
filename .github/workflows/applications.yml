@@ -45,7 +45,7 @@ jobs:
     - name: Run npm install
       env:
         PUPPETEER_SKIP_DOWNLOAD: true
-      run: npm install --no-audit --no-fund
+      run: npm ci --no-audit --no-fund
 
     - uses: browser-actions/setup-chrome@v1
       id: setup-chrome
