@@ -74,6 +74,7 @@
     "wait-on": "8.0.5"
   },
   "overrides": {
-    "@babel/traverse@<7.23.2": ">=7.23.2"
+    "@babel/traverse@<7.23.2": ">=7.23.2",
+    "braces@<3.0.3": ">=3.0.3"
   }
 }
