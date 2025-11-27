@@ -20,11 +20,16 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+        cache: 'pnpm'
+        cache-dependency-path: pnpm-lock.yaml
 
-    - name: Run npm install
+    - name: Enable Corepack
+      run: corepack enable
+
+    - name: Install dependencies
       env:
         PUPPETEER_SKIP_DOWNLOAD: true
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: pnpm install --frozen-lockfile
 
     - name: Run tests
-      run: npm run lint
+      run: pnpm run lint

@@ -17,3 +17,12 @@ Familiarize yourself with the [DevExtreme License](https://js.devexpress.com/Lic
 ## Support & Feedback ##
 
 If you want to report a bug, request a feature, or ask a question, contact us at the [DevExpress Support Center](https://www.devexpress.com/Support/Center).
+
+## Development
+
+This repository is managed with [pnpm workspaces](https://pnpm.io/workspaces). Enable Corepack and install dependencies before running the developer scripts described in `README_DEVELOPERS.md`:
+
+```sh
+corepack enable
+pnpm install
+```
