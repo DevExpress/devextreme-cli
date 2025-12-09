@@ -19,7 +19,7 @@ async function _DEMO_logIn() {
   // return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
 }
 
-export default async function middleware(req<%=#isTypeScript%>: NextRequest<%=/isTypeScript%>) {
+export default async function proxy(req<%=#isTypeScript%>: NextRequest<%=/isTypeScript%>) {
   const path = req.nextUrl.pathname;
 
   if (!isProtectedRoute(path)) {
