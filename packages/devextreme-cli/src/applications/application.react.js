@@ -82,7 +82,7 @@ const create = async(appName, options) => {
 
     const commandArguments = [`-p=create-vite@${depsVersionTag || latestVersions['create-vite']}`, 'create-vite', appName];
 
-    commandArguments.push(`--template react${transpiler === 'swc' ? '-swc' : ''}${templateOptions.isTypeScript ? '-ts' : ''}`);
+    commandArguments.push(`--template react${transpiler === 'swc' ? '-swc' : ''}${templateOptions.isTypeScript ? '-ts' : ''} --no-rolldown --no-interactive`);
 
     await runCommand('npx', commandArguments);
 
