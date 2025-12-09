@@ -42,15 +42,12 @@ export default function(options: any): Rule {
 }
 
 const postinstallScripts = () => {
-  const isWin = /^win/.test(process.platform);
-
   const sassEmbeddedPath = resolve('node_modules', 'sass-embedded');
   const sassVendorPath = join(sassEmbeddedPath, 'dist', 'lib', 'src', 'vendor', 'dart-sass-embedded');
   if (!existsSync(sassVendorPath)) {
     spawnSync('npm', ['run', 'postinstall'], {
       cwd: resolve(join('node_modules', 'sass-embedded')),
       windowsVerbatimArguments: true,
-      shell: isWin ? false : true
     });
   }
 };
