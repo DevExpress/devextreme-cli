@@ -8,7 +8,6 @@ module.exports = function(commandName, args = [], customConfig = {}) {
     const config = {
         stdio: 'inherit',
         windowsVerbatimArguments: true,
-        shell: true
     };
 
     if(customConfig) {
