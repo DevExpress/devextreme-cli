@@ -5,8 +5,6 @@ import './Header.scss';
 import { ThemeSwitcher } from '@/components/theme-switcher/ThemeSwitcher';
 <%=#isTypeScript%>import type { HeaderProps } from '@/types';<%=/isTypeScript%>
 
-const renderMenuItem = () => <UserPanel menuMode='list' />;
-
 export default function Header({ menuToggleEnabled, title, toggleMenu }<%=#isTypeScript%>: HeaderProps<%=/isTypeScript%>) {
   return (
     <header className={'header-component'}>
@@ -30,7 +28,7 @@ export default function Header({ menuToggleEnabled, title, toggleMenu }<%=#isTyp
         >
           <ThemeSwitcher />
         </Item>
-        <Item location='after' locateInMenu='auto' menuItemRender={renderMenuItem}>
+        <Item location='after'>
           <UserPanel menuMode='context' />
         </Item>
       </Toolbar>
