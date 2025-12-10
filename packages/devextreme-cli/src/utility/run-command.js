@@ -8,7 +8,7 @@ module.exports = function(commandName, args = [], customConfig = {}) {
     const config = {
         stdio: 'inherit',
         windowsVerbatimArguments: true,
-        shell: true,
+        shell: true
     };
 
     if(customConfig) {
@@ -17,7 +17,7 @@ module.exports = function(commandName, args = [], customConfig = {}) {
 
     console.log(`> ${command} ${args.join(' ')}`);
 
-    const proc = spawn(`${command} ${args.join(' ')}`, config);
+    const proc = spawn(command, args, config);
 
     return new Promise((resolve, reject) => {
         proc.on('exit', (code) => {
