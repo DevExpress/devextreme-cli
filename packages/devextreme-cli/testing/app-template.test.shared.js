@@ -169,17 +169,23 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await openPage(getPageURL('profile'));
 
                                     await new Promise(r => setTimeout(r, 3000));
-                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)');
+                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)', {
+                                        visible: true
+                                    });
 
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'profile');
 
                                     await switchTheme();
-                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)');
+                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)', {
+                                        visible: true
+                                    });
                                     await compareThemeModeSnapshot('profile', 'dark');
                                     await switchTheme();
-                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)');
+                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)', {
+                                        visible: true
+                                    });
 
                                     await compareThemeModeSnapshot('profile', 'light');
                                 });
@@ -211,7 +217,9 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
 
                                     // NOTE: Wait for animation complete
                                     await new Promise(r => setTimeout(r, 3000));
-                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)');
+                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)', {
+                                        visible: true
+                                    });
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'toggle');
@@ -223,7 +231,9 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
                                     // NOTE: Wait for animation complete
                                     await new Promise(r => setTimeout(r, 2000));
-                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)');
+                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)', {
+                                        visible: true
+                                    });
                                     const image = await takeScreenshot({
                                         clip: {
                                             x: viewport.width - 300,
