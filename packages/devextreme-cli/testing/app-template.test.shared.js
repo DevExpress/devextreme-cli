@@ -217,6 +217,23 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     compareSnapshot(image, 'toggle');
                                 });
 
+                                function getPopulatedProperties(elementStyles) {
+                                    for(const prop in elementStyles) {
+                                        if(
+                                            // Check the property belongs to the CSSStyleProperties instance
+                                            // Check property has a numeric index (indicates inline/dash-named style)
+                                            Object.hasOwn(elementStyles, prop) &&
+                                            !Number.isNaN(Number.parseInt(prop, 10))
+                                        ) {
+                                            console.log(
+                                                `${elementStyles[prop]} = '${elementStyles.getPropertyValue(
+                                                    elementStyles[prop],
+                                                )}'`,
+                                            );
+                                        }
+                                    }
+                                }
+
                                 it('User panel', async() => {
                                     await openPage(getPageURL('profile'));
                                     const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
@@ -224,6 +241,14 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     // NOTE: Wait for animation complete
                                     await new Promise(r => setTimeout(r, 2000));
                                     await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)');
+                                    if(env.engine.startsWith('nextjs')) {
+                                        const html = await page.$eval('.header-component .dx-toolbar-before', el => el.innerHTML);
+                                        console.log('********** Toolbar Inner HTML', html);
+                                        // eslint-disable-next-line
+                                        const styles = await page.$eval('.header-component .dx-toolbar .dx-item div::-p-text(My App)', el => window.getComputedStyle(el));
+                                        console.log('********** Title Styles');
+                                        getPopulatedProperties(styles);
+                                    }
                                     const image = await takeScreenshot({
                                         clip: {
                                             x: viewport.width - 300,
