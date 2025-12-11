@@ -69,19 +69,19 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     ...options
                                 });
                                 await page.waitForSelector('.with-footer');
-                                await page.waitForTimeout(3000);
+                                await new Promise(r => setTimeout(r, 3000));
                             }
 
                             async function logOut() {
                                 const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                 await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
 
-                                await page.waitForTimeout(500);
+                                await new Promise(r => setTimeout(r, 500));
                                 await page.waitForSelector('.dx-icon-runner');
                                 await page.click('.dx-icon-runner');
 
                                 await page.waitForSelector('.login-form');
-                                await page.waitForTimeout(500);
+                                await new Promise(r => setTimeout(r, 500));
                             }
 
                             const customConfig = {
@@ -108,10 +108,10 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                             /* eslint-disable-next-line no-unused-vars */
                             async function switchTheme() {
                                 await page.click('.dx-button.theme-button');
-                                await page.waitForTimeout(500);
+                                await new Promise(r => setTimeout(r, 500));
 
                                 await page.click('.dx-button.theme-button', { offset: { x: 0, y: -100 } });
-                                await page.waitForTimeout(500);
+                                await new Promise(r => setTimeout(r, 500));
                             }
 
                             async function compareThemeModeSnapshot(name, mode) {
@@ -131,7 +131,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                         scrollElement.className += ' dx-state-invisible';
                                     }
                                 });
-                                await page.waitForTimeout(3000);
+                                await new Promise(r => setTimeout(r, 3000));
                             }
 
                             async function takeScreenshot(options) {
@@ -151,7 +151,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                             domcontentloaded: true
                                         }
                                     }]);
-                                    await page.waitForTimeout(5000);
+                                    await new Promise(r => setTimeout(r, 5000));
 
                                     const image = await takeScreenshot({
                                         clip: {
@@ -168,15 +168,18 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                 it('Profile view', async() => {
                                     await openPage(getPageURL('profile'));
 
-                                    await page.waitForTimeout(3000);
+                                    await new Promise(r => setTimeout(r, 3000));
+                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)');
 
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'profile');
 
                                     await switchTheme();
+                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)');
                                     await compareThemeModeSnapshot('profile', 'dark');
                                     await switchTheme();
+                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)');
 
                                     await compareThemeModeSnapshot('profile', 'light');
                                 });
@@ -185,7 +188,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await openPage(getPageURL('tasks'));
                                     // NOTE: Wait for the DataGrid is loaded
                                     await page.waitForSelector('.dx-row-focused');
-                                    await page.waitForTimeout(3000);
+                                    await new Promise(r => setTimeout(r, 3000));
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'tasks');
@@ -194,7 +197,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                 it('Add view', async() => {
 
                                     await openPage(getPageURL('page'));
-                                    await page.waitForTimeout(3000);
+                                    await new Promise(r => setTimeout(r, 3000));
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'add-view');
@@ -207,18 +210,45 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await page.click(menuButtonSelector);
 
                                     // NOTE: Wait for animation complete
-                                    await page.waitForTimeout(3000);
+                                    await new Promise(r => setTimeout(r, 3000));
+                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)');
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'toggle');
                                 });
+
+                                function getPopulatedProperties(elementStyles) {
+                                    for(const prop in elementStyles) {
+                                        if(
+                                            // Check the property belongs to the CSSStyleProperties instance
+                                            // Check property has a numeric index (indicates inline/dash-named style)
+                                            Object.hasOwn(elementStyles, prop) &&
+                                            !Number.isNaN(Number.parseInt(prop, 10))
+                                        ) {
+                                            console.log(
+                                                `${elementStyles[prop]} = '${elementStyles.getPropertyValue(
+                                                    elementStyles[prop],
+                                                )}'`,
+                                            );
+                                        }
+                                    }
+                                }
 
                                 it('User panel', async() => {
                                     await openPage(getPageURL('profile'));
                                     const isCompact = await page.$('.dx-toolbar-item-invisible .user-button');
                                     await page.click(isCompact ? '.dx-dropdownmenu-button' : '.user-button');
                                     // NOTE: Wait for animation complete
-                                    await page.waitForTimeout(2000);
+                                    await new Promise(r => setTimeout(r, 2000));
+                                    await page.waitForSelector('.dx-toolbar-item div::-p-text(My App)');
+                                    if(env.engine.startsWith('nextjs')) {
+                                        const html = await page.$eval('.header-component .dx-toolbar-before', el => el.innerHTML);
+                                        console.log('********** Toolbar Inner HTML', html);
+                                        // eslint-disable-next-line
+                                        const styles = await page.$eval('.header-component .dx-toolbar .dx-item div::-p-text(My App)', el => window.getComputedStyle(el));
+                                        console.log('********** Title Styles');
+                                        getPopulatedProperties(styles);
+                                    }
                                     const image = await takeScreenshot({
                                         clip: {
                                             x: viewport.width - 300,
@@ -243,7 +273,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
 
                                     await hideScroll();
 
-                                    await page.waitForTimeout(3000);
+                                    await new Promise(r => setTimeout(r, 3000));
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, name);
@@ -259,12 +289,12 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await logOut();
                                     await page.waitForSelector('.dx-button-normal');
                                     await page.hover('.dx-button-normal');
-                                    await page.waitForTimeout(1000);
+                                    await new Promise(r => setTimeout(r, 1000));
                                     await page.click('.dx-button-normal');
                                     await page.waitForSelector('.create-account-form');
 
                                     await hideScroll();
-                                    await page.waitForTimeout(3000);
+                                    await new Promise(r => setTimeout(r, 3000));
                                     const image = await takeScreenshot();
 
                                     compareSnapshot(image, 'create-account');
@@ -279,9 +309,9 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await openPage(appUrl);
                                     await logOut();
                                     await page.click('a');
-                                    await page.waitForTimeout(500);
+                                    await new Promise(r => setTimeout(r, 500));
                                     await page.waitForSelector('.reset-password-form');
-                                    await page.waitForTimeout(3000);
+                                    await new Promise(r => setTimeout(r, 3000));
 
                                     await hideScroll();
 
@@ -304,7 +334,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     await page.waitForSelector('form');
                                     await page.mouse.move(0, 0);
                                     await hideScroll();
-                                    await page.waitForTimeout(3000);
+                                    await new Promise(r => setTimeout(r, 3000));
 
                                     const image = await takeScreenshot();
 

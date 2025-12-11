@@ -1,5 +1,5 @@
 'use client'
-import <%=#isTypeScript%>React, <%=/isTypeScript%>{ useState, useRef, useCallback } from 'react';
+import <%=#isTypeScript%>React, <%=/isTypeScript%>{ useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Form, {
@@ -9,7 +9,8 @@ import Form, {
   ButtonOptions,
   RequiredRule,
   CustomRule,
-  EmailRule
+  EmailRule,<%=#isTypeScript%>
+  type FormTypes,<%=/isTypeScript%>
 } from 'devextreme-react/form';
 import notify from 'devextreme/ui/notify';
 import LoadIndicator from 'devextreme-react/load-indicator';
@@ -20,11 +21,22 @@ import './CreateAccountForm.scss';
 export default function CreateAccountForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const formData = useRef({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '' });
+
+  const onFieldDataChanged = useCallback((e<%=#isTypeScript%>: FormTypes.FieldDataChangedEvent<%=/isTypeScript%>) => {
+    const { dataField, value } = e;
+
+    if (dataField) {
+      setFormData(formData => ({
+        ...formData,
+        [dataField]: value,
+      }));
+    }
+  }, []);
 
   const onSubmit = useCallback(async (e<%=#isTypeScript%>: React.FormEvent<HTMLFormElement><%=/isTypeScript%>) => {
     e.preventDefault();
-    const { email, password } = formData.current;
+    const { email, password } = formData;
     setLoading(true);
 
     const result = await signUp(email, password);
@@ -35,16 +47,16 @@ export default function CreateAccountForm() {
     } else {
       notify(result.message, 'error', 2000);
     }
-  }, [router]);
+  }, [router, formData]);
 
   const confirmPassword = useCallback(
-    ({ value }<%=#isTypeScript%>: ValidationCallbackData<%=/isTypeScript%>) => value === formData.current.password,
-    []
+    ({ value }<%=#isTypeScript%>: ValidationCallbackData<%=/isTypeScript%>) => value === formData.password,
+    [formData]
   );
 
   return (
     <form className={'create-account-form'} onSubmit={onSubmit}>
-      <Form formData={formData.current} disabled={loading}>
+      <Form formData={formData} disabled={loading} onFieldDataChanged={onFieldDataChanged}>
         <Item
           dataField={'email'}
           editorType={'dxTextBox'}

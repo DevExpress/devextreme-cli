@@ -17,14 +17,9 @@ const defaultStyles = [
 const preparePackageJsonForTemplate = (appPath, appName) => {
     const dependencies = [
         { name: 'sass-embedded', version: '^1.85.1' },
-        { name: 'vue-router', version: '^3.0.1' },
+        { name: 'vue-router', version: '^4.0.1' },
         { name: 'devextreme-cli', version: latestVersions['devextreme-cli'], dev: true }
     ];
-
-    const nameDepends = dependencies.map(d => d.name);
-    const indexVueRouter = nameDepends.indexOf('vue-router');
-
-    dependencies[indexVueRouter].version = '^4.0.1';
 
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },

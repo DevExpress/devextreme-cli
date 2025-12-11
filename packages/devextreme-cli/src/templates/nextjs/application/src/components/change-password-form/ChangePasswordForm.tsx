@@ -1,5 +1,5 @@
 'use client'
-import <%=#isTypeScript%>React, <%=/isTypeScript%>{ useState, useRef, useCallback } from 'react';
+import <%=#isTypeScript%>React, <%=/isTypeScript%>{ useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Form, {
   Item,
@@ -7,7 +7,8 @@ import Form, {
   ButtonItem,
   ButtonOptions,
   RequiredRule,
-  CustomRule,
+  CustomRule,<%=#isTypeScript%>
+  type FormTypes,<%=/isTypeScript%>
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
@@ -17,11 +18,22 @@ import { changePassword } from '@/app/actions/auth';
 export default function ChangePasswordForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const formData = useRef({ password: '' });
+  const [formData, setFormData] = useState({ password: '' });
+
+  const onFieldDataChanged = useCallback((e<%=#isTypeScript%>: FormTypes.FieldDataChangedEvent<%=/isTypeScript%>) => {
+    const { dataField, value } = e;
+
+    if (dataField) {
+      setFormData(formData => ({
+        ...formData,
+        [dataField]: value,
+      }));
+    }
+  }, []);
 
   const onSubmit = useCallback(async (e<%=#isTypeScript%>: React.FormEvent<HTMLFormElement><%=/isTypeScript%>) => {
   e.preventDefault();
-  const { password } = formData.current;
+  const { password } = formData;
   setLoading(true);
 
   const result = await changePassword(password);
@@ -32,16 +44,16 @@ export default function ChangePasswordForm() {
   } else {
     notify(result.message, 'error', 2000);
   }
-}, [router]);
+}, [router, formData]);
 
 const confirmPassword = useCallback(
-  ({ value }<%=#isTypeScript%>: ValidationCallbackData<%=/isTypeScript%>) => value === formData.current.password,
-  []
+  ({ value }<%=#isTypeScript%>: ValidationCallbackData<%=/isTypeScript%>) => value === formData.password,
+  [formData]
 );
 
 return (
   <form onSubmit={onSubmit}>
-    <Form formData={formData.current} disabled={loading}>
+    <Form formData={formData} disabled={loading} onFieldDataChanged={onFieldDataChanged}>
       <Item
         dataField={'password'}
         editorType={'dxTextBox'}
