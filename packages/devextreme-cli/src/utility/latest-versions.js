@@ -5,7 +5,7 @@ module.exports = {
     'devextreme-vue': '25.1.7',
     'create-vite': '8.2.0',
     'create-vue': '3.17.0',
-    'create-next-app': '16.0.8',
+    'create-next-app': '16.0.10',
     'jose': '6.1.3',
     'devextreme-cli': packageJson.version,
     'devextreme-schematics': 'latest'
