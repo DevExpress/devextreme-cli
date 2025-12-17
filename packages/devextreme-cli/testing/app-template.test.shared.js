@@ -169,7 +169,6 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     // TODO: remove and fix
                                     if(env.engine.startsWith('nextjs')
                                         && theme === 'generic'
-                                        && layout === 'side-nav-outer-toolbar'
                                         && viewport.width === 320
                                     ) {
                                         return;
@@ -212,7 +211,6 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     // TODO: remove and fix
                                     if(env.engine.startsWith('nextjs')
                                         && theme === 'generic'
-                                        && layout === 'side-nav-outer-toolbar'
                                         && viewport.width === 320
                                     ) {
                                         return;
@@ -234,7 +232,6 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                                     // TODO: remove and fix
                                     if(env.engine.startsWith('nextjs')
                                         && theme === 'generic'
-                                        && layout === 'side-nav-outer-toolbar'
                                         && viewport.width === 320
                                     ) {
                                         return;
