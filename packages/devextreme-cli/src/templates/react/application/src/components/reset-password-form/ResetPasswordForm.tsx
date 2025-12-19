@@ -1,4 +1,4 @@
-import <%=#isTypeScript%>React, <%=/isTypeScript%>{ useState, useRef, useCallback } from 'react';
+import <%=#isTypeScript%>React, <%=/isTypeScript%>{ useState, useCallback } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Form, {
   Item,
@@ -6,7 +6,8 @@ import Form, {
   ButtonItem,
   ButtonOptions,
   RequiredRule,
-  EmailRule
+  EmailRule,<%=#isTypeScript%>
+  type FormTypes,<%=/isTypeScript%>
 } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import notify from 'devextreme/ui/notify';
@@ -18,11 +19,22 @@ const notificationText = 'We\'ve sent a link to reset your password. Check your 
 export default function ResetPasswordForm() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const formData = useRef({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '' });
+
+  const onFieldDataChanged = useCallback((e<%=#isTypeScript%>: FormTypes.FieldDataChangedEvent<%=/isTypeScript%>) => {
+    const { dataField, value } = e;
+
+    if (dataField) {
+      setFormData(formData => ({
+        ...formData,
+        [dataField]: value,
+      }));
+    }
+  }, []);
 
   const onSubmit = useCallback(async (e<%=#isTypeScript%>: React.FormEvent<HTMLFormElement><%=/isTypeScript%>) => {
     e.preventDefault();
-    const { email } = formData.current;
+    const { email } = formData;
     setLoading(true);
 
     const result = await resetPassword(email);
@@ -34,11 +46,11 @@ export default function ResetPasswordForm() {
     } else {
       notify(result.message, 'error', 2000);
     }
-  }, [navigate]);
+  }, [navigate, formData]);
 
   return (
     <form className={'reset-password-form'} onSubmit={onSubmit}>
-      <Form formData={formData.current} disabled={loading}>
+      <Form formData={formData} disabled={loading} onFieldDataChanged={onFieldDataChanged}>
         <Item
           dataField={'email'}
           editorType={'dxTextBox'}

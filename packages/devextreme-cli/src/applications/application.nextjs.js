@@ -79,6 +79,7 @@ const create = async(appName, options) => {
         '--src-dir',
         '--app',
         '--no-turbopack',
+        '--no-react-compiler',
         '--import-alias "@/*"',
     ];
 
