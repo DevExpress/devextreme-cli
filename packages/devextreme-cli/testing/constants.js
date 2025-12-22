@@ -30,8 +30,8 @@ exports.viewports = {
 };
 
 exports.themes = {
-    material: 'material.blue',
-    generic: 'generic',
+    // material: 'material.blue',
+    // generic: 'generic',
     fluent: 'fluent.blue'
 };
 
