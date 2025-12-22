@@ -1,5 +1,4 @@
 @if (isAuthenticated()) {
-<ng-container>
   <app-<%= layout %> title="{{appInfo.title}}">
     <router-outlet></router-outlet>
     <app-footer>
@@ -8,9 +7,6 @@
       All trademarks or registered trademarks are property of their respective owners.
     </app-footer>
   </app-<%= layout %>>
-</ng-container>
 } @else {
-<ng-template>
   <app-unauthenticated-content></app-unauthenticated-content>
-</ng-template>
 }

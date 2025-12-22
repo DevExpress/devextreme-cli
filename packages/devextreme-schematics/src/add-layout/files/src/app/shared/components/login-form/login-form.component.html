@@ -28,11 +28,9 @@
       <div>
         <span class="dx-button-text">
           @if (loading) {
-          <ng-container>
             <dx-load-indicator width="24px" height="24px" [visible]="true"></dx-load-indicator>
-          </ng-container>
           } @else {
-          <ng-template>Sign In</ng-template>
+            <div>Sign In</div>
           }
         </span>
       </div>
