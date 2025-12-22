@@ -29,12 +29,6 @@ exports.viewports = {
     }
 };
 
-exports.themes = {
-    // material: 'material.blue',
-    // generic: 'generic',
-    fluent: 'fluent.blue'
-};
-
 exports.layouts = [
     'side-nav-outer-toolbar',
     'side-nav-inner-toolbar'
