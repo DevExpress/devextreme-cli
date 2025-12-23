@@ -14,7 +14,7 @@ jobs:
         SRC_DIR: [true, false]
         APP_ROUTER: [true, false]
         NODE:
-          - 20
+          - 24
         OS:
           - ubuntu-latest
 
