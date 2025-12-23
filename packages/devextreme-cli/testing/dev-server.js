@@ -1,10 +1,8 @@
 const fs = require('fs');
-const path = require('path');
 const WebServer = require('./web-server');
 const NextJsServer = require('./nextjs-server');
 
 const runCommand = require('../src/utility/run-command');
-const { themes, swatchModes, baseFontFamily } = require('./constants');
 
 module.exports = class DevServer {
     constructor(env, { port }) {
@@ -38,39 +36,5 @@ module.exports = class DevServer {
 
     async setLayout(layout) {
         this.env.setLayout(layout);
-    }
-
-    async setTheme(theme) {
-        if(this.currentTheme === theme) {
-            return;
-        }
-
-        Object.keys(swatchModes).forEach((modeName) => {
-            const mode = swatchModes[modeName];
-            const themeFilePath = path.join(this.env.appPath, `/src/themes/metadata.${modeName}.json`);
-
-            const data = fs.readFileSync(themeFilePath, 'utf8');
-            const metadata = JSON.parse(data);
-
-            const items = metadata.items
-                ? metadata.items.filter(item => item.key !== baseFontFamily.key)
-                : [];
-            items.push(baseFontFamily);
-
-            metadata.items = items;
-            metadata.baseTheme = `${themes[theme]}.${mode}`;
-
-            fs.writeFileSync(themeFilePath, `${JSON.stringify(metadata, null, '  ')}\n`, 'utf8');
-        });
-
-        await runCommand('node', [
-            path.join(process.cwd(), 'index.js'),
-            'build'
-        ], {
-            cwd: this.env.appPath,
-            forceNoCmd: true
-        });
-
-        this.currentTheme = theme;
     }
 };
