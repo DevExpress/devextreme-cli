@@ -151,7 +151,7 @@ function addContentToView(options: any) {
   return overwriteModuleContent(options, componentPath, content);
 }
 
-async function addContentToTS(options: any) {
+function addContentToTS(options: any) {
   const name = strings.dasherize(basename(normalize(options.name)));
   const path = `${dirname(options.name)}/${name}`;
   const componentPath = `${path}/${name}.component.ts`;
