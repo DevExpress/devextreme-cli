@@ -166,7 +166,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                             await compareThemeModeSnapshot('profile', 'light');
                         });
 
-                        xit('Tasks view', async() => {
+                        it('Tasks view', async() => {
                             await openPage(getPageURL('tasks'));
                             // NOTE: Wait for the DataGrid is loaded
                             await page.waitForSelector('.dx-row-focused');
