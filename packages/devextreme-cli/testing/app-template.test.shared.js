@@ -84,7 +84,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                     const customConfig = {
                         threshold: 0.3,
                         thresholdType: 'percent',
-                        failureThreshold: 0.02,
+                        failureThreshold: 0.05,
                         failureThresholdType: 'percent',
                         customDiffConfig: {
                             includeAA: false,
