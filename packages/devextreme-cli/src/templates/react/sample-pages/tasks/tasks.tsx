@@ -79,7 +79,7 @@ const dataSource = new DataSource({
         return {
           data: result,
         };
-      } catch (err: Error) {
+      } catch (err<%=#isTypeScript%>: Error<%=/isTypeScript%>) {
         throw new Error(`Data Loading Error: ${err.message}`);
       }
     },
