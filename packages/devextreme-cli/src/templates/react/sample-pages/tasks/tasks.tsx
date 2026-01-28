@@ -80,7 +80,7 @@ const dataSource = new DataSource({
           data: result,
         };
       } catch (err) {
-        throw new Error('Data Loading Error');
+        throw new Error(`Data Loading Error: ${err.message}`);
       }
     },
   })
