@@ -1,11 +1,10 @@
 import React from 'react';
-import { DataSource } from 'devextreme-react/common/data';
+import { CustomStore } from 'devextreme-react/common/data';
 import DataGrid, {
   Column,
   Pager,
   Paging,
   FilterRow,
-  Lookup
 } from 'devextreme-react/data-grid';
 import './tasks.scss';
 
@@ -27,85 +26,61 @@ export function Tasks() {
         <Pager showPageSizeSelector={true} showInfo={true} />
         <FilterRow visible={true} />
 
-        <Column dataField={'Task_ID'} width={90} hidingPriority={2} />
+        <Column dataField={'id'} width={90} hidingPriority={1} />
         <Column
-          dataField={'Task_Subject'}
+          dataField={'text'}
           width={190}
           caption={'Subject'}
-          hidingPriority={8}
-        />
-        <Column
-          dataField={'Task_Status'}
-          caption={'Status'}
           hidingPriority={6}
         />
         <Column
-          dataField={'Task_Priority'}
-          caption={'Priority'}
-          hidingPriority={5}
-        >
-          <Lookup
-            dataSource={priorities}
-            valueExpr={'value'}
-            displayExpr={'name'}
-          />
-        </Column>
-        <Column
-          dataField={'ResponsibleEmployee.Employee_Full_Name'}
-          caption={'Assigned To'}
-          allowSorting={false}
-          hidingPriority={7}
+          dataField={'status'}
+          caption={'Status'}
+          hidingPriority={4}
         />
         <Column
-          dataField={'Task_Start_Date'}
+          dataField={'owner'}
+          caption={'Assigned To'}
+          allowSorting={false}
+          hidingPriority={5}
+        />
+        <Column
+          dataField={'startDate'}
           caption={'Start Date'}
+          dataType={'date'}
+          hidingPriority={2}
+        />
+        <Column
+          dataField={'dueDate'}
+          caption={'Due Date'}
           dataType={'date'}
           hidingPriority={3}
         />
         <Column
-          dataField={'Task_Due_Date'}
-          caption={'Due Date'}
-          dataType={'date'}
-          hidingPriority={4}
-        />
-        <Column
-          dataField={'Task_Priority'}
+          dataField={'priority'}
           caption={'Priority'}
           name={'Priority'}
-          hidingPriority={1}
-        />
-        <Column
-          dataField={'Task_Completion'}
-          caption={'Completion'}
           hidingPriority={0}
         />
       </DataGrid>
     </React.Fragment>
 )}
 
-const dataSource = new DataSource({
-  store: {
-    version: 2,
-    type: 'odata',
-    key: 'Task_ID',
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks'
-  },
-  expand: 'ResponsibleEmployee',
-  select: [
-    'Task_ID',
-    'Task_Subject',
-    'Task_Start_Date',
-    'Task_Due_Date',
-    'Task_Status',
-    'Task_Priority',
-    'Task_Completion',
-    'ResponsibleEmployee/Employee_Full_Name'
-  ]
-});
+const dataSource = {
+  store: new CustomStore({
+    key: 'id',
+    async load() {
+      try {
+        const response = await fetch(`https://js.devexpress.com/Demos/RwaService/api/Employees/AllTasks`);
 
-const priorities = [
-  { name: 'High', value: 4 },
-  { name: 'Urgent', value: 3 },
-  { name: 'Normal', value: 2 },
-  { name: 'Low', value: 1 }
-];
+        const result = await response.json();
+
+        return {
+          data: result,
+        };
+      } catch {
+        throw new Error(`Data Loading Error`);
+      }
+    },
+  })
+};

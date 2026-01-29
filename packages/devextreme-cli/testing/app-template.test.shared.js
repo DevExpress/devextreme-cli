@@ -81,20 +81,8 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                         await new Promise(r => setTimeout(r, 500));
                     }
 
-                    const customConfig = {
-                        threshold: 0.3,
-                        thresholdType: 'percent',
-                        failureThreshold: 0.02,
-                        failureThresholdType: 'percent',
-                        customDiffConfig: {
-                            includeAA: false,
-                            threshold: 0.05,
-                        }
-                    };
-
                     function compareSnapshot(image, name, overrideConfig = {}) {
                         expect(image).toMatchImageSnapshot({
-                            customDiffConfig: { ...customConfig, ...overrideConfig },
                             customSnapshotIdentifier: `${layout}-fluent-${viewportName}-${name}-snap`,
                             customDiffDir: diffSnapshotsDir,
                             storeReceivedOnFailure: true,
