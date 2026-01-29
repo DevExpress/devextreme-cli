@@ -62,14 +62,13 @@
 </template>
 
 <script>
-import "devextreme-vue/common/data";
+import { CustomStore } from 'devextreme-vue/common/data';
 import DxDataGrid, {
   DxColumn,
   DxFilterRow,
   DxPager,
   DxPaging
 } from "devextreme-vue/data-grid";
-import { CustomStore } from 'devextreme-vue/common/data';
 
 export default {
   setup() {

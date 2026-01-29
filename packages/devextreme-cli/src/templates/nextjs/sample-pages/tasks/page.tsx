@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import { DataSource } from 'devextreme-react/common/data';
+import { CustomStore } from 'devextreme-react/common/data';
 import DataGrid, {
   Column,
   Pager,
@@ -8,7 +8,6 @@ import DataGrid, {
   FilterRow,
 } from 'devextreme-react/data-grid';
 import './tasks.scss';
-import { CustomStore } from 'devextreme-react/common/data';
 
 export default function Task() {
   return (
@@ -68,7 +67,7 @@ export default function Task() {
     </React.Fragment>
 )}
 
-const dataSource = new DataSource({
+const dataSource = {
   store: new CustomStore({
     key: 'id',
     async load() {
@@ -85,4 +84,4 @@ const dataSource = new DataSource({
       }
     },
   }),
-});
+};

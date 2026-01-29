@@ -1,5 +1,5 @@
 import React from 'react';
-import { DataSource } from 'devextreme-react/common/data';
+import { CustomStore } from 'devextreme-react/common/data';
 import DataGrid, {
   Column,
   Pager,
@@ -7,7 +7,6 @@ import DataGrid, {
   FilterRow,
 } from 'devextreme-react/data-grid';
 import './tasks.scss';
-import { CustomStore } from 'devextreme-react/common/data';
 
 export function Tasks() {
   return (
@@ -67,7 +66,7 @@ export function Tasks() {
     </React.Fragment>
 )}
 
-const dataSource = new DataSource({
+const dataSource = {
   store: new CustomStore({
     key: 'id',
     async load() {
@@ -84,4 +83,4 @@ const dataSource = new DataSource({
       }
     },
   })
-});
+};
