@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/jasmine": "~3.10.19",
-    "@types/node": "20.19.32",
+    "@types/node": "20.19.33",
     "@types/picomatch": "^4.0.2",
     "@types/semver": "^7.7.1",
     "jasmine": "^2.99.0",
