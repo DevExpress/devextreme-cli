@@ -22,9 +22,9 @@
   ],
   "schematics": "./src/collection.json",
   "dependencies": {
-    "@angular-devkit/core": "^19.2.19",
-    "@angular-devkit/schematics": "^19.2.19",
-    "@schematics/angular": "^19.2.19",
+    "@angular-devkit/core": "^19.2.20",
+    "@angular-devkit/schematics": "^19.2.20",
+    "@schematics/angular": "^19.2.20",
     "parse5": "^7.3.0",
     "picomatch": "^4.0.3"
   },
