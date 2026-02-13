@@ -63,40 +63,6 @@ function localPackageExists(packageName) {
     return false;
 }
 
-function getLocalCollectionPath(packageName) {
-    const nodeModulesPath = path.join(process.cwd(), 'node_modules', packageName, 'src', 'collection.json');
-    if(fs.existsSync(nodeModulesPath)) {
-        return nodeModulesPath;
-    }
-    return null;
-}
-
-function getCollectionPath(packageName) {
-    const localPath = getLocalCollectionPath(packageName);
-    if(localPath) {
-        return localPath;
-    }
-
-    try {
-        const packageJsonPath = require.resolve(`${packageName}/package.json`);
-        const collectionPath = path.join(path.dirname(packageJsonPath), 'src', 'collection.json');
-        if(fs.existsSync(collectionPath)) {
-            return collectionPath;
-        }
-    } catch(e) {}
-
-    return null;
-}
-
-function schematicsCliExists() {
-    try {
-        require.resolve('@angular-devkit/schematics-cli/package.json');
-        return true;
-    } catch(e) {
-        return false;
-    }
-}
-
 const hasSutableNgCli = async() => {
     const localVersion = ngVersion.getLocalNgVersion();
 
@@ -189,44 +155,17 @@ const addView = (viewName, options) => {
 
 const migrateConfigComponents = async(options = {}) => {
     const collectionName = 'devextreme-schematics';
-    const collectionPath = getCollectionPath(collectionName);
-
-    if(!collectionPath) {
-        const prompts = require('prompts');
-
-        console.log(`\nRequired package is missing: '${collectionName}'`);
-
-        const response = await prompts({
-            type: 'confirm',
-            name: 'install',
-            message: `Would you like to install '${collectionName}@${schematicsVersion}' in the npm cache?`,
-            initial: true
-        });
-
-        if(!response.install) {
-            console.log('Migration was canceled.');
-            process.exit(1);
-        }
-    }
 
     const schematicOptions = {
         ...options
     };
 
-    const hasSchematicsCli = schematicsCliExists();
     const commandArguments = ['--yes'];
 
-    if(!hasSchematicsCli) {
-        commandArguments.push('-p', '@angular-devkit/schematics-cli');
-    }
+    commandArguments.push('-p', '@angular-devkit/schematics-cli');
+    commandArguments.push('-p', `${collectionName}@${schematicsVersion}`);
 
-    if(!collectionPath) {
-        commandArguments.push('-p', `${collectionName}@${schematicsVersion}`);
-    }
-
-    const collectionSpecifier = collectionPath
-        ? `${collectionPath.replace(/\\/g, '/')}:migrate-config-components`
-        : `${collectionName}:migrate-config-components`;
+    const collectionSpecifier = `${collectionName}:migrate-config-components`;
 
     commandArguments.push('schematics', collectionSpecifier);
 
