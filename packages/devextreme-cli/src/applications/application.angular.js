@@ -220,13 +220,9 @@ const migrateConfigComponents = async(options = {}) => {
         commandArguments.push('-p', '@angular-devkit/schematics-cli');
     }
 
-    if(!collectionPath) {
-        commandArguments.push('-p', `${collectionName}@${schematicsVersion}`);
-    }
+    commandArguments.push('-p', `${collectionName}@${schematicsVersion}`);
 
-    const collectionSpecifier = collectionPath
-        ? `${collectionPath.replace(/\\/g, '/')}:migrate-config-components`
-        : `${collectionName}:migrate-config-components`;
+    const collectionSpecifier = `${collectionName}:migrate-config-components`;
 
     commandArguments.push('schematics', collectionSpecifier);
 
