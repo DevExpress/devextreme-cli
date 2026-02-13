@@ -88,15 +88,6 @@ function getCollectionPath(packageName) {
     return null;
 }
 
-function schematicsCliExists() {
-    try {
-        require.resolve('@angular-devkit/schematics-cli/package.json');
-        return true;
-    } catch(e) {
-        return false;
-    }
-}
-
 const hasSutableNgCli = async() => {
     const localVersion = ngVersion.getLocalNgVersion();
 
@@ -213,13 +204,9 @@ const migrateConfigComponents = async(options = {}) => {
         ...options
     };
 
-    const hasSchematicsCli = schematicsCliExists();
     const commandArguments = ['--yes'];
 
-    if(!hasSchematicsCli) {
-        commandArguments.push('-p', '@angular-devkit/schematics-cli');
-    }
-
+    commandArguments.push('-p', '@angular-devkit/schematics-cli');
     commandArguments.push('-p', `${collectionName}@${schematicsVersion}`);
 
     const collectionSpecifier = `${collectionName}:migrate-config-components`;
