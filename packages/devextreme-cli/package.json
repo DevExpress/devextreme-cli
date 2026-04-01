@@ -76,6 +76,7 @@
   "overrides": {
     "@babel/traverse@<7.23.2": ">=7.23.2",
     "braces@<3.0.3": ">=3.0.3",
-    "flatted": "^3.4.2"
+    "flatted": "^3.4.2",
+    "picomatch@<2.3.2": "^2.3.2"
   }
 }
