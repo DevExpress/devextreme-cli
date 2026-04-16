@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
@@ -71,7 +71,7 @@ for (const variant of variants) {
     ];
 
     console.log(`Creating ${variant.name}...`);
-    execSync(`${createNextAppBin} ${args.join(' ')}`, {
+    execFileSync(createNextAppBin, args, {
         cwd: appsDir,
         stdio: 'inherit',
         env: npmEnv
