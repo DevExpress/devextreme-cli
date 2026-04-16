@@ -95,6 +95,6 @@ jobs:
       - name: Build Next.js application
         run: |
           cd ${{ env.TEST_APP_ISOLATED }}
-          npx next build --no-turbopack
+          npx next build --webpack
         shell: bash
         timeout-minutes: 15
