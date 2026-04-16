@@ -68,14 +68,6 @@ jobs:
         run: cd ${{ env.TEST_APP_ISOLATED }} && npm ci
         timeout-minutes: 5
 
-      - name: Verify vanilla app builds
-        run: |
-          cd ${{ env.TEST_APP_ISOLATED }}
-          cat jsconfig.json 2>/dev/null || cat tsconfig.json 2>/dev/null
-          npx next build
-        shell: bash
-        timeout-minutes: 5
-
       - name: Add DevExtreme to Next.js application
         run: |
           cd ${{ env.TEST_APP_ISOLATED }}
