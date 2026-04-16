@@ -20,6 +20,16 @@ const variants = [
 
 const scriptDir = __dirname;
 
+// Parse min-release-age from .npmrc to pass as env var to create-next-app,
+// so its internal npm install also respects the setting
+const npmrcPath = path.join(scriptDir, '.npmrc');
+const npmrcContent = fs.readFileSync(npmrcPath, 'utf8');
+const minReleaseAgeMatch = npmrcContent.match(/^min-release-age=(.+)$/m);
+const npmEnv = { ...process.env };
+if (minReleaseAgeMatch) {
+    npmEnv.npm_config_min_release_age = minReleaseAgeMatch[1];
+}
+
 console.log(`Generating ${variants.length} Next.js test apps with create-next-app@${version}\n`);
 
 for (const variant of variants) {
@@ -46,16 +56,11 @@ for (const variant of variants) {
     console.log(`Creating ${variant.name}...`);
     execSync(`npx ${args.join(' ')}`, {
         cwd: scriptDir,
-        stdio: 'inherit'
+        stdio: 'inherit',
+        env: npmEnv
     });
 
     fs.copyFileSync(path.join(scriptDir, '.npmrc'), path.join(appDir, '.npmrc'));
-
-    console.log('  Regenerating lockfile for multi-platform support...');
-    execSync('npm install', {
-        cwd: appDir,
-        stdio: 'inherit'
-    });
 
     const nodeModulesDir = path.join(appDir, 'node_modules');
     if (fs.existsSync(nodeModulesDir)) {
