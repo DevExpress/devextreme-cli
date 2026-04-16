@@ -12,7 +12,7 @@ export interface TypeScriptResolutionResult {
  * Resolves TypeScript with a 3-level fallback strategy:
  * 1. Project search - look in the user's project node_modules
  * 2. Global search - look in global node_modules
- * 3. Temporary install - use npx to temporarily install typescript
+ * 3. Temporary install typescript
  */
 export function resolveTypeScript(): TypeScriptResolutionResult {
   const errors: string[] = [];

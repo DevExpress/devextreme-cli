@@ -8,7 +8,7 @@ module.exports = class NextJsServer {
     }
 
     async start() {
-        ({ proc: this.proc } = await runCommand('npx', ['next', 'start', `-p ${this.port}`], {
+        ({ proc: this.proc } = await runCommand('npx', ['--no-install', 'next', 'start', `-p ${this.port}`], {
             cwd: this.env.appPath,
             detached: true,
             shell: false,

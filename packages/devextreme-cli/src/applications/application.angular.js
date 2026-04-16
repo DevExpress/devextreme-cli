@@ -183,7 +183,7 @@ const migrateConfigComponents = async(options = {}) => {
         }
     }
 
-    // Use runCommand directly with npx to work outside Angular workspace
+    // Required to work outside Angular workspace
     return runCommand('npx', commandArguments, { stdio: 'inherit' });
 };
 
