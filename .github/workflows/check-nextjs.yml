@@ -57,20 +57,27 @@ jobs:
         run: npm ci --prefix packages/devextreme-cli
         timeout-minutes: 5
 
+      - name: Copy test app to isolated directory
+        run: |
+          TEST_APP_ISOLATED="$RUNNER_TEMP/test-nextjs-app"
+          cp -r ${{ env.TEST_APP_DIR }} "$TEST_APP_ISOLATED"
+          echo "TEST_APP_ISOLATED=$TEST_APP_ISOLATED" >> $GITHUB_ENV
+        shell: bash
+
       - name: Install test app dependencies
-        run: cd ${{ env.TEST_APP_DIR }} && npm ci
+        run: cd ${{ env.TEST_APP_ISOLATED }} && npm ci
         timeout-minutes: 5
 
       - name: Add DevExtreme to Next.js application
         run: |
-          cd ${{ env.TEST_APP_DIR }}
-          node ../../../packages/devextreme-cli/index.js add devextreme-react
+          cd ${{ env.TEST_APP_ISOLATED }}
+          node ${{ github.workspace }}/packages/devextreme-cli/index.js add devextreme-react
         shell: bash
         timeout-minutes: 15
 
       - name: Verify DevExtreme dependencies in package.json
         run: |
-          cd ${{ env.TEST_APP_DIR }}
+          cd ${{ env.TEST_APP_ISOLATED }}
 
           if ! grep -q '"devextreme":' package.json; then
             echo "Error: devextreme dependency not found in package.json"
@@ -87,7 +94,7 @@ jobs:
 
       - name: Build Next.js application
         run: |
-          cd ${{ env.TEST_APP_DIR }}
+          cd ${{ env.TEST_APP_ISOLATED }}
           npm run build
         shell: bash
         timeout-minutes: 15
