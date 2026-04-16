@@ -4,8 +4,38 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
+const scriptDir = __dirname;
+const repoRoot = path.join(scriptDir, '..', '..');
+const appsDir = path.join(repoRoot, 'apps', 'nextjs-testing');
+const createNextAppBin = path.join(scriptDir, 'node_modules', '.bin', 'create-next-app');
+
 const latestVersions = require('../../packages/devextreme-cli/src/utility/latest-versions');
-const version = latestVersions['create-next-app'];
+const expectedVersion = latestVersions['create-next-app'];
+
+// Verify the locked version matches latest-versions.js
+const scriptPkg = require('./package.json');
+const lockedVersion = scriptPkg.dependencies['create-next-app'];
+if (lockedVersion !== expectedVersion) {
+    console.error(`ERROR: create-next-app version mismatch`);
+    console.error(`  latest-versions.js: ${expectedVersion}`);
+    console.error(`  scripts/regenerate-nextjs-apps/package.json: ${lockedVersion}`);
+    console.error(`\nUpdate package.json and run 'npm install' in scripts/regenerate-nextjs-apps/`);
+    process.exit(1);
+}
+
+// Install create-next-app from lockfile
+console.log('Installing create-next-app from lockfile...');
+execSync('npm ci', { cwd: scriptDir, stdio: 'inherit' });
+
+// Parse min-release-age from .npmrc to pass as env var to create-next-app,
+// so its internal npm commands also respect the setting
+const npmrcPath = path.join(appsDir, '.npmrc');
+const npmrcContent = fs.readFileSync(npmrcPath, 'utf8');
+const minReleaseAgeMatch = npmrcContent.match(/^min-release-age=(.+)$/m);
+const npmEnv = { ...process.env };
+if (minReleaseAgeMatch) {
+    npmEnv.npm_config_min_release_age = minReleaseAgeMatch[1];
+}
 
 const variants = [
     { name: 'ts-src-app', typescript: true, srcDir: true, appRouter: true },
@@ -18,29 +48,16 @@ const variants = [
     { name: 'js-nosrc-pages', typescript: false, srcDir: false, appRouter: false },
 ];
 
-const scriptDir = __dirname;
-
-// Parse min-release-age from .npmrc to pass as env var to create-next-app,
-// so its internal npm install also respects the setting
-const npmrcPath = path.join(scriptDir, '.npmrc');
-const npmrcContent = fs.readFileSync(npmrcPath, 'utf8');
-const minReleaseAgeMatch = npmrcContent.match(/^min-release-age=(.+)$/m);
-const npmEnv = { ...process.env };
-if (minReleaseAgeMatch) {
-    npmEnv.npm_config_min_release_age = minReleaseAgeMatch[1];
-}
-
-console.log(`Generating ${variants.length} Next.js test apps with create-next-app@${version}\n`);
+console.log(`\nGenerating ${variants.length} Next.js test apps with create-next-app@${expectedVersion}\n`);
 
 for (const variant of variants) {
-    const appDir = path.join(scriptDir, variant.name);
+    const appDir = path.join(appsDir, variant.name);
 
     if (fs.existsSync(appDir)) {
         fs.rmSync(appDir, { recursive: true, force: true });
     }
 
     const args = [
-        `create-next-app@${version}`,
         variant.name,
         variant.typescript ? '--ts' : '--js',
         variant.srcDir ? '--src-dir' : '--no-src-dir',
@@ -54,13 +71,13 @@ for (const variant of variants) {
     ];
 
     console.log(`Creating ${variant.name}...`);
-    execSync(`npx ${args.join(' ')}`, {
-        cwd: scriptDir,
+    execSync(`${createNextAppBin} ${args.join(' ')}`, {
+        cwd: appsDir,
         stdio: 'inherit',
         env: npmEnv
     });
 
-    fs.copyFileSync(path.join(scriptDir, '.npmrc'), path.join(appDir, '.npmrc'));
+    fs.copyFileSync(npmrcPath, path.join(appDir, '.npmrc'));
 
     const nodeModulesDir = path.join(appDir, 'node_modules');
     if (fs.existsSync(nodeModulesDir)) {
@@ -76,16 +93,14 @@ for (const variant of variants) {
 }
 
 const meta = {
-    'create-next-app': version,
-    generatedAt: new Date().toISOString(),
-    variants: variants.map(v => v.name)
+    'create-next-app': expectedVersion
 };
 
 fs.writeFileSync(
-    path.join(scriptDir, '.generator-meta.json'),
+    path.join(appsDir, '.generator-meta.json'),
     JSON.stringify(meta, null, 2) + '\n'
 );
 
-console.log(`Generated ${variants.length} variants with create-next-app@${version}`);
+console.log(`Generated ${variants.length} variants with create-next-app@${expectedVersion}`);
 console.log('Metadata written to .generator-meta.json');
 console.log('\nCommit the generated apps and their package-lock.json files.');
