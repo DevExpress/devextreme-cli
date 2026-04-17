@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "lint": "eslint ./",
-    "test": "npm run create-template && npm run lint-template && npm run test-template && npm run test-themebuilder",
+    "test": "pnpm run create-template && pnpm run lint-template && pnpm run test-template && pnpm run test-themebuilder",
     "create-template": "node ./testing/creating.js",
     "lint-template": "node ./testing/linting.js",
     "test-template": "node ./testing/testing.js",
@@ -72,12 +72,5 @@
     "typescript": "^4.9.5",
     "typescript-eslint-parser": "^22.0.0",
     "wait-on": "8.0.5"
-  },
-  "overrides": {
-    "@babel/traverse@<7.23.2": ">=7.23.2",
-    "braces@<3.0.3": ">=3.0.3",
-    "flatted": "^3.4.2",
-    "picomatch@<2.3.2": "^2.3.2",
-    "picomatch@>4.0.0": "^4.0.4"
   }
 }

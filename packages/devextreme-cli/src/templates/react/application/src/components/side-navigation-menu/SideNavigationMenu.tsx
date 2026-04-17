@@ -20,10 +20,14 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
 
   const theme = useContext(ThemeContext);
   const { isLarge } = useScreenSize();
-  const items = useMemo(
-    () => navigation.map((item) => (
+  function normalizePath () {
+    return navigation.map((item) => (
       { ...item, expanded: isLarge, path: item.path && !(/^\//.test(item.path)) ? `/${item.path}` : item.path }
-    )),
+    ))
+  }
+
+  const items = useMemo(
+    () => normalizePath(),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );

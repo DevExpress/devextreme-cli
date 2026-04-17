@@ -1,17 +1,17 @@
 {
   "name": "devextreme-cli-monorepo",
   "version": "1.2.7",
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
-    "test": "lerna run --stream test",
-    "test-dev": "lerna run --stream test-dev",
-    "create-template": "npm run --prefix ./packages/devextreme-cli create-template",
-    "lint-template": "npm run --prefix ./packages/devextreme-cli lint-template",
-    "test-template": "npm run --prefix ./packages/devextreme-cli test-template",
-    "test-themebuilder": "npm run --prefix ./packages/devextreme-cli test-themebuilder",
-    "postinstall": "lerna bootstrap",
+    "test": "pnpm -r run test",
+    "test-dev": "pnpm --filter devextreme-cli run test-dev",
+    "create-template": "pnpm --filter devextreme-cli run create-template",
+    "lint-template": "pnpm --filter devextreme-cli run lint-template",
+    "test-template": "pnpm --filter devextreme-cli run test-template",
+    "test-themebuilder": "pnpm --filter devextreme-cli run test-themebuilder",
     "update-template": "node ./templates-generator/index.js",
     "regenerate-nextjs-apps": "node ./scripts/regenerate-nextjs-apps/index.js",
-    "lint": "lerna run lint"
+    "lint": "pnpm -r run lint"
   },
   "devDependencies": {
     "@angular-eslint/schematics": "^0.2.0-beta.1",
@@ -20,13 +20,20 @@
     "puppeteer": "^24.42.0"
   },
   "pre-commit": "lint",
-  "overrides": {
-    "form-data@>=4.0.0 <4.0.4": ">=4.0.4",
-    "tar-fs@>=3.0.0 <3.1.1": ">=3.1.1",
-    "ws@>=8.0.0 <8.17.1": ">=8.17.1",
-    "cross-spawn": "7.0.6",
-    "js-yaml@>=4.0.0 <4.1.1": "4.1.1",
-    "tar@<=7.5.10": "~7.5.11",
-    "minimatch": "3.1.5"
+  "pnpm": {
+    "overrides": {
+      "form-data@>=4.0.0 <4.0.4": ">=4.0.4",
+      "tar-fs@>=3.0.0 <3.1.1": ">=3.1.1",
+      "ws@>=8.0.0 <8.17.1": ">=8.17.1",
+      "cross-spawn": "7.0.6",
+      "js-yaml@>=4.0.0 <4.1.1": "4.1.1",
+      "tar@<=7.5.10": "~7.5.11",
+      "minimatch": "3.1.5",
+      "@babel/traverse@<7.23.2": ">=7.23.2",
+      "braces@<3.0.3": ">=3.0.3",
+      "flatted": "^3.4.2",
+      "picomatch@<2.3.2": "^2.3.2",
+      "picomatch@>4.0.0": "^4.0.4"
+    }
   }
 }
