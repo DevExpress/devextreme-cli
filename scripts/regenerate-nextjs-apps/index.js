@@ -8,10 +8,6 @@ const scriptDir = __dirname;
 const repoRoot = path.join(scriptDir, '..', '..');
 const appsDir = path.join(repoRoot, 'apps', 'nextjs-testing');
 
-const createNextAppPkgPath = path.dirname(require.resolve('create-next-app/package.json', { paths: [scriptDir] }));
-const createNextAppPkg = require('create-next-app/package.json');
-const createNextAppBin = path.join(createNextAppPkgPath, createNextAppPkg.bin['create-next-app']);
-
 const latestVersions = require('../../packages/devextreme-cli/src/utility/latest-versions');
 const expectedVersion = latestVersions['create-next-app'];
 
@@ -29,6 +25,11 @@ if (lockedVersion !== expectedVersion) {
 // Install create-next-app from lockfile
 console.log('Installing create-next-app from lockfile...');
 execFileSync('npm', ['ci'], { cwd: scriptDir, stdio: 'inherit' });
+
+// Resolve the create-next-app binary from its package.json bin field
+const createNextAppPkgPath = path.dirname(require.resolve('create-next-app/package.json', { paths: [scriptDir] }));
+const createNextAppPkg = require('create-next-app/package.json');
+const createNextAppBin = path.join(createNextAppPkgPath, createNextAppPkg.bin['create-next-app']);
 
 // Parse min-release-age from .npmrc to pass as env var to create-next-app,
 // so its internal npm commands also respect the setting
