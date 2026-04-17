@@ -27,7 +27,7 @@ export default function SideNavigationMenu(props<%=#isTypeScript%>: React.PropsW
   }
 
   const items = useMemo(
-    normalizePath,
+    () => normalizePath(),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
