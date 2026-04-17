@@ -7,7 +7,10 @@ const fs = require('fs');
 const scriptDir = __dirname;
 const repoRoot = path.join(scriptDir, '..', '..');
 const appsDir = path.join(repoRoot, 'apps', 'nextjs-testing');
-const createNextAppBin = path.join(scriptDir, 'node_modules', '.bin', 'create-next-app');
+
+const createNextAppPkgPath = path.dirname(require.resolve('create-next-app/package.json', { paths: [scriptDir] }));
+const createNextAppPkg = require('create-next-app/package.json');
+const createNextAppBin = path.join(createNextAppPkgPath, createNextAppPkg.bin['create-next-app']);
 
 const latestVersions = require('../../packages/devextreme-cli/src/utility/latest-versions');
 const expectedVersion = latestVersions['create-next-app'];
@@ -25,7 +28,7 @@ if (lockedVersion !== expectedVersion) {
 
 // Install create-next-app from lockfile
 console.log('Installing create-next-app from lockfile...');
-execSync('npm ci', { cwd: scriptDir, stdio: 'inherit' });
+execFileSync('npm', ['ci'], { cwd: scriptDir, stdio: 'inherit' });
 
 // Parse min-release-age from .npmrc to pass as env var to create-next-app,
 // so its internal npm commands also respect the setting
@@ -65,13 +68,13 @@ for (const variant of variants) {
         '--eslint',
         '--no-tailwind',
         '--no-react-compiler',
-        '--import-alias="@/*"',
+        '--import-alias', '@/*',
         '--no-git',
         '--use-npm'
     ];
 
     console.log(`Creating ${variant.name}...`);
-    execFileSync(createNextAppBin, args, {
+    execFileSync(process.execPath, [createNextAppBin, ...args], {
         cwd: appsDir,
         stdio: 'inherit',
         env: npmEnv
