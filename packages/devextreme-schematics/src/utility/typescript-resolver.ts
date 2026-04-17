@@ -115,7 +115,7 @@ function tryResolveViaTemporaryInstall(): any {
       JSON.stringify(packageJson, null, 2)
     );
 
-    execSync('npm install --silent --no-progress', {
+    execSync('npm install --silent --no-progress --ignore-scripts', {
       cwd: tmpDir,
       stdio: 'ignore',
       timeout: 30000
