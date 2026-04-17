@@ -1,4 +1,4 @@
-# DevExtreme CLI
+# DevExtreme CLII
 ![App Tests](https://github.com/DevExpress/devextreme-cli/actions/workflows/applications.yml/badge.svg)
 ![ThemeBuilder](https://github.com/DevExpress/devextreme-cli/actions/workflows/themebuilder.yml/badge.svg)
 ![Lint](https://github.com/DevExpress/devextreme-cli/actions/workflows/lint.yml/badge.svg)
