@@ -10,6 +10,7 @@
     "test-themebuilder": "npm run --prefix ./packages/devextreme-cli test-themebuilder",
     "postinstall": "lerna bootstrap",
     "update-template": "node ./templates-generator/index.js",
+    "regenerate-nextjs-apps": "node ./scripts/regenerate-nextjs-apps/index.js",
     "lint": "lerna run lint"
   },
   "devDependencies": {

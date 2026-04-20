@@ -89,9 +89,9 @@ export async function applyInlineComponentTemplateMigrations(
         '  3. Temporary installation (npm cache)\n\n' +
         'To resolve this issue, install TypeScript manually.\n\n' +
         'Project installation:\n' +
-        '  npm install typescript --save-dev\n\n' +
+        '  npm install typescript --save-dev --ignore-scripts\n\n' +
         'Global installation:\n' +
-        '  npm install -g typescript\n\n'
+        '  npm install -g typescript --ignore-scripts\n\n'
       );
       return;
   }

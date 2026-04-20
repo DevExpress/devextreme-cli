@@ -1,6 +1,7 @@
 # IDEs
 **/.idea/
 **/jsconfig.json
+!apps/nextjs-testing/**/jsconfig.json
 **/.vscode/
 
 # Misc

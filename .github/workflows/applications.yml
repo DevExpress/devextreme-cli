@@ -47,7 +47,7 @@ jobs:
       with:
         node-version: '24'
 
-    - name: Run npm install
+    - name: Install dependencies
       env:
         PUPPETEER_SKIP_DOWNLOAD: true
       run: npm ci --no-audit --no-fund
@@ -117,7 +117,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
 
-      - name: Run npm install
+      - name: Install dependencies
         env:
           PUPPETEER_SKIP_DOWNLOAD: true
         run: npm ci --no-audit --no-fund

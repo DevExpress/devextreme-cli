@@ -30,48 +30,47 @@ jobs:
         with:
           node-version: ${{ matrix.NODE }}
           cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            apps/nextjs-testing/**/package-lock.json
 
-      - name: Extract create-next-app version
+      - name: Determine test app directory
         run: |
-          NEXT_APP_VERSION=$(node -e "const versions = require('./packages/devextreme-cli/src/utility/latest-versions.js'); console.log(versions['create-next-app'])")
-          echo "Using create-next-app version: $NEXT_APP_VERSION"
-          echo "NEXT_APP_VERSION=$NEXT_APP_VERSION" >> $GITHUB_ENV
+          TS_PART=${{ matrix.TYPESCRIPT == true && 'ts' || 'js' }}
+          SRC_PART=${{ matrix.SRC_DIR == true && 'src' || 'nosrc' }}
+          ROUTER_PART=${{ matrix.APP_ROUTER == true && 'app' || 'pages' }}
+          echo "TEST_APP_DIR=apps/nextjs-testing/${TS_PART}-${SRC_PART}-${ROUTER_PART}" >> $GITHUB_ENV
         shell: bash
 
-      - name: Create Next.js application
+      - name: Verify committed apps are up-to-date
         run: |
-          npx create-next-app@${{ env.NEXT_APP_VERSION }} test-nextjs-app \
-          --typescript=${{ matrix.TYPESCRIPT }} \
-          --src-dir=${{ matrix.SRC_DIR }} \
-          --app=${{ matrix.APP_ROUTER }} \
-          --eslint \
-          --no-tailwind \
-          --import-alias="@/*" \
-          --no-git \
-          --use-npm
+          EXPECTED_VERSION=$(node -e "const v = require('./packages/devextreme-cli/src/utility/latest-versions.js'); console.log(v['create-next-app'])")
+          COMMITTED_VERSION=$(node -e "const m = require('./apps/nextjs-testing/.generator-meta.json'); console.log(m['create-next-app'])")
+          if [ "$EXPECTED_VERSION" != "$COMMITTED_VERSION" ]; then
+            echo "ERROR: Committed test apps use create-next-app@$COMMITTED_VERSION but latest-versions.js specifies $EXPECTED_VERSION"
+            echo "Run 'npm run regenerate-nextjs-apps' and commit the results"
+            exit 1
+          fi
         shell: bash
 
-      - name: Add actual devExtreme-cli
-        run: |
-          cd test-nextjs-app
-          npm add devextreme-cli
-          rm -r ./node_modules/devextreme-cli/src/
-          cp -r ../packages/devextreme-cli/src/ ./node_modules/devextreme-cli/
-          ls ./node_modules/devextreme-cli
-          ls ./node_modules/devextreme-cli/src
-        shell: bash
-        timeout-minutes: 15
+      - name: Install devextreme-cli dependencies
+        run: npm ci --prefix packages/devextreme-cli
+        timeout-minutes: 5
+
+      - name: Install test app dependencies
+        run: cd ${{ env.TEST_APP_DIR }} && npm ci
+        timeout-minutes: 5
 
       - name: Add DevExtreme to Next.js application
         run: |
-          cd test-nextjs-app
-          npx devextreme-cli add devextreme-react
+          cd ${{ env.TEST_APP_DIR }}
+          node ../../../packages/devextreme-cli/index.js add devextreme-react
         shell: bash
         timeout-minutes: 15
 
       - name: Verify DevExtreme dependencies in package.json
         run: |
-          cd test-nextjs-app
+          cd ${{ env.TEST_APP_DIR }}
 
           if ! grep -q '"devextreme":' package.json; then
             echo "Error: devextreme dependency not found in package.json"
@@ -88,7 +87,7 @@ jobs:
 
       - name: Build Next.js application
         run: |
-          cd test-nextjs-app
+          cd ${{ env.TEST_APP_DIR }}
           npm run build
         shell: bash
         timeout-minutes: 15
