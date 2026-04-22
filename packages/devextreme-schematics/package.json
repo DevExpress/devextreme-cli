@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "tslint -c tslint.json 'src/*/*.ts' -e '**/*.d.ts'",
-    "test": "npm run lint && npm run build && jasmine **/*_spec.js"
+    "test": "pnpm run lint && pnpm run build && jasmine **/*_spec.js"
   },
   "author": "Developer Express Inc.",
   "license": "MIT",
@@ -26,7 +26,8 @@
     "@angular-devkit/schematics": "^19.2.24",
     "@schematics/angular": "^19.2.24",
     "parse5": "^7.3.0",
-    "picomatch": "^4.0.4"
+    "picomatch": "^4.0.4",
+    "semver": "^7.7.1"
   },
   "devDependencies": {
     "@types/jasmine": "~3.10.19",

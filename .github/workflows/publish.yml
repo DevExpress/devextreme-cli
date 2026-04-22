@@ -23,25 +23,23 @@ jobs:
       - name: Get sources
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
+          cache: 'pnpm'
 
-      - name: Install dependencies (root)
-        run: npm ci --no-audit --no-fund
-
-      - name: Install dependencies (devextreme-schematics)
-        working-directory: packages/devextreme-schematics
-        run: npm ci --no-audit --no-fund
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Test devextreme-schematics
-        working-directory: packages/devextreme-schematics
-        run: npm run test
+        run: pnpm --filter devextreme-schematics run test
 
       - name: Build devextreme-schematics
-        working-directory: packages/devextreme-schematics
-        run: npm run build
+        run: pnpm --filter devextreme-schematics run build
 
       - uses: fregante/setup-git-user@v2
 
@@ -53,6 +51,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npx --no-install lerna version ${{ github.event.inputs.version }} -y --no-push
+          NEW_VERSION=$(cd packages/devextreme-cli && npm version ${{ github.event.inputs.version }} --no-git-tag-version)
+          (cd packages/devextreme-schematics && npm version "$NEW_VERSION" --no-git-tag-version)
+          npm version "$NEW_VERSION" --no-git-tag-version
+          git add -A
+          git commit -m "$NEW_VERSION"
+          git tag "$NEW_VERSION"
           git push -f --follow-tags --no-verify --atomic origin master
-          npx --no-install lerna publish from-git -y
+          pnpm --filter './packages/*' publish --no-git-checks
