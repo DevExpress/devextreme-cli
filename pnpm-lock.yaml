@@ -12,7 +12,7 @@ overrides:
   js-yaml@>=4.0.0 <4.1.1: 4.1.1
   tar@<=7.5.10: ~7.5.13
   minimatch: 3.1.5
-  '@babel/traverse@<7.23.2': '>=7.23.2'
+  '@babel/traverse@<7.23.2': '>=7.29.0'
   braces@<3.0.3: '>=3.0.3'
   flatted: ^3.4.2
   picomatch@<2.3.2: ^2.3.2
