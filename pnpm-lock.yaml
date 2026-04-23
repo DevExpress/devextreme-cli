@@ -153,7 +153,7 @@ importers:
         specifier: ^4.0.4
         version: 4.0.4
       semver:
-        specifier: ^7.7.1
+        specifier: ^7.7.4
         version: 7.7.4
     devDependencies:
       '@types/jasmine':
