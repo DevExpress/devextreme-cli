@@ -1,3 +1,31 @@
+## v1.14.2
+
+- Added dependency and security fixes.
+
+## v1.14.1
+
+- Fixed package resolving logic in the `migrate` command.
+- Added dependency fixes.
+
+## v1.14.0
+
+- Updated DevExtreme Schematics to Angular 19.
+- Updated sample data source in application templates.
+- Added dependency and security fixes.
+
+## v1.13.0
+
+- Added support for DevExtreme v25.2 and updated scaffolders.
+- Angular templates updated to control flow syntax (`@if`/`@else`).
+- Fixed form state management in React and Next.js templates.
+- Added dependency and security fixes.
+
+## v1.12.2
+
+- Fixed issues with Angular application creation.
+- Updated `migrate` command messages.
+- Added dependency and security fixes.
+
 ## v1.12.1
 
 - `migrate` command descriptions were updated.
