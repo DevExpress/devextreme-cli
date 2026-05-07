@@ -13,7 +13,7 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  publish:
     name: Build & Publish NPM packages
     runs-on: ubuntu-latest
     environment: npmjs
@@ -30,6 +30,7 @@ jobs:
         with:
           node-version: '24'
           cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
