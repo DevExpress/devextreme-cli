@@ -41,4 +41,4 @@ jobs:
         run: pnpm --filter devextreme-schematics run build
 
       - name: Publish packages
-        run: pnpm --filter './packages/*' publish --provenance ${{ inputs.dry-run && '--dry-run' || '' }}
+        run: pnpm --filter './packages/*' publish --provenance ${{ inputs['dry-run'] && '--dry-run' || '' }}
