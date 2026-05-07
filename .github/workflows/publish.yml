@@ -35,5 +35,5 @@ jobs:
       - name: Build devextreme-schematics
         run: pnpm --filter devextreme-schematics run build
 
-      - name: Publish package
+      - name: Publish packages
         run: pnpm --filter './packages/*' publish --provenance --dry-run
