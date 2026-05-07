@@ -2,6 +2,11 @@ name: Build and publish NPM packages
 
 on:
   workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Run in dry-run mode (no actual publish)'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -36,4 +41,4 @@ jobs:
         run: pnpm --filter devextreme-schematics run build
 
       - name: Publish packages
-        run: pnpm --filter './packages/*' publish --provenance --dry-run
+        run: pnpm --filter './packages/*' publish --provenance ${{ inputs.dry-run && '--dry-run' || '' }}
