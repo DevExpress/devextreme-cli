@@ -1,23 +1,22 @@
-name: Publish NPM package
+name: Build and publish NPM packages
 
 on:
   workflow_dispatch:
     inputs:
-      version:
-        type: choice
-        required: true
-        description: Bump version
-        options:
-          - patch
-          - minor
-          - major
+      dry-run:
+        description: 'Run in dry-run mode (no actual publish)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
-  build:
-    name: Build & Publish NPM package
+  publish:
+    name: Build & Publish NPM packages
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    environment: npmjs
 
     steps:
       - name: Get sources
@@ -31,6 +30,7 @@ jobs:
         with:
           node-version: '24'
           cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -41,21 +41,5 @@ jobs:
       - name: Build devextreme-schematics
         run: pnpm --filter devextreme-schematics run build
 
-      - uses: fregante/setup-git-user@v2
-
-      - name: Update NPM config
-        run: npm set "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}"
-
-      - name: Publish package
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          NEW_VERSION=$(cd packages/devextreme-cli && npm version ${{ github.event.inputs.version }} --no-git-tag-version)
-          (cd packages/devextreme-schematics && npm version "$NEW_VERSION" --no-git-tag-version)
-          npm version "$NEW_VERSION" --no-git-tag-version
-          git add -A
-          git commit -m "$NEW_VERSION"
-          git tag "$NEW_VERSION"
-          git push -f --follow-tags --no-verify --atomic origin master
-          pnpm --filter './packages/*' publish --no-git-checks
+      - name: Publish packages
+        run: pnpm --filter './packages/*' publish --provenance ${{ inputs['dry-run'] && '--dry-run' || '' }}
