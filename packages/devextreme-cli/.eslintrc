@@ -1,4 +1,5 @@
 {
+    "ignorePatterns": ["src/templates/**", "testing/sandbox/**"],
     "env": {
         "es6": true,
         "node": true

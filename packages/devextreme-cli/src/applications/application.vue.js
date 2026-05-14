@@ -71,7 +71,7 @@ const modifyIndexHtml = (appPath, appName) => {
     const indexHtmlPath = path.join(appPath, 'index.html');
     let htmlContent = fs.readFileSync(indexHtmlPath).toString();
 
-    htmlContent = htmlContent.replace(/<title>(\w+\s*)+<\/title>/, `<title>${appName}<\/title>`);
+    htmlContent = htmlContent.replace(/<title>[^<]*<\/title>/, `<title>${appName}<\/title>`);
     htmlContent = htmlContent.replace('<body>', '<body class="dx-viewport">');
     fs.writeFileSync(indexHtmlPath, htmlContent);
 };
