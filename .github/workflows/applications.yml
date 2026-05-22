@@ -78,6 +78,19 @@ jobs:
       if: ${{ matrix.OS != 'windows-latest' }}
       run: pnpm run lint-template -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
 
+    - name: ESLint Security Analysis
+      if: ${{ matrix.OS != 'windows-latest' }}
+      run: |
+        mkdir -p /tmp/eslint-security
+        cd /tmp/eslint-security
+        echo '{"type":"module"}' > package.json
+        pnpm add eslint@9 @devexpress/eslint-plugin-dx-security @typescript-eslint/parser
+        cp ${{ github.workspace }}/.github/eslint-security.config.mjs ./eslint.config.mjs
+        cd ${{ github.workspace }}
+        /tmp/eslint-security/node_modules/.bin/eslint \
+          --config /tmp/eslint-security/eslint.config.mjs \
+          "packages/devextreme-cli/testing/sandbox/${{ matrix.APPROACH }}/my-app/**/*.{js,mjs,cjs,jsx,ts,tsx}"
+
     - name: Run template tests
       if: ${{ matrix.OS != 'windows-latest' }}
       env:

@@ -1,0 +1,6 @@
+{
+    "ignores": [
+        "packages/devextreme-cli/src/templates/**",
+        "packages/devextreme-schematics/src/**/files/**"
+    ]
+}
