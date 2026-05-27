@@ -11,7 +11,8 @@
     "test-themebuilder": "pnpm --filter devextreme-cli run test-themebuilder",
     "update-template": "node ./templates-generator/index.js",
     "regenerate-nextjs-apps": "node ./scripts/regenerate-nextjs-apps/index.js",
-    "lint": "pnpm -r run lint"
+    "lint": "pnpm -r run lint",
+    "lint-sandbox": "eslint --config .github/eslint-security.config.mjs"
   },
   "devDependencies": {
     "@angular-eslint/schematics": "^0.2.0-beta.1",

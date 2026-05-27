@@ -79,10 +79,7 @@ jobs:
       run: pnpm run lint-template -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
 
     - name: ESLint Security Analysis
-      run: |
-        pnpm exec eslint \
-          --config .github/eslint-security.config.mjs \
-          "packages/devextreme-cli/testing/sandbox/${{ matrix.APPROACH }}/my-app/**/*.{js,mjs,cjs,jsx,ts,tsx}"
+      run: pnpm run lint-sandbox -- "packages/devextreme-cli/testing/sandbox/${{ matrix.APPROACH }}/my-app/**/*.{js,mjs,cjs,jsx,ts,tsx}"
 
     - name: Run template tests
       if: ${{ matrix.OS != 'windows-latest' }}
