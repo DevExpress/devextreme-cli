@@ -3,6 +3,6 @@
     "private": true,
     "description": "Locked dependencies for regenerating Next.js test apps",
     "dependencies": {
-        "create-next-app": "16.2.6"
+        "create-next-app": "16.2.7"
     }
 }
