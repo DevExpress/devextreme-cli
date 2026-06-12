@@ -43,8 +43,8 @@ jobs:
 
       - name: Pack packages
         run: |
-          package_cli_tgz="$(pnpm --filter devextreme-cli pack --json | jq -er '.filename')"
-          package_schematics_tgz="$(pnpm --filter devextreme-schematics pack --json | jq -er '.filename')"
+          package_cli_tgz="$(pnpm --filter devextreme-cli pack --json | jq -er 'if type=="array" then .[0].filename else .filename end')"
+          package_schematics_tgz="$(pnpm --filter devextreme-schematics pack --json | jq -er 'if type=="array" then .[0].filename else .filename end')"
 
           echo "PACKAGE_CLI_TGZ=$package_cli_tgz" >> "$GITHUB_ENV"
           echo "PACKAGE_SCHEMATICS_TGZ=$package_schematics_tgz" >> "$GITHUB_ENV"
