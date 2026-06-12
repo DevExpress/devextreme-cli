@@ -41,5 +41,16 @@ jobs:
       - name: Build devextreme-schematics
         run: pnpm --filter devextreme-schematics run build
 
-      - name: Publish packages
-        run: pnpm --filter './packages/*' publish --provenance ${{ inputs['dry-run'] && '--dry-run' || '' }}
+      - name: Pack packages
+        run: |
+          package_cli_tgz="$(pnpm --filter devextreme-cli pack --json | jq -er 'if type=="array" then .[0].filename else .filename end')"
+          package_schematics_tgz="$(pnpm --filter devextreme-schematics pack --json | jq -er 'if type=="array" then .[0].filename else .filename end')"
+
+          echo "PACKAGE_CLI_TGZ=$package_cli_tgz" >> "$GITHUB_ENV"
+          echo "PACKAGE_SCHEMATICS_TGZ=$package_schematics_tgz" >> "$GITHUB_ENV"
+
+      - name: Publish devextreme-cli
+        run: pnpm publish "$PACKAGE_CLI_TGZ" --provenance ${{ inputs['dry-run'] && '--dry-run' || '' }}
+
+      - name: Publish devextreme-schematics
+        run: pnpm publish "$PACKAGE_SCHEMATICS_TGZ" --provenance ${{ inputs['dry-run'] && '--dry-run' || '' }}
