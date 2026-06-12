@@ -1,7 +1,7 @@
 {
   "name": "devextreme-cli-monorepo",
   "version": "1.2.7",
-  "packageManager": "pnpm@11.5.1",
+  "packageManager": "pnpm@11.5.2",
   "scripts": {
     "test": "pnpm -r run test",
     "test-dev": "pnpm --filter devextreme-cli run test-dev",
