@@ -16,5 +16,8 @@
   "devDependencies": {
     "eslint": "^9.39.4",
     "eslint-config-next": "16.2.7"
+  },
+  "overrides": {
+    "postcss": "~8.5.10"
   }
 }
