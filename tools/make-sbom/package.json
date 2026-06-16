@@ -1,10 +1,10 @@
 {
   "name": "devextreme-cli-monorepo-sbom",
   "version": "1.2.7",
-  "packageManager": "pnpm@11.5.1",
+  "packageManager": "pnpm@11.5.2",
   "private": true,
   "devDependencies": {
-    "@devexpress/sbom-toolkit": "0.11.1"
+    "@devexpress/sbom-toolkit": "0.11.2"
   },
   "scripts": {
     "make-sbom": "rm -rf dist/ && pnpm dx-make-sbom ../../ dist/ devextreme-cli,devextreme-schematics"
