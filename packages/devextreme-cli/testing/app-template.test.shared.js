@@ -90,7 +90,7 @@ module.exports = (env, { port = 8080, urls = {} } = {}) => {
                         });
                     }
 
-                    /* eslint-disable-next-line no-unused-vars */
+
                     async function switchTheme() {
                         await page.click('.dx-button.theme-button');
                         await new Promise(r => setTimeout(r, 500));
