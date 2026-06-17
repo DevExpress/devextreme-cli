@@ -1,9 +1,7 @@
 name: SBOM
 
 on:
-  push:
-    branches:
-      - sbom-dev
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,7 +9,6 @@ permissions:
 
 jobs:
   sbom:
-    if: ${{ github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'sbom-dev' }}
     runs-on: ubuntu-latest
 
     steps:
