@@ -1,7 +1,7 @@
 {
   "name": "devextreme-cli-monorepo",
   "version": "1.2.7",
-  "packageManager": "pnpm@11.5.2",
+  "packageManager": "pnpm@11.7.0+sha512.19cc852c120c7125760f2443ee6be0ca5b40f9f50598de1a09a1f177503e010e57c23c77646e01e761de59bf874fb22a3398c33ab9691fc13eb946b6f0f4d620",
   "scripts": {
     "test": "pnpm -r run test",
     "test-dev": "pnpm --filter devextreme-cli run test-dev",
@@ -17,7 +17,7 @@
   "devDependencies": {
     "@angular-eslint/schematics": "^0.2.0-beta.1",
     "@devexpress/eslint-plugin-dx-security": "^0.2.6",
-    "@typescript-eslint/parser": "^8.60.1",
+    "@typescript-eslint/parser": "^8.61.0",
     "eslint": "^9.39.4",
     "pre-commit": "^1.2.2",
     "puppeteer": "^24.43.1"

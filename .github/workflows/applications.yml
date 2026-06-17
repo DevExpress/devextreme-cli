@@ -41,13 +41,13 @@ jobs:
     steps:
 
     - name: Get sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Install pnpm
       uses: pnpm/action-setup@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: '.node-version'
         cache: 'pnpm'
@@ -57,7 +57,7 @@ jobs:
         PUPPETEER_SKIP_DOWNLOAD: true
       run: pnpm install --frozen-lockfile
 
-    - uses: browser-actions/setup-chrome@v1
+    - uses: browser-actions/setup-chrome@v2
       id: setup-chrome
     - run: ${{ steps.setup-chrome.outputs.chrome-path }} --version
 
@@ -91,7 +91,7 @@ jobs:
 
     - name: Archive artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: app-tests-artifacts-${{ matrix.APPROACH }}-${{ matrix.NODE }}-${{ matrix.OS }}
         path: |
@@ -105,7 +105,7 @@ jobs:
     if: ${{ failure() && !cancelled() }}
     steps:
     - name: Merge Artifacts
-      uses: actions/upload-artifact/merge@v4
+      uses: actions/upload-artifact/merge@v7
       continue-on-error: true
       with:
         name: artifacts
@@ -117,13 +117,13 @@ jobs:
     steps:
 
       - name: Get sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
 
       - name: Set up Node.js and restore cache
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
           cache: 'pnpm'
