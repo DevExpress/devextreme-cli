@@ -2,6 +2,7 @@ const minimist = require('minimist');
 const fs = require('fs');
 const path = require('path');
 const ESLint = require('eslint').ESLint;
+const { FlatCompat } = require('@eslint/eslintrc');
 const envs = require('./constants').envs;
 const run = require('./../src/utility/run-command');
 
@@ -25,10 +26,16 @@ const projectLint = async(app) => {
 };
 
 const customLint = async(env) => {
+    const compat = new FlatCompat({
+        baseDirectory: path.resolve(__dirname, '..'),
+        resolvePluginsRelativeTo: path.resolve(__dirname, '..'),
+    });
+    const legacyConfig = JSON.parse(
+        fs.readFileSync(path.join(__dirname, `lint-config/${env.engine}.eslintrc`), 'utf8')
+    );
     const eslint = new ESLint({
-        useEslintrc: false,
-        overrideConfigFile: `./testing/lint-config/${env.engine}.eslintrc`,
-        ignore: false
+        overrideConfigFile: true,
+        overrideConfig: compat.config(legacyConfig),
     });
 
     const lintFiles = isTypeScript(env.engine)
