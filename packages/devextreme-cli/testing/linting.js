@@ -26,8 +26,7 @@ const projectLint = async(app) => {
 
 const customLint = async(env) => {
     const eslint = new ESLint({
-        useEslintrc: false,
-        overrideConfigFile: `./testing/lint-config/${env.engine}.eslintrc`,
+        overrideConfigFile: `./testing/lint-config/${env.engine}.config.mjs`,
         ignore: false
     });
 
