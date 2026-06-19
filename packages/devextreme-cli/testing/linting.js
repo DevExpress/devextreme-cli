@@ -30,11 +30,10 @@ const customLint = async(env) => {
         ignore: false
     });
 
-    const sandboxSrc = path.join(__dirname, 'sandbox', env.engine, 'my-app', 'src');
+    const sandboxSrc = path.join(__dirname, 'sandbox', env.engine, 'my-app', 'src').replace(/\\/g, '/');
     const lintFiles = isTypeScript(env.engine)
-        ? [path.join(sandboxSrc, '**/*.ts'),
-            path.join(sandboxSrc, '**/*.tsx')]
-        : [path.join(sandboxSrc, `**/*.${env.fileExtension}`)];
+        ? [`${sandboxSrc}/**/*.ts`, `${sandboxSrc}/**/*.tsx`]
+        : [`${sandboxSrc}/**/*.${env.fileExtension}`];
 
     const report = await eslint.lintFiles(lintFiles);
 
