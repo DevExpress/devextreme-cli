@@ -26,14 +26,15 @@ const projectLint = async(app) => {
 
 const customLint = async(env) => {
     const eslint = new ESLint({
-        overrideConfigFile: `./testing/lint-config/${env.engine}.config.mjs`,
+        overrideConfigFile: path.join(__dirname, 'lint-config', `${env.engine}.config.mjs`),
         ignore: false
     });
 
+    const sandboxSrc = path.join(__dirname, 'sandbox', env.engine, 'my-app', 'src');
     const lintFiles = isTypeScript(env.engine)
-        ? [`./testing/sandbox/${env.engine}/my-app/src/**/*.ts`,
-            `./testing/sandbox/${env.engine}/my-app/src/**/*.tsx`]
-        : [`./testing/sandbox/${env.engine}/my-app/src/**/*.${env.fileExtension}`];
+        ? [path.join(sandboxSrc, '**/*.ts'),
+            path.join(sandboxSrc, '**/*.tsx')]
+        : [path.join(sandboxSrc, `**/*.${env.fileExtension}`)];
 
     const report = await eslint.lintFiles(lintFiles);
 
