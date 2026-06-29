@@ -18,6 +18,6 @@
     "eslint-config-next": "16.2.9"
   },
   "overrides": {
-    "postcss": ">=8.5.10"
+    "postcss": ">=8.5.15"
   }
 }
