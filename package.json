@@ -15,9 +15,9 @@
     "lint-sandbox": "eslint --config .github/eslint-security.config.mjs"
   },
   "devDependencies": {
-    "@angular-eslint/schematics": "^0.2.0-beta.1",
+    "@angular-eslint/schematics": "0.2.0-beta.1",
     "@devexpress/eslint-plugin-dx-security": "^0.2.6",
-    "@typescript-eslint/parser": "^8.61.1",
+    "@typescript-eslint/parser": "^8.62.0",
     "eslint": "^9.39.4",
     "pre-commit": "^1.2.2",
     "puppeteer": "^24.43.1"
