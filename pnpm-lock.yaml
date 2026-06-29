@@ -95,7 +95,7 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0
       eslint-config-prettier:
-        specifier: ^10.0.1
+        specifier: ^10.1.8
         version: 10.1.8(eslint@9.39.4)
       eslint-plugin-angular:
         specifier: ^4.1.0
