@@ -1,23 +1,15 @@
-name: Build and publish NPM packages
+name: SBOM
 
 on:
   workflow_dispatch:
-    inputs:
-      dry-run:
-        description: 'Run in dry-run mode (no actual publish)'
-        type: boolean
-        default: false
 
 permissions:
   contents: read
   packages: read
-  id-token: write
 
 jobs:
-  publish:
-    name: Build & Publish NPM packages
+  sbom:
     runs-on: ubuntu-latest
-    environment: npmjs
 
     steps:
       - name: Get sources
@@ -61,7 +53,7 @@ jobs:
             ${{ env.PACKAGE_CLI_TGZ }}
             ${{ env.PACKAGE_SCHEMATICS_TGZ }}
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 1
 
       - name: Build SBOMs
         env:
@@ -76,7 +68,7 @@ jobs:
           name: sbom
           path: tools/make-sbom/dist
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 1
 
       - name: Validate SBOMs
         uses: mpreyskurantov/github-actions/validate-sbom@sbom-val-dev
@@ -86,8 +78,8 @@ jobs:
             tools/make-sbom/dist/devextreme-cli.cdx.json
             tools/make-sbom/dist/devextreme-schematics.cdx.json
 
-      - name: Publish devextreme-cli
-        run: pnpm publish "$PACKAGE_CLI_TGZ" --provenance ${{ inputs['dry-run'] && '--dry-run' || '' }}
+      - name: Publish devextreme-cli (dry-run)
+        run: pnpm publish "$PACKAGE_CLI_TGZ" --no-git-checks --dry-run
 
-      - name: Publish devextreme-schematics
-        run: pnpm publish "$PACKAGE_SCHEMATICS_TGZ" --provenance ${{ inputs['dry-run'] && '--dry-run' || '' }}
+      - name: Publish devextreme-schematics (dry-run)
+        run: pnpm publish "$PACKAGE_SCHEMATICS_TGZ" --no-git-checks --dry-run

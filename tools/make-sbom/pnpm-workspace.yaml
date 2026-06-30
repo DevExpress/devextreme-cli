@@ -1,0 +1,2 @@
+minimumReleaseAgeExclude:
+  - '@devexpress/sbom-toolkit'
