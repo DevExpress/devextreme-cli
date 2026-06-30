@@ -107,7 +107,7 @@ importers:
         specifier: ^7.37.5
         version: 7.37.5(eslint@9.39.4)
       eslint-plugin-react-hooks:
-        specifier: ^5.1.0
+        specifier: ^5.2.0
         version: 5.2.0(eslint@9.39.4)
       eslint-plugin-unused-imports:
         specifier: ^4.1.4
