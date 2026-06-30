@@ -61,6 +61,10 @@ jobs:
       id: setup-chrome
     - run: ${{ steps.setup-chrome.outputs.chrome-path }} --version
 
+    - name: Set Legacy-peer-deps=true
+      if: contains(fromJSON('["angular", "nextjs", "nextjs-ts"]'), matrix.APPROACH)
+      run: npm config set legacy-peer-deps true
+
     - name: Create ${{ matrix.APPROACH }} application
       working-directory: packages/devextreme-cli
       run: node ./testing/creating.js -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
