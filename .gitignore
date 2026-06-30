@@ -9,6 +9,7 @@
 **/npm-debug.log*
 **/pnpm-debug.log*
 **/yarn-error.log*
+*.tgz
 packages/devextreme-cli/testing/sandbox/
 packages/devextreme-cli/testing/__tests__/__diff_snapshots__/
 
