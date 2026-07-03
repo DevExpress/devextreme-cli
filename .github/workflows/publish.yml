@@ -50,7 +50,7 @@ jobs:
           echo "PACKAGE_SCHEMATICS_TGZ=$package_schematics_tgz" >> "$GITHUB_ENV"
 
       - name: Publish devextreme-cli
-        run: pnpm publish "$PACKAGE_CLI_TGZ" --provenance ${{ inputs['dry-run'] && '--dry-run' || '' }}
+        run: pnpm publish "$PACKAGE_CLI_TGZ" --provenance --no-git-checks ${{ inputs['dry-run'] && '--dry-run' || '' }}
 
       - name: Publish devextreme-schematics
-        run: pnpm publish "$PACKAGE_SCHEMATICS_TGZ" --provenance ${{ inputs['dry-run'] && '--dry-run' || '' }}
+        run: pnpm publish "$PACKAGE_SCHEMATICS_TGZ" --provenance --no-git-checks ${{ inputs['dry-run'] && '--dry-run' || '' }}
