@@ -14,7 +14,7 @@
     "react-dom": "19.2.7"
   },
   "devDependencies": {
-    "@types/node": "^20.19.42",
+    "@types/node": "^20.19.43",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.4",
@@ -22,6 +22,9 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "postcss": ">=8.5.10"
+    "@babel/core": ">=7.29.1",
+    "brace-expansion": ">=5.0.7",
+    "js-yaml": ">=5.2.1",
+    "postcss": ">=8.5.16"
   }
 }
