@@ -10,14 +10,13 @@ on:
 
 permissions:
   contents: read
-  packages: read
+  packages: write
   id-token: write
 
 jobs:
-  publish:
-    name: Build & Publish NPM packages
+  build:
+    name: Build NPM packages
     runs-on: ubuntu-latest
-    environment: npmjs
 
     steps:
       - name: Get sources
@@ -53,15 +52,19 @@ jobs:
           echo "PACKAGE_CLI_TGZ=$(realpath "$package_cli_tgz")" >> "$GITHUB_ENV"
           echo "PACKAGE_SCHEMATICS_TGZ=$(realpath "$package_schematics_tgz")" >> "$GITHUB_ENV"
 
-      - name: Upload packages
+      - name: Upload devextreme-cli package
         uses: actions/upload-artifact@v7
         with:
-          name: packages
-          path: |
-            ${{ env.PACKAGE_CLI_TGZ }}
-            ${{ env.PACKAGE_SCHEMATICS_TGZ }}
+          name: package-cli
+          path: ${{ env.PACKAGE_CLI_TGZ }}
           if-no-files-found: error
-          retention-days: 14
+
+      - name: Upload devextreme-schematics package
+        uses: actions/upload-artifact@v7
+        with:
+          name: package-schematics
+          path: ${{ env.PACKAGE_SCHEMATICS_TGZ }}
+          if-no-files-found: error
 
       - name: Build SBOMs
         env:
@@ -69,14 +72,6 @@ jobs:
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
           cd tools/make-sbom && pnpm install --frozen-lockfile && pnpm dx-make-sbom ../../ dist/ "devextreme-cli($PACKAGE_CLI_TGZ),devextreme-schematics($PACKAGE_SCHEMATICS_TGZ)"
-
-      - name: Upload SBOMs
-        uses: actions/upload-artifact@v7
-        with:
-          name: sbom
-          path: tools/make-sbom/dist
-          if-no-files-found: error
-          retention-days: 14
 
       - name: Validate SBOMs
         uses: mpreyskurantov/github-actions/validate-sbom@sbom-val-dev
@@ -86,8 +81,59 @@ jobs:
             tools/make-sbom/dist/devextreme-cli.cdx.json
             tools/make-sbom/dist/devextreme-schematics.cdx.json
 
+      - name: Publish devextreme-cli SBOM to npm.pkg.github.com
+        run: |
+          version="$(cd packages/devextreme-cli && pnpm pkg get version | tr -d '"')"
+          mkdir -p tools/make-sbom/pack/devextreme-cli && cp tools/make-sbom/dist/devextreme-cli.cdx.json tools/make-sbom/pack/devextreme-cli/
+          jq -n --arg v "$version" '{name:"@devexpress/devextreme-cli-sbom",version:$v}' > tools/make-sbom/pack/devextreme-cli/package.json
+          cd tools/make-sbom/pack/devextreme-cli
+          pnpm publish --registry https://npm.pkg.github.com --no-git-checks
+
+      - name: Publish devextreme-schematics SBOM to npm.pkg.github.com
+        run: |
+          version="$(cd packages/devextreme-schematics && pnpm pkg get version | tr -d '"')"
+          mkdir -p tools/make-sbom/pack/devextreme-schematics && cp tools/make-sbom/dist/devextreme-schematics.cdx.json tools/make-sbom/pack/devextreme-schematics/
+          jq -n --arg v "$version" '{name:"@devexpress/devextreme-schematics-sbom",version:$v}' > tools/make-sbom/pack/devextreme-schematics/package.json
+          cd tools/make-sbom/pack/devextreme-schematics
+          pnpm publish --registry https://npm.pkg.github.com --no-git-checks
+
+  publish:
+    name: Publish NPM packages
+    needs: build
+    runs-on: ubuntu-latest
+    environment: npmjs
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.node-version'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Download devextreme-cli package
+        uses: actions/download-artifact@v7
+        with:
+          name: package-cli
+          path: package-cli
+
+      - name: Download devextreme-schematics package
+        uses: actions/download-artifact@v7
+        with:
+          name: package-schematics
+          path: package-schematics
+
       - name: Publish devextreme-cli
-        run: pnpm publish "$PACKAGE_CLI_TGZ" --provenance --no-git-checks ${{ inputs['dry-run'] && '--dry-run' || '' }}
+        run: |
+          package_cli_tgz=$(ls package-cli/*.tgz)
+          pnpm publish "$package_cli_tgz" --provenance --no-git-checks ${{ inputs['dry-run'] && '--dry-run' || '' }}
 
       - name: Publish devextreme-schematics
-        run: pnpm publish "$PACKAGE_SCHEMATICS_TGZ" --provenance --no-git-checks ${{ inputs['dry-run'] && '--dry-run' || '' }}
+        run: |
+          package_schematics_tgz=$(ls package-schematics/*.tgz)
+          pnpm publish "$package_schematics_tgz" --provenance --no-git-checks ${{ inputs['dry-run'] && '--dry-run' || '' }}

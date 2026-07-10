@@ -11,6 +11,7 @@
 **/yarn-error.log*
 *.tgz
 dist
+tools/make-sbom/pack
 packages/devextreme-cli/testing/sandbox/
 packages/devextreme-cli/testing/__tests__/__diff_snapshots__/
 
