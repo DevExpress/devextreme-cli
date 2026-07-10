@@ -22,7 +22,7 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "@babel/core": ">=7.29.7",
+    "@babel/core": ">=8.0.1",
     "brace-expansion": ">=5.0.7",
     "js-yaml": ">=5.2.1",
     "postcss": ">=8.5.16"
