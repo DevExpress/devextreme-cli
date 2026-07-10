@@ -17,7 +17,7 @@ overrides:
   flatted: "^3.4.2"
   form-data@>=4.0.0 <4.0.4: ">=4.0.6"
   ip-address@<=10.1.0: ">=10.2.0"
-  js-yaml@<=4.1.1: "^4.2.0"
+  js-yaml@<=4.1.1: "^4.3.0"
   minimatch@<3.1.5: "3.1.5"
   picomatch@<2.3.2: "^2.3.2"
   picomatch@>4.0.0: "^4.0.5"
