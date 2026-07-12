@@ -8,19 +8,19 @@ on:
         type: boolean
         default: false
 
-permissions:
-  contents: read
-  packages: write
-  id-token: write
+permissions: {}
 
 jobs:
   build:
     name: Build NPM packages
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
@@ -33,7 +33,6 @@ jobs:
           cache-dependency-path: |
             pnpm-lock.yaml
             tools/make-sbom/pnpm-lock.yaml
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -66,12 +65,16 @@ jobs:
           path: ${{ env.PACKAGE_SCHEMATICS_TGZ }}
           if-no-files-found: error
 
+      - name: Set GitHub Packages auth
+        run: pnpm set //npm.pkg.github.com/:_authToken='${NODE_AUTH_TOKEN}'
+
       - name: Build SBOMs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
-          cd tools/make-sbom && pnpm install --frozen-lockfile && pnpm dx-make-sbom ../../ dist/ "devextreme-cli($PACKAGE_CLI_TGZ),devextreme-schematics($PACKAGE_SCHEMATICS_TGZ)"
+          cd tools/make-sbom
+          pnpm install --frozen-lockfile
+          pnpm dx-make-sbom ../../ dist/ "devextreme-cli($PACKAGE_CLI_TGZ),devextreme-schematics($PACKAGE_SCHEMATICS_TGZ)"
 
       - name: Validate SBOMs
         uses: DevExpress/github-actions/validate-sbom@5034a6d5e0fd18fc2826ed20a5140f9c83b8994f
@@ -81,31 +84,38 @@ jobs:
             tools/make-sbom/dist/devextreme-cli.cdx.json
             tools/make-sbom/dist/devextreme-schematics.cdx.json
 
-      - name: Publish devextreme-cli SBOM to npm.pkg.github.com
+      - name: Publish devextreme-cli SBOM to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          version="$(cd packages/devextreme-cli && pnpm pkg get version | tr -d '"')"
-          mkdir -p tools/make-sbom/pack/devextreme-cli && cp tools/make-sbom/dist/devextreme-cli.cdx.json tools/make-sbom/pack/devextreme-cli/
-          jq -n --arg v "$version" '{name:"@devexpress/devextreme-cli-sbom",version:$v}' > tools/make-sbom/pack/devextreme-cli/package.json
-          cd tools/make-sbom/pack/devextreme-cli
-          pnpm publish --registry https://npm.pkg.github.com --no-git-checks
+          version="$(pnpm pkg get version | tr -d '"')"
+          mkdir -p tools/make-sbom/pack && cp tools/make-sbom/dist/devextreme-cli-sbom tools/make-sbom/pack/
+          jq -n --arg v "$version" '{name:"@devexpress/devextreme-cli-sbom",version:$v,publishConfig:{registry:"https://npm.pkg.github.com"}}' > tools/make-sbom/pack/package.json
+          cd tools/make-sbom/pack
+          pnpm publish --no-git-checks
 
-      - name: Publish devextreme-schematics SBOM to npm.pkg.github.com
+      - name: Publish devextreme-schematics SBOM to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          version="$(cd packages/devextreme-schematics && pnpm pkg get version | tr -d '"')"
-          mkdir -p tools/make-sbom/pack/devextreme-schematics && cp tools/make-sbom/dist/devextreme-schematics.cdx.json tools/make-sbom/pack/devextreme-schematics/
-          jq -n --arg v "$version" '{name:"@devexpress/devextreme-schematics-sbom",version:$v}' > tools/make-sbom/pack/devextreme-schematics/package.json
-          cd tools/make-sbom/pack/devextreme-schematics
-          pnpm publish --registry https://npm.pkg.github.com --no-git-checks
+          version="$(pnpm pkg get version | tr -d '"')"
+          mkdir -p tools/make-sbom/pack && cp tools/make-sbom/dist/devextreme-schematics-sbom tools/make-sbom/pack/
+          jq -n --arg v "$version" '{name:"@devexpress/devextreme-schematics-sbom",version:$v,publishConfig:{registry:"https://npm.pkg.github.com"}}' > tools/make-sbom/pack/package.json
+          cd tools/make-sbom/pack
+          pnpm publish --no-git-checks
 
   publish:
     name: Publish NPM packages
     needs: build
     runs-on: ubuntu-latest
     environment: npmjs
+    permissions:
+      id-token: write  # Required for OIDC (Trusted Publishing)
+      contents: read
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
@@ -114,7 +124,6 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version-file: '.node-version'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Download devextreme-cli package
         uses: actions/download-artifact@v7
