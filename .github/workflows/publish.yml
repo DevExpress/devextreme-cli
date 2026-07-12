@@ -109,7 +109,7 @@ jobs:
   publish:
     name: Publish NPM packages
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     environment: npmjs
     permissions:
       id-token: write  # Required for OIDC (Trusted Publishing)
