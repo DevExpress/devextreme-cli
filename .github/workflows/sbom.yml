@@ -89,9 +89,10 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           version="$(pnpm pkg get version | tr -d '"')"
-          mkdir -p tools/make-sbom/pack && cp tools/make-sbom/dist/devextreme-cli-sbom tools/make-sbom/pack/
-          jq -n --arg v "$version" '{name:"@devexpress/devextreme-cli-sbom",version:$v,publishConfig:{registry:"https://npm.pkg.github.com"}}' > tools/make-sbom/pack/package.json
-          cd tools/make-sbom/pack
+          mkdir -p tools/make-sbom/pack/devextreme-cli
+          cp tools/make-sbom/dist/devextreme-cli.cdx.json tools/make-sbom/pack/devextreme-cli
+          jq -n --arg v "$version" '{name:"@devexpress/devextreme-cli-sbom",version:$v,publishConfig:{registry:"https://npm.pkg.github.com"}}' > tools/make-sbom/pack/devextreme-cli/package.json
+          cd tools/make-sbom/pack/devextreme-cli
           pnpm publish --no-git-checks
 
       - name: Publish devextreme-schematics SBOM to GitHub Packages
@@ -99,9 +100,10 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           version="$(pnpm pkg get version | tr -d '"')"
-          mkdir -p tools/make-sbom/pack && cp tools/make-sbom/dist/devextreme-schematics-sbom tools/make-sbom/pack/
-          jq -n --arg v "$version" '{name:"@devexpress/devextreme-schematics-sbom",version:$v,publishConfig:{registry:"https://npm.pkg.github.com"}}' > tools/make-sbom/pack/package.json
-          cd tools/make-sbom/pack
+          mkdir -p tools/make-sbom/pack/devextreme-schematics
+          cp tools/make-sbom/dist/devextreme-schematics.cdx.json tools/make-sbom/pack/devextreme-schematics
+          jq -n --arg v "$version" '{name:"@devexpress/devextreme-schematics-sbom",version:$v,publishConfig:{registry:"https://npm.pkg.github.com"}}' > tools/make-sbom/pack/devextreme-schematics/package.json
+          cd tools/make-sbom/pack/devextreme-schematics
           pnpm publish --no-git-checks
 
   publish:
