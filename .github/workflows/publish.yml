@@ -8,19 +8,19 @@ on:
         type: boolean
         default: false
 
-permissions:
-  contents: read
-  id-token: write
+permissions: {}
 
 jobs:
-  publish:
-    name: Build & Publish NPM packages
-    runs-on: ubuntu-latest
-    environment: npmjs
+  build:
+    name: Build NPM packages
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Get sources
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
@@ -30,7 +30,9 @@ jobs:
         with:
           node-version-file: '.node-version'
           cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            tools/make-sbom/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -46,11 +48,103 @@ jobs:
           package_cli_tgz="$(pnpm --filter devextreme-cli pack --json | jq -er 'if type=="array" then .[0].filename else .filename end')"
           package_schematics_tgz="$(pnpm --filter devextreme-schematics pack --json | jq -er 'if type=="array" then .[0].filename else .filename end')"
 
-          echo "PACKAGE_CLI_TGZ=$package_cli_tgz" >> "$GITHUB_ENV"
-          echo "PACKAGE_SCHEMATICS_TGZ=$package_schematics_tgz" >> "$GITHUB_ENV"
+          echo "PACKAGE_CLI_TGZ=$(realpath "$package_cli_tgz")" >> "$GITHUB_ENV"
+          echo "PACKAGE_SCHEMATICS_TGZ=$(realpath "$package_schematics_tgz")" >> "$GITHUB_ENV"
+
+      - name: Upload devextreme-cli package
+        uses: actions/upload-artifact@v7
+        with:
+          name: package-cli
+          path: ${{ env.PACKAGE_CLI_TGZ }}
+          if-no-files-found: error
+
+      - name: Upload devextreme-schematics package
+        uses: actions/upload-artifact@v7
+        with:
+          name: package-schematics
+          path: ${{ env.PACKAGE_SCHEMATICS_TGZ }}
+          if-no-files-found: error
+
+      - name: Set GitHub Packages auth
+        run: pnpm set //npm.pkg.github.com/:_authToken='${NODE_AUTH_TOKEN}'
+
+      - name: Build SBOMs
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd tools/make-sbom
+          pnpm install --frozen-lockfile
+          pnpm dx-make-sbom ../../ dist/ "devextreme-cli($PACKAGE_CLI_TGZ),devextreme-schematics($PACKAGE_SCHEMATICS_TGZ)"
+
+      - name: Validate SBOMs
+        uses: DevExpress/github-actions/validate-sbom@5034a6d5e0fd18fc2826ed20a5140f9c83b8994f
+        with:
+          input-format: json
+          input-files: |
+            tools/make-sbom/dist/devextreme-cli.cdx.json
+            tools/make-sbom/dist/devextreme-schematics.cdx.json
+
+      - name: Publish devextreme-cli SBOM to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version="$(pnpm pkg get version | tr -d '"')"
+          mkdir -p tools/make-sbom/pack/devextreme-cli
+          cp tools/make-sbom/dist/devextreme-cli.cdx.json tools/make-sbom/pack/devextreme-cli
+          jq -n --arg v "$version" '{name:"@devexpress/devextreme-cli-sbom",version:$v,publishConfig:{registry:"https://npm.pkg.github.com"}}' > tools/make-sbom/pack/devextreme-cli/package.json
+          cd tools/make-sbom/pack/devextreme-cli
+          pnpm publish --no-git-checks
+
+      - name: Publish devextreme-schematics SBOM to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version="$(pnpm pkg get version | tr -d '"')"
+          mkdir -p tools/make-sbom/pack/devextreme-schematics
+          cp tools/make-sbom/dist/devextreme-schematics.cdx.json tools/make-sbom/pack/devextreme-schematics
+          jq -n --arg v "$version" '{name:"@devexpress/devextreme-schematics-sbom",version:$v,publishConfig:{registry:"https://npm.pkg.github.com"}}' > tools/make-sbom/pack/devextreme-schematics/package.json
+          cd tools/make-sbom/pack/devextreme-schematics
+          pnpm publish --no-git-checks
+
+  publish:
+    name: Publish NPM packages
+    needs: build
+    runs-on: ubuntu-slim
+    environment: npmjs
+    permissions:
+      id-token: write  # Required for OIDC (Trusted Publishing)
+      contents: read
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v7
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.node-version'
+
+      - name: Download devextreme-cli package
+        uses: actions/download-artifact@v7
+        with:
+          name: package-cli
+          path: package-cli
+
+      - name: Download devextreme-schematics package
+        uses: actions/download-artifact@v7
+        with:
+          name: package-schematics
+          path: package-schematics
 
       - name: Publish devextreme-cli
-        run: pnpm publish "$PACKAGE_CLI_TGZ" --provenance --no-git-checks ${{ inputs['dry-run'] && '--dry-run' || '' }}
+        run: |
+          package_cli_tgz=$(ls package-cli/*.tgz)
+          pnpm publish "$package_cli_tgz" --provenance --no-git-checks ${{ inputs['dry-run'] && '--dry-run' || '' }}
 
       - name: Publish devextreme-schematics
-        run: pnpm publish "$PACKAGE_SCHEMATICS_TGZ" --provenance --no-git-checks ${{ inputs['dry-run'] && '--dry-run' || '' }}
+        run: |
+          package_schematics_tgz=$(ls package-schematics/*.tgz)
+          pnpm publish "$package_schematics_tgz" --provenance --no-git-checks ${{ inputs['dry-run'] && '--dry-run' || '' }}
