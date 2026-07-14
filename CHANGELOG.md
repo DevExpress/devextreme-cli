@@ -1,3 +1,14 @@
+## v1.16.0
+
+- Added support for DevExtreme v26.1.
+- Added dependency and security fixes.
+
+## v1.15.0
+
+- Migrated the repository from npm to pnpm.
+- Added dependency and security fixes.
+- Added minor security improvements in DevExtreme Schematics.
+
 ## v1.14.2
 
 - Added dependency and security fixes.
@@ -10,7 +21,7 @@
 ## v1.14.0
 
 - Updated DevExtreme Schematics to Angular 19.
-- Updated sample data source in application templates.
+- Updated the sample data source in application templates.
 - Added dependency and security fixes.
 
 ## v1.13.0
