@@ -3,5 +3,5 @@ minimumReleaseAgeExclude:
   - tar@7.5.16
   - undici@7.28.0
 overrides:
-  tar@<=7.5.15: ^7.5.16
+  tar@<=7.5.15: ^7.5.20
   body-parser@>=2.0.0 <2.3.0: ^2.3.0
