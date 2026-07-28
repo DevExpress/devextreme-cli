@@ -68,6 +68,34 @@ jobs:
       - name: Set GitHub Packages auth
         run: pnpm set //npm.pkg.github.com/:_authToken='${NODE_AUTH_TOKEN}'
 
+      - name: Publish devextreme-cli to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          package_dir="$RUNNER_TEMP/github-package-cli"
+          rm -rf "$package_dir"
+          mkdir -p "$package_dir"
+          tar -xzf "$PACKAGE_CLI_TGZ" -C "$package_dir"
+          jq --arg name "@devexpress/devextreme-cli" --arg registry "https://npm.pkg.github.com" '.name = $name | .publishConfig = ((.publishConfig // {}) + {registry:$registry})' "$package_dir/package/package.json" > "$package_dir/package/package.json.tmp"
+          mv "$package_dir/package/package.json.tmp" "$package_dir/package/package.json"
+          github_package_tgz="$package_dir/github-package.tgz"
+          tar -czf "$github_package_tgz" -C "$package_dir" package
+          pnpm publish "$github_package_tgz" --no-git-checks
+
+      - name: Publish devextreme-schematics to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          package_dir="$RUNNER_TEMP/github-package-schematics"
+          rm -rf "$package_dir"
+          mkdir -p "$package_dir"
+          tar -xzf "$PACKAGE_SCHEMATICS_TGZ" -C "$package_dir"
+          jq --arg name "@devexpress/devextreme-schematics" --arg registry "https://npm.pkg.github.com" '.name = $name | .publishConfig = ((.publishConfig // {}) + {registry:$registry})' "$package_dir/package/package.json" > "$package_dir/package/package.json.tmp"
+          mv "$package_dir/package/package.json.tmp" "$package_dir/package/package.json"
+          github_package_tgz="$package_dir/github-package.tgz"
+          tar -czf "$github_package_tgz" -C "$package_dir" package
+          pnpm publish "$github_package_tgz" --no-git-checks
+
       - name: Build SBOMs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
