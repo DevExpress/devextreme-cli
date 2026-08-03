@@ -23,9 +23,9 @@
   },
   "overrides": {
     "@babel/core": ">=8.0.1",
-    "brace-expansion": ">=5.0.7",
-    "js-yaml": ">=5.2.1",
-    "postcss": ">=8.5.16",
+    "brace-expansion": ">=5.0.8",
+    "js-yaml": ">=5.2.2",
+    "postcss": ">=8.5.17",
     "sharp@<0.35.0": "0.35.0"
   }
 }
