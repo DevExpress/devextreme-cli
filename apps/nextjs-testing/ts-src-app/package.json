@@ -23,7 +23,7 @@
   },
   "overrides": {
     "@babel/core": ">=8.0.1",
-    "brace-expansion": ">=5.0.8",
+    "brace-expansion": ">=5.0.9",
     "js-yaml": ">=5.2.2",
     "postcss": ">=8.5.17",
     "sharp@<0.35.0": "0.35.0"
