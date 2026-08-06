@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@angular-eslint/schematics": "0.2.0-beta.1",
-    "@devexpress/eslint-plugin-dx-security": "^0.2.6",
+    "@devexpress/eslint-plugin-dx-security": "^0.2.4",
     "@typescript-eslint/parser": "^8.63.0",
     "eslint": "^9.39.4",
     "pre-commit": "^1.2.2",
