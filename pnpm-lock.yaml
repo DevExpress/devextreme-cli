@@ -9,9 +9,10 @@ overrides:
   '@babel/traverse@<7.23.2': '>=7.29.7'
   basic-ftp@<=5.3.0: '>=5.3.1'
   braces@<3.0.3: '>=3.0.3'
-  brace-expansion@>=5.0.2 <5.0.8: ^5.0.8
-  brace-expansion@<2.1.3: ^2.1.3
+  brace-expansion@>=4.0.0 <5.0.9: ^5.0.9
+  brace-expansion@<2.1.4: ^2.1.4
   cross-spawn: 7.0.6
+  fast-uri@>=3.0.0 <3.1.5: ^3.1.5
   flatted: ^3.4.3
   form-data@>=4.0.0 <4.0.4: '>=4.0.6'
   ip-address@<=10.1.0: '>=10.2.2'
@@ -32,8 +33,8 @@ importers:
         specifier: 0.2.0-beta.1
         version: 0.2.0-beta.1(@angular-devkit/schematics@19.2.27(chokidar@4.0.3))
       '@devexpress/eslint-plugin-dx-security':
-        specifier: ^0.2.6
-        version: 0.2.6(eslint@9.39.4)
+        specifier: ^0.2.7
+        version: 0.2.7(eslint@9.39.4)
       '@typescript-eslint/parser':
         specifier: ^8.63.0
         version: 8.63.0(eslint@9.39.4)(typescript@5.6.3)
@@ -412,8 +413,8 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  '@devexpress/eslint-plugin-dx-security@0.2.6':
-    resolution: {integrity: sha512-lkTJhNTYxRaHjqJFYjOpdHwnYGfsqzIMuJl3otT2WXm5TjEIXZOaNPZ9IGjdLobYmS6O9bZyWxuOCRTRWiWlLg==}
+  '@devexpress/eslint-plugin-dx-security@0.2.7':
+    resolution: {integrity: sha512-UL5zuenzoWh/9W3BF/VcbcTn3ba5Hqn+G014Wsb9dU5M1fnalpXQbiqRMQ3peeJER7SamQj1MgxOGnIWopnc+g==}
     peerDependencies:
       eslint: ^8 || ^9.7 || ^10
 
@@ -1077,11 +1078,11 @@ packages:
   boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
 
-  brace-expansion@2.1.3:
-    resolution: {integrity: sha512-DRdx5neNsG/QXbniLFWi2YmC/68oeOOmKz6zOjVk6ZS1ZLXgLIKqVEc6hWsmkjBbgii0SwaBTcJ5XKj5gzY/4A==}
+  brace-expansion@2.1.4:
+    resolution: {integrity: sha512-hGfVzPxthbf3+2yjg/RBs60cB0FhqBS/zvdV/4wn4/BmN0bNMMHPc4V/BbFieqf1TKAGGAHnY4eSjajCl0f2Xg==}
 
-  brace-expansion@5.0.8:
-    resolution: {integrity: sha512-JZyDyq3D4AUifKTPOB7DELf6XsB3WdPuNxCtob1vFXPsSXhdAiHBWJ/tJ8HAc9aH84BK+5JFZLNkJKx3G9kzQg==}
+  brace-expansion@5.0.9:
+    resolution: {integrity: sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==}
     engines: {node: 20 || >=22}
 
   braces@3.0.3:
@@ -1498,8 +1499,8 @@ packages:
   eslint-plugin-security@1.4.0:
     resolution: {integrity: sha512-xlS7P2PLMXeqfhyf3NpqbvbnW04kN8M9NtmhpR3XGyOvt/vNKS7XPXT5EDbwKW9vCjWH4PpfQvgD/+JgN0VJKA==}
 
-  eslint-plugin-security@4.0.0:
-    resolution: {integrity: sha512-tfuQT8K/Li1ZxhFzyD8wPIKtlzZxqBcPr9q0jFMQ77wWAbKBVEhaMPVQRTMTvCMUDhwBe5vPVqQPwAGk/ASfxQ==}
+  eslint-plugin-security@4.0.1:
+    resolution: {integrity: sha512-/lZCkOxPOWaf1jXAqgICrS8St3BMBccIPvhOSUYuV6VCr1o5nFVG998FnTLt6w2Nxb8Uo0nM8fzmnhp+GY/aEg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   eslint-plugin-unused-imports@4.4.1:
@@ -1608,8 +1609,8 @@ packages:
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
 
-  fast-uri@3.1.4:
-    resolution: {integrity: sha512-8JnbkQ4juDyvYs4mgFGQqg4yCYtFDtUtmp2QIQq11ZZe5CFQ5wcqm1rqDgAh/QdMySuBnPzMUiJUNZG5N/AiQw==}
+  fast-uri@3.1.5:
+    resolution: {integrity: sha512-gHwA1O9LDIcKunMKhObS/HimwtehO1nPUECKAu5TpKgaO19fcWEl4bliWe1jWxVFvIXztJjjQ4L8XQ1EU9f7Jw==}
 
   fb-watchman@2.0.2:
     resolution: {integrity: sha512-p5161BqbuCaSnB8jIbzQHOlpgsPmK5rJVDfDKO91Axs5NC1uu3HRQm6wt9cd9/+GtQQIO53JdGXXoyDpTAsgYA==}
@@ -3405,13 +3406,13 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@devexpress/eslint-plugin-dx-security@0.2.6(eslint@9.39.4)':
+  '@devexpress/eslint-plugin-dx-security@0.2.7(eslint@9.39.4)':
     dependencies:
       '@microsoft/eslint-plugin-sdl': 1.1.0(eslint@9.39.4)
       eslint: 9.39.4
       eslint-plugin-react: 7.37.5(eslint@9.39.4)
       eslint-plugin-redos: 4.5.0(eslint@9.39.4)
-      eslint-plugin-security: 4.0.0
+      eslint-plugin-security: 4.0.1
 
   '@eslint-community/eslint-utils@4.9.1(eslint@9.39.4)':
     dependencies:
@@ -4083,7 +4084,7 @@ snapshots:
   ajv@8.18.0:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.4
+      fast-uri: 3.1.5
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -4296,11 +4297,11 @@ snapshots:
 
   boolbase@1.0.0: {}
 
-  brace-expansion@2.1.3:
+  brace-expansion@2.1.4:
     dependencies:
       balanced-match: 1.0.2
 
-  brace-expansion@5.0.8:
+  brace-expansion@5.0.9:
     dependencies:
       balanced-match: 4.0.4
 
@@ -4754,7 +4755,7 @@ snapshots:
       es-iterator-helpers: 1.3.2
       eslint: 9.39.4
       estraverse: 5.3.0
-      hasown: 2.0.3
+      hasown: 2.0.4
       jsx-ast-utils: 3.3.5
       minimatch: 3.1.5
       object.entries: 1.1.9
@@ -4797,7 +4798,7 @@ snapshots:
     dependencies:
       safe-regex: 1.1.0
 
-  eslint-plugin-security@4.0.0:
+  eslint-plugin-security@4.0.1:
     dependencies:
       safe-regex: 2.1.1
 
@@ -4948,7 +4949,7 @@ snapshots:
 
   fast-levenshtein@2.0.6: {}
 
-  fast-uri@3.1.4: {}
+  fast-uri@3.1.5: {}
 
   fb-watchman@2.0.2:
     dependencies:
@@ -5014,7 +5015,7 @@ snapshots:
       call-bound: 1.0.4
       define-properties: 1.2.1
       functions-have-names: 1.2.3
-      hasown: 2.0.3
+      hasown: 2.0.4
       is-callable: 1.2.7
 
   functions-have-names@1.2.3: {}
@@ -5288,7 +5289,7 @@ snapshots:
       call-bound: 1.0.4
       gopd: 1.2.0
       has-tostringtag: 1.0.2
-      hasown: 2.0.3
+      hasown: 2.0.4
 
   is-set@2.0.3: {}
 
@@ -5850,15 +5851,15 @@ snapshots:
 
   minimatch@10.2.5:
     dependencies:
-      brace-expansion: 5.0.8
+      brace-expansion: 5.0.9
 
   minimatch@3.1.5:
     dependencies:
-      brace-expansion: 2.1.3
+      brace-expansion: 2.1.4
 
   minimatch@9.0.9:
     dependencies:
-      brace-expansion: 2.1.3
+      brace-expansion: 2.1.4
 
   minimist@1.2.8: {}
 
