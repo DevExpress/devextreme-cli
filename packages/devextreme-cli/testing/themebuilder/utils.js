@@ -39,6 +39,7 @@ module.exports.getLatestThemeBuilderVersion = () => {
 
 module.exports.getVersionFromTheme = async(workDirectory) => {
     const themeFileName = join(workDirectory, 'dx.generic.custom-scheme.css');
-    const themeContent = (await readFile(themeFileName, 'utf8')).slice(0, 200);
-    return themeContent.replace(/.*version:\s(\d\d\.\d\.\d\d?).*/gis, '$1');
+    const themeContent = await readFile(themeFileName, 'utf8');
+    const match = themeContent.match(/version:\s(\d\d\.\d\.\d\d?)/i);
+    return match ? match[1] : null;
 };
