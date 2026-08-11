@@ -1,3 +1,7 @@
+## v1.17.0
+- Updated the `less` dependency from v3 to v4.
+- Added dependency and security fixes.
+
 ## v1.16.0
 
 - Added support for DevExtreme v26.1.
