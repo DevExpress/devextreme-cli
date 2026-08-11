@@ -23,3 +23,4 @@ packages/devextreme-cli/testing/__tests__/__diff_snapshots__/
 packages/devextreme-schematics/src/**/*.js
 packages/devextreme-schematics/src/**/*.js.map
 packages/devextreme-schematics/src/**/*.d.ts
+packages/devextreme-schematics/package-lock.json
