@@ -27,8 +27,8 @@
     "test": "pnpm run create-template && pnpm run lint-template && pnpm run test-template && pnpm run test-themebuilder",
     "create-template": "node ./testing/creating.js",
     "lint-template": "node ./testing/linting.js",
-    "test-template": "node ./testing/testing.js",
-    "test-dev": "cross-env TEST_MODE=dev jest",
+    "test-template": "node --experimental-vm-modules ./testing/testing.js",
+    "test-dev": "cross-env TEST_MODE=dev NODE_OPTIONS=--experimental-vm-modules jest",
     "test-themebuilder": "jest --config=./jest-themebuilder.config.js --runInBand",
     "docker:build": "docker build --rm -f \"testing/docker/Dockerfile\" -t devextreme-cli:latest \"testing/docker\" --progress=plain",
     "docker:run": "docker run --rm -d  -p 9222:9222/tcp devextreme-cli:latest"
