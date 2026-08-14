@@ -71,7 +71,7 @@ jobs:
       timeout-minutes: 30
 
     - name: Install Internal Packages
-      uses: DevExpress/github-actions/install-internal-package@main
+      uses: DevExpress/github-actions/install-internal-package@install-internal-package
       with:
         working-directory: packages/devextreme-cli/testing/sandbox/${{ matrix.APPROACH }}/my-app
 

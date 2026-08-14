@@ -19,7 +19,7 @@ jobs:
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
-      - uses: DevExpress/github-actions/send-teams-notification@main
+      - uses: DevExpress/github-actions/send-teams-notification@send-teams-notification
         with:
           hook_url: ${{secrets.TEAMS_ALERT_WEBHOOK}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
