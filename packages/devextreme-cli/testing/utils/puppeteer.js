@@ -1,6 +1,5 @@
-const puppeteer = require('puppeteer');
-
-module.exports.getBrowser = () => {
+module.exports.getBrowser = async() => {
+    const puppeteer = await import('puppeteer');
     if(Boolean(process.env.LAUNCH_BROWSER)) {
         return puppeteer.launch({
             headless: 'new',
