@@ -9,13 +9,13 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "next": "^16.2.11",
+    "next": "^16.3.3",
     "react": "19.2.7",
     "react-dom": "19.2.7"
   },
   "devDependencies": {
     "eslint": "^9.39.4",
-    "eslint-config-next": "^16.2.11"
+    "eslint-config-next": "^16.3.3"
   },
   "overrides": {
     "@babel/core": ">=8.0.1",
