@@ -11,8 +11,8 @@ const sandboxPath = path.join(process.cwd(), './testing/sandbox/angular');
 const appPath = path.join(sandboxPath, appName);
 const schematicsDirectory = '../../../../devextreme-schematics';
 const schematicsPath = path.join(sandboxPath, schematicsDirectory);
-const appComponentTemplatePath = path.join(appPath, 'src/app/app.component.html');
-const appComponentPath = path.join(appPath, 'src/app/app.component.ts');
+const appComponentTemplatePath = path.join(appPath, 'src/app/app.html');
+const appComponentPath = path.join(appPath, 'src/app/app.ts');
 
 async function prepareSchematics() {
     await packageManager.runInstall({

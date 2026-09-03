@@ -12,7 +12,7 @@ const { getPackageJsonPath } = require('../utility/package-json-utils');
 const modifyJson = require('../utility/modify-json-file');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
-const minNgCliVersion = new semver('17.0.0');
+const minNgCliVersion = new semver('20.0.0');
 const ngCliWithZoneless = new semver('20.0.0');
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
@@ -111,7 +111,8 @@ const create = async(appName, options) => {
         '--skip-tests=true',
         '--skip-install=true',
         '--standalone=true',
-        '--ssr=false'
+        '--ssr=false',
+        '--ai-config=none'
     ];
 
     if(ngCliWithZoneless.compare(currentNgVersion) <= 0) {
