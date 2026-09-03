@@ -112,7 +112,7 @@ const run = async(commands, options, devextremeConfig) => {
 
             if(app) {
                 if(commands[1] === 'view') {
-                    app.addView(commands[2], options);
+                    await app.addView(commands[2], options);
                 } else {
                     console.error('Invalid command');
                     printHelp(commands[0]);

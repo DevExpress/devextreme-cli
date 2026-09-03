@@ -35,7 +35,7 @@ async function runSchematicCommand(schematicCommand, options, evaluatingOptions)
         commandArguments.push(`--${dasherize(option)}=${options[option]}`);
     }
 
-    runNgCommand(commandArguments, options, evaluatingOptions);
+    return runNgCommand(commandArguments, options, evaluatingOptions);
 }
 
 async function runNgCommand(commandArguments, commandOptions, commandConfig) {
@@ -81,7 +81,7 @@ const getTargetNgCliVersion = () => {
 };
 
 const install = async(options) => {
-    runSchematicCommand('install', {
+    return runSchematicCommand('install', {
         ...options
     });
 };
@@ -137,7 +137,7 @@ const create = async(appName, options) => {
     options.updateBudgets = true;
     options.layout = layout;
     options.globalNgCliVersion = currentNgVersion;
-    addTemplate(appName, options, {
+    await addTemplate(appName, options, {
         cwd: appPath
     });
 
@@ -150,7 +150,7 @@ const addTemplate = async(appName, options, evaluatingOptions) => {
         ...options,
         globalNgCliVersion: options.globalNgCliVersion || getTargetNgCliVersion().version
     };
-    runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
+    return runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
 
 const addView = (viewName, options) => {
@@ -158,7 +158,7 @@ const addView = (viewName, options) => {
         name: viewName
     }, options);
     schematicOptions.name = viewName;
-    runSchematicCommand('add-view', schematicOptions);
+    return runSchematicCommand('add-view', schematicOptions);
 };
 
 const migrateConfigComponents = async(options = {}) => {

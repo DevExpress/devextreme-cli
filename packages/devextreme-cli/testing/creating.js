@@ -18,11 +18,8 @@ const args = minimist(process.argv.slice(2), {
         : envs.filter(e => e.engine === args.e);
 
     const depsVersionTag = args[depsVersionTagOptionName];
-    filteredEnvs.forEach(async env => {
-        try {
-            await env.createApp(depsVersionTag);
-        } catch(e) {
-            process.exit(1);
-        }
-    });
-})().catch(reject => console.error(reject));
+    await Promise.all(filteredEnvs.map(env => env.createApp(depsVersionTag)));
+})().catch(reject => {
+    console.error(reject);
+    process.exitCode = 1;
+});
