@@ -94,7 +94,7 @@ describe('view', () => {
     }, tree);
     tree = await runner.runSchematic('add-view', options, tree);
 
-    const moduleContent = tree.readContent('/src/app/test/test-routing.module.ts');
+    const moduleContent = tree.readContent('/src/app/test/test-routing-module.ts');
 
     expect(moduleContent).toMatch(/component: TestComponent/);
     expect(moduleContent).toMatch(/path: 'pages\/test'/);

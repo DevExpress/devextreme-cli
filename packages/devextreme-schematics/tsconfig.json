@@ -9,6 +9,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "ignoreDeprecations": "6.0",
     "resolveJsonModule": true,
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,

@@ -8,6 +8,10 @@ export interface TypeScriptResolutionResult {
   errors: string[];
 }
 
+function getErrorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
+}
+
 /**
  * Resolves TypeScript with a 3-level fallback strategy:
  * 1. Project search - look in the user's project node_modules
@@ -27,7 +31,7 @@ export function resolveTypeScript(): TypeScriptResolutionResult {
       };
     }
   } catch (err) {
-    errors.push(`Failed to import TypeScript from project: ${err?.message || err}`);
+    errors.push(`Failed to import TypeScript from project: ${getErrorMessage(err)}`);
   }
 
   try {
@@ -40,7 +44,7 @@ export function resolveTypeScript(): TypeScriptResolutionResult {
       };
     }
   } catch (err) {
-    errors.push(`Failed to import TypeScript from global node_modules: ${err?.message || err}`);
+    errors.push(`Failed to import TypeScript from global node_modules: ${getErrorMessage(err)}`);
   }
 
   try {
@@ -53,7 +57,7 @@ export function resolveTypeScript(): TypeScriptResolutionResult {
       };
     }
   } catch (err) {
-    errors.push(`Failed to import TypeScript from temporary installation (npm cache): ${err?.message || err}`);
+    errors.push(`Failed to import TypeScript from temporary installation (npm cache): ${getErrorMessage(err)}`);
   }
 
   return {

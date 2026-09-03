@@ -12,7 +12,7 @@ const { getPackageJsonPath } = require('../utility/package-json-utils');
 const modifyJson = require('../utility/modify-json-file');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
-const minNgCliVersion = new semver('17.0.0');
+const minNgCliVersion = new semver('20.0.0');
 const ngCliWithZoneless = new semver('20.0.0');
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
@@ -46,7 +46,7 @@ async function runNgCommand(commandArguments, commandOptions, commandConfig) {
 
     const ngCommandArguments = hasNg && !depsVersionTag
         ? []
-        : ['-p', `@angular/cli@${depsVersionTag || `v${minCliLtsVersion}-lts`}`, 'ng'];
+        : ['-p', `@angular/cli@${depsVersionTag || minCliLtsVersion}`, 'ng'];
 
     ngCommandArguments.push(...commandArguments);
     return runCommand(npmCommandName, ngCommandArguments, commandConfig);
@@ -72,6 +72,14 @@ const hasSutableNgCli = async() => {
 
     const isSupportVersion = localVersion.compare(minNgCliVersion) >= 0;
     return isSupportVersion;
+};
+
+const getTargetNgCliVersion = () => {
+    const localVersion = ngVersion.getLocalNgVersion();
+
+    return localVersion && localVersion.compare(minNgCliVersion) >= 0
+        ? localVersion
+        : ngVersion.getPublicNgVersion();
 };
 
 const install = async(options) => {
@@ -100,7 +108,7 @@ const bumpAngular = (appPath, versionTag) => {
 
 const create = async(appName, options) => {
     const layout = await getLayoutInfo(options.layout);
-    const currentNgVersion = ngVersion.getNgCliVersion().version;
+    const currentNgVersion = getTargetNgCliVersion().version;
     const depsVersionTag = extractDepsVersionTag(options);
 
     const commandArguments = [
@@ -111,7 +119,8 @@ const create = async(appName, options) => {
         '--skip-tests=true',
         '--skip-install=true',
         '--standalone=true',
-        '--ssr=false'
+        '--ssr=false',
+        '--ai-config=none'
     ];
 
     if(ngCliWithZoneless.compare(currentNgVersion) <= 0) {
@@ -129,6 +138,7 @@ const create = async(appName, options) => {
     options.resolveConflicts = 'override';
     options.updateBudgets = true;
     options.layout = layout;
+    options.globalNgCliVersion = currentNgVersion;
     addTemplate(appName, options, {
         cwd: appPath
     });
@@ -140,7 +150,7 @@ const addTemplate = async(appName, options, evaluatingOptions) => {
     const schematicOptions = {
         ...(appName && { project: appName }),
         ...options,
-        globalNgCliVersion: ngVersion.getNgCliVersion().version
+        globalNgCliVersion: options.globalNgCliVersion || getTargetNgCliVersion().version
     };
     runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };

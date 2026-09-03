@@ -3,7 +3,7 @@ import { InsertChange, Change } from '@schematics/angular/utility/change';
 
 import {
   Node
-} from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
+} from 'typescript';
 
 const newLine = `
 `;
@@ -11,8 +11,10 @@ const newLine = `
 export function applyChanges(host: Tree, changes: Change[], filePath: string) {
   const recorder = host.beginUpdate(filePath);
 
-  changes.forEach((change: InsertChange) => {
-    recorder.insertLeft(change.pos, change.toAdd);
+  changes.forEach((change: Change) => {
+    if (change instanceof InsertChange) {
+      recorder.insertLeft(change.pos, change.toAdd);
+    }
   });
 
   host.commitUpdate(recorder);

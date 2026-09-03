@@ -34,6 +34,16 @@ import { humanize } from '../utility/string';
 
 async function getPathToFile(host: Tree, projectName: string, moduleName: string) {
   const rootPath = await getApplicationPath(host, projectName);
+  const directCandidates = [
+    `/${rootPath}/${moduleName}.ts`,
+    `/${rootPath}/${moduleName}.module.ts`,
+    `/${rootPath}/${moduleName}-module.ts`,
+  ];
+
+  const directMatch = directCandidates.find(candidate => host.exists(candidate));
+  if (directMatch) {
+    return directMatch;
+  }
 
   try {
     return findModuleFromOptions(host, { name: moduleName, path: rootPath, module: moduleName });
@@ -185,6 +195,7 @@ export default function(options: any): Rule {
         skipTests: options.skipTests,
         inlineStyle: options.inlineStyle,
         prefix: options.prefix,
+        type: 'component',
         standalone: true
       }),
       addContentToView({ name, project }) as any,
