@@ -111,7 +111,8 @@ const create = async(appName, options) => {
         '--skip-tests=true',
         '--skip-install=true',
         '--standalone=true',
-        '--ssr=false'
+        '--ssr=false',
+        '--ai-config=none'
     ];
 
     if(ngCliWithZoneless.compare(currentNgVersion) <= 0) {
