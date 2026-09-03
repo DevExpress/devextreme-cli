@@ -3,7 +3,7 @@ import { InsertChange, Change } from '@schematics/angular/utility/change';
 
 import {
   Node
-} from 'typescript';
+} from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 
 const newLine = `
 `;

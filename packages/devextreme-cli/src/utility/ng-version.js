@@ -15,7 +15,7 @@ const getLocalNgVersion = () => {
 };
 
 const getPublicNgVersion = () => {
-    const versions = JSON.parse(execSync('npm view @angular/cli@22 version --json').toString());
+    const versions = JSON.parse(execSync('npm view @angular/cli@latest version --json').toString());
     const version = Array.isArray(versions) ? versions[versions.length - 1] : versions;
     return new semver(version);
 };

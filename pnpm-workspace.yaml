@@ -9,9 +9,9 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - '@devexpress/eslint-plugin-dx-security@0.2.8'
-  - '@angular-devkit/core@22.1.7'
-  - '@angular-devkit/schematics@22.1.7'
-  - '@schematics/angular@22.1.7'
+  - '@angular-devkit/core@20.3.36'
+  - '@angular-devkit/schematics@20.3.36'
+  - '@schematics/angular@20.3.36'
 
 overrides:
   "@babel/core@<=7.29.0": ">=7.29.7"

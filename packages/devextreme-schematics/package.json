@@ -22,9 +22,9 @@
   ],
   "schematics": "./src/collection.json",
   "dependencies": {
-    "@angular-devkit/core": "^22.1.7",
-    "@angular-devkit/schematics": "^22.1.7",
-    "@schematics/angular": "^22.1.7",
+    "@angular-devkit/core": "^20.3.36",
+    "@angular-devkit/schematics": "^20.3.36",
+    "@schematics/angular": "^20.3.36",
     "parse5": "^7.3.0",
     "picomatch": "^4.0.5",
     "semver": "^7.8.5"
@@ -37,6 +37,6 @@
     "jasmine": "^2.99.0",
     "rxjs": "^7.8.2",
     "tslint": "^5.20.1",
-    "typescript": "~6.0.3"
+    "typescript": "~5.8.3"
   }
 }

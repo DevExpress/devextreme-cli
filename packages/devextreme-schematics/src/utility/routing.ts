@@ -2,7 +2,7 @@ import {
   Node,
   SourceFile,
   SyntaxKind
-} from 'typescript';
+} from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 
 import {
   strings,
