@@ -18,8 +18,9 @@ overrides:
   brace-expansion@2: "^2.1.4"
   brace-expansion@>=4: "^5.0.9"
   braces@<3.0.3: ">=3.0.3"
+  browserslist@<4.28.7: ^4.28.7
   cross-spawn: 7.0.6
-  fast-uri@>=3.0.0 <3.1.5: ^3.1.5
+  fast-uri@>=3.0.0 <3.1.6: ^3.1.6
   flatted: "^3.4.3"
   form-data@>=4.0.0 <4.0.4: ">=4.0.6"
   ip-address@<=10.3.0: ">=10.3.1"

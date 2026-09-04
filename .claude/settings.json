@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git log *)",
+      "Bash(find / -maxdepth 6 -iname \"devextreme-schematics\" -not -path \"*/node_modules/*/node_modules/*\")",
+      "Read(//Users/vladislavvolkov/Documents/work/**)",
+      "Bash(npx -y @angular/cli@20 version)",
+      "Bash(node ./testing/creating.js -e angular)",
+      "Bash(git checkout *)"
+    ]
+  }
+}
