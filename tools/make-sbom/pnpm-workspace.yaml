@@ -3,7 +3,7 @@ minimumReleaseAgeExclude:
 overrides:
   tar@<=7.5.20: ^7.5.21
   undici@>=7.0.0 <7.29.0: ^7.29.0
-  fast-uri@>=3.0.0 <3.1.5: ^3.1.5
+  fast-uri@>=3.0.0 <3.1.5: ^3.1.6
   brace-expansion@>=4.0.0 <5.0.9: ^5.0.9
   brace-expansion@<2.1.4: ^2.1.4
   body-parser@>=2.0.0 <2.3.0: ^2.3.0
