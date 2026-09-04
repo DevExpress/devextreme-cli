@@ -62,7 +62,7 @@ jobs:
 
       - name: Install test app dependencies
         run: cd ${{ env.TEST_APP_DIR }} && npm ci
-        timeout-minutes: 5
+        timeout-minutes: 10
 
       - name: Add DevExtreme to Next.js application
         run: |
