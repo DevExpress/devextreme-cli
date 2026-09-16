@@ -83,7 +83,7 @@ describe('layout', () => {
     expect(devextremeConfigContent).toContain('"inputFile": "src/themes/metadata.additional.json"');
     expect(devextremeConfigContent).toMatch(/\n\s{2}\S/g);
 
-    const componentContent = tree.readContent('/src/app/app.component.html');
+    const componentContent = tree.readContent('/src/app/app.html');
     expect(componentContent).toContain('app-side-nav-outer-toolbar title="{{appInfo.title}}"');
 
     const stylesContent = tree.readContent('/src/dx-styles.scss');
@@ -101,7 +101,7 @@ describe('layout', () => {
     expect(styles[3]).toBe('src/themes/generated/theme.additional.dark.css');
     expect(styles[4]).toBe('src/themes/generated/theme.additional.css');
 
-    const appContent = tree.readContent('/src/app/app.component.ts');
+    const appContent = tree.readContent('/src/app/app.ts');
     expect(appContent).toContain('import { DxHttpModule }');
     expect(appContent)
       .toContain('import { SideNavOuterToolbarComponent as SideNavToolbarComponent }');
@@ -109,8 +109,8 @@ describe('layout', () => {
       .toContain(`import { AuthService, ScreenService, AppInfoService } from './shared/services';`);
     expect(appContent)
       .toContain('import { FooterComponent }');
-    expect(appContent).toContain('templateUrl: \'./app.component.html\',');
-    expect(appContent).toContain('styleUrls: [\'./app.component.scss\']');
+    expect(appContent).toContain('templateUrl: \'./app.html\',');
+    expect(appContent).toContain('styleUrls: [\'./app.scss\']');
     expect(appContent).toContain('selector: \'app-root\',');
 
     const navigationMenu = tree.readContent(
@@ -217,18 +217,18 @@ describe('layout', () => {
     options.resolveConflicts = 'createNew';
     const tree = await runner.runSchematic('add-layout', options, appTree);
 
-    expect(tree.files).toContain('/src/app/app1.component.ts');
+    expect(tree.files).toContain('/src/app/app1.ts');
 
-    const componentContent = tree.readContent('/src/app/app1.component.html');
+    const componentContent = tree.readContent('/src/app/app1.html');
     expect(componentContent).toContain('app-side-nav-outer-toolbar title="{{appInfo.title}}"');
 
-    const appContent = tree.readContent('/src/app/app.component.ts');
-    expect(appContent).toMatch(/templateUrl: '.\/app.component.html',/);
-    expect(appContent).toMatch(/styleUrl: '.\/app.component.scss'/);
+    const appContent = tree.readContent('/src/app/app.ts');
+    expect(appContent).toMatch(/templateUrl: '.\/app.html',/);
+    expect(appContent).toMatch(/styleUrl: '.\/app.scss'/);
 
-    const newAppContent = tree.readContent('/src/app/app1.component.ts');
-    expect(newAppContent).toMatch(/templateUrl: '.\/app1.component.html',/);
-    expect(newAppContent).toMatch(/styleUrls: \['.\/app1.component.scss'\]/);
+    const newAppContent = tree.readContent('/src/app/app1.ts');
+    expect(newAppContent).toMatch(/templateUrl: '.\/app1.html',/);
+    expect(newAppContent).toMatch(/styleUrls: \['.\/app1.scss'\]/);
     expect(newAppContent).toContain(`import { AuthService, ScreenService, AppInfoService } from './shared/services';`);
 
     const appInfo = tree.readContent('/src/app/shared/services/app-info.service.ts');
@@ -267,7 +267,7 @@ describe('layout', () => {
     options.layout = 'side-nav-inner-toolbar';
     options.resolveConflicts = 'override';
     const tree = await runner.runSchematic('add-layout', options, appTree);
-    const content = tree.readContent('/src/app/app.component.html');
+    const content = tree.readContent('/src/app/app.html');
 
     expect(content).toContain('app-side-nav-inner-toolbar title="{{appInfo.title}}"');
   });
@@ -308,7 +308,7 @@ describe('layout', () => {
       project: 'testApp2'
     }, appTree);
 
-    const appContent = tree.readContent('projects/testApp2/src/app/app.component.ts');
+    const appContent = tree.readContent('projects/testApp2/src/app/app.ts');
     expect(appContent).toContain('selector: \'app2-root\',');
 
     const content = tree.readContent('/devextreme.json');

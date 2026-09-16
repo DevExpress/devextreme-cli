@@ -35,6 +35,11 @@ import { humanize } from '../utility/string';
 async function getPathToFile(host: Tree, projectName: string, moduleName: string) {
   const rootPath = await getApplicationPath(host, projectName);
 
+  const standalonePath = normalize(`${rootPath}/${moduleName}.ts`);
+  if (host.exists(standalonePath)) {
+    return standalonePath;
+  }
+
   try {
     return findModuleFromOptions(host, { name: moduleName, path: rootPath, module: moduleName });
   } catch (error) {
@@ -88,7 +93,7 @@ export function addViewToRouting(options: any) {
     const routingModulePath = await getPathToFile(host, options.project, options.module);
 
     if (!routingModulePath) {
-      throw new SchematicsException('Specified module does not exist.');
+      throw new SchematicsException(`Specified module ${routingModulePath}  does not exist.`);
     }
 
     addRedirectRoute(host, routingModulePath, options.name);
@@ -106,7 +111,7 @@ export function addViewToRouting(options: any) {
 
       const name = options.name.replace(/^pages\//, '');
       const componentName = getRouteComponentName(name);
-      const importChanges = insertImport(source, routingModulePath, componentName, `./pages/${name}/${name}.component`);
+      const importChanges = insertImport(source, routingModulePath, componentName, `./pages/${name}/${name}`);
       applyChanges(host, [importChanges], routingModulePath);
     }
     return host;
@@ -141,7 +146,7 @@ function addContentToView(options: any) {
   const name = strings.dasherize(basename(normalize(options.name)));
   const path = `${dirname(options.name)}/${name}`;
   const title = humanize(name);
-  const componentPath = `${path}/${name}.component.html`;
+  const componentPath = `${path}/${name}.html`;
   const content = `<h2>${title}</h2>
 <div class="content-block">
     <div class="dx-card responsive-paddings">Put your content here</div>
@@ -154,13 +159,13 @@ function addContentToView(options: any) {
 function addContentToTS(options: any) {
   const name = strings.dasherize(basename(normalize(options.name)));
   const path = `${dirname(options.name)}/${name}`;
-  const componentPath = `${path}/${name}.component.ts`;
+  const componentPath = `${path}/${name}.ts`;
   const content = `import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-${name}',
-  templateUrl: './${name}.component.html',
-  styleUrl: './${name}.component.css',
+  templateUrl: './${name}.html',
+  styleUrl: './${name}.css',
   standalone: true
 })
 export class ${strings.classify(basename(normalize(name)))}Component {
