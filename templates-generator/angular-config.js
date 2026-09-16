@@ -72,7 +72,7 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/app/pages/home/home.component.html',
+            glob: 'src/app/pages/home/home.html',
             definitions: [
                 {
                     before: 'My App',
@@ -99,7 +99,7 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/app/app.component.html',
+            glob: 'src/app/app.html',
             definitions: [
                 {
                     before: /side-nav-(inner|outer)-toolbar/g,
@@ -108,7 +108,7 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/app/app.component.ts',
+            glob: 'src/app/app.ts',
             definitions: [
                 {
                     before: 'app',
