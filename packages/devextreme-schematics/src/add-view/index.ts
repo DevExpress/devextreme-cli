@@ -93,7 +93,7 @@ export function addViewToRouting(options: any) {
     const routingModulePath = await getPathToFile(host, options.project, options.module);
 
     if (!routingModulePath) {
-      throw new SchematicsException(`Specified module ${routingModulePath}  does not exist.`);
+      throw new SchematicsException(`Specified module ${options.module} does not exist.`);
     }
 
     addRedirectRoute(host, routingModulePath, options.name);
