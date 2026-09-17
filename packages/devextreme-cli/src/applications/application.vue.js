@@ -11,7 +11,7 @@ const stringUtils = require('../utility/string');
 const latestVersions = require('../utility/latest-versions');
 const { depsVersionTagOptionName, extractDepsVersionTag } = require('../utility/extract-deps-version-tag');
 const defaultStyles = [
-    'devextreme/dist/css/dx.light.css'
+    'devextreme/dist/css/dx.fluent.blue.light.css'
 ];
 
 const preparePackageJsonForTemplate = (appPath, appName) => {
