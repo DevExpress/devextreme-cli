@@ -3,8 +3,8 @@ import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { CustomStore } from 'devextreme-angular/common/data';
 
 @Component({
-  templateUrl: 'tasks.component.html',
-  styleUrls: ['tasks.component.scss'],
+  templateUrl: 'tasks.html',
+  styleUrls: ['tasks.scss'],
   standalone: true,
   imports: [DxDataGridModule]
 })

@@ -58,7 +58,7 @@ describe('add-app-template', () => {
     expect(tree.files)
       .toContain('/projects/testApp2/src/themes/metadata.base.json');
     expect(tree.files)
-      .toContain('/projects/testApp2/src/app/pages/home/home.component.ts');
+      .toContain('/projects/testApp2/src/app/pages/home/home.ts');
   });
 
   it('should consider the `updateBudgets` option', async () => {
