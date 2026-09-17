@@ -24,7 +24,6 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
 
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
-        { name: 'postinstall', value: 'npm run build-themes' }
     ];
 
     packageJsonUtils.addDependencies(appPath, dependencies);
@@ -99,12 +98,13 @@ const addTemplate = (appPath, appName, templateOptions) => {
     install({}, appPath, styles);
 };
 
-const install = (options, appPath, styles) => {
+const install = async(options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
     addStylesToApp(appPath, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'vue');
 
-    packageManager.runInstall({ cwd: appPath });
+    await packageManager.runInstall({ cwd: appPath });
+    await packageManager.run(['run', 'build-themes'], { cwd: appPath });
 };
 
 const addStylesToApp = (appPath, styles) => {

@@ -123,7 +123,6 @@ describe('layout', () => {
     const tree = await runner.runSchematic('add-layout', options, appTree);
     const packageConfig = JSON.parse(tree.readContent('package.json'));
     expect(packageConfig.scripts['build-themes']).toBe('devextreme build');
-    expect(packageConfig.scripts['postinstall']).toBe('npm run build-themes');
   });
 
   it('should set static flag', async () => {
@@ -147,7 +146,6 @@ describe('layout', () => {
       const scripts = config['scripts'];
 
       scripts['build-themes'] = 'prev value 1';
-      scripts['postinstall'] = 'prev value 2';
 
       return config;
     });
@@ -158,7 +156,6 @@ describe('layout', () => {
     expect(packageConfig.scripts['origin-build-themes']).toBe('prev value 1');
     expect(packageConfig.scripts['origin-postinstall']).toBe('prev value 2');
     expect(packageConfig.scripts['build-themes']).toBe('npm run origin-build-themes && devextreme build');
-    expect(packageConfig.scripts['postinstall']).toBe('npm run origin-postinstall && npm run build-themes');
   });
 
   it('should add angular/cdk dependency', async () => {

@@ -35,8 +35,7 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
         { name: 'react-router-dom', version: '^6.3.0' },
     ];
     const scripts = [
-        { name: 'build-themes', value: 'devextreme build' },
-        { name: 'postinstall', value: 'npm run build-themes' }
+        { name: 'build-themes', value: 'devextreme build' }
     ];
 
     packageJsonUtils.addDependencies(appPath, dependencies);
@@ -140,14 +139,15 @@ const addTemplate = (appPath, appName, templateOptions) => {
     install({}, appPath, styles);
 };
 
-const install = (options, appPath, styles) => {
+const install = async(options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
 
     const pathToMainComponent = path.join(appPath, 'src', `App${getExtension(appPath)}`);
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
-    packageManager.runInstall({ cwd: appPath });
+    await packageManager.runInstall({ cwd: appPath });
+    await packageManager.run(['run', 'build-themes'], { cwd: appPath });
 };
 
 const addStylesToApp = (filePath, styles) => {
