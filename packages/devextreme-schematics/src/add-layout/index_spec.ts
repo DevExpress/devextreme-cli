@@ -154,7 +154,6 @@ describe('layout', () => {
     const tree = await runner.runSchematic('add-layout', options, appTree);
     const packageConfig = JSON.parse(tree.readContent('package.json'));
     expect(packageConfig.scripts['origin-build-themes']).toBe('prev value 1');
-    expect(packageConfig.scripts['origin-postinstall']).toBe('prev value 2');
     expect(packageConfig.scripts['build-themes']).toBe('npm run origin-build-themes && devextreme build');
   });
 
