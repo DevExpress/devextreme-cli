@@ -90,7 +90,7 @@ const create = async(appName, options) => {
         bumpReact(appPath, depsVersionTag, templateOptions.isTypeScript);
     }
 
-    addTemplate(appPath, appName, templateOptions);
+    await addTemplate(appPath, appName, templateOptions);
     modifyAppFiles(appPath, templateOptions);
 };
 
@@ -103,7 +103,7 @@ const modifyAppFiles = (appPath, { project, isTypeScript }) => {
     fs.writeFileSync(entryFilePath, content);
 };
 
-const addTemplate = (appPath, appName, templateOptions) => {
+const addTemplate = async(appPath, appName, templateOptions) => {
     const applicationTemplatePath = path.join(
         templateCreator.getTempaltePath('nextjs'),
         'application'
@@ -133,7 +133,7 @@ const addTemplate = (appPath, appName, templateOptions) => {
 
     preparePackageJsonForTemplate(appPath, appName, templateOptions.isTypeScript);
     updateJsonPropName(manifestPath, appName);
-    install({ isTypeScript: templateOptions.isTypeScript }, appPath, styles);
+    await install({ isTypeScript: templateOptions.isTypeScript }, appPath, styles);
 };
 
 const getEntryFilePath = (options, appPath) => {
@@ -159,7 +159,9 @@ const install = async(options, appPath, styles) => {
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
     await packageManager.runInstall({ cwd: appPath });
-    await packageManager.run(['run', 'build-themes'], { cwd: appPath });
+    if(packageManager.isPackagesConsistScript('build-themes', { cwd: appPath })) {
+        await packageManager.run(['run', 'build-themes'], { cwd: appPath });
+    }
 };
 
 const getNavigationData = (viewName, componentName, icon) => {
