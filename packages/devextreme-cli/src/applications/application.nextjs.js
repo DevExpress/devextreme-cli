@@ -21,7 +21,7 @@ const {
 } = require('./application.react');
 
 const defaultStyles = [
-    'devextreme/dist/css/dx.light.css'
+    'devextreme/dist/css/dx.fluent.blue.light.css'
 ];
 
 const isNextJsApp = () => {

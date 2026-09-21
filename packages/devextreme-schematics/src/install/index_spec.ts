@@ -65,7 +65,7 @@ describe('install', () => {
     const angularConfig = JSON.parse(tree.readContent('angular.json'));
     const styles = angularConfig['projects']['testApp']['architect']['build']['options']['styles'];
 
-    expect(styles[0]).toBe('node_modules/devextreme/dist/css/dx.light.css');
+    expect(styles[0]).toBe('node_modules/devextreme/dist/css/dx.fluent.blue.light.css');
   });
 
   it('should register jszip', async () => {
@@ -97,7 +97,7 @@ describe('install', () => {
     const angularConfig = JSON.parse(tree.readContent('angular.json'));
     const styles = angularConfig['projects']['testApp2']['architect']['build']['options']['styles'];
 
-    expect(styles[0]).toBe('node_modules/devextreme/dist/css/dx.light.css');
+    expect(styles[0]).toBe('node_modules/devextreme/dist/css/dx.fluent.blue.light.css');
 
     expect(angularConfig['projects']['testApp']['architect']['build']['options']['styles'].length).toBe(1);
   });

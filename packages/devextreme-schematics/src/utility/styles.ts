@@ -9,7 +9,7 @@ function cleanStyles(projectStyles: Array<any>, defaultStyles: any) {
 export function addStylesToApp(project: string, config: any, styles?: Array<any>) {
   const projectBuildOptopns = config['projects'][project]['architect']['build']['options'];
   const defaultStyles = [
-    'node_modules/devextreme/dist/css/dx.light.css'
+    'node_modules/devextreme/dist/css/dx.fluent.blue.light.css'
   ];
   let projectStyles = projectBuildOptopns['styles'];
 
