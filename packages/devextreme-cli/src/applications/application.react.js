@@ -16,7 +16,7 @@ const removeFile = require('../utility/file-operations').remove;
 const latestVersions = require('../utility/latest-versions');
 const { extractDepsVersionTag } = require('../utility/extract-deps-version-tag');
 const defaultStyles = [
-    'devextreme/dist/css/dx.light.css'
+    'devextreme/dist/css/dx.fluent.blue.light.css'
 ];
 
 const getExtension = (appPath) => {
