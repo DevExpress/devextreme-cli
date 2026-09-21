@@ -1,4 +1,4 @@
-import { Rule, Tree } from '@angular-devkit/schematics';
+import { Rule, SchematicsException, Tree } from '@angular-devkit/schematics';
 import { spawnSync } from 'child_process';
 
 function hasBuildThemesScript(host: Tree) {
@@ -16,13 +16,19 @@ function hasBuildThemesScript(host: Tree) {
 export default function(): Rule {
   return (host: Tree) => {
     if (hasBuildThemesScript(host)) {
-      const isWin = /^win/.test(process.platform);
-
-      spawnSync('npm', ['run', 'build-themes'], {
+      const { error, status } = spawnSync('npm', ['run', 'build-themes'], {
         stdio: 'inherit',
         windowsVerbatimArguments: true,
-        shell: !isWin
+        shell: true
       });
+
+      if (error) {
+        throw new SchematicsException(`The theme build failed to start: ${error.message}`);
+      }
+
+      if (status) {
+        throw new SchematicsException(`The theme build exited with the code ${status}.`);
+      }
     }
 
     return host;

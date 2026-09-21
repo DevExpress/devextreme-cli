@@ -85,16 +85,16 @@ const run = async(commands, options, devextremeConfig) => {
 
             if(commands[1] === 'devextreme-react') {
                 if(nextjsApplication.isNextJsApp()) {
-                    nextjsApplication.install(options);
+                    await nextjsApplication.install(options);
                 } else {
-                    reactApplication.install(options);
+                    await reactApplication.install(options);
                 }
 
                 return;
             }
 
             if(commands[1] === 'devextreme-vue') {
-                vueApplication.install(options);
+                await vueApplication.install(options);
                 return;
             }
 
@@ -112,7 +112,7 @@ const run = async(commands, options, devextremeConfig) => {
 
             if(app) {
                 if(commands[1] === 'view') {
-                    app.addView(commands[2], options);
+                    await app.addView(commands[2], options);
                 } else {
                     console.error('Invalid command');
                     printHelp(commands[0]);
