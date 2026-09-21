@@ -125,6 +125,15 @@ describe('layout', () => {
     expect(packageConfig.scripts['build-themes']).toBe('devextreme build');
   });
 
+  it('should not add install scripts', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner.runSchematic('add-layout', options, appTree);
+    const scripts = JSON.parse(tree.readContent('package.json')).scripts;
+
+    ['preinstall', 'install', 'postinstall', 'prepare', 'prepublish']
+      .forEach(name => expect(name in scripts).toBe(false));
+  });
+
   it('should set static flag', async () => {
     removePackageJsonDependency(appTree, '@angular/core');
     addPackageJsonDependency(appTree, {

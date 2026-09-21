@@ -35,5 +35,8 @@ jobs:
         PUPPETEER_SKIP_DOWNLOAD: true
       run: pnpm install --frozen-lockfile
 
+    - name: Set ignore-scripts=true
+      run: npm config set ignore-scripts true
+
     - name: Run tests
       run: pnpm run test-themebuilder
