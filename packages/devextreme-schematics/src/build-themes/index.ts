@@ -26,7 +26,7 @@ export default function(): Rule {
         throw new SchematicsException(`The theme build failed to start: ${error.message}`);
       }
 
-      if (status) {
+      if (status !== 0) {
         throw new SchematicsException(`The theme build exited with the code ${status}.`);
       }
     }
