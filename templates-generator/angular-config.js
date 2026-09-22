@@ -127,7 +127,7 @@ module.exports = {
     ],
     removeRules: [
         {
-            glob: 'src/app/routes.ts',
+            glob: 'src/app/app.routes.ts',
             definitions: [
                 /import { HomeComponent } [^\n]*?\n/,
                 /import { ProfileComponent } [^\n]*?\n/,
