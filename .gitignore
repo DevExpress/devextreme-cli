@@ -24,3 +24,7 @@ packages/devextreme-schematics/src/**/*.js
 packages/devextreme-schematics/src/**/*.js.map
 packages/devextreme-schematics/src/**/*.d.ts
 packages/devextreme-schematics/package-lock.json
+
+# tests output
+packages/devextreme-cli/testing/themebuilder/install-local
+packages/devextreme-cli/testing/themebuilder/bootstrap
