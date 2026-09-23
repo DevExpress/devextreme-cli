@@ -147,7 +147,7 @@ const install = async(options, appPath, styles) => {
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
     await packageManager.runInstall({ cwd: appPath });
-    if(packageManager.isPackagesConsistScript('build-themes', { cwd: appPath })) {
+    if(packageManager.hasPackageScript('build-themes', { cwd: appPath })) {
         await packageManager.run(['run', 'build-themes'], { cwd: appPath });
     }
 };

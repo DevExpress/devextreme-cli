@@ -51,6 +51,9 @@ jobs:
       with:
         node-version-file: '.node-version'
         cache: 'pnpm'
+    
+    - name: Set ignore-scripts=true
+      run: npm config set ignore-scripts true
 
     - name: Install dependencies
       env:
@@ -64,9 +67,6 @@ jobs:
     - name: Set Legacy-peer-deps=true
       if: contains(fromJSON('["angular", "nextjs", "nextjs-ts"]'), matrix.APPROACH)
       run: npm config set legacy-peer-deps true
-
-    - name: Set ignore-scripts=true
-      run: npm config set ignore-scripts true
 
     - name: Create ${{ matrix.APPROACH }} application
       working-directory: packages/devextreme-cli

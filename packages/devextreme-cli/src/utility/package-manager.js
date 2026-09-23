@@ -67,7 +67,7 @@ const run = (commands, evaluatingOptions = {}) => runCommand(getPackageManager(e
 
 const runInstall = (evaluatingOptions = {}) => run(['install'], evaluatingOptions);
 
-const isPackagesConsistScript = (scriptName, evaluatingOptions = {}) => {
+const hasPackageScript = (scriptName, evaluatingOptions = {}) => {
     const cwd = evaluatingOptions.cwd;
     const packageJsonPath = path.join(cwd, 'package.json');
     if(!fs.existsSync(packageJsonPath)) {
@@ -83,5 +83,5 @@ module.exports = {
     installPackage,
     run,
     runInstall,
-    isPackagesConsistScript
+    hasPackageScript
 };
