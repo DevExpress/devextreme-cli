@@ -55,11 +55,9 @@ module.exports = class WebServer {
 
     async stop() {
         return new Promise(async(resolve, reject) => {
-            if(this.httpServer) {
-                this.httpServer.close(resolve);
-            } else {
-                resolve();
-            }
+            if(!this.httpServer) return resolve();
+            this.httpServer.closeAllConnections();
+            this.httpServer.close(resolve);
         });
     }
 };
