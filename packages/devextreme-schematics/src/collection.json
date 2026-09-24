@@ -29,6 +29,11 @@
       "description": "Migrate to the latest DevExtreme configuration components.",
       "factory": "./migrate-config-components/index#migrateConfigComponents",
       "schema": "./migrate-config-components/schema.json"
+    },
+    "build-themes": {
+      "private": true,
+      "description": "Build DevExtreme themes.",
+      "factory": "./build-themes/index"
     }
   }
 }

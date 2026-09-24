@@ -67,9 +67,21 @@ const run = (commands, evaluatingOptions = {}) => runCommand(getPackageManager(e
 
 const runInstall = (evaluatingOptions = {}) => run(['install'], evaluatingOptions);
 
+const hasPackageScript = (scriptName, evaluatingOptions = {}) => {
+    const cwd = evaluatingOptions.cwd;
+    const packageJsonPath = path.join(cwd, 'package.json');
+    if(!fs.existsSync(packageJsonPath)) {
+        return false;
+    }
+
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    return Boolean(packageJson.scripts?.[scriptName]);
+};
+
 module.exports = {
     getDependencies,
     installPackage,
     run,
-    runInstall
+    runInstall,
+    hasPackageScript
 };

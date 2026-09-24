@@ -51,6 +51,9 @@ jobs:
       with:
         node-version-file: '.node-version'
         cache: 'pnpm'
+    
+    - name: Set ignore-scripts=true
+      run: npm config set ignore-scripts true
 
     - name: Install dependencies
       env:
@@ -69,6 +72,10 @@ jobs:
       working-directory: packages/devextreme-cli
       run: node ./testing/creating.js -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
       timeout-minutes: 30
+
+    - name: Verify the application needs no install scripts
+      working-directory: packages/devextreme-cli
+      run: node ./testing/verifying.js -e ${{ matrix.APPROACH }}
 
     - name: Install Internal Packages
       uses: DevExpress/github-actions/install-internal-package@install-internal-package

@@ -24,7 +24,6 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
 
     const scripts = [
         { name: 'build-themes', value: 'devextreme build' },
-        { name: 'postinstall', value: 'npm run build-themes' }
     ];
 
     packageJsonUtils.addDependencies(appPath, dependencies);
@@ -65,7 +64,7 @@ const create = async(appName, options) => {
     }
 
     modifyIndexHtml(appPath, templateOptions.project);
-    addTemplate(appPath, appName, templateOptions);
+    await addTemplate(appPath, appName, templateOptions);
 };
 
 const modifyIndexHtml = (appPath, appName) => {
@@ -81,7 +80,7 @@ const getCorrectPath = (extension, pathToApp) => {
     return pathToApp;
 };
 
-const addTemplate = (appPath, appName, templateOptions) => {
+const addTemplate = async(appPath, appName, templateOptions) => {
     const applicationTemplatePath = path.join(templateCreator.getTempaltePath('vue-v3'), 'application');
     const styles = [
         './themes/generated/theme.additional.css',
@@ -96,15 +95,18 @@ const addTemplate = (appPath, appName, templateOptions) => {
         addSamplePages(appPath, templateOptions);
     }
     preparePackageJsonForTemplate(appPath, appName);
-    install({}, appPath, styles);
+    await install({}, appPath, styles);
 };
 
-const install = (options, appPath, styles) => {
+const install = async(options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
     addStylesToApp(appPath, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'vue');
 
-    packageManager.runInstall({ cwd: appPath });
+    await packageManager.runInstall({ cwd: appPath });
+    if(packageManager.hasPackageScript('build-themes', { cwd: appPath })) {
+        await packageManager.run(['run', 'build-themes'], { cwd: appPath });
+    }
 };
 
 const addStylesToApp = (appPath, styles) => {

@@ -4,6 +4,8 @@ import * as path from 'path';
 
 const collectionPath = path.join(__dirname, '../collection.json');
 
+const installScriptNames = ['preinstall', 'install', 'postinstall', 'prepare', 'prepublish'];
+
 const appOptions: any = {
   name: 'testApp',
   projectRoot: '',
@@ -36,6 +38,17 @@ describe('add-app-template', () => {
     const packageConfig = JSON.parse(tree.readContent('package.json'));
 
     expect('devextreme' in packageConfig.dependencies).toBe(true);
+  });
+
+  it('should schedule the theme build, so that no install script is needed', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner.runSchematic('add-app-template', { }, appTree);
+    const scripts = JSON.parse(tree.readContent('package.json')).scripts;
+    const buildThemesTask = runner.tasks.find(task => task.name === 'run-schematic');
+
+    installScriptNames.forEach(name => expect(name in scripts).toBe(false));
+    expect(buildThemesTask).toBeDefined();
+    expect((buildThemesTask!.options as any).name).toBe('build-themes');
   });
 
   it('should consider the `project` option', async () => {

@@ -35,8 +35,7 @@ const preparePackageJsonForTemplate = (appPath, appName) => {
         { name: 'react-router-dom', version: '^6.3.0' },
     ];
     const scripts = [
-        { name: 'build-themes', value: 'devextreme build' },
-        { name: 'postinstall', value: 'npm run build-themes' }
+        { name: 'build-themes', value: 'devextreme build' }
     ];
 
     packageJsonUtils.addDependencies(appPath, dependencies);
@@ -94,7 +93,7 @@ const create = async(appName, options) => {
         bumpReact(appPath, depsVersionTag, templateOptions.isTypeScript);
     }
 
-    addTemplate(appPath, appName, templateOptions);
+    await addTemplate(appPath, appName, templateOptions);
 };
 
 const modifyIndexHtml = (appPath, appName) => {
@@ -111,7 +110,7 @@ const getCorrectPath = (extension, pathToApp, isTypeScript) => {
     return extension === '.ts' || extension === '.tsx' ? typescriptUtils.setFileExtension(pathToApp, isTypeScript) : pathToApp;
 };
 
-const addTemplate = (appPath, appName, templateOptions) => {
+const addTemplate = async(appPath, appName, templateOptions) => {
     const applicationTemplatePath = path.join(
         templateCreator.getTempaltePath('react'),
         'application'
@@ -137,17 +136,20 @@ const addTemplate = (appPath, appName, templateOptions) => {
 
     preparePackageJsonForTemplate(appPath, appName, templateOptions.isTypeScript);
     updateJsonPropName(manifestPath, appName);
-    install({}, appPath, styles);
+    await install({}, appPath, styles);
 };
 
-const install = (options, appPath, styles) => {
+const install = async(options, appPath, styles) => {
     appPath = appPath ? appPath : process.cwd();
 
     const pathToMainComponent = path.join(appPath, 'src', `App${getExtension(appPath)}`);
     addStylesToApp(pathToMainComponent, styles || defaultStyles);
     packageJsonUtils.addDevextreme(appPath, options.dxversion, 'react');
 
-    packageManager.runInstall({ cwd: appPath });
+    await packageManager.runInstall({ cwd: appPath });
+    if(packageManager.hasPackageScript('build-themes', { cwd: appPath })) {
+        await packageManager.run(['run', 'build-themes'], { cwd: appPath });
+    }
 };
 
 const addStylesToApp = (filePath, styles) => {

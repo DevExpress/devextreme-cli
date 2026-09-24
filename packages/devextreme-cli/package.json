@@ -24,8 +24,9 @@
   ],
   "scripts": {
     "lint": "eslint ./",
-    "test": "pnpm run create-template && pnpm run lint-template && pnpm run test-template && pnpm run test-themebuilder",
+    "test": "pnpm run create-template && pnpm run verify-template && pnpm run lint-template && pnpm run test-template && pnpm run test-themebuilder",
     "create-template": "node ./testing/creating.js",
+    "verify-template": "node ./testing/verifying.js",
     "lint-template": "node ./testing/linting.js",
     "test-template": "node --experimental-vm-modules ./testing/testing.js",
     "test-dev": "cross-env TEST_MODE=dev NODE_OPTIONS=--experimental-vm-modules jest",

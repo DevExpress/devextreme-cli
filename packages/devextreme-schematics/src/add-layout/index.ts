@@ -68,6 +68,7 @@ import { Change } from '@schematics/angular/utility/change';
 
 import { PatchNodePackageInstallTask } from '../utility/patch';
 import { isAngularVersionHigherThan } from '../utility/angular-version';
+import { RunSchematicTask } from '@angular-devkit/schematics/tasks';
 
 const routes = [
   {
@@ -129,7 +130,6 @@ function addBuildThemeScript() {
       const scripts = config['scripts'];
 
       addScriptSafe(scripts, 'build-themes', 'devextreme build');
-      addScriptSafe(scripts, 'postinstall', 'npm run build-themes');
 
       return config;
     });
@@ -438,7 +438,8 @@ export default function(options: any): Rule {
 
     if (!options.skipInstall) {
       rules.push((_: Tree, context: SchematicContext) => {
-        context.addTask(new PatchNodePackageInstallTask());
+        const installTaskId = context.addTask(new PatchNodePackageInstallTask());
+        context.addTask(new RunSchematicTask('build-themes', {}), [installTaskId]);
       });
     }
 
