@@ -36,6 +36,7 @@ describe('view', () => {
   };
 
   const angularSchematicsCollection = require.resolve('../../node_modules/@schematics/angular/collection.json');
+
   const schematicRunner = new SchematicTestRunner('@schematics/angular', angularSchematicsCollection);
   let appTree: UnitTestTree;
 
@@ -50,16 +51,16 @@ describe('view', () => {
     let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
     tree = await runner.runSchematic('add-view', componentOptions, appTree);
 
-    expect(tree.files).toContain('/src/app/pages/test/test.component.ts');
-    expect(tree.files).toContain('/src/app/pages/test/test.component.html');
+    expect(tree.files).toContain('/src/app/pages/test/test.ts');
+    expect(tree.files).toContain('/src/app/pages/test/test.html');
 
-    const contentHTML = tree.readContent('/src/app/pages/test/test.component.html');
-    const contentTS = tree.readContent('/src/app/pages/test/test.component.ts');
+    const contentHTML = tree.readContent('/src/app/pages/test/test.html');
+    const contentTS = tree.readContent('/src/app/pages/test/test.ts');
 
     expect(contentHTML).toMatch(/<h2>Test<\/h2>/);
     expect(contentTS).toContain(`selector: 'app-${componentName}'`);
-    expect(contentTS).toContain(`templateUrl: './${componentName}.component.html'`);
-    expect(contentTS).toContain(`styleUrl: './${componentName}.component.css'`);
+    expect(contentTS).toContain(`templateUrl: './${componentName}.html'`);
+    expect(contentTS).toContain(`styleUrl: './${componentName}.css'`);
     expect(contentTS).toContain('standalone: true');
     expect(contentTS).toContain(`export class ${strings.classify(basename(normalize(componentName)))}Component`);
   });
@@ -94,7 +95,7 @@ describe('view', () => {
     }, tree);
     tree = await runner.runSchematic('add-view', options, tree);
 
-    const moduleContent = tree.readContent('/src/app/test/test-routing.module.ts');
+    const moduleContent = tree.readContent('/src/app/test/test-routing-module.ts');
 
     expect(moduleContent).toMatch(/component: TestComponent/);
     expect(moduleContent).toMatch(/path: 'pages\/test'/);
@@ -131,7 +132,7 @@ export const navigation: NavigationItem[] = [
     icon: 'home'
   }
 ];`);
-    const pageContent = tree.readContent('/src/app/pages/some-test/some-test.component.html');
+    const pageContent = tree.readContent('/src/app/pages/some-test/some-test.html');
     expect(pageContent).toMatch(/<h2>Some Test<\/h2>/);
   });
 
@@ -141,7 +142,7 @@ export const navigation: NavigationItem[] = [
     let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
     tree = await runner.runSchematic('add-view', componentOptions, appTree);
 
-    expect(tree.files).toContain('/src/app/folder/test/test.component.ts');
-    expect(tree.files).toContain('/src/app/folder/test/test.component.html');
+    expect(tree.files).toContain('/src/app/folder/test/test.ts');
+    expect(tree.files).toContain('/src/app/folder/test/test.html');
   });
 });

@@ -15,7 +15,7 @@ module.exports = {
         'angular.json',
         'tslint.json',
         'karma.conf.js',
-        'src/app/pages/new-page/new-page.component.*'
+        'src/app/pages/new-page/new-page.*'
     ],
     replaceRules: [
         {
@@ -72,7 +72,7 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/app/pages/home/home.component.html',
+            glob: 'src/app/pages/home/home.html',
             definitions: [
                 {
                     before: 'My App',
@@ -99,7 +99,7 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/app/app.component.html',
+            glob: 'src/app/app.html',
             definitions: [
                 {
                     before: /side-nav-(inner|outer)-toolbar/g,
@@ -108,26 +108,26 @@ module.exports = {
             ]
         },
         {
-            glob: 'src/app/app.component.ts',
+            glob: 'src/app/app.ts',
             definitions: [
                 {
                     before: 'app',
                     after: '<%= prefix %>'
                 },
                 {
-                    before: /app.component/g,
-                    after: '<%= name %>.component'
+                    before: /\.\/app\./g,
+                    after: './<%= name %>.'
                 },
                 {
-                    before: 'AppComponent',
-                    after: '<%= strings.classify(name) %>Component'
+                    before: /export class App\b/,
+                    after: 'export class <%= strings.classify(name) %>'
                 }
             ]
         }
     ],
     removeRules: [
         {
-            glob: 'src/app/routes.ts',
+            glob: 'src/app/app.routes.ts',
             definitions: [
                 /import { HomeComponent } [^\n]*?\n/,
                 /import { ProfileComponent } [^\n]*?\n/,
@@ -143,6 +143,14 @@ module.exports = {
     ],
     moveRules: [
         {
+            glob: 'src/app/app.{scss,ts,html}',
+            definition:
+            {
+                sourcePath: 'src/app/app',
+                targetPath: 'packages/devextreme-schematics/src/add-layout/files/src/app/__name__'
+            }
+        },
+        {
             glob: 'src/app/pages/**/*.*',
             definition:
             {
@@ -151,19 +159,11 @@ module.exports = {
             }
         },
         {
-            glob: '{src/**/!(app.component).*,devextreme.json,e2e/**/*.*}',
+            glob: '{src/**/*.*,devextreme.json,e2e/**/*.*}',
             definition:
             {
                 sourcePath: '',
                 targetPath: 'packages/devextreme-schematics/src/add-layout/files/'
-            }
-        },
-        {
-            glob: 'src/app/app.component.{scss,ts,html}',
-            definition:
-            {
-                sourcePath: 'src/app/app',
-                targetPath: 'packages/devextreme-schematics/src/add-layout/files/src/app/__name__'
             }
         }
     ]

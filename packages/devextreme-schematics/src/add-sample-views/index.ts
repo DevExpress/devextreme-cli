@@ -25,19 +25,7 @@ import {
 import { getSourceFile } from '../utility/source';
 
 const sampleViewOptions = [
-  {
-    name: 'home',
-    componentName: 'HomeComponent',
-    relativePath: './pages/home/home.component'
-  }, {
-    name: 'profile',
-    componentName: 'ProfileComponent',
-    relativePath: './pages/profile/profile.component'
-  }, {
-    name: 'tasks',
-    componentName: 'TasksComponent',
-    relativePath: './pages/tasks/tasks.component'
-}];
+  { name: 'home' }, { name: 'profile' }, { name: 'tasks'}];
 
 const navigations = [
   `  {

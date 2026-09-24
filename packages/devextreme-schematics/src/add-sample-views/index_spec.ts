@@ -45,7 +45,9 @@ describe('sample views', () => {
     expect(moduleContent).toMatch(/component: HomeComponent/);
     expect(moduleContent).toMatch(/path: 'home'/);
 
-    expect(moduleContent).toMatch(/import { HomeComponent } from /);
+    expect(moduleContent).toContain(`import { HomeComponent } from './pages/home/home';`);
+    expect(moduleContent).toContain(`import { ProfileComponent } from './pages/profile/profile';`);
+    expect(moduleContent).toContain(`import { TasksComponent } from './pages/tasks/tasks';`);
 
     const navigationContent = tree.readContent('/src/app/app-navigation.ts');
     expect(navigationContent).toMatch(/text: 'Home'/);
