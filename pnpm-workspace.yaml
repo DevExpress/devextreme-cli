@@ -7,8 +7,5 @@ allowBuilds:
   puppeteer: true
   spawn-sync: true
 
-minimumReleaseAgeExclude:
-  - '@devexpress/eslint-plugin-dx-security@0.2.8'
-
 overrides:
   cross-spawn: 7.0.6
