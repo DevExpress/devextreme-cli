@@ -75,7 +75,7 @@ const hasPackageScript = (scriptName, evaluatingOptions = {}) => {
     }
 
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-    return packageJson.scripts && scriptName in packageJson.scripts;
+    return Boolean(packageJson.scripts?.[scriptName]);
 };
 
 module.exports = {
