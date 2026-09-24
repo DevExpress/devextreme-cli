@@ -1,7 +1,8 @@
 ## v1.18.0
 
 - Updated DevExtreme Schematics to Angular 19.
-- Bumped `create-next-app` version to 16.3.3.
+- Bumped `create-next-app` version to `16.3.3`.
+- Updated DevExtreme version to `26.1.5`
 - Switched the default theme in application templates to `dx.fluent.blue.light`.
 - Added dependency and security fixes.
   
