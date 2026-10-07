@@ -109,8 +109,12 @@ const install = async(options, appPath, styles) => {
     }
 };
 
+const getExtension = (appPath) => {
+    return fs.existsSync(path.join(appPath, 'src', 'main.ts')) ? '.ts' : '.js';
+};
+
 const addStylesToApp = (appPath, styles) => {
-    const mainModulePath = path.join(appPath, 'src', 'main.js');
+    const mainModulePath = path.join(appPath, 'src', `main${getExtension(appPath)}`);
 
     styles.forEach(style => {
         moduleUtils.insertImport(mainModulePath, style);
