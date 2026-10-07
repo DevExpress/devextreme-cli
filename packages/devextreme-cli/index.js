@@ -1,10 +1,19 @@
 #!/usr/bin/env node
-const args = require('minimist')(process.argv.slice(2), {
-    alias: { v: 'version' }
+const rawArgs = process.argv.slice(2);
+const hasEmptyFlag = rawArgs.some(arg => arg === '--empty' || arg.startsWith('--empty='));
+
+const args = require('minimist')(rawArgs, {
+    alias: { v: 'version' },
+    boolean: ['empty']
 });
 
 const commands = args['_'];
 delete args['_'];
+
+// Remove empty flag if it wasn't explicitly provided to prevent passing it to commands that don't support it
+if(!hasEmptyFlag) {
+    delete args.empty;
+}
 const themeBuilder = require('./src/themebuider');
 const application = require('./src/application');
 const devextremeConfig = require('./src/utility/devextreme-config');
