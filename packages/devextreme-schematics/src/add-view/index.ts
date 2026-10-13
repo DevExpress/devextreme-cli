@@ -156,16 +156,21 @@ function addContentToView(options: any) {
   return overwriteModuleContent(options, componentPath, content);
 }
 
+const styleExtensions = ['css', 'scss', 'sass', 'less'];
+
 function addContentToTS(options: any) {
-  const name = strings.dasherize(basename(normalize(options.name)));
-  const path = `${dirname(options.name)}/${name}`;
-  const componentPath = `${path}/${name}.ts`;
-  const content = `import { Component } from '@angular/core';
+  return async (host: Tree) => {
+    const name = strings.dasherize(basename(normalize(options.name)));
+    const path = `${dirname(options.name)}/${name}`;
+    const componentPath = `${path}/${name}.ts`;
+    const appPath = await getApplicationPath(host, options.project);
+    const styleExtension = styleExtensions.find((ext) => host.exists(`/${appPath}${path}/${name}.${ext}`));
+    const styleUrl = styleExtension ? `\n  styleUrl: './${name}.${styleExtension}',` : '';
+    const content = `import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-${name}',
-  templateUrl: './${name}.html',
-  styleUrl: './${name}.css',
+  templateUrl: './${name}.html',${styleUrl}
   standalone: true
 })
 export class ${strings.classify(basename(normalize(name)))}Component {
@@ -173,7 +178,8 @@ export class ${strings.classify(basename(normalize(name)))}Component {
 }
 `;
 
-  return overwriteModuleContent(options, componentPath, content);
+    return overwriteModuleContent(options, componentPath, content);
+  };
 }
 
 export default function(options: any): Rule {

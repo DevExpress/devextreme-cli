@@ -65,6 +65,18 @@ describe('view', () => {
     expect(contentTS).toContain(`export class ${strings.classify(basename(normalize(componentName)))}Component`);
   });
 
+  it('should not reference a style file when inlineStyle is true', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    let tree = await runner.runSchematic('add-layout', { layout: 'side-nav-outer-toolbar' }, appTree);
+    tree = await runner.runSchematic('add-view', { ...componentOptions, inlineStyle: true }, tree);
+
+    expect(tree.files).not.toContain('/src/app/pages/test/test.css');
+
+    const contentTS = tree.readContent('/src/app/pages/test/test.ts');
+    expect(contentTS).not.toContain('styleUrl');
+    expect(contentTS).toContain(`templateUrl: './test.html'`);
+  });
+
   it('should add view to default routing module', async () => {
     const options = { ...componentOptions, addRoute: true };
 
