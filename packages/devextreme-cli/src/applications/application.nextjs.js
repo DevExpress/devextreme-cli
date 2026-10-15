@@ -80,10 +80,11 @@ const create = async(appName, options) => {
         '--no-turbopack',
         '--no-react-compiler',
         '--import-alias "@/*"',
-        '--skip-install'
     ];
 
-    await runCommand('npx', commandArguments);
+    await runCommand('npx', commandArguments, {
+        env: { ...process.env, npm_config_ignore_scripts: 'true' }
+    });
 
     const appPath = path.join(process.cwd(), appName);
 
