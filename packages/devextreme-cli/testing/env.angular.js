@@ -34,6 +34,7 @@ exports.fileExtension = 'ts';
 exports.createApp = async(depsVersionTag) => {
     await rimraf(sandboxPath);
     fs.mkdirSync(sandboxPath, { recursive: true });
+    fs.writeFileSync(path.join(sandboxPath, 'package-lock.json'), '{}');
 
     await prepareSchematics();
     const additionalArguments = depsVersionTag && [`--${depsVersionTagOptionName} ${depsVersionTag}`] || [];
