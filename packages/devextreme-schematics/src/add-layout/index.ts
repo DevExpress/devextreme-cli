@@ -288,7 +288,7 @@ function addPackagesToDependency(globalNgCliVersion: string) {
       addPackageJsonDependency(host, {
         type: NodeDependencyType.Default,
         name: 'zone.js',
-        version: version.major > 18 ? '~0.15.0' : '~0.14.0'
+        version: version.major > 18 ? '~0.16.0' : '~0.14.0'
       });
     }
 
