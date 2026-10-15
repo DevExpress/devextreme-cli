@@ -16,8 +16,7 @@ import { latestVersions } from '../utility/latest-versions';
 import { modifyJSONFile } from '../utility/modify-json-file';
 import { getProjectName } from '../utility/project';
 
-import { PatchNodePackageInstallTask } from '../utility/patch';
-import { RunSchematicTask } from '@angular-devkit/schematics/tasks';
+import { NodePackageInstallTask, RunSchematicTask } from '@angular-devkit/schematics/tasks';
 
 export default function(options: any): Rule {
 
@@ -27,7 +26,7 @@ export default function(options: any): Rule {
     (host: Tree) => addDevExtremeCSS(host, { project: options.project }),
     (host: Tree) => reqisterJSZip(host),
     (_, context: SchematicContext) => {
-      const installTaskId = context.addTask(new PatchNodePackageInstallTask());
+      const installTaskId = context.addTask(new NodePackageInstallTask());
       context.addTask(new RunSchematicTask('build-themes', {}), [installTaskId]);
     },
   ]);

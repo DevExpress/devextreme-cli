@@ -80,6 +80,7 @@ const create = async(appName, options) => {
         '--no-turbopack',
         '--no-react-compiler',
         '--import-alias "@/*"',
+        '--skip-install'
     ];
 
     await runCommand('npx', commandArguments);

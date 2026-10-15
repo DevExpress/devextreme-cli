@@ -66,9 +66,8 @@ import { insertImport } from '@schematics/angular/utility/ast-utils';
 import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { Change } from '@schematics/angular/utility/change';
 
-import { PatchNodePackageInstallTask } from '../utility/patch';
 import { isAngularVersionHigherThan } from '../utility/angular-version';
-import { RunSchematicTask } from '@angular-devkit/schematics/tasks';
+import { NodePackageInstallTask, RunSchematicTask } from '@angular-devkit/schematics/tasks';
 
 const routes = [
   {
@@ -438,7 +437,7 @@ export default function(options: any): Rule {
 
     if (!options.skipInstall) {
       rules.push((_: Tree, context: SchematicContext) => {
-        const installTaskId = context.addTask(new PatchNodePackageInstallTask());
+        const installTaskId = context.addTask(new NodePackageInstallTask());
         context.addTask(new RunSchematicTask('build-themes', {}), [installTaskId]);
       });
     }
