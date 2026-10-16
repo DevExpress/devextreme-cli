@@ -16,13 +16,15 @@ const packageManagers = {
         installCommand: 'install',
         lockFileName: 'package-lock.json',
         getLockFile: (cwd) => getLock(cwd, 'package-lock.json', JSON),
-        getDependencies: (obj) => obj.dependencies
+        getDependencies: (obj) => obj.dependencies,
+        defaultInstallationOptions: ['--ignore-scripts']
     },
     yarn: {
         installCommand: 'add',
         lockFileName: 'yarn.lock',
         getLockFile: (cwd) => getLock(cwd, 'yarn.lock', yarnLockfile),
-        getDependencies: (obj) => obj.object
+        getDependencies: (obj) => obj.object,
+        defaultInstallationOptions: ['--ignore-scripts']
     }
 };
 
@@ -51,12 +53,10 @@ const getDependencies = (evaluatingOptions = {}) => {
 
 const installPackage = (packageName, evaluatingOptions = {}, options = {}) => {
     const packageManager = getPackageManager(evaluatingOptions.cwd);
-    const instalationOptions = options[packageManager];
+    const defaultInstallationOptions = packageManagers[packageManager].defaultInstallationOptions || [];
+    const instalationOptions = options[packageManager] || [];
     const commandArguments = [packageManagers[packageManager].installCommand];
-
-    if(instalationOptions) {
-        commandArguments.push(...instalationOptions);
-    }
+    commandArguments.push(...defaultInstallationOptions, ...instalationOptions);
 
     commandArguments.push(packageName);
 
@@ -65,7 +65,12 @@ const installPackage = (packageName, evaluatingOptions = {}, options = {}) => {
 
 const run = (commands, evaluatingOptions = {}) => runCommand(getPackageManager(evaluatingOptions.cwd), commands, evaluatingOptions);
 
-const runInstall = (evaluatingOptions = {}) => run(['install'], evaluatingOptions);
+const runInstall = (evaluatingOptions = {}) => {
+    const packageManager = getPackageManager(evaluatingOptions.cwd);
+    const defaultInstallationOptions = packageManagers[packageManager].defaultInstallationOptions || [];
+
+    return runCommand(packageManager, ['install', ...defaultInstallationOptions], evaluatingOptions);
+};
 
 const hasPackageScript = (scriptName, evaluatingOptions = {}) => {
     const cwd = evaluatingOptions.cwd;
