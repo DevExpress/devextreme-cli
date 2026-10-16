@@ -12,8 +12,8 @@ const { getPackageJsonPath } = require('../utility/package-json-utils');
 const modifyJson = require('../utility/modify-json-file');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
-const minNgCliVersion = new semver('20.0.0');
-const ngCliWithZoneless = new semver('20.0.0');
+const minNgCliVersion = new semver('21.0.0');
+const ngCliWithZoneless = new semver('21.0.0');
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
