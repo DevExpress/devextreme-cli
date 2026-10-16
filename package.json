@@ -1,7 +1,7 @@
 {
   "name": "devextreme-cli-monorepo",
   "version": "1.18.0",
-  "packageManager": "pnpm@11.10.0+sha512.0b7f8b98060031904c017e3a41eb187a16d40eeb829b95c4f8cb03681761fc4ab53dd219115b9b447f4dce1a05a214764461e7d3703392a9f32f9511ce8c86c8",
+  "packageManager": "pnpm@11.28.5+sha512.484563d30b4c2ad27cb48aa94ff2b302dbcebc8ff6bf28816c2589886e146ce7f76f354f3bc1a438e6f5e9768c302aa0a6f7add8232903cd4cf81426cbc14d9e",
   "scripts": {
     "test": "pnpm -r run test",
     "test-dev": "pnpm --filter devextreme-cli run test-dev",
