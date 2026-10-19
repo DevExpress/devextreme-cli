@@ -11,7 +11,6 @@ const {
 const workDirectory = join(__dirname, 'bootstrap');
 
 describe('ThemeBuilder bootstrap integration tests', () => {
-    jest.setTimeout(1800000); // 30min
     beforeAll(async() => {
         await buildPackage();
         await mkdir(workDirectory, { recursive: true });

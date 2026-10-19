@@ -49,7 +49,6 @@ const runThemeBuilder = async(command, meta, parameters) => {
 };
 
 describe('ThemeBuilder save metadata and variables tests', () => {
-    jest.setTimeout(1800000); // 30min
     beforeAll(async() => {
         await buildPackage();
     });

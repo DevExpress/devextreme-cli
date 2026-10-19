@@ -96,7 +96,7 @@ export default [
         files: ['testing/**/*.js'],
         languageOptions: {
             globals: {
-                ...globals.jest
+                ...globals.vitest
             }
         }
     }
