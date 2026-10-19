@@ -7,7 +7,6 @@ export default defineConfig({
         globals: true,
         testTimeout: 300000,
         hookTimeout: 300000,
-        // NOTE: All applications are served on the same port
         fileParallelism: false
     }
 });

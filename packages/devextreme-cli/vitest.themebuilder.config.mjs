@@ -4,9 +4,8 @@ export default defineConfig({
     test: {
         include: ['testing/themebuilder/*.test.js'],
         globals: true,
-        testTimeout: 1800000, // 30min
+        testTimeout: 1800000,
         hookTimeout: 1800000,
-        // NOTE: Tests change the working directory and share the packed cli
         fileParallelism: false
     }
 });

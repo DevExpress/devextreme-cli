@@ -3,7 +3,6 @@ import { dirname, join } from 'path';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 
-// NOTE: Same file layout and comparison settings as jest-image-snapshot, which created the reference images
 const SNAPSHOTS_DIR = '__image_snapshots__';
 const diffConfig = { threshold: 0.01 };
 
@@ -22,7 +21,6 @@ const resize = (image, width, height) => {
     return result;
 };
 
-// Places the reference, diff and received images side by side
 const composeDiff = (images) => {
     const { width, height } = images[0];
     const result = new PNG({ width: width * images.length, height });
@@ -48,7 +46,6 @@ export function toMatchImageSnapshot(received, {
     const snapshotPath = join(snapshotsDir, `${customSnapshotIdentifier}.png`);
     const diffPath = join(customDiffDir || join(snapshotsDir, '__diff_output__'), `${customSnapshotIdentifier}-diff.png`);
     const receivedPath = join(customReceivedDir || join(snapshotsDir, '__received_output__'), `${customSnapshotIdentifier}-received.png`);
-    // 'all' with --update, 'none' on CI, 'new' otherwise
     const updateState = snapshotState.snapshotUpdateState;
 
     if(!existsSync(snapshotPath)) {
