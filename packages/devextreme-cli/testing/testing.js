@@ -1,5 +1,3 @@
-const jest = require('jest');
-const path = require('path');
 const minimist = require('minimist');
 const envs = require('./constants').envs;
 
@@ -14,34 +12,14 @@ const args = minimist(process.argv.slice(), {
 });
 
 async function runTest(envirorments) {
-    const options = {
-        testPathIgnorePatterns: [
-            './testing/sandbox/'
-        ],
-        projects: [
-            './testing/__tests__'
-        ],
-        testPathPattern: envirorments.map(env => `./testing/__tests__/${env.engine}.test.js`),
-        setupFiles: [
-            path.join(process.cwd(), 'jest.config.js')
-        ],
-        setupFilesAfterEnv: [
-            path.join(process.cwd(), 'testing/jest-setup.js')
-        ],
-        forceExit: true,
-        showConfig: false,
-        runInBand: true
-    };
-    jest
-        .runCLI(options, options.projects)
-        .then(success => {
-            success.results.numFailedTestSuites || success.results.numFailedTests
-                ? process.exit(1)
-                : process.exit(0);
-        })
-        .catch(() => {
-            process.exit(1);
-        });
+    try {
+        const { startVitest } = await import('vitest/node');
+        await startVitest('test', envirorments.map(env => `testing/__tests__/${env.engine}.test.js`), { run: true });
+    } catch(e) {
+        console.error(e);
+        process.exitCode = 1;
+    }
+    process.exit();
 }
 
 (async function testProccess() {

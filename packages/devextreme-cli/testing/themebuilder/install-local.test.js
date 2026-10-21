@@ -14,7 +14,6 @@ const {
 const workDirectory = join(__dirname, 'install-local');
 
 describe('ThemeBuilder local install tests', () => {
-    jest.setTimeout(1800000); // 30min
     beforeAll(async() => {
         await buildPackage();
     });
