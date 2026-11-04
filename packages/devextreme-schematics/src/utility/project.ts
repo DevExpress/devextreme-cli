@@ -4,7 +4,6 @@ import { getWorkspace } from '@schematics/angular/utility/workspace';
 export async function getProjectName(host: Tree, projectName: string) {
   const projects: string[] = [];
   const workspace = await getWorkspace(host);
-  /* tslint:disable-next-line:variable-name */
   workspace.projects.forEach((_v, k) => {
     projects.push(k);
   });

@@ -72,7 +72,7 @@ function tryResolveFromProject(): any {
   for (const searchPath of searchPaths) {
     try {
       const tsPath = require.resolve('typescript', { paths: [searchPath] });
-      // tslint:disable-next-line:no-var-requires
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       return require(tsPath);
     } catch {
       // Continue to next path
@@ -88,7 +88,7 @@ function tryResolveFromGlobal(): any {
     const typescriptPath = path.join(globalPath, 'typescript');
 
     if (fs.existsSync(typescriptPath)) {
-      // tslint:disable-next-line:no-var-requires
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       return require(typescriptPath);
     }
   } catch {
@@ -100,6 +100,7 @@ function tryResolveFromGlobal(): any {
 
 function tryResolveViaTemporaryInstall(): any {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const tmpDir = path.join(require('os').tmpdir(), 'devextreme-schematics-ts-' + Date.now());
     fs.mkdirSync(tmpDir, { recursive: true });
 
@@ -123,7 +124,7 @@ function tryResolveViaTemporaryInstall(): any {
 
     const typescriptPath = path.join(tmpDir, 'node_modules', 'typescript');
     if (fs.existsSync(typescriptPath)) {
-      // tslint:disable-next-line:no-var-requires
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const ts = require(typescriptPath);
 
       setTimeout(() => {
