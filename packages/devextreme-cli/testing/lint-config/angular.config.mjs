@@ -23,7 +23,6 @@ export default [
         },
         rules: {
             ...angularConfig.rules,
-            ...angularPlugin.configs.johnpapa.rules,
             'angular/log': 'off'
         }
     }
