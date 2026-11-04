@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "tslint -c tslint.json 'src/*/*.ts' -e '**/*.d.ts'",
-    "test": "pnpm run lint && pnpm run build && jasmine **/*_spec.js"
+    "test": "pnpm run lint && pnpm run build && vitest run"
   },
   "author": "Developer Express Inc.",
   "license": "MIT",
@@ -30,13 +30,12 @@
     "semver": "^7.8.5"
   },
   "devDependencies": {
-    "@types/jasmine": "~3.10.19",
     "@types/node": "20.19.43",
     "@types/picomatch": "^4.0.3",
     "@types/semver": "^7.7.1",
-    "jasmine": "^2.99.0",
     "rxjs": "^7.8.2",
     "tslint": "^5.20.1",
-    "typescript": "~5.6.3"
+    "typescript": "~5.6.3",
+    "vitest": "^5.0.5"
   }
 }
