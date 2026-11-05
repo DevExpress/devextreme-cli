@@ -47,10 +47,6 @@
     "updateBudgets": {
       "type": "boolean"
     },
-    "zoneless": {
-      "type": "boolean",
-      "description": "Specifies whether the application uses zoneless change detection. Detected from the project if not set."
-    },
     "globalNgCliVersion": {
       "type":"string",
       "default": "17.2.0"

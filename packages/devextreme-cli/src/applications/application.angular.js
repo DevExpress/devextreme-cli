@@ -124,7 +124,6 @@ const create = async(appName, options) => {
     options.resolveConflicts = 'override';
     options.updateBudgets = true;
     options.layout = layout;
-    options.zoneless = true;
     addTemplate(appName, options, {
         cwd: appPath
     });
@@ -138,7 +137,6 @@ const addTemplate = async(appName, options, evaluatingOptions) => {
         ...options,
         globalNgCliVersion: ngVersion.getNgCliVersion().version
     };
-    console.log('Schematic options:', schematicOptions);
     runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
 

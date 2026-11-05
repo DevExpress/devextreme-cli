@@ -15,7 +15,3 @@ A schematic that adds a DevExtreme layout to a DevExtreme Angular application.
 
 - skip-install (boolean)
  Specifies whether to skip the dependency package installation
-
-- zoneless (boolean)
- Specifies whether the application uses zoneless change detection. Detected from the project if not set
-

@@ -3,7 +3,6 @@ import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { join } from 'path';
 
 function readFile(host: Tree, path?: string) {
-  console.log('Reading file:', path);
   return path && host.exists(path) ? host.read(path)!.toString() : '';
 }
 

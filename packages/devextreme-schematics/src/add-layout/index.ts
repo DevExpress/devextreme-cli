@@ -410,7 +410,6 @@ function setPostfix(host: Tree, name: string) {
 }
 
 export default function(options: any): Rule {
-  console.log('Running add-layout schematic with options:', options);
   return async (host: Tree) => {
     const project = await getProjectName(host, options.project);
     const workspace = await getWorkspace(host);
@@ -423,7 +422,7 @@ export default function(options: any): Rule {
     const override = options.resolveConflicts === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath?.replace(/\/?(\w)+\/?/g, '../');
-    const zoneless = options.zoneless ?? await isZonelessApp(host, project, appPath);
+    const zoneless = await isZonelessApp(host, project, appPath);
 
     const templateOptions = {
       name: setPostfix(host, componentName),

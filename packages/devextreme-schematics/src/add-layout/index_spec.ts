@@ -180,7 +180,7 @@ describe('layout', () => {
     const tree = await runner.runSchematic('add-layout', options, appTree);
     const packageConfig = JSON.parse(tree.readContent('package.json'));
 
-    expect(packageConfig.dependencies['@angular/cdk']).toBe('^17.0.0');
+    expect(packageConfig.dependencies['@angular/cdk']).toBe('^21.0.0');
   });
 
   it('should update budgets if updateBudgets option is true', async () => {
@@ -388,17 +388,6 @@ describe('layout', () => {
       const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
 
       expectZoneApp(tree);
-    });
-
-    it('should prefer the zoneless option over detection', async () => {
-      setPolyfills(['zone.js']);
-
-      const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = await runner.runSchematic('add-layout', { ...zoneOptions, zoneless: true }, appTree);
-
-      const packageConfig = JSON.parse(tree.readContent('package.json'));
-      expect(packageConfig.dependencies['zone.js']).toBeUndefined();
-      expect(tree.readContent('/src/app/app.config.ts')).not.toContain('provideZoneChangeDetection');
     });
   });
 });
