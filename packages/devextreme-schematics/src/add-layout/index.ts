@@ -67,6 +67,7 @@ import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { Change } from '@schematics/angular/utility/change';
 
 import { isAngularVersionHigherThan } from '../utility/angular-version';
+import { isZonelessApp } from '../utility/zone';
 import { NodePackageInstallTask, RunSchematicTask } from '@angular-devkit/schematics/tasks';
 
 const routes = [
@@ -181,6 +182,8 @@ async function addPolyfills(host: Tree, project: string, polyfills: string[]) {
 
     if (!buildOptions.polyfills) {
       buildOptions.polyfills = [];
+    } else if (!Array.isArray(buildOptions.polyfills)) {
+      buildOptions.polyfills = [buildOptions.polyfills];
     }
 
     polyfills.forEach((polyfill) => {
@@ -270,7 +273,29 @@ function hasRouting(host: Tree, sourcePath: string) {
   return host.exists(sourcePath + 'app.routes.ts');
 }
 
-function addPackagesToDependency(globalNgCliVersion: string) {
+function addZoneChangeDetection(appPath: string) {
+  const appConfigPath = join(appPath, 'app.config.ts');
+
+  return chain([
+    modifyFileRule(appConfigPath, (source: SourceFile) => [
+      insertImport(source, appConfigPath, 'provideZoneChangeDetection', '@angular/core')
+    ]),
+    (host: Tree) => {
+      const content = host.read(appConfigPath)?.toString();
+
+      if (content && !content.includes('provideZoneChangeDetection(')) {
+        host.overwrite(appConfigPath, content.replace(
+          /providers:\s*\[/,
+          '$&\n    provideZoneChangeDetection({ eventCoalescing: true }),'
+        ));
+      }
+
+      return host;
+    }
+  ]);
+}
+
+function addPackagesToDependency(globalNgCliVersion: string, zoneless: boolean) {
   const version = new SemVer(globalNgCliVersion.replace(/\^|\~/g, ''));
 
   return (host: Tree) => {
@@ -283,7 +308,7 @@ function addPackagesToDependency(globalNgCliVersion: string) {
         ? 'next' : `^${version.major}.0.0`
     });
 
-    if (!zonejs) {
+    if (!zoneless && !zonejs) {
       addPackageJsonDependency(host, {
         type: NodeDependencyType.Default,
         name: 'zone.js',
@@ -385,6 +410,7 @@ function setPostfix(host: Tree, name: string) {
 }
 
 export default function(options: any): Rule {
+  console.log('Running add-layout schematic with options:', options);
   return async (host: Tree) => {
     const project = await getProjectName(host, options.project);
     const workspace = await getWorkspace(host);
@@ -397,6 +423,7 @@ export default function(options: any): Rule {
     const override = options.resolveConflicts === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath?.replace(/\/?(\w)+\/?/g, '../');
+    const zoneless = options.zoneless ?? await isZonelessApp(host, project, appPath);
 
     const templateOptions = {
       name: setPostfix(host, componentName),
@@ -427,9 +454,15 @@ export default function(options: any): Rule {
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),
-      addPackagesToDependency(options.globalNgCliVersion),
-      () => addPolyfills(host, options.project, ['zone.js'])
+      addPackagesToDependency(options.globalNgCliVersion, zoneless),
     ];
+
+    if (!zoneless) {
+      rules.push(
+        addZoneChangeDetection(appPath),
+        () => addPolyfills(host, options.project, ['zone.js']) as any
+      );
+    }
 
     if (options.updateBudgets) {
       rules.push(() => updateBudgets(host, options) as any);

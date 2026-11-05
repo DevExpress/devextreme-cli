@@ -16,7 +16,8 @@ export default function(options: any): Rule {
       project: options.project,
       skipInstall: true,
       updateBudgets: options.updateBudgets,
-      globalNgCliVersion: options.globalNgCliVersion
+      globalNgCliVersion: options.globalNgCliVersion,
+      zoneless: options.zoneless
     })
   ];
 

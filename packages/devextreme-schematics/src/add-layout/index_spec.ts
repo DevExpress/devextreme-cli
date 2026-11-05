@@ -33,7 +33,7 @@ describe('layout', () => {
   const options: any = {
     layout: 'side-nav-outer-toolbar',
     resolveConflicts: 'override',
-    globalNgCliVersion: '^17.2.0'
+    globalNgCliVersion: '^21.0.0'
   };
 
   const angularSchematicsCollection = require.resolve('../../node_modules/@schematics/angular/collection.json');
@@ -320,5 +320,85 @@ describe('layout', () => {
     const content = tree.readContent('/devextreme.json');
     expect(content).toContain('"inputFile": "src/themes/metadata.base.json",');
     expect(content).toContain('"inputFile": "projects/testApp2/src/themes/metadata.base.json",');
+  });
+
+  describe('change detection', () => {
+    const zoneOptions = { ...options, resolveConflicts: 'override' };
+
+    const setPolyfills = (polyfills: string | string[]) => {
+      modifyJSONFile(appTree, './angular.json', config => {
+        config.projects.testApp.architect.build.options.polyfills = polyfills;
+        return config;
+      });
+    };
+
+    const expectZoneApp = (tree: UnitTestTree) => {
+      const packageConfig = JSON.parse(tree.readContent('package.json'));
+      const appConfig = tree.readContent('/src/app/app.config.ts');
+
+      expect(packageConfig.dependencies['zone.js']).toBeDefined();
+      expect(appConfig).toMatch(/import { ApplicationConfig, provideZoneChangeDetection } from '@angular\/core';/);
+      expect(appConfig).toMatch(/providers: \[\s+provideZoneChangeDetection\({ eventCoalescing: true }\),/);
+    };
+
+    it('should not add zone.js to a zoneless app', async () => {
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
+
+      const packageConfig = JSON.parse(tree.readContent('package.json'));
+      const angularContent = JSON.parse(tree.readContent('/angular.json'));
+      const polyfills = angularContent.projects.testApp.architect.build.options.polyfills || [];
+
+      expect(packageConfig.dependencies['zone.js']).toBeUndefined();
+      expect(polyfills).not.toContain('zone.js');
+      expect(tree.readContent('/src/app/app.config.ts')).not.toContain('provideZoneChangeDetection');
+    });
+
+    it('should keep zone change detection if zone.js is in polyfills', async () => {
+      setPolyfills(['zone.js']);
+
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
+
+      expectZoneApp(tree);
+    });
+
+    it('should keep zone change detection if zone.js is imported in a polyfills file', async () => {
+      setPolyfills('src/polyfills.ts');
+      appTree.create('/src/polyfills.ts', `import 'zone.js';`);
+
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
+
+      expectZoneApp(tree);
+      const angularContent = JSON.parse(tree.readContent('/angular.json'));
+      expect(angularContent.projects.testApp.architect.build.options.polyfills)
+        .toEqual(['src/polyfills.ts', 'zone.js']);
+    });
+
+    it('should keep zone change detection if app config provides it', async () => {
+      appTree.create('/src/app/app.config.ts', [
+        `import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';`,
+        `export const appConfig: ApplicationConfig = {`,
+        `  providers: [provideZoneChangeDetection()]`,
+        `};`
+      ].join('\n'));
+
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
+
+      expectZoneApp(tree);
+    });
+
+    it('should prefer the zoneless option over detection', async () => {
+      setPolyfills(['zone.js']);
+
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', { ...zoneOptions, zoneless: true }, appTree);
+
+      const packageConfig = JSON.parse(tree.readContent('package.json'));
+      expect(packageConfig.dependencies['zone.js']).toBeUndefined();
+      expect(tree.readContent('/src/app/app.config.ts')).not.toContain('provideZoneChangeDetection');
+    });
   });
 });

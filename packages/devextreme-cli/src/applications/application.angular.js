@@ -13,7 +13,6 @@ const modifyJson = require('../utility/modify-json-file');
 const schematicsVersion = latestVersions['devextreme-schematics'] || 'latest';
 
 const minNgCliVersion = new semver('21.0.0');
-const ngCliWithZoneless = new semver('21.0.0');
 
 async function runSchematicCommand(schematicCommand, options, evaluatingOptions) {
     const collectionName = 'devextreme-schematics';
@@ -100,7 +99,6 @@ const bumpAngular = (appPath, versionTag) => {
 
 const create = async(appName, options) => {
     const layout = await getLayoutInfo(options.layout);
-    const currentNgVersion = ngVersion.getNgCliVersion().version;
     const depsVersionTag = extractDepsVersionTag(options);
 
     const commandArguments = [
@@ -115,10 +113,6 @@ const create = async(appName, options) => {
         '--ai-config=none'
     ];
 
-    if(ngCliWithZoneless.compare(currentNgVersion) <= 0) {
-        commandArguments.push('--zoneless=false');
-    }
-
     await runNgCommand(commandArguments, options);
 
     const appPath = path.join(process.cwd(), appName);
@@ -130,6 +124,7 @@ const create = async(appName, options) => {
     options.resolveConflicts = 'override';
     options.updateBudgets = true;
     options.layout = layout;
+    options.zoneless = true;
     addTemplate(appName, options, {
         cwd: appPath
     });
@@ -143,6 +138,7 @@ const addTemplate = async(appName, options, evaluatingOptions) => {
         ...options,
         globalNgCliVersion: ngVersion.getNgCliVersion().version
     };
+    console.log('Schematic options:', schematicOptions);
     runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
 
