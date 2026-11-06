@@ -1,13 +1,13 @@
 import { Tree } from '@angular-devkit/schematics';
-import { SemVer } from 'semver';
+import { coerce } from 'semver';
 
 export function getAngularVersion(host: Tree): number {
   const packageJson = JSON.parse(host.read('package.json')?.toString() || '{}');
   const angularCore = packageJson.dependencies?.['@angular/core'];
 
   if (angularCore) {
-    const version = new SemVer(angularCore.replace(/\^|\~/g, ''));
-    return version.major;
+    const version = coerce(angularCore);
+    return version ? version.major : Number.MAX_SAFE_INTEGER;
   }
 
   throw new Error('Angular version not found');

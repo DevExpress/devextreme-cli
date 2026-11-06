@@ -22,7 +22,7 @@ import { strings } from '@angular-devkit/core';
 
 import { join, basename } from 'path';
 
-import { SemVer } from 'semver';
+import { coerce } from 'semver';
 
 import {
   getApplicationPath,
@@ -295,24 +295,31 @@ function addZoneChangeDetection(appPath: string) {
   ]);
 }
 
-function addPackagesToDependency(globalNgCliVersion: string, zoneless: boolean) {
-  const version = new SemVer(globalNgCliVersion.replace(/\^|\~/g, ''));
+function getCdkVersion(angularCoreVersion: string = '') {
+  if (angularCoreVersion.includes('next') || angularCoreVersion.includes('-rc')) {
+    return 'next';
+  }
 
+  const version = coerce(angularCoreVersion);
+  return version ? `^${version.major}.0.0` : 'latest';
+}
+
+function addPackagesToDependency(zoneless: boolean) {
   return (host: Tree) => {
     const zonejs = getPackageJsonDependency(host, 'zone.js');
+    const angularCore = getPackageJsonDependency(host, '@angular/core');
 
     addPackageJsonDependency(host, {
       type: NodeDependencyType.Default,
       name: '@angular/cdk',
-      version: version.raw.includes('next') || version.raw.includes('-rc')
-        ? 'next' : `^${version.major}.0.0`
+      version: getCdkVersion(angularCore?.version)
     });
 
     if (!zoneless && !zonejs) {
       addPackageJsonDependency(host, {
         type: NodeDependencyType.Default,
         name: 'zone.js',
-        version: version.major > 18 ? '~0.16.0' : '~0.14.0'
+        version: '~0.16.0'
       });
     }
 
@@ -453,7 +460,7 @@ export default function(options: any): Rule {
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),
-      addPackagesToDependency(options.globalNgCliVersion, zoneless),
+      addPackagesToDependency(zoneless),
     ];
 
     if (!zoneless) {

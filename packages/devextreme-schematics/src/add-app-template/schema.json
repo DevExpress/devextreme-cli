@@ -41,10 +41,6 @@
       "description": "The DevExtreme version",
       "default": "26.1.5"
     },
-    "globalNgCliVersion": {
-      "type":"string",
-      "default": "^17.2.0"
-    },
     "empty": {
       "type": "boolean",
       "description": "Specifies whether to skip sample views generation",

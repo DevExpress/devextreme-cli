@@ -32,8 +32,7 @@ describe('layout', () => {
 
   const options: any = {
     layout: 'side-nav-outer-toolbar',
-    resolveConflicts: 'override',
-    globalNgCliVersion: '^21.0.0'
+    resolveConflicts: 'override'
   };
 
   const angularSchematicsCollection = require.resolve('../../node_modules/@schematics/angular/collection.json');
@@ -175,12 +174,26 @@ describe('layout', () => {
     expect(packageConfig.dependencies['@angular/cdk']).toBeDefined();
   });
 
-  it('should choose angular/cdk version such as angular/cli', async () => {
-    const runner = new SchematicTestRunner('schematics', collectionPath);
-    const tree = await runner.runSchematic('add-layout', options, appTree);
-    const packageConfig = JSON.parse(tree.readContent('package.json'));
+  [
+    { angularCore: '~21.2.0', cdk: '^21.0.0' },
+    { angularCore: '^22.0.0', cdk: '^22.0.0' },
+    { angularCore: '22.1.0-rc.1', cdk: 'next' },
+    { angularCore: 'next', cdk: 'next' },
+  ].forEach(({ angularCore, cdk }) => {
+    it(`should choose angular/cdk ${cdk} for angular/core ${angularCore}`, async () => {
+      removePackageJsonDependency(appTree, '@angular/core');
+      addPackageJsonDependency(appTree, {
+        type: NodeDependencyType.Default,
+        name: '@angular/core',
+        version: angularCore
+      });
 
-    expect(packageConfig.dependencies['@angular/cdk']).toBe('^21.0.0');
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', options, appTree);
+      const packageConfig = JSON.parse(tree.readContent('package.json'));
+
+      expect(packageConfig.dependencies['@angular/cdk']).toBe(cdk);
+    });
   });
 
   it('should update budgets if updateBudgets option is true', async () => {

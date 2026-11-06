@@ -134,8 +134,7 @@ const create = async(appName, options) => {
 const addTemplate = async(appName, options, evaluatingOptions) => {
     const schematicOptions = {
         ...(appName && { project: appName }),
-        ...options,
-        globalNgCliVersion: ngVersion.getNgCliVersion().version
+        ...options
     };
     runSchematicCommand('add-app-template', schematicOptions, evaluatingOptions);
 };
