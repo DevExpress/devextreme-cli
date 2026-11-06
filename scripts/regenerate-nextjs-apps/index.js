@@ -41,6 +41,13 @@ if (minReleaseAgeMatch) {
     npmEnv.npm_config_min_release_age = minReleaseAgeMatch[1];
 }
 
+// npm overrides added to every generated app to resolve security alerts
+// in dependencies that create-next-app installs.
+const npmOverrides = {
+    // GHSA-g3hv-75wg-m249: @typescript-eslint/typescript-estree (via eslint-config-next) requires minimatch ^10
+    'minimatch@>=7.0.0 <11.0.1': '^11.0.1'
+};
+
 const variants = [
     { name: 'ts-src-app', typescript: true, srcDir: true, appRouter: true },
     { name: 'ts-src-pages', typescript: true, srcDir: true, appRouter: false },
@@ -82,6 +89,16 @@ for (const variant of variants) {
     });
 
     fs.copyFileSync(npmrcPath, path.join(appDir, '.npmrc'));
+
+    const packageJsonPath = path.join(appDir, 'package.json');
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    packageJson.overrides = { ...packageJson.overrides, ...npmOverrides };
+    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
+    execFileSync('npm', ['install', '--package-lock-only', '--ignore-scripts'], {
+        cwd: appDir,
+        stdio: 'inherit',
+        env: npmEnv
+    });
 
     const nodeModulesDir = path.join(appDir, 'node_modules');
     if (fs.existsSync(nodeModulesDir)) {
