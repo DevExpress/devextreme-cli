@@ -1,3 +1,13 @@
+## v1.19.0
+
+- Added support for Angular 21.
+- Updated DevExtreme version to `26.1.6`.
+- Fixed `add devextreme-vue` for TypeScript applications.
+- Fixed `styleUrl` in Angular components generated using `add view`.
+- Migrated tests to Vitest.
+- Migrated lint checks to ESLint in `devextreme-schematics`.
+- Updated dependencies and applied security fixes.
+
 ## v1.18.0
 
 - Updated DevExtreme Schematics to Angular 20.
