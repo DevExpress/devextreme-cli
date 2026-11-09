@@ -15,17 +15,18 @@ import {
 } from '@angular-devkit/schematics';
 
 import {
-  type Expression,
-  ScriptTarget,
+  type CallExpression,
+  type Node,
   type SourceFile,
   type StringLiteral,
-  createSourceFile,
+  forEachChild,
   isArrayLiteralExpression,
   isCallExpression,
   isImportDeclaration,
   isNamedImports,
   isObjectLiteralExpression,
   isPropertyAssignment,
+  isSpreadElement,
   isVariableStatement
 } from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 
@@ -259,35 +260,28 @@ function hasRouting(host: Tree, sourcePath: string) {
   return host.exists(sourcePath + 'app.routes.ts');
 }
 
-function getNamedImports(source: SourceFile) {
-  return source.statements
-    .filter(isImportDeclaration)
-    .flatMap((declaration) => {
-      const bindings = declaration.importClause?.namedBindings;
-      const location = (declaration.moduleSpecifier as StringLiteral).text;
+const appRoutesLocation = './app.routes';
+const routerProvider = 'provideRouter(routes, withHashLocation())';
 
-      return bindings && isNamedImports(bindings)
-        ? bindings.elements.map((element) => ({ name: element.name.text, location }))
-        : [];
-    });
-}
+function findCall(source: SourceFile, name: string) {
+  let call: CallExpression | undefined;
 
-function getProviderName(node: Expression) {
-  if (isCallExpression(node)) {
-    return node.expression.getText();
-  }
-
-  if (isObjectLiteralExpression(node)) {
-    const provide = node.properties.find((property) =>
-      isPropertyAssignment(property) && property.name.getText() === 'provide'
-    );
-
-    if (provide && isPropertyAssignment(provide)) {
-      return provide.initializer.getText();
+  const visit = (node: Node) => {
+    if (call) {
+      return;
     }
-  }
 
-  return node.getText();
+    if (isCallExpression(node) && node.expression.getText() === name) {
+      call = node;
+      return;
+    }
+
+    forEachChild(node, visit);
+  };
+
+  visit(source);
+
+  return call;
 }
 
 function findAppConfigProviders(source: SourceFile) {
@@ -311,54 +305,108 @@ function findAppConfigProviders(source: SourceFile) {
     : undefined;
 }
 
-function mergeAppConfig(host: Tree, filePath: string, templateContent: string) {
-  const source = getSourceFile(host, filePath);
-  const providers = source && findAppConfigProviders(source);
-  const templateSource = createSourceFile(filePath, templateContent, ScriptTarget.Latest, true);
-  const templateProviders = findAppConfigProviders(templateSource);
+function isImportedFrom(source: SourceFile, name: string, location: string) {
+  return source.statements.some((statement) => {
+    const bindings = isImportDeclaration(statement) && statement.importClause?.namedBindings;
 
-  if (!source || !providers || !templateProviders) {
+    return !!bindings
+      && isNamedImports(bindings)
+      && (statement.moduleSpecifier as StringLiteral).text === location
+      && bindings.elements.some((element) => element.name.text === name);
+  });
+}
+
+function addImports(host: Tree, filePath: string, imports: { name: string, location: string }[]) {
+  for (const { name, location } of imports) {
+    applyChanges(host, [insertImport(getSourceFile(host, filePath)!, filePath, name, location)], filePath);
+  }
+}
+
+function addHashLocation(host: Tree, filePath: string, router: CallExpression) {
+  const lastArgument = router.arguments[router.arguments.length - 1];
+
+  if (!lastArgument || router.getText().includes('withHashLocation')) {
+    return;
+  }
+
+  const recorder = host.beginUpdate(filePath);
+  recorder.insertLeft(lastArgument.end, ', withHashLocation()');
+  host.commitUpdate(recorder);
+
+  addImports(host, filePath, [{ name: 'withHashLocation', location: '@angular/router' }]);
+}
+
+function addRouterProvider(host: Tree, filePath: string, source: SourceFile) {
+  const providers = findAppConfigProviders(source);
+  const canAddRouter = providers
+    && !providers.elements.some(isSpreadElement)
+    && !/\broutes\b/.test(source.getText());
+
+  if (!providers || !canAddRouter) {
     return false;
   }
 
   const elements = providers.elements;
-  const providerNames = elements.map(getProviderName);
-  const router = elements.find((element) => getProviderName(element) === 'provideRouter');
-  const missingProviders = templateProviders.elements
-    .filter((element) => !providerNames.includes(getProviderName(element)))
-    .map((element) => element.getText());
+  const lastElement = elements[elements.length - 1];
+  const getPosition = (pos: number) => source.getLineAndCharacterOfPosition(pos);
   const recorder = host.beginUpdate(filePath);
 
-  if (router && isCallExpression(router) && !router.getText().includes('withHashLocation')) {
-    const lastArgument = router.arguments[router.arguments.length - 1];
-
-    recorder.insertLeft(
-      lastArgument ? lastArgument.end : router.arguments.end,
-      lastArgument ? ', withHashLocation()' : 'routes, withHashLocation()'
-    );
-  }
-
-  if (missingProviders.length) {
-    const lastElement = elements[elements.length - 1];
-    const getPosition = (pos: number) => source.getLineAndCharacterOfPosition(pos);
-
-    if (!lastElement) {
-      recorder.insertLeft(providers.getStart() + 1, `\n    ${missingProviders.join(',\n    ')}\n  `);
-    } else if (getPosition(lastElement.getStart()).line === getPosition(providers.getStart()).line) {
-      recorder.insertLeft(lastElement.end, `, ${missingProviders.join(', ')}`);
-    } else {
-      const indent = ' '.repeat(getPosition(lastElement.getStart()).character);
-      recorder.insertLeft(lastElement.end, `,\n${indent}${missingProviders.join(`,\n${indent}`)}`);
-    }
+  if (!lastElement) {
+    recorder.insertLeft(providers.getStart() + 1, `\n    ${routerProvider}\n  `);
+  } else if (getPosition(lastElement.getStart()).line === getPosition(providers.getStart()).line) {
+    recorder.insertLeft(lastElement.end, `, ${routerProvider}`);
+  } else {
+    const indent = ' '.repeat(getPosition(lastElement.getStart()).character);
+    recorder.insertLeft(lastElement.end, `,\n${indent}${routerProvider}`);
   }
 
   host.commitUpdate(recorder);
 
-  for (const { name, location } of getNamedImports(templateSource)) {
-    applyChanges(host, [insertImport(getSourceFile(host, filePath)!, filePath, name, location)], filePath);
-  }
+  addImports(host, filePath, [
+    { name: 'provideRouter', location: '@angular/router' },
+    { name: 'withHashLocation', location: '@angular/router' },
+    { name: 'routes', location: appRoutesLocation },
+  ]);
 
   return true;
+}
+
+function updateAppConfig(appPath: string): Rule {
+  const filePath = join(appPath, 'app.config.ts');
+
+  return (host: Tree, context: SchematicContext) => {
+    const source = getSourceFile(host, filePath);
+
+    if (!source) {
+      return host;
+    }
+
+    const router = findCall(source, 'provideRouter');
+
+    if (!router) {
+      if (!addRouterProvider(host, filePath, source)) {
+        context.logger.warn(
+          `Could not register the router in ${filePath}. `
+          + `Add "${routerProvider}" with "routes" imported from '${appRoutesLocation}' to the application providers.`
+        );
+      }
+
+      return host;
+    }
+
+    addHashLocation(host, filePath, router);
+
+    const routesArgument = router.arguments[0];
+
+    if (!routesArgument || !isImportedFrom(source, routesArgument.getText(), appRoutesLocation)) {
+      context.logger.warn(
+        `DevExtreme layout routes were added to ${join(appPath, 'app.routes.ts')}, `
+        + `but the router in ${filePath} uses other routes. Add the layout routes to the routes passed to provideRouter.`
+      );
+    }
+
+    return host;
+  };
 }
 
 function getCdkVersion(angularCoreVersion: string = '') {
@@ -486,6 +534,7 @@ export default function(options: any): Rule {
     const override = options.resolveConflicts === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath?.replace(/\/?(\w)+\/?/g, '../');
+    const hasAppConfig = host.exists(join(appPath, 'app.config.ts'));
 
     const templateOptions = {
       name: setPostfix(host, componentName),
@@ -506,7 +555,7 @@ export default function(options: any): Rule {
         return currentContent;
       }
 
-      if (basename(filePath) === 'app.config.ts' && mergeAppConfig(host, filePath, templateContent)) {
+      if (basename(filePath) === 'app.config.ts') {
         return currentContent;
       }
 
@@ -522,6 +571,10 @@ export default function(options: any): Rule {
       addViewportToBody(sourcePath),
       addPackagesToDependency(),
     ];
+
+    if (hasAppConfig) {
+      rules.push(updateAppConfig(appPath));
+    }
 
     if (options.updateBudgets) {
       rules.push(() => updateBudgets(host, options) as any);

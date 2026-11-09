@@ -367,7 +367,30 @@ describe('layout', () => {
       appTree.create('/src/app/app.config.ts', content.join('\n'));
     };
 
-    it('should merge layout providers into existing app config', async () => {
+    const runLayout = async () => {
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const warnings: string[] = [];
+
+      runner.logger.subscribe((entry) => {
+        if (entry.level === 'warn') {
+          warnings.push(entry.message);
+        }
+      });
+
+      const tree = await runner.runSchematic('add-layout', options, appTree);
+
+      return { appConfig: tree.readContent('/src/app/app.config.ts'), tree, warnings };
+    };
+
+    it('should create app config from template if it does not exist', async () => {
+      const { appConfig, warnings } = await runLayout();
+
+      expect(appConfig).toContain('provideRouter(routes, withHashLocation())');
+      expect(appConfig).not.toContain('./shared/services');
+      expect(warnings).toEqual([]);
+    });
+
+    it('should add hash location to existing router and keep user providers', async () => {
       createAppConfig([
         `import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';`,
         `import { provideHttpClient } from '@angular/common/http';`,
@@ -383,94 +406,154 @@ describe('layout', () => {
         `};`
       ]);
 
-      const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = await runner.runSchematic('add-layout', options, appTree);
-      const appConfig = tree.readContent('/src/app/app.config.ts');
+      const { appConfig, warnings } = await runLayout();
 
-      expect(appConfig).toContain('provideBrowserGlobalErrorListeners(),');
-      expect(appConfig).toContain('provideHttpClient(),');
-      expect(appConfig).toContain('provideRouter(routes, withHashLocation()),');
-      expect(appConfig).toMatch(/import { provideRouter, withHashLocation } from '@angular\/router';/);
-      expect(appConfig).toMatch(
-        /import { AppInfoService, AuthGuardService, AuthService, ScreenService } from '.\/shared\/services';/
-      );
-      expect(appConfig).toMatch(new RegExp([
-        'provideRouter\\(routes, withHashLocation\\(\\)\\),',
-        'AuthGuardService,',
-        'AuthService,',
-        'ScreenService,',
-        'AppInfoService,',
-        '\\]'
-      ].join('\\s+')));
+      expect(appConfig).toContain([
+        `  providers: [`,
+        `    provideBrowserGlobalErrorListeners(),`,
+        `    provideHttpClient(),`,
+        `    provideRouter(routes, withHashLocation()),`,
+        `  ]`,
+      ].join('\n'));
+      expect(appConfig).toContain(`import { provideRouter, withHashLocation } from '@angular/router';`);
       expect(appConfig.match(/import { routes }/g)).toHaveLength(1);
+      expect(warnings).toEqual([]);
     });
 
-    it('should add hash location to router with trailing comma in arguments', async () => {
-      createAppConfig([
+    it('should not change app config with hash location router', async () => {
+      const content = [
         `import { ApplicationConfig } from '@angular/core';`,
-        `import { provideRouter, withComponentInputBinding } from '@angular/router';`,
+        `import { provideRouter, withHashLocation } from '@angular/router';`,
         `import { routes } from './app.routes';`,
         ``,
         `export const appConfig: ApplicationConfig = {`,
+        `  providers: [provideRouter(routes, withHashLocation())]`,
+        `};`
+      ];
+      createAppConfig(content);
+
+      const { appConfig, warnings } = await runLayout();
+
+      expect(appConfig).toBe(content.join('\n'));
+      expect(warnings).toEqual([]);
+    });
+
+    it('should add hash location to router call with trailing comma', async () => {
+      createAppConfig([
+        `import { ApplicationConfig } from '@angular/core';`,
+        `import { provideRouter } from '@angular/router';`,
+        `import { routes } from './app.routes';`,
+        ``,
+        `export const appConfig: ApplicationConfig = {`,
+        `  providers: [provideRouter(routes,)]`,
+        `};`
+      ]);
+
+      const { appConfig } = await runLayout();
+
+      expect(appConfig).toContain('provideRouter(routes, withHashLocation(),)');
+    });
+
+    it('should add hash location to router outside of providers literal', async () => {
+      createAppConfig([
+        `import { ApplicationConfig } from '@angular/core';`,
+        `import { provideHttpClient } from '@angular/common/http';`,
+        `import { provideRouter } from '@angular/router';`,
+        `import { routes } from './app.routes';`,
+        ``,
+        `const appProviders = [provideHttpClient(), provideRouter(routes)];`,
+        ``,
+        `export const appConfig: ApplicationConfig = {`,
+        `  providers: appProviders`,
+        `};`
+      ]);
+
+      const { appConfig, warnings } = await runLayout();
+
+      expect(appConfig).toContain(
+        'const appProviders = [provideHttpClient(), provideRouter(routes, withHashLocation())];'
+      );
+      expect(appConfig).toContain('providers: appProviders');
+      expect(warnings).toEqual([]);
+    });
+
+    it('should add router to app config without routing', async () => {
+      createAppConfig([
+        `import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';`,
+        ``,
+        `export const appConfig: ApplicationConfig = {`,
         `  providers: [`,
-        `    provideRouter(`,
-        `      routes,`,
-        `      withComponentInputBinding(),`,
-        `    ),`,
+        `    provideBrowserGlobalErrorListeners(),`,
         `  ]`,
         `};`
       ]);
 
-      const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = await runner.runSchematic('add-layout', options, appTree);
-      const appConfig = tree.readContent('/src/app/app.config.ts');
+      const { appConfig, tree, warnings } = await runLayout();
 
-      expect(appConfig).toContain('withComponentInputBinding(), withHashLocation(),');
-      expect(appConfig).not.toMatch(/,\s*,/);
+      expect(appConfig).toContain([
+        `    provideBrowserGlobalErrorListeners(),`,
+        `    provideRouter(routes, withHashLocation()),`,
+      ].join('\n'));
+      expect(appConfig).toContain(`import { provideRouter, withHashLocation } from '@angular/router';`);
+      expect(appConfig).toContain(`import { routes } from './app.routes';`);
+      expect(tree.files).toContain('/src/app/app.routes.ts');
+      expect(warnings).toEqual([]);
     });
 
-    it('should not duplicate existing providers', async () => {
-      createAppConfig([
+    it('should warn and keep app config if routes name is taken', async () => {
+      const content = [
         `import { ApplicationConfig } from '@angular/core';`,
-        `import { provideRouter, withHashLocation } from '@angular/router';`,
-        `import { routes } from './app.routes';`,
-        `import { AuthService } from './shared/services';`,
+        ``,
+        `const routes = [];`,
         ``,
         `export const appConfig: ApplicationConfig = {`,
-        `  providers: [provideRouter(routes, withHashLocation()), AuthService]`,
+        `  providers: []`,
+        `};`
+      ];
+      createAppConfig(content);
+
+      const { appConfig, warnings } = await runLayout();
+
+      expect(appConfig).toBe(content.join('\n'));
+      expect(warnings).toHaveLength(1);
+      expect(warnings[0]).toContain('Could not register the router');
+    });
+
+    it('should warn and keep app config if providers are not a literal array', async () => {
+      const content = [
+        `import { ApplicationConfig } from '@angular/core';`,
+        `import { appProviders } from './app.providers';`,
+        ``,
+        `export const appConfig: ApplicationConfig = {`,
+        `  providers: [...appProviders]`,
+        `};`
+      ];
+      createAppConfig(content);
+
+      const { appConfig, warnings } = await runLayout();
+
+      expect(appConfig).toBe(content.join('\n'));
+      expect(warnings).toHaveLength(1);
+      expect(warnings[0]).toContain('Could not register the router');
+    });
+
+    it('should warn if router uses other routes', async () => {
+      createAppConfig([
+        `import { ApplicationConfig } from '@angular/core';`,
+        `import { provideRouter } from '@angular/router';`,
+        `import { myRoutes } from './my.routes';`,
+        ``,
+        `export const appConfig: ApplicationConfig = {`,
+        `  providers: [provideRouter(myRoutes)]`,
         `};`
       ]);
 
-      const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = await runner.runSchematic('add-layout', options, appTree);
-      const appConfig = tree.readContent('/src/app/app.config.ts');
+      const { appConfig, warnings } = await runLayout();
 
-      expect(appConfig).toContain('providers: [provideRouter(routes, withHashLocation()), AuthService, '
-        + 'AuthGuardService, ScreenService, AppInfoService]');
-      expect(appConfig).toContain(
-        `import { AuthService, AppInfoService, AuthGuardService, ScreenService } from './shared/services';`
-      );
-      expect(appConfig.match(/from '@angular\/router'/g)).toHaveLength(1);
-    });
-
-    it('should keep custom provider registered by provide token', async () => {
-      createAppConfig([
-        `import { ApplicationConfig } from '@angular/core';`,
-        `import { AuthService } from './shared/services';`,
-        `import { CustomAuthService } from './custom-auth.service';`,
-        ``,
-        `export const appConfig: ApplicationConfig = {`,
-        `  providers: [{ provide: AuthService, useClass: CustomAuthService }]`,
-        `};`
-      ]);
-
-      const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = await runner.runSchematic('add-layout', options, appTree);
-      const appConfig = tree.readContent('/src/app/app.config.ts');
-
-      expect(appConfig).toContain('{ provide: AuthService, useClass: CustomAuthService }');
-      expect(appConfig).not.toMatch(/[,[]\s*AuthService\s*[,\]]/);
-      expect(appConfig).toContain('ScreenService');
+      expect(appConfig).toContain('provideRouter(myRoutes, withHashLocation())');
+      expect(appConfig).not.toContain('./app.routes');
+      expect(warnings).toHaveLength(1);
+      expect(warnings[0]).toContain('uses other routes');
     });
   });
 });

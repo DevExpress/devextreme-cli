@@ -1,7 +1,7 @@
 import { Output, Injectable, EventEmitter, WritableSignal, signal } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ScreenService {
   @Output() changed = new EventEmitter();
 
