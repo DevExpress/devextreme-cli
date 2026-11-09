@@ -15,14 +15,11 @@ import {
 } from '@angular-devkit/schematics';
 
 import {
-  type ArrayLiteralExpression,
   type Expression,
-  type Node,
   ScriptTarget,
   type SourceFile,
   type StringLiteral,
   createSourceFile,
-  forEachChild,
   isArrayLiteralExpression,
   isCallExpression,
   isImportDeclaration,
