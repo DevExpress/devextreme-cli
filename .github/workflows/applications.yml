@@ -68,6 +68,14 @@ jobs:
       if: contains(fromJSON('["angular", "nextjs", "nextjs-ts"]'), matrix.APPROACH)
       run: npm config set legacy-peer-deps true
 
+    - name: Pack local devextreme-cli
+      run: |
+        pack_dir="$RUNNER_TEMP/devextreme-cli-package"
+        mkdir -p "$pack_dir"
+        pnpm --filter devextreme-cli pack --pack-destination "$pack_dir"
+        package_tgz="$(ls "$pack_dir"/*.tgz)"
+        echo "DEVEXTREME_CLI_PACKAGE=file:$package_tgz" >> "$GITHUB_ENV"
+
     - name: Create ${{ matrix.APPROACH }} application
       working-directory: packages/devextreme-cli
       run: node ./testing/creating.js -e ${{ matrix.APPROACH }} ${{ env.DEPS_VERSION_TAG_PARAM }}
