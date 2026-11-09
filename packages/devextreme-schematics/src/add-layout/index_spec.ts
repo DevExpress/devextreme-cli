@@ -452,5 +452,25 @@ describe('layout', () => {
       );
       expect(appConfig.match(/from '@angular\/router'/g)).toHaveLength(1);
     });
+
+    it('should keep custom provider registered by provide token', async () => {
+      createAppConfig([
+        `import { ApplicationConfig } from '@angular/core';`,
+        `import { AuthService } from './shared/services';`,
+        `import { CustomAuthService } from './custom-auth.service';`,
+        ``,
+        `export const appConfig: ApplicationConfig = {`,
+        `  providers: [{ provide: AuthService, useClass: CustomAuthService }]`,
+        `};`
+      ]);
+
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', options, appTree);
+      const appConfig = tree.readContent('/src/app/app.config.ts');
+
+      expect(appConfig).toContain('{ provide: AuthService, useClass: CustomAuthService }');
+      expect(appConfig).not.toMatch(/[,[]\s*AuthService\s*[,\]]/);
+      expect(appConfig).toContain('ScreenService');
+    });
   });
 });

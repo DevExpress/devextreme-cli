@@ -27,7 +27,9 @@ import {
   isCallExpression,
   isImportDeclaration,
   isNamedImports,
-  isPropertyAssignment
+  isObjectLiteralExpression,
+  isPropertyAssignment,
+  isVariableStatement
 } from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 
 import { strings } from '@angular-devkit/core';
@@ -273,40 +275,50 @@ function getNamedImports(source: SourceFile) {
     });
 }
 
-function findProvidersArray(source: SourceFile) {
-  let providers: ArrayLiteralExpression | undefined;
+function getProviderName(node: Expression) {
+  if (isCallExpression(node)) {
+    return node.expression.getText();
+  }
 
-  const visit = (node: Node) => {
-    if (providers) {
-      return;
+  if (isObjectLiteralExpression(node)) {
+    const provide = node.properties.find((property) =>
+      isPropertyAssignment(property) && property.name.getText() === 'provide'
+    );
+
+    if (provide && isPropertyAssignment(provide)) {
+      return provide.initializer.getText();
     }
+  }
 
-    if (
-      isPropertyAssignment(node)
-      && node.name.getText() === 'providers'
-      && isArrayLiteralExpression(node.initializer)
-    ) {
-      providers = node.initializer;
-      return;
-    }
-
-    forEachChild(node, visit);
-  };
-
-  visit(source);
-
-  return providers;
+  return node.getText();
 }
 
-function getProviderName(node: Expression) {
-  return isCallExpression(node) ? node.expression.getText() : node.getText();
+function findAppConfigProviders(source: SourceFile) {
+  const declarations = source.statements
+    .filter(isVariableStatement)
+    .flatMap((statement) => [...statement.declarationList.declarations]);
+  const appConfig = declarations.find((declaration) => declaration.type?.getText() === 'ApplicationConfig')
+    ?? declarations.find((declaration) => declaration.name.getText() === 'appConfig');
+  const config = appConfig?.initializer;
+
+  if (!config || !isObjectLiteralExpression(config)) {
+    return;
+  }
+
+  const providers = config.properties.find((property) =>
+    isPropertyAssignment(property) && property.name.getText() === 'providers'
+  );
+
+  return providers && isPropertyAssignment(providers) && isArrayLiteralExpression(providers.initializer)
+    ? providers.initializer
+    : undefined;
 }
 
 function mergeAppConfig(host: Tree, filePath: string, templateContent: string) {
   const source = getSourceFile(host, filePath);
-  const providers = source && findProvidersArray(source);
+  const providers = source && findAppConfigProviders(source);
   const templateSource = createSourceFile(filePath, templateContent, ScriptTarget.Latest, true);
-  const templateProviders = findProvidersArray(templateSource);
+  const templateProviders = findAppConfigProviders(templateSource);
 
   if (!source || !providers || !templateProviders) {
     return false;
