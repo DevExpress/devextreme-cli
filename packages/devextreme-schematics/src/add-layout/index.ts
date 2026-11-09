@@ -15,7 +15,19 @@ import {
 } from '@angular-devkit/schematics';
 
 import {
-  SourceFile
+  ArrayLiteralExpression,
+  Expression,
+  Node,
+  ScriptTarget,
+  SourceFile,
+  StringLiteral,
+  createSourceFile,
+  forEachChild,
+  isArrayLiteralExpression,
+  isCallExpression,
+  isImportDeclaration,
+  isNamedImports,
+  isPropertyAssignment
 } from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 
 import { strings } from '@angular-devkit/core';
@@ -67,7 +79,6 @@ import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { Change } from '@schematics/angular/utility/change';
 
 import { isAngularVersionHigherThan } from '../utility/angular-version';
-import { isZonelessApp } from '../utility/zone';
 import { NodePackageInstallTask, RunSchematicTask } from '@angular-devkit/schematics/tasks';
 
 const routes = [
@@ -174,30 +185,6 @@ async function updateBudgets(host: Tree, options: any) {
   return host;
 }
 
-async function addPolyfills(host: Tree, project: string, polyfills: string[]) {
-  const projectName = await getProjectName(host, project);
-
-  modifyJSONFile(host, './angular.json', config => {
-    const buildOptions: Record<string, any> = config.projects[projectName]['architect']['build']['options'];
-
-    if (!buildOptions.polyfills) {
-      buildOptions.polyfills = [];
-    } else if (!Array.isArray(buildOptions.polyfills)) {
-      buildOptions.polyfills = [buildOptions.polyfills];
-    }
-
-    polyfills.forEach((polyfill) => {
-      if (!buildOptions.polyfills.includes(polyfill)) {
-        buildOptions.polyfills.push(polyfill);
-      }
-    });
-
-    return config;
-  });
-
-  return host;
-}
-
 function addViewportToBody(sourcePath: string = '') {
   return (host: Tree) => {
     const indexPath =  join(sourcePath, 'index.html');
@@ -273,26 +260,94 @@ function hasRouting(host: Tree, sourcePath: string) {
   return host.exists(sourcePath + 'app.routes.ts');
 }
 
-function addZoneChangeDetection(appPath: string) {
-  const appConfigPath = join(appPath, 'app.config.ts');
+function getNamedImports(source: SourceFile) {
+  return source.statements
+    .filter(isImportDeclaration)
+    .flatMap((declaration) => {
+      const bindings = declaration.importClause?.namedBindings;
+      const location = (declaration.moduleSpecifier as StringLiteral).text;
 
-  return chain([
-    modifyFileRule(appConfigPath, (source: SourceFile) => [
-      insertImport(source, appConfigPath, 'provideZoneChangeDetection', '@angular/core')
-    ]),
-    (host: Tree) => {
-      const content = host.read(appConfigPath)?.toString();
+      return bindings && isNamedImports(bindings)
+        ? bindings.elements.map((element) => ({ name: element.name.text, location }))
+        : [];
+    });
+}
 
-      if (content && !content.includes('provideZoneChangeDetection(')) {
-        host.overwrite(appConfigPath, content.replace(
-          /providers:\s*\[/,
-          '$&\n    provideZoneChangeDetection({ eventCoalescing: true }),'
-        ));
-      }
+function findProvidersArray(source: SourceFile) {
+  let providers: ArrayLiteralExpression | undefined;
 
-      return host;
+  const visit = (node: Node) => {
+    if (providers) {
+      return;
     }
-  ]);
+
+    if (
+      isPropertyAssignment(node)
+      && node.name.getText() === 'providers'
+      && isArrayLiteralExpression(node.initializer)
+    ) {
+      providers = node.initializer;
+      return;
+    }
+
+    forEachChild(node, visit);
+  };
+
+  visit(source);
+
+  return providers;
+}
+
+function getProviderName(node: Expression) {
+  return isCallExpression(node) ? node.expression.getText() : node.getText();
+}
+
+function mergeAppConfig(host: Tree, filePath: string, templateContent: string) {
+  const source = getSourceFile(host, filePath);
+  const providers = source && findProvidersArray(source);
+  const templateSource = createSourceFile(filePath, templateContent, ScriptTarget.Latest, true);
+  const templateProviders = findProvidersArray(templateSource);
+
+  if (!source || !providers || !templateProviders) {
+    return false;
+  }
+
+  const elements = providers.elements;
+  const providerNames = elements.map(getProviderName);
+  const router = elements.find((element) => getProviderName(element) === 'provideRouter');
+  const missingProviders = templateProviders.elements
+    .filter((element) => !providerNames.includes(getProviderName(element)))
+    .map((element) => element.getText());
+  const recorder = host.beginUpdate(filePath);
+
+  if (router && isCallExpression(router) && !router.getText().includes('withHashLocation')) {
+    recorder.insertLeft(
+      router.arguments.end,
+      router.arguments.length ? ', withHashLocation()' : 'routes, withHashLocation()'
+    );
+  }
+
+  if (missingProviders.length) {
+    const lastElement = elements[elements.length - 1];
+    const getPosition = (pos: number) => source.getLineAndCharacterOfPosition(pos);
+
+    if (!lastElement) {
+      recorder.insertLeft(providers.getStart() + 1, `\n    ${missingProviders.join(',\n    ')}\n  `);
+    } else if (getPosition(lastElement.getStart()).line === getPosition(providers.getStart()).line) {
+      recorder.insertLeft(lastElement.end, `, ${missingProviders.join(', ')}`);
+    } else {
+      const indent = ' '.repeat(getPosition(lastElement.getStart()).character);
+      recorder.insertLeft(lastElement.end, `,\n${indent}${missingProviders.join(`,\n${indent}`)}`);
+    }
+  }
+
+  host.commitUpdate(recorder);
+
+  for (const { name, location } of getNamedImports(templateSource)) {
+    applyChanges(host, [insertImport(getSourceFile(host, filePath)!, filePath, name, location)], filePath);
+  }
+
+  return true;
 }
 
 function getCdkVersion(angularCoreVersion: string = '') {
@@ -304,9 +359,8 @@ function getCdkVersion(angularCoreVersion: string = '') {
   return version ? `^${version.major}.0.0` : 'latest';
 }
 
-function addPackagesToDependency(zoneless: boolean) {
+function addPackagesToDependency() {
   return (host: Tree) => {
-    const zonejs = getPackageJsonDependency(host, 'zone.js');
     const angularCore = getPackageJsonDependency(host, '@angular/core');
 
     addPackageJsonDependency(host, {
@@ -314,14 +368,6 @@ function addPackagesToDependency(zoneless: boolean) {
       name: '@angular/cdk',
       version: getCdkVersion(angularCore?.version)
     });
-
-    if (!zoneless && !zonejs) {
-      addPackageJsonDependency(host, {
-        type: NodeDependencyType.Default,
-        name: 'zone.js',
-        version: '~0.16.0'
-      });
-    }
 
     return host;
   };
@@ -429,7 +475,6 @@ export default function(options: any): Rule {
     const override = options.resolveConflicts === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath?.replace(/\/?(\w)+\/?/g, '../');
-    const zoneless = await isZonelessApp(host, project, appPath);
 
     const templateOptions = {
       name: setPostfix(host, componentName),
@@ -450,6 +495,10 @@ export default function(options: any): Rule {
         return currentContent;
       }
 
+      if (basename(filePath) === 'app.config.ts' && mergeAppConfig(host, filePath, templateContent)) {
+        return currentContent;
+      }
+
       return templateContent;
     };
 
@@ -460,15 +509,8 @@ export default function(options: any): Rule {
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),
-      addPackagesToDependency(zoneless),
+      addPackagesToDependency(),
     ];
-
-    if (!zoneless) {
-      rules.push(
-        addZoneChangeDetection(appPath),
-        () => addPolyfills(host, options.project, ['zone.js']) as any
-      );
-    }
 
     if (options.updateBudgets) {
       rules.push(() => updateBudgets(host, options) as any);

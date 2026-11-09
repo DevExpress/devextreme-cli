@@ -335,71 +335,98 @@ describe('layout', () => {
   });
 
   describe('change detection', () => {
-    const zoneOptions = { ...options, resolveConflicts: 'override' };
-
-    const setPolyfills = (polyfills: string | string[]) => {
-      modifyJSONFile(appTree, './angular.json', config => {
-        config.projects.testApp.architect.build.options.polyfills = polyfills;
-        return config;
-      });
-    };
-
-    const expectZoneApp = (tree: UnitTestTree) => {
-      const packageConfig = JSON.parse(tree.readContent('package.json'));
-      const appConfig = tree.readContent('/src/app/app.config.ts');
-
-      expect(packageConfig.dependencies['zone.js']).toBeDefined();
-      expect(appConfig).toMatch(/import { ApplicationConfig, provideZoneChangeDetection } from '@angular\/core';/);
-      expect(appConfig).toMatch(/providers: \[\s+provideZoneChangeDetection\({ eventCoalescing: true }\),/);
-    };
-
     it('should not add zone.js to a zoneless app', async () => {
       const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
-
-      const packageConfig = JSON.parse(tree.readContent('package.json'));
+      const tree = await runner.runSchematic('add-layout', options, appTree);
       const angularContent = JSON.parse(tree.readContent('/angular.json'));
-      const polyfills = angularContent.projects.testApp.architect.build.options.polyfills || [];
 
-      expect(packageConfig.dependencies['zone.js']).toBeUndefined();
-      expect(polyfills).not.toContain('zone.js');
+      expect(JSON.parse(tree.readContent('package.json')).dependencies['zone.js']).toBeUndefined();
+      expect(angularContent.projects.testApp.architect.build.options.polyfills || []).not.toContain('zone.js');
       expect(tree.readContent('/src/app/app.config.ts')).not.toContain('provideZoneChangeDetection');
     });
 
-    it('should keep zone change detection if zone.js is in polyfills', async () => {
-      setPolyfills(['zone.js']);
-
-      const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
-
-      expectZoneApp(tree);
-    });
-
-    it('should keep zone change detection if zone.js is imported in a polyfills file', async () => {
-      setPolyfills('src/polyfills.ts');
-      appTree.create('/src/polyfills.ts', `import 'zone.js';`);
-
-      const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
-
-      expectZoneApp(tree);
-      const angularContent = JSON.parse(tree.readContent('/angular.json'));
-      expect(angularContent.projects.testApp.architect.build.options.polyfills)
-        .toEqual(['src/polyfills.ts', 'zone.js']);
-    });
-
-    it('should keep zone change detection if app config provides it', async () => {
+    it('should keep zone change detection provided in app config', async () => {
       appTree.create('/src/app/app.config.ts', [
         `import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';`,
         `export const appConfig: ApplicationConfig = {`,
-        `  providers: [provideZoneChangeDetection()]`,
+        `  providers: [provideZoneChangeDetection({ eventCoalescing: true })]`,
         `};`
       ].join('\n'));
 
       const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
+      const tree = await runner.runSchematic('add-layout', options, appTree);
+      const appConfig = tree.readContent('/src/app/app.config.ts');
 
-      expectZoneApp(tree);
+      expect(appConfig).toContain(`import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';`);
+      expect(appConfig).toContain('provideZoneChangeDetection({ eventCoalescing: true })');
+    });
+  });
+
+  describe('app config', () => {
+    const createAppConfig = (content: string[]) => {
+      appTree.create('/src/app/app.config.ts', content.join('\n'));
+    };
+
+    it('should merge layout providers into existing app config', async () => {
+      createAppConfig([
+        `import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';`,
+        `import { provideHttpClient } from '@angular/common/http';`,
+        `import { provideRouter } from '@angular/router';`,
+        `import { routes } from './app.routes';`,
+        ``,
+        `export const appConfig: ApplicationConfig = {`,
+        `  providers: [`,
+        `    provideBrowserGlobalErrorListeners(),`,
+        `    provideHttpClient(),`,
+        `    provideRouter(routes),`,
+        `  ]`,
+        `};`
+      ]);
+
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', options, appTree);
+      const appConfig = tree.readContent('/src/app/app.config.ts');
+
+      expect(appConfig).toContain('provideBrowserGlobalErrorListeners(),');
+      expect(appConfig).toContain('provideHttpClient(),');
+      expect(appConfig).toContain('provideRouter(routes, withHashLocation()),');
+      expect(appConfig).toMatch(/import { provideRouter, withHashLocation } from '@angular\/router';/);
+      expect(appConfig).toMatch(
+        /import { AppInfoService, AuthGuardService, AuthService, ScreenService } from '.\/shared\/services';/
+      );
+      expect(appConfig).toMatch(new RegExp([
+        'provideRouter\\(routes, withHashLocation\\(\\)\\),',
+        'AuthGuardService,',
+        'AuthService,',
+        'ScreenService,',
+        'AppInfoService,',
+        '\\]'
+      ].join('\\s+')));
+      expect(appConfig.match(/import { routes }/g)).toHaveLength(1);
+    });
+
+    it('should not duplicate existing providers', async () => {
+      createAppConfig([
+        `import { ApplicationConfig } from '@angular/core';`,
+        `import { provideRouter, withHashLocation } from '@angular/router';`,
+        `import { routes } from './app.routes';`,
+        `import { AuthService } from './shared/services';`,
+        ``,
+        `export const appConfig: ApplicationConfig = {`,
+        `  providers: [provideRouter(routes, withHashLocation()), AuthService]`,
+        `};`
+      ]);
+
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', options, appTree);
+      const appConfig = tree.readContent('/src/app/app.config.ts');
+
+      expect(appConfig).toContain('providers: [provideRouter(routes, withHashLocation()), AuthService, '
+        + 'AuthGuardService, ScreenService, AppInfoService]');
+      expect(appConfig).toContain(
+        `import { AuthService, AppInfoService, AuthGuardService, ScreenService } from './shared/services';`
+      );
+      expect(appConfig.match(/from '@angular\/router'/g)).toHaveLength(1);
     });
   });
 });
