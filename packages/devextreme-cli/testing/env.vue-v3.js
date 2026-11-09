@@ -4,6 +4,7 @@ const path = require('path');
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
 const { depsVersionTagOptionName } = require('../src/utility/extract-deps-version-tag');
+const localCliPackage = require('./utils/local-cli-package');
 
 const appName = 'my-app';
 const sandboxPath = path.join(process.cwd(), './testing/sandbox/vue-v3');
@@ -22,6 +23,7 @@ exports.createApp = async(depsVersionTag) => {
 
     const additionalArguments = depsVersionTag && [`--${depsVersionTagOptionName} ${depsVersionTag}`] || [];
     await runCommand('node', [
+        ...localCliPackage.nodeArgs,
         path.join(process.cwd(), './index.js'),
         'new',
         'vue-app',

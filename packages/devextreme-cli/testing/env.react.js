@@ -5,6 +5,7 @@ const path = require('path');
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
 const { depsVersionTagOptionName } = require('../src/utility/extract-deps-version-tag');
+const localCliPackage = require('./utils/local-cli-package');
 const classify = require('../src/utility/string').classify;
 
 function getConfig({ engine, template, fileExtension, templateExtension, transpiler }) {
@@ -27,6 +28,7 @@ function getConfig({ engine, template, fileExtension, templateExtension, transpi
 
         const additionalArguments = depsVersionTag && [`--${depsVersionTagOptionName} ${depsVersionTag}`] || [];
         await runCommand('node', [
+            ...localCliPackage.nodeArgs,
             path.join(process.cwd(), './index.js'),
             'new',
             'react-app',
