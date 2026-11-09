@@ -296,7 +296,7 @@ function addZoneChangeDetection(appPath: string) {
 }
 
 function getCdkVersion(angularCoreVersion: string = '') {
-  if (angularCoreVersion.includes('next') || angularCoreVersion.includes('-rc')) {
+  if (angularCoreVersion.includes('next')) {
     return 'next';
   }
 

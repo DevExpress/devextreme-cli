@@ -177,7 +177,6 @@ describe('layout', () => {
   [
     { angularCore: '~21.2.0', cdk: '^21.0.0' },
     { angularCore: '^22.0.0', cdk: '^22.0.0' },
-    { angularCore: '22.1.0-rc.1', cdk: 'next' },
     { angularCore: 'next', cdk: 'next' },
   ].forEach(({ angularCore, cdk }) => {
     it(`should choose angular/cdk ${cdk} for angular/core ${angularCore}`, async () => {
