@@ -7,6 +7,6 @@ module.exports = {
     'create-vue': '3.17.0',
     'create-next-app': '16.3.3',
     'jose': '6.1.3',
-    'devextreme-cli': process.env.DEVEXTREME_CLI_PACKAGE || packageJson.version,
+    'devextreme-cli': packageJson.version,
     'devextreme-schematics': 'latest'
 };

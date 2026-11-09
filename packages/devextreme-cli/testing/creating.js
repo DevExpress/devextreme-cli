@@ -1,6 +1,7 @@
 const minimist = require('minimist');
 const { depsVersionTagOptionName } = require('../src/utility/extract-deps-version-tag');
 const envs = require('./constants').envs;
+const localCliPackage = require('./utils/local-cli-package');
 
 const args = minimist(process.argv.slice(2), {
     default: {
@@ -17,6 +18,8 @@ const args = minimist(process.argv.slice(2), {
         ? envs
         : envs.filter(e => e.engine === args.e);
 
+    await localCliPackage.packLocalCli();
+
     const depsVersionTag = args[depsVersionTagOptionName];
     filteredEnvs.forEach(async env => {
         try {
@@ -25,4 +28,7 @@ const args = minimist(process.argv.slice(2), {
             process.exit(1);
         }
     });
-})().catch(reject => console.error(reject));
+})().catch(error => {
+    console.error(error);
+    process.exit(1);
+});
