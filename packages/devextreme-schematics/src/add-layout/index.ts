@@ -1,7 +1,7 @@
 import {
-  Rule,
-  SchematicContext,
-  Tree,
+  type Rule,
+  type SchematicContext,
+  type Tree,
   apply,
   url,
   move,
@@ -10,17 +10,17 @@ import {
   forEach,
   mergeWith,
   callRule,
-  FileEntry,
+  type FileEntry,
   template
 } from '@angular-devkit/schematics';
 
 import {
-  ArrayLiteralExpression,
-  Expression,
-  Node,
+  type ArrayLiteralExpression,
+  type Expression,
+  type Node,
   ScriptTarget,
-  SourceFile,
-  StringLiteral,
+  type SourceFile,
+  type StringLiteral,
   createSourceFile,
   forEachChild,
   isArrayLiteralExpression,
@@ -76,7 +76,7 @@ import {
 import { insertImport } from '@schematics/angular/utility/ast-utils';
 
 import { getWorkspace } from '@schematics/angular/utility/workspace';
-import { Change } from '@schematics/angular/utility/change';
+import type { Change } from '@schematics/angular/utility/change';
 
 import { isAngularVersionHigherThan } from '../utility/angular-version';
 import { NodePackageInstallTask, RunSchematicTask } from '@angular-devkit/schematics/tasks';
@@ -321,9 +321,11 @@ function mergeAppConfig(host: Tree, filePath: string, templateContent: string) {
   const recorder = host.beginUpdate(filePath);
 
   if (router && isCallExpression(router) && !router.getText().includes('withHashLocation')) {
+    const lastArgument = router.arguments[router.arguments.length - 1];
+
     recorder.insertLeft(
-      router.arguments.end,
-      router.arguments.length ? ', withHashLocation()' : 'routes, withHashLocation()'
+      lastArgument ? lastArgument.end : router.arguments.end,
+      lastArgument ? ', withHashLocation()' : 'routes, withHashLocation()'
     );
   }
 

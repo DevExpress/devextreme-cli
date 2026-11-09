@@ -405,6 +405,30 @@ describe('layout', () => {
       expect(appConfig.match(/import { routes }/g)).toHaveLength(1);
     });
 
+    it('should add hash location to router with trailing comma in arguments', async () => {
+      createAppConfig([
+        `import { ApplicationConfig } from '@angular/core';`,
+        `import { provideRouter, withComponentInputBinding } from '@angular/router';`,
+        `import { routes } from './app.routes';`,
+        ``,
+        `export const appConfig: ApplicationConfig = {`,
+        `  providers: [`,
+        `    provideRouter(`,
+        `      routes,`,
+        `      withComponentInputBinding(),`,
+        `    ),`,
+        `  ]`,
+        `};`
+      ]);
+
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', options, appTree);
+      const appConfig = tree.readContent('/src/app/app.config.ts');
+
+      expect(appConfig).toContain('withComponentInputBinding(), withHashLocation(),');
+      expect(appConfig).not.toMatch(/,\s*,/);
+    });
+
     it('should not duplicate existing providers', async () => {
       createAppConfig([
         `import { ApplicationConfig } from '@angular/core';`,
