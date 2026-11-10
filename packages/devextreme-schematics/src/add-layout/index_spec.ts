@@ -335,225 +335,71 @@ describe('layout', () => {
   });
 
   describe('change detection', () => {
+    const zoneOptions = { ...options, resolveConflicts: 'override' };
+
+    const setPolyfills = (polyfills: string | string[]) => {
+      modifyJSONFile(appTree, './angular.json', config => {
+        config.projects.testApp.architect.build.options.polyfills = polyfills;
+        return config;
+      });
+    };
+
+    const expectZoneApp = (tree: UnitTestTree) => {
+      const packageConfig = JSON.parse(tree.readContent('package.json'));
+      const appConfig = tree.readContent('/src/app/app.config.ts');
+
+      expect(packageConfig.dependencies['zone.js']).toBeDefined();
+      expect(appConfig).toMatch(/import { ApplicationConfig, provideZoneChangeDetection } from '@angular\/core';/);
+      expect(appConfig).toMatch(/providers: \[\s+provideZoneChangeDetection\({ eventCoalescing: true }\),/);
+    };
+
     it('should not add zone.js to a zoneless app', async () => {
       const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = await runner.runSchematic('add-layout', options, appTree);
-      const angularContent = JSON.parse(tree.readContent('/angular.json'));
+      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
 
-      expect(JSON.parse(tree.readContent('package.json')).dependencies['zone.js']).toBeUndefined();
-      expect(angularContent.projects.testApp.architect.build.options.polyfills || []).not.toContain('zone.js');
+      const packageConfig = JSON.parse(tree.readContent('package.json'));
+      const angularContent = JSON.parse(tree.readContent('/angular.json'));
+      const polyfills = angularContent.projects.testApp.architect.build.options.polyfills || [];
+
+      expect(packageConfig.dependencies['zone.js']).toBeUndefined();
+      expect(polyfills).not.toContain('zone.js');
       expect(tree.readContent('/src/app/app.config.ts')).not.toContain('provideZoneChangeDetection');
     });
 
-    it('should keep zone change detection provided in app config', async () => {
+    it('should keep zone change detection if zone.js is in polyfills', async () => {
+      setPolyfills(['zone.js']);
+
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
+
+      expectZoneApp(tree);
+    });
+
+    it('should keep zone change detection if zone.js is imported in a polyfills file', async () => {
+      setPolyfills('src/polyfills.ts');
+      appTree.create('/src/polyfills.ts', `import 'zone.js';`);
+
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
+
+      expectZoneApp(tree);
+      const angularContent = JSON.parse(tree.readContent('/angular.json'));
+      expect(angularContent.projects.testApp.architect.build.options.polyfills)
+        .toEqual(['src/polyfills.ts', 'zone.js']);
+    });
+
+    it('should keep zone change detection if app config provides it', async () => {
       appTree.create('/src/app/app.config.ts', [
         `import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';`,
         `export const appConfig: ApplicationConfig = {`,
-        `  providers: [provideZoneChangeDetection({ eventCoalescing: true })]`,
+        `  providers: [provideZoneChangeDetection()]`,
         `};`
       ].join('\n'));
 
       const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = await runner.runSchematic('add-layout', options, appTree);
-      const appConfig = tree.readContent('/src/app/app.config.ts');
+      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
 
-      expect(appConfig).toContain(`import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';`);
-      expect(appConfig).toContain('provideZoneChangeDetection({ eventCoalescing: true })');
-    });
-  });
-
-  describe('app config', () => {
-    const createAppConfig = (content: string[]) => {
-      appTree.create('/src/app/app.config.ts', content.join('\n'));
-    };
-
-    const runLayout = async () => {
-      const runner = new SchematicTestRunner('schematics', collectionPath);
-      const warnings: string[] = [];
-
-      runner.logger.subscribe((entry) => {
-        if (entry.level === 'warn') {
-          warnings.push(entry.message);
-        }
-      });
-
-      const tree = await runner.runSchematic('add-layout', options, appTree);
-
-      return { appConfig: tree.readContent('/src/app/app.config.ts'), tree, warnings };
-    };
-
-    it('should create app config from template if it does not exist', async () => {
-      const { appConfig, warnings } = await runLayout();
-
-      expect(appConfig).toContain('provideRouter(routes, withHashLocation())');
-      expect(appConfig).not.toContain('./shared/services');
-      expect(warnings).toEqual([]);
-    });
-
-    it('should add hash location to existing router and keep user providers', async () => {
-      createAppConfig([
-        `import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';`,
-        `import { provideHttpClient } from '@angular/common/http';`,
-        `import { provideRouter } from '@angular/router';`,
-        `import { routes } from './app.routes';`,
-        ``,
-        `export const appConfig: ApplicationConfig = {`,
-        `  providers: [`,
-        `    provideBrowserGlobalErrorListeners(),`,
-        `    provideHttpClient(),`,
-        `    provideRouter(routes),`,
-        `  ]`,
-        `};`
-      ]);
-
-      const { appConfig, warnings } = await runLayout();
-
-      expect(appConfig).toContain([
-        `  providers: [`,
-        `    provideBrowserGlobalErrorListeners(),`,
-        `    provideHttpClient(),`,
-        `    provideRouter(routes, withHashLocation()),`,
-        `  ]`,
-      ].join('\n'));
-      expect(appConfig).toContain(`import { provideRouter, withHashLocation } from '@angular/router';`);
-      expect(appConfig.match(/import { routes }/g)).toHaveLength(1);
-      expect(warnings).toEqual([]);
-    });
-
-    it('should not change app config with hash location router', async () => {
-      const content = [
-        `import { ApplicationConfig } from '@angular/core';`,
-        `import { provideRouter, withHashLocation } from '@angular/router';`,
-        `import { routes } from './app.routes';`,
-        ``,
-        `export const appConfig: ApplicationConfig = {`,
-        `  providers: [provideRouter(routes, withHashLocation())]`,
-        `};`
-      ];
-      createAppConfig(content);
-
-      const { appConfig, warnings } = await runLayout();
-
-      expect(appConfig).toBe(content.join('\n'));
-      expect(warnings).toEqual([]);
-    });
-
-    it('should add hash location to router call with trailing comma', async () => {
-      createAppConfig([
-        `import { ApplicationConfig } from '@angular/core';`,
-        `import { provideRouter } from '@angular/router';`,
-        `import { routes } from './app.routes';`,
-        ``,
-        `export const appConfig: ApplicationConfig = {`,
-        `  providers: [provideRouter(routes,)]`,
-        `};`
-      ]);
-
-      const { appConfig } = await runLayout();
-
-      expect(appConfig).toContain('provideRouter(routes, withHashLocation(),)');
-    });
-
-    it('should add hash location to router outside of providers literal', async () => {
-      createAppConfig([
-        `import { ApplicationConfig } from '@angular/core';`,
-        `import { provideHttpClient } from '@angular/common/http';`,
-        `import { provideRouter } from '@angular/router';`,
-        `import { routes } from './app.routes';`,
-        ``,
-        `const appProviders = [provideHttpClient(), provideRouter(routes)];`,
-        ``,
-        `export const appConfig: ApplicationConfig = {`,
-        `  providers: appProviders`,
-        `};`
-      ]);
-
-      const { appConfig, warnings } = await runLayout();
-
-      expect(appConfig).toContain(
-        'const appProviders = [provideHttpClient(), provideRouter(routes, withHashLocation())];'
-      );
-      expect(appConfig).toContain('providers: appProviders');
-      expect(warnings).toEqual([]);
-    });
-
-    it('should add router to app config without routing', async () => {
-      createAppConfig([
-        `import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';`,
-        ``,
-        `export const appConfig: ApplicationConfig = {`,
-        `  providers: [`,
-        `    provideBrowserGlobalErrorListeners(),`,
-        `  ]`,
-        `};`
-      ]);
-
-      const { appConfig, tree, warnings } = await runLayout();
-
-      expect(appConfig).toContain([
-        `    provideBrowserGlobalErrorListeners(),`,
-        `    provideRouter(routes, withHashLocation()),`,
-      ].join('\n'));
-      expect(appConfig).toContain(`import { provideRouter, withHashLocation } from '@angular/router';`);
-      expect(appConfig).toContain(`import { routes } from './app.routes';`);
-      expect(tree.files).toContain('/src/app/app.routes.ts');
-      expect(warnings).toEqual([]);
-    });
-
-    it('should warn and keep app config if routes name is taken', async () => {
-      const content = [
-        `import { ApplicationConfig } from '@angular/core';`,
-        ``,
-        `const routes = [];`,
-        ``,
-        `export const appConfig: ApplicationConfig = {`,
-        `  providers: []`,
-        `};`
-      ];
-      createAppConfig(content);
-
-      const { appConfig, warnings } = await runLayout();
-
-      expect(appConfig).toBe(content.join('\n'));
-      expect(warnings).toHaveLength(1);
-      expect(warnings[0]).toContain('Could not register the router');
-    });
-
-    it('should warn and keep app config if providers are not a literal array', async () => {
-      const content = [
-        `import { ApplicationConfig } from '@angular/core';`,
-        `import { appProviders } from './app.providers';`,
-        ``,
-        `export const appConfig: ApplicationConfig = {`,
-        `  providers: [...appProviders]`,
-        `};`
-      ];
-      createAppConfig(content);
-
-      const { appConfig, warnings } = await runLayout();
-
-      expect(appConfig).toBe(content.join('\n'));
-      expect(warnings).toHaveLength(1);
-      expect(warnings[0]).toContain('Could not register the router');
-    });
-
-    it('should warn if router uses other routes', async () => {
-      createAppConfig([
-        `import { ApplicationConfig } from '@angular/core';`,
-        `import { provideRouter } from '@angular/router';`,
-        `import { myRoutes } from './my.routes';`,
-        ``,
-        `export const appConfig: ApplicationConfig = {`,
-        `  providers: [provideRouter(myRoutes)]`,
-        `};`
-      ]);
-
-      const { appConfig, warnings } = await runLayout();
-
-      expect(appConfig).toContain('provideRouter(myRoutes, withHashLocation())');
-      expect(appConfig).not.toContain('./app.routes');
-      expect(warnings).toHaveLength(1);
-      expect(warnings[0]).toContain('uses other routes');
+      expectZoneApp(tree);
     });
   });
 });

@@ -11,10 +11,8 @@ const newLine = `
 export function applyChanges(host: Tree, changes: Change[], filePath: string) {
   const recorder = host.beginUpdate(filePath);
 
-  changes.forEach((change) => {
-    if (change instanceof InsertChange) {
-      recorder.insertLeft(change.pos, change.toAdd);
-    }
+  changes.forEach((change: InsertChange) => {
+    recorder.insertLeft(change.pos, change.toAdd);
   });
 
   host.commitUpdate(recorder);

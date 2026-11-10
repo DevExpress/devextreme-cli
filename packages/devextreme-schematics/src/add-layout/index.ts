@@ -1,7 +1,7 @@
 import {
-  type Rule,
-  type SchematicContext,
-  type Tree,
+  Rule,
+  SchematicContext,
+  Tree,
   apply,
   url,
   move,
@@ -10,24 +10,12 @@ import {
   forEach,
   mergeWith,
   callRule,
-  type FileEntry,
+  FileEntry,
   template
 } from '@angular-devkit/schematics';
 
 import {
-  type CallExpression,
-  type Node,
-  type SourceFile,
-  type StringLiteral,
-  forEachChild,
-  isArrayLiteralExpression,
-  isCallExpression,
-  isImportDeclaration,
-  isNamedImports,
-  isObjectLiteralExpression,
-  isPropertyAssignment,
-  isSpreadElement,
-  isVariableStatement
+  SourceFile
 } from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 
 import { strings } from '@angular-devkit/core';
@@ -76,9 +64,10 @@ import {
 import { insertImport } from '@schematics/angular/utility/ast-utils';
 
 import { getWorkspace } from '@schematics/angular/utility/workspace';
-import type { Change } from '@schematics/angular/utility/change';
+import { Change } from '@schematics/angular/utility/change';
 
 import { isAngularVersionHigherThan } from '../utility/angular-version';
+import { isZonelessApp } from '../utility/zone';
 import { NodePackageInstallTask, RunSchematicTask } from '@angular-devkit/schematics/tasks';
 
 const routes = [
@@ -185,6 +174,30 @@ async function updateBudgets(host: Tree, options: any) {
   return host;
 }
 
+async function addPolyfills(host: Tree, project: string, polyfills: string[]) {
+  const projectName = await getProjectName(host, project);
+
+  modifyJSONFile(host, './angular.json', config => {
+    const buildOptions: Record<string, any> = config.projects[projectName]['architect']['build']['options'];
+
+    if (!buildOptions.polyfills) {
+      buildOptions.polyfills = [];
+    } else if (!Array.isArray(buildOptions.polyfills)) {
+      buildOptions.polyfills = [buildOptions.polyfills];
+    }
+
+    polyfills.forEach((polyfill) => {
+      if (!buildOptions.polyfills.includes(polyfill)) {
+        buildOptions.polyfills.push(polyfill);
+      }
+    });
+
+    return config;
+  });
+
+  return host;
+}
+
 function addViewportToBody(sourcePath: string = '') {
   return (host: Tree) => {
     const indexPath =  join(sourcePath, 'index.html');
@@ -260,153 +273,26 @@ function hasRouting(host: Tree, sourcePath: string) {
   return host.exists(sourcePath + 'app.routes.ts');
 }
 
-const appRoutesLocation = './app.routes';
-const routerProvider = 'provideRouter(routes, withHashLocation())';
+function addZoneChangeDetection(appPath: string) {
+  const appConfigPath = join(appPath, 'app.config.ts');
 
-function findCall(source: SourceFile, name: string) {
-  let call: CallExpression | undefined;
+  return chain([
+    modifyFileRule(appConfigPath, (source: SourceFile) => [
+      insertImport(source, appConfigPath, 'provideZoneChangeDetection', '@angular/core')
+    ]),
+    (host: Tree) => {
+      const content = host.read(appConfigPath)?.toString();
 
-  const visit = (node: Node) => {
-    if (call) {
-      return;
-    }
-
-    if (isCallExpression(node) && node.expression.getText() === name) {
-      call = node;
-      return;
-    }
-
-    forEachChild(node, visit);
-  };
-
-  visit(source);
-
-  return call;
-}
-
-function findAppConfigProviders(source: SourceFile) {
-  const declarations = source.statements
-    .filter(isVariableStatement)
-    .flatMap((statement) => [...statement.declarationList.declarations]);
-  const appConfig = declarations.find((declaration) => declaration.type?.getText() === 'ApplicationConfig')
-    ?? declarations.find((declaration) => declaration.name.getText() === 'appConfig');
-  const config = appConfig?.initializer;
-
-  if (!config || !isObjectLiteralExpression(config)) {
-    return;
-  }
-
-  const providers = config.properties.find((property) =>
-    isPropertyAssignment(property) && property.name.getText() === 'providers'
-  );
-
-  return providers && isPropertyAssignment(providers) && isArrayLiteralExpression(providers.initializer)
-    ? providers.initializer
-    : undefined;
-}
-
-function isImportedFrom(source: SourceFile, name: string, location: string) {
-  return source.statements.some((statement) => {
-    const bindings = isImportDeclaration(statement) && statement.importClause?.namedBindings;
-
-    return !!bindings
-      && isNamedImports(bindings)
-      && (statement.moduleSpecifier as StringLiteral).text === location
-      && bindings.elements.some((element) => element.name.text === name);
-  });
-}
-
-function addImports(host: Tree, filePath: string, imports: { name: string, location: string }[]) {
-  for (const { name, location } of imports) {
-    applyChanges(host, [insertImport(getSourceFile(host, filePath)!, filePath, name, location)], filePath);
-  }
-}
-
-function addHashLocation(host: Tree, filePath: string, router: CallExpression) {
-  const lastArgument = router.arguments[router.arguments.length - 1];
-
-  if (!lastArgument || router.getText().includes('withHashLocation')) {
-    return;
-  }
-
-  const recorder = host.beginUpdate(filePath);
-  recorder.insertLeft(lastArgument.end, ', withHashLocation()');
-  host.commitUpdate(recorder);
-
-  addImports(host, filePath, [{ name: 'withHashLocation', location: '@angular/router' }]);
-}
-
-function addRouterProvider(host: Tree, filePath: string, source: SourceFile) {
-  const providers = findAppConfigProviders(source);
-  const canAddRouter = providers
-    && !providers.elements.some(isSpreadElement)
-    && !/\broutes\b/.test(source.getText());
-
-  if (!providers || !canAddRouter) {
-    return false;
-  }
-
-  const elements = providers.elements;
-  const lastElement = elements[elements.length - 1];
-  const getPosition = (pos: number) => source.getLineAndCharacterOfPosition(pos);
-  const recorder = host.beginUpdate(filePath);
-
-  if (!lastElement) {
-    recorder.insertLeft(providers.getStart() + 1, `\n    ${routerProvider}\n  `);
-  } else if (getPosition(lastElement.getStart()).line === getPosition(providers.getStart()).line) {
-    recorder.insertLeft(lastElement.end, `, ${routerProvider}`);
-  } else {
-    const indent = ' '.repeat(getPosition(lastElement.getStart()).character);
-    recorder.insertLeft(lastElement.end, `,\n${indent}${routerProvider}`);
-  }
-
-  host.commitUpdate(recorder);
-
-  addImports(host, filePath, [
-    { name: 'provideRouter', location: '@angular/router' },
-    { name: 'withHashLocation', location: '@angular/router' },
-    { name: 'routes', location: appRoutesLocation },
-  ]);
-
-  return true;
-}
-
-function updateAppConfig(appPath: string): Rule {
-  const filePath = join(appPath, 'app.config.ts');
-
-  return (host: Tree, context: SchematicContext) => {
-    const source = getSourceFile(host, filePath);
-
-    if (!source) {
-      return host;
-    }
-
-    const router = findCall(source, 'provideRouter');
-
-    if (!router) {
-      if (!addRouterProvider(host, filePath, source)) {
-        context.logger.warn(
-          `Could not register the router in ${filePath}. `
-          + `Add "${routerProvider}" with "routes" imported from '${appRoutesLocation}' to the application providers.`
-        );
+      if (content && !content.includes('provideZoneChangeDetection(')) {
+        host.overwrite(appConfigPath, content.replace(
+          /providers:\s*\[/,
+          '$&\n    provideZoneChangeDetection({ eventCoalescing: true }),'
+        ));
       }
 
       return host;
     }
-
-    addHashLocation(host, filePath, router);
-
-    const routesArgument = router.arguments[0];
-
-    if (!routesArgument || !isImportedFrom(source, routesArgument.getText(), appRoutesLocation)) {
-      context.logger.warn(
-        `DevExtreme layout routes were added to ${join(appPath, 'app.routes.ts')}, `
-        + `but the router in ${filePath} uses other routes. Add the layout routes to the routes passed to provideRouter.`
-      );
-    }
-
-    return host;
-  };
+  ]);
 }
 
 function getCdkVersion(angularCoreVersion: string = '') {
@@ -418,8 +304,9 @@ function getCdkVersion(angularCoreVersion: string = '') {
   return version ? `^${version.major}.0.0` : 'latest';
 }
 
-function addPackagesToDependency() {
+function addPackagesToDependency(zoneless: boolean) {
   return (host: Tree) => {
+    const zonejs = getPackageJsonDependency(host, 'zone.js');
     const angularCore = getPackageJsonDependency(host, '@angular/core');
 
     addPackageJsonDependency(host, {
@@ -427,6 +314,14 @@ function addPackagesToDependency() {
       name: '@angular/cdk',
       version: getCdkVersion(angularCore?.version)
     });
+
+    if (!zoneless && !zonejs) {
+      addPackageJsonDependency(host, {
+        type: NodeDependencyType.Default,
+        name: 'zone.js',
+        version: '~0.16.0'
+      });
+    }
 
     return host;
   };
@@ -534,7 +429,7 @@ export default function(options: any): Rule {
     const override = options.resolveConflicts === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath?.replace(/\/?(\w)+\/?/g, '../');
-    const hasAppConfig = host.exists(join(appPath, 'app.config.ts'));
+    const zoneless = await isZonelessApp(host, project, appPath);
 
     const templateOptions = {
       name: setPostfix(host, componentName),
@@ -555,10 +450,6 @@ export default function(options: any): Rule {
         return currentContent;
       }
 
-      if (basename(filePath) === 'app.config.ts') {
-        return currentContent;
-      }
-
       return templateContent;
     };
 
@@ -569,11 +460,14 @@ export default function(options: any): Rule {
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),
-      addPackagesToDependency(),
+      addPackagesToDependency(zoneless),
     ];
 
-    if (hasAppConfig) {
-      rules.push(updateAppConfig(appPath));
+    if (!zoneless) {
+      rules.push(
+        addZoneChangeDetection(appPath),
+        () => addPolyfills(host, options.project, ['zone.js']) as any
+      );
     }
 
     if (options.updateBudgets) {

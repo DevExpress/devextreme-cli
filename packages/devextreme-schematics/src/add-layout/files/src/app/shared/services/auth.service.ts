@@ -12,7 +12,7 @@ const defaultUser = {
   avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class AuthService {
   private _user: IUser | null = defaultUser;
   get loggedIn(): boolean {
@@ -118,7 +118,7 @@ export class AuthService {
   }
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class AuthGuardService implements CanActivate {
   constructor(private router: Router, private authService: AuthService) { }
 
