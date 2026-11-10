@@ -1,19 +1,10 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig<% if (!zoneless) { %>, provideZoneChangeDetection<% } %> } from '@angular/core';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { routes } from './app.routes';
-import {
-    AppInfoService,
-    AuthGuardService,
-    AuthService,
-    ScreenService,
-} from './shared/services';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
+  providers: [<% if (!zoneless) { %>
+    provideZoneChangeDetection({ eventCoalescing: true }),<% } %>
     provideRouter(routes, withHashLocation()),
-    AuthGuardService,
-    AuthService,
-    ScreenService,
-    AppInfoService,
   ]
 };

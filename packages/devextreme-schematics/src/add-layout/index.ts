@@ -273,28 +273,6 @@ function hasRouting(host: Tree, sourcePath: string) {
   return host.exists(sourcePath + 'app.routes.ts');
 }
 
-function addZoneChangeDetection(appPath: string) {
-  const appConfigPath = join(appPath, 'app.config.ts');
-
-  return chain([
-    modifyFileRule(appConfigPath, (source: SourceFile) => [
-      insertImport(source, appConfigPath, 'provideZoneChangeDetection', '@angular/core')
-    ]),
-    (host: Tree) => {
-      const content = host.read(appConfigPath)?.toString();
-
-      if (content && !content.includes('provideZoneChangeDetection(')) {
-        host.overwrite(appConfigPath, content.replace(
-          /providers:\s*\[/,
-          '$&\n    provideZoneChangeDetection({ eventCoalescing: true }),'
-        ));
-      }
-
-      return host;
-    }
-  ]);
-}
-
 function getCdkVersion(angularCoreVersion: string = '') {
   if (angularCoreVersion.includes('next')) {
     return 'next';
@@ -437,7 +415,8 @@ export default function(options: any): Rule {
       title,
       strings,
       path: pathToCss,
-      prefix
+      prefix,
+      zoneless
     };
 
     const modifyContent = (templateContent: string, currentContent: string, filePath: string) => {
@@ -464,10 +443,7 @@ export default function(options: any): Rule {
     ];
 
     if (!zoneless) {
-      rules.push(
-        addZoneChangeDetection(appPath),
-        () => addPolyfills(host, options.project, ['zone.js']) as any
-      );
+      rules.push(() => addPolyfills(host, options.project, ['zone.js']) as any);
     }
 
     if (options.updateBudgets) {
