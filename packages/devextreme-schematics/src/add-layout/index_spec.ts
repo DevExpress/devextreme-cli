@@ -177,7 +177,7 @@ describe('layout', () => {
   [
     { angularCore: '~21.2.0', cdk: '^21.0.0' },
     { angularCore: '^22.0.0', cdk: '^22.0.0' },
-    { angularCore: 'next', cdk: 'next' },
+    { angularCore: '^22.0.0-next.3', cdk: 'next' },
   ].forEach(({ angularCore, cdk }) => {
     it(`should choose angular/cdk ${cdk} for angular/core ${angularCore}`, async () => {
       removePackageJsonDependency(appTree, '@angular/core');
@@ -386,6 +386,16 @@ describe('layout', () => {
       const angularContent = JSON.parse(tree.readContent('/angular.json'));
       expect(angularContent.projects.testApp.architect.build.options.polyfills)
         .toEqual(['src/polyfills.ts', 'zone.js']);
+    });
+
+    it('should keep zone change detection if zone.js is imported in main file', async () => {
+      const mainPath = '/src/main.ts';
+      appTree.overwrite(mainPath, `import 'zone.js';\n${appTree.readContent(mainPath)}`);
+
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic('add-layout', zoneOptions, appTree);
+
+      expectZoneApp(tree);
     });
 
     it('should keep zone change detection if app config provides it', async () => {

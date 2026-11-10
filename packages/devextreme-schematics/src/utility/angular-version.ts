@@ -5,9 +5,9 @@ export function getAngularVersion(host: Tree): number {
   const packageJson = JSON.parse(host.read('package.json')?.toString() || '{}');
   const angularCore = packageJson.dependencies?.['@angular/core'];
 
-  if (angularCore) {
-    const version = coerce(angularCore);
-    return version ? version.major : Number.MAX_SAFE_INTEGER;
+  const version = coerce(angularCore);
+  if (version) {
+    return version.major;
   }
 
   throw new Error('Angular version not found');

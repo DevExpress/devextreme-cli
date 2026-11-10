@@ -20,10 +20,11 @@ export async function isZonelessApp(host: Tree, projectName: string, appPath: st
     return true;
   }
 
+  const hasZoneImport = (path?: string) => /['"]zone\.js['"]/.test(readFile(host, path));
   const polyfills = buildOptions.polyfills;
   const polyfillList = (Array.isArray(polyfills) ? polyfills : [polyfills]).filter(Boolean) as string[];
 
-  return !polyfillList.some((polyfill) =>
-    polyfill === 'zone.js' || /['"]zone\.js['"]/.test(readFile(host, polyfill))
+  return !hasZoneImport(mainPath) && !polyfillList.some((polyfill) =>
+    polyfill === 'zone.js' || hasZoneImport(polyfill)
   );
 }
