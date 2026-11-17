@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const packageManager = require('../src/utility/package-manager');
 const rimraf = require('./utils/rimraf-async');
 const runCommand = require('../src/utility/run-command');
 const { depsVersionTagOptionName } = require('../src/utility/extract-deps-version-tag');
@@ -15,11 +14,7 @@ const appComponentTemplatePath = path.join(appPath, 'src/app/app.html');
 const appComponentPath = path.join(appPath, 'src/app/app.ts');
 
 async function prepareSchematics() {
-    await packageManager.runInstall({
-        cwd: schematicsPath
-    });
-
-    await packageManager.run(['run', 'build'], {
+    await runCommand('pnpm', ['run', 'build'], {
         cwd: schematicsPath
     });
 }

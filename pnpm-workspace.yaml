@@ -7,6 +7,13 @@ allowBuilds:
   puppeteer: true
   spawn-sync: true
 
+catalog:
+  eslint: ^10.14.0
+  "@typescript-eslint/parser": ^8.63.0
+  "@typescript-eslint/eslint-plugin": ^8.63.0
+  vitest: ^5.0.5
+  "@types/node": 20.19.43
+
 overrides:
   cross-spawn: 7.0.6
   "minimatch@<11.0.1": ^11.0.1

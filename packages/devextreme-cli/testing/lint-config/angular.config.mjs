@@ -1,4 +1,3 @@
-import { fixupPluginRules } from '@eslint/compat';
 import angularConfig from 'eslint-config-angular';
 import angularPlugin from 'eslint-plugin-angular';
 import globals from 'globals';
@@ -10,7 +9,7 @@ export default [
     {
         files: tsFiles,
         plugins: {
-            angular: fixupPluginRules(angularPlugin)
+            angular: angularPlugin
         },
         languageOptions: {
             parser: tsParser,
