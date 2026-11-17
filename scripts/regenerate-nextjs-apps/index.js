@@ -48,10 +48,6 @@ const npmOverrides = {
     'minimatch@>=7.0.0 <11.0.1': '^11.0.1'
 };
 
-const devDependencyVersions = {
-    'eslint': '^10.14.0'
-};
-
 const variants = [
     { name: 'ts-src-app', typescript: true, srcDir: true, appRouter: true },
     { name: 'ts-src-pages', typescript: true, srcDir: true, appRouter: false },
@@ -80,8 +76,6 @@ for (const variant of variants) {
         '--eslint',
         '--no-tailwind',
         '--no-react-compiler',
-        '--no-cache-components',
-        '--no-agents-md',
         '--import-alias', '@/*',
         '--no-git',
         '--use-npm'
@@ -98,7 +92,6 @@ for (const variant of variants) {
 
     const packageJsonPath = path.join(appDir, 'package.json');
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-    packageJson.devDependencies = { ...packageJson.devDependencies, ...devDependencyVersions };
     packageJson.overrides = { ...packageJson.overrides, ...npmOverrides };
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
     execFileSync('npm', ['install', '--package-lock-only', '--ignore-scripts'], {
