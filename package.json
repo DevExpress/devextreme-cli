@@ -16,8 +16,8 @@
   },
   "devDependencies": {
     "@devexpress/eslint-plugin-dx-security": "^0.2.11",
-    "@typescript-eslint/parser": "^8.63.0",
-    "eslint": "^10.14.0",
+    "@typescript-eslint/parser": "catalog:",
+    "eslint": "catalog:",
     "pre-commit": "^1.2.2",
     "puppeteer": "^25.6.0"
   },

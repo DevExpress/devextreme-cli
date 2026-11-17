@@ -4,6 +4,24 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@types/node':
+      specifier: 20.19.43
+      version: 20.19.43
+    '@typescript-eslint/eslint-plugin':
+      specifier: ^8.63.0
+      version: 8.63.0
+    '@typescript-eslint/parser':
+      specifier: ^8.63.0
+      version: 8.63.0
+    eslint:
+      specifier: ^10.14.0
+      version: 10.15.0
+    vitest:
+      specifier: ^5.0.5
+      version: 5.0.5
+
 overrides:
   cross-spawn: 7.0.6
   minimatch@<11.0.1: ^11.0.1
@@ -16,10 +34,10 @@ importers:
         specifier: ^0.2.11
         version: 0.2.11(eslint@10.15.0)
       '@typescript-eslint/parser':
-        specifier: ^8.63.0
+        specifier: 'catalog:'
         version: 8.63.0(eslint@10.15.0)(typescript@5.6.3)
       eslint:
-        specifier: ^10.14.0
+        specifier: 'catalog:'
         version: 10.15.0
       pre-commit:
         specifier: ^1.2.2
@@ -59,10 +77,10 @@ importers:
         version: 4.0.0
     devDependencies:
       '@types/node':
-        specifier: 20.19.43
+        specifier: 'catalog:'
         version: 20.19.43
       '@typescript-eslint/parser':
-        specifier: ^8.63.0
+        specifier: 'catalog:'
         version: 8.63.0(eslint@10.15.0)(typescript@4.9.5)
       create-vite:
         specifier: 7.1.3
@@ -71,7 +89,7 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       eslint:
-        specifier: ^10.14.0
+        specifier: 'catalog:'
         version: 10.15.0
       eslint-config-angular:
         specifier: ^0.5.0
@@ -104,7 +122,7 @@ importers:
         specifier: ^4.9.5
         version: 4.9.5
       vitest:
-        specifier: ^5.0.5
+        specifier: 'catalog:'
         version: 5.0.5(@types/node@20.19.43)(vite@8.3.4(@types/node@20.19.43)(less@4.8.1)(sass@1.101.0))
       vue-eslint-parser:
         specifier: ^10.4.1
@@ -135,7 +153,7 @@ importers:
         version: 7.8.5
     devDependencies:
       '@types/node':
-        specifier: 20.19.43
+        specifier: 'catalog:'
         version: 20.19.43
       '@types/picomatch':
         specifier: ^4.0.3
@@ -144,13 +162,13 @@ importers:
         specifier: ^7.7.1
         version: 7.7.1
       '@typescript-eslint/eslint-plugin':
-        specifier: ^8.63.0
+        specifier: 'catalog:'
         version: 8.63.0(@typescript-eslint/parser@8.63.0(eslint@10.15.0)(typescript@5.6.3))(eslint@10.15.0)(typescript@5.6.3)
       '@typescript-eslint/parser':
-        specifier: ^8.63.0
+        specifier: 'catalog:'
         version: 8.63.0(eslint@10.15.0)(typescript@5.6.3)
       eslint:
-        specifier: ^10.14.0
+        specifier: 'catalog:'
         version: 10.15.0
       rxjs:
         specifier: ^7.8.2
@@ -159,7 +177,7 @@ importers:
         specifier: ~5.6.3
         version: 5.6.3
       vitest:
-        specifier: ^5.0.5
+        specifier: 'catalog:'
         version: 5.0.5(@types/node@20.19.43)(vite@8.3.4(@types/node@20.19.43)(less@4.8.1)(sass@1.101.0))
 
 packages:
@@ -257,9 +275,6 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
-
-  '@isaacs/nonrecursive-glob-match@1.0.3':
-    resolution: {integrity: sha512-SI7kyKHq4XXDRozw+r9GlRZkia1ZkFrpLW98r2IC2Bpr8YkFGE3fvjzmxCG0x78A++69HmDNrDvSMYBZmHGpKA==}
 
   '@isaacs/nonrecursive-glob-match@1.1.0':
     resolution: {integrity: sha512-GPm/Dbvk5RLmhRnxXIa7nTpK0xtl4E0wj0MslsuNiJ1FIROU+2+9lgUC/dgF7Ey4QCWhfEsgxilMRMCdHPfDfw==}
@@ -2337,8 +2352,6 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@isaacs/nonrecursive-glob-match@1.0.3': {}
-
   '@isaacs/nonrecursive-glob-match@1.1.0': {}
 
   '@jridgewell/resolve-uri@3.1.2': {}
@@ -2607,7 +2620,7 @@ snapshots:
       '@typescript-eslint/types': 8.63.0
       '@typescript-eslint/visitor-keys': 8.63.0
       debug: 4.4.3
-      minimatch: 11.0.4
+      minimatch: 11.0.8
       semver: 7.8.5
       tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@4.9.5)
@@ -2622,7 +2635,7 @@ snapshots:
       '@typescript-eslint/types': 8.63.0
       '@typescript-eslint/visitor-keys': 8.63.0
       debug: 4.4.3
-      minimatch: 11.0.4
+      minimatch: 11.0.8
       semver: 7.8.5
       tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@5.6.3)
@@ -3071,7 +3084,7 @@ snapshots:
       get-tsconfig: 4.14.0
       globals: 15.15.0
       ignore: 5.3.2
-      minimatch: 11.0.4
+      minimatch: 11.0.8
       semver: 7.8.5
 
   eslint-plugin-react@7.37.3(eslint@10.15.0):
@@ -3086,7 +3099,7 @@ snapshots:
       estraverse: 5.3.0
       hasown: 2.0.4
       jsx-ast-utils: 3.3.5
-      minimatch: 11.0.4
+      minimatch: 11.0.8
       object.entries: 1.1.9
       object.fromentries: 2.0.8
       object.values: 1.2.1
@@ -3688,7 +3701,7 @@ snapshots:
 
   minimatch@11.0.4:
     dependencies:
-      '@isaacs/nonrecursive-glob-match': 1.0.3
+      '@isaacs/nonrecursive-glob-match': 1.1.0
       brace-expansion: 5.0.12
 
   minimatch@11.0.8:
