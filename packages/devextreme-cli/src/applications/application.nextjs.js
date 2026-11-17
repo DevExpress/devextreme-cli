@@ -79,6 +79,8 @@ const create = async(appName, options) => {
         '--app',
         '--no-turbopack',
         '--no-react-compiler',
+        '--no-cache-components',
+        '--use-npm',
         '--import-alias "@/*"',
     ];
 
