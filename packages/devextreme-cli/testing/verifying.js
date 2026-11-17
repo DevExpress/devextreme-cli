@@ -36,9 +36,39 @@ const verifyThemesAreBuilt = (env) => {
     return missing.map(outputFile => `${env.engine}: '${outputFile}' was not generated on the application creation`);
 };
 
+const verifyZoneless = (env) => {
+    if(env.engine !== 'angular') {
+        return [];
+    }
+
+    const problems = [];
+    const { dependencies = {}, devDependencies = {} } = readJson(path.join(env.appPath, 'package.json'));
+
+    if('zone.js' in dependencies || 'zone.js' in devDependencies) {
+        problems.push(`${env.engine}: package.json has the 'zone.js' dependency`);
+    }
+
+    const { projects } = readJson(path.join(env.appPath, 'angular.json'));
+    Object.keys(projects).forEach(projectName => {
+        const polyfills = projects[projectName].architect.build.options.polyfills || [];
+
+        if([].concat(polyfills).includes('zone.js')) {
+            problems.push(`${env.engine}: angular.json has the 'zone.js' polyfill in the '${projectName}' project`);
+        }
+    });
+
+    const appConfig = fs.readFileSync(path.join(env.appPath, 'src/app/app.config.ts'), 'utf8');
+    if(appConfig.includes('provideZoneChangeDetection')) {
+        problems.push(`${env.engine}: app.config.ts uses provideZoneChangeDetection`);
+    }
+
+    return problems;
+};
+
 const verify = (env) => [
     ...verifyNoInstallScripts(env),
-    ...verifyThemesAreBuilt(env)
+    ...verifyThemesAreBuilt(env),
+    ...verifyZoneless(env)
 ];
 
 (function verifyProcess() {
@@ -56,5 +86,5 @@ const verify = (env) => [
         process.exit(1);
     }
 
-    console.log('The generated applications need no install scripts.');
+    console.log('The generated applications passed verification.');
 })();

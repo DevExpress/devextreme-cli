@@ -22,7 +22,7 @@ import { strings } from '@angular-devkit/core';
 
 import { join, basename } from 'path';
 
-import { SemVer } from 'semver';
+import { coerce } from 'semver';
 
 import {
   getApplicationPath,
@@ -67,6 +67,7 @@ import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { Change } from '@schematics/angular/utility/change';
 
 import { isAngularVersionHigherThan } from '../utility/angular-version';
+import { isZonelessApp } from '../utility/zone';
 import { NodePackageInstallTask, RunSchematicTask } from '@angular-devkit/schematics/tasks';
 
 const routes = [
@@ -181,6 +182,8 @@ async function addPolyfills(host: Tree, project: string, polyfills: string[]) {
 
     if (!buildOptions.polyfills) {
       buildOptions.polyfills = [];
+    } else if (!Array.isArray(buildOptions.polyfills)) {
+      buildOptions.polyfills = [buildOptions.polyfills];
     }
 
     polyfills.forEach((polyfill) => {
@@ -270,24 +273,31 @@ function hasRouting(host: Tree, sourcePath: string) {
   return host.exists(sourcePath + 'app.routes.ts');
 }
 
-function addPackagesToDependency(globalNgCliVersion: string) {
-  const version = new SemVer(globalNgCliVersion.replace(/\^|\~/g, ''));
+function getCdkVersion(angularCoreVersion: string = '') {
+  if (angularCoreVersion.includes('next')) {
+    return 'next';
+  }
 
+  const version = coerce(angularCoreVersion);
+  return version ? `^${version.major}.0.0` : 'latest';
+}
+
+function addPackagesToDependency(zoneless: boolean) {
   return (host: Tree) => {
     const zonejs = getPackageJsonDependency(host, 'zone.js');
+    const angularCore = getPackageJsonDependency(host, '@angular/core');
 
     addPackageJsonDependency(host, {
       type: NodeDependencyType.Default,
       name: '@angular/cdk',
-      version: version.raw.includes('next') || version.raw.includes('-rc')
-        ? 'next' : `^${version.major}.0.0`
+      version: getCdkVersion(angularCore?.version)
     });
 
-    if (!zonejs) {
+    if (!zoneless && !zonejs) {
       addPackageJsonDependency(host, {
         type: NodeDependencyType.Default,
         name: 'zone.js',
-        version: version.major > 18 ? '~0.16.0' : '~0.14.0'
+        version: '~0.16.0'
       });
     }
 
@@ -397,6 +407,7 @@ export default function(options: any): Rule {
     const override = options.resolveConflicts === 'override';
     const componentName = override ? 'app' : getComponentName(host, appPath);
     const pathToCss = sourcePath?.replace(/\/?(\w)+\/?/g, '../');
+    const zoneless = await isZonelessApp(host, project, appPath);
 
     const templateOptions = {
       name: setPostfix(host, componentName),
@@ -404,7 +415,8 @@ export default function(options: any): Rule {
       title,
       strings,
       path: pathToCss,
-      prefix
+      prefix,
+      zoneless
     };
 
     const modifyContent = (templateContent: string, currentContent: string, filePath: string) => {
@@ -427,9 +439,12 @@ export default function(options: any): Rule {
       addBuildThemeScript(),
       () => addCustomThemeStyles(host, options, sourcePath) as any,
       addViewportToBody(sourcePath),
-      addPackagesToDependency(options.globalNgCliVersion),
-      () => addPolyfills(host, options.project, ['zone.js'])
+      addPackagesToDependency(zoneless),
     ];
+
+    if (!zoneless) {
+      rules.push(() => addPolyfills(host, options.project, ['zone.js']) as any);
+    }
 
     if (options.updateBudgets) {
       rules.push(() => updateBudgets(host, options) as any);

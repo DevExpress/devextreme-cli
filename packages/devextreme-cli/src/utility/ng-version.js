@@ -14,22 +14,6 @@ const getLocalNgVersion = () => {
     }
 };
 
-const getPublicNgVersion = () => {
-    const version = execSync('npm view @angular/cli@v21-lts version').toString();
-    return new semver(version);
-};
-
-const getNgCliVersion = () => {
-    let ngCliVersion = getLocalNgVersion();
-    if(!ngCliVersion) {
-        ngCliVersion = getPublicNgVersion();
-    }
-
-    return ngCliVersion;
-};
-
 module.exports = {
-    getLocalNgVersion,
-    getPublicNgVersion,
-    getNgCliVersion
+    getLocalNgVersion
 };

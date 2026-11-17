@@ -1,12 +1,12 @@
 import { Tree } from '@angular-devkit/schematics';
-import { SemVer } from 'semver';
+import { coerce } from 'semver';
 
 export function getAngularVersion(host: Tree): number {
   const packageJson = JSON.parse(host.read('package.json')?.toString() || '{}');
   const angularCore = packageJson.dependencies?.['@angular/core'];
 
-  if (angularCore) {
-    const version = new SemVer(angularCore.replace(/\^|\~/g, ''));
+  const version = coerce(angularCore);
+  if (version) {
     return version.major;
   }
 
